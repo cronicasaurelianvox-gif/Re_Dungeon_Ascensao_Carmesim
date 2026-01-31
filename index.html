@@ -1,11 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReDungeon - Banco de Dados</title>
-    <link rel="icon" type="image/x-icon" href="./icon.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1142,7 +1141,7 @@
 
         .nav-link {
             color: rgba(189, 195, 199, 0.85);
-            border: none;
+            border: 1px solid rgba(212, 175, 55, 0);
             font-size: 0.8rem;
             font-weight: 600;
             transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -1187,9 +1186,9 @@
         .nav-link:hover {
             color: rgba(240, 200, 80, 0.95);
             background: rgba(212, 175, 55, 0.12);
-            border-color: transparent;
+            border: 1px solid rgba(212, 175, 55, 0.4);
             transform: translateY(-1px);
-            box-shadow: none;
+            box-shadow: inset 0 0 0 1px rgba(212, 175, 55, 0.3);
             filter: brightness(1.05);
         }
 
@@ -1545,6 +1544,8 @@
 
         .modal-body {
             color: #ecf0f1 !important;
+            overflow: visible !important;
+            overflow-y: auto !important;
         }
 
         .modal-footer {
@@ -2057,15 +2058,50 @@
             }
         }
 
+        @keyframes glowItemMitico {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 10px rgba(231, 76, 60, 0.5),
+                    0 0 20px rgba(231, 76, 60, 0.35),
+                    0 0 40px rgba(231, 76, 60, 0.2),
+                    inset 0 0 10px rgba(231, 76, 60, 0.1);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 20px rgba(231, 76, 60, 0.7),
+                    0 0 40px rgba(231, 76, 60, 0.5),
+                    0 0 80px rgba(231, 76, 60, 0.3),
+                    inset 0 0 20px rgba(231, 76, 60, 0.2);
+            }
+        }
+
+        @keyframes glowItemCelestial {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 10px rgba(240, 200, 80, 0.5),
+                    0 0 20px rgba(240, 200, 80, 0.35),
+                    0 0 40px rgba(240, 200, 80, 0.2),
+                    inset 0 0 10px rgba(240, 200, 80, 0.1);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 20px rgba(240, 200, 80, 0.7),
+                    0 0 40px rgba(240, 200, 80, 0.5),
+                    0 0 80px rgba(240, 200, 80, 0.3),
+                    inset 0 0 20px rgba(240, 200, 80, 0.2);
+            }
+        }
+
         .item-card {
             border-radius: 12px;
             overflow: hidden;
-            border: 2px solid rgba(52, 152, 219, 0.6);
+            border: 2px solid rgba(52, 152, 219, 0.7);
             background: linear-gradient(135deg, rgba(22, 33, 62, 0.95) 0%, rgba(20, 30, 55, 0.98) 100%);
             box-shadow: 
                 0 8px 32px rgba(0, 0, 0, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.05),
-                0 0 20px rgba(52, 152, 219, 0.2);
+                0 0 20px rgba(52, 152, 219, 0.25),
+                inset 0 0 20px rgba(52, 152, 219, 0.08);
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             display: flex;
             flex-direction: column;
@@ -2088,39 +2124,144 @@
 
         /* ITENS COM QUALIDADE ESPECÍFICA */
         [data-qualidade-item="comum"] {
-            border-color: rgba(52, 152, 219, 0.6);
+            border-color: rgba(52, 152, 219, 0.7);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 0 20px rgba(52, 152, 219, 0.3),
+                inset 0 0 20px rgba(52, 152, 219, 0.1);
             animation: glowItemComum 3s ease-in-out infinite;
         }
 
         [data-qualidade-item="incomum"] {
-            border-color: rgba(46, 204, 113, 0.6);
+            border-color: rgba(46, 204, 113, 0.7);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 0 20px rgba(46, 204, 113, 0.3),
+                inset 0 0 20px rgba(46, 204, 113, 0.1);
             animation: glowItemIncomum 3s ease-in-out infinite;
         }
 
         [data-qualidade-item="raro"] {
-            border-color: rgba(155, 89, 182, 0.6);
+            border-color: rgba(155, 89, 182, 0.7);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 0 20px rgba(155, 89, 182, 0.3),
+                inset 0 0 20px rgba(155, 89, 182, 0.1);
             animation: glowItemRaro 3s ease-in-out infinite;
         }
 
         [data-qualidade-item="epica"] {
-            border-color: rgba(230, 126, 34, 0.6);
+            border-color: rgba(230, 126, 34, 0.7);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 0 20px rgba(230, 126, 34, 0.3),
+                inset 0 0 20px rgba(230, 126, 34, 0.1);
             animation: glowItemEpica 3s ease-in-out infinite;
         }
 
         [data-qualidade-item="lendario"] {
-            border-color: rgba(243, 156, 18, 0.6);
+            border-color: rgba(243, 156, 18, 0.7);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 0 20px rgba(243, 156, 18, 0.3),
+                inset 0 0 20px rgba(243, 156, 18, 0.1);
             animation: glowItemLendario 3s ease-in-out infinite;
         }
 
+        [data-qualidade-item="mitico"] {
+            border-color: rgba(231, 76, 60, 0.7);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 0 20px rgba(231, 76, 60, 0.3),
+                inset 0 0 20px rgba(231, 76, 60, 0.1);
+            animation: glowItemMitico 3s ease-in-out infinite;
+        }
+
+        [data-qualidade-item="celestial"] {
+            border-color: rgba(240, 200, 80, 0.7);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 0 20px rgba(240, 200, 80, 0.3),
+                inset 0 0 20px rgba(240, 200, 80, 0.1);
+            animation: glowItemCelestial 3s ease-in-out infinite;
+        }
+
         .item-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 8px 24px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 0 20px rgba(52, 152, 219, 0.3),
+                inset 0 0 15px rgba(52, 152, 219, 0.08);
+            border-color: rgba(52, 152, 219, 1);
+            animation: none;
+        }
+
+        [data-qualidade-item="incomum"]:hover {
+            border-color: rgba(46, 204, 113, 1);
             box-shadow: 
                 0 16px 48px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.08),
-                0 0 30px rgba(52, 152, 219, 0.35),
-                0 0 60px rgba(0, 0, 0, 0.2);
-            border-color: rgba(52, 152, 219, 0.9);
-            animation: none;
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 40px rgba(46, 204, 113, 0.5),
+                inset 0 0 30px rgba(46, 204, 113, 0.15);
+        }
+
+        [data-qualidade-item="raro"]:hover {
+            border-color: rgba(155, 89, 182, 1);
+            box-shadow: 
+                0 16px 48px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 40px rgba(155, 89, 182, 0.5),
+                inset 0 0 30px rgba(155, 89, 182, 0.15);
+        }
+
+        [data-qualidade-item="epica"]:hover {
+            border-color: rgba(230, 126, 34, 1);
+            box-shadow: 
+                0 16px 48px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 40px rgba(230, 126, 34, 0.5),
+                inset 0 0 30px rgba(230, 126, 34, 0.15);
+        }
+
+        [data-qualidade-item="lendario"]:hover {
+            border-color: rgba(243, 156, 18, 1);
+            box-shadow: 
+                0 16px 48px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 40px rgba(243, 156, 18, 0.5),
+                inset 0 0 30px rgba(243, 156, 18, 0.15);
+        }
+
+        [data-qualidade-item="mitico"]:hover {
+            border-color: rgba(231, 76, 60, 1);
+            box-shadow: 
+                0 16px 48px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 40px rgba(231, 76, 60, 0.5),
+                inset 0 0 30px rgba(231, 76, 60, 0.15);
+        }
+
+        [data-qualidade-item="celestial"]:hover {
+            border-color: rgba(240, 200, 80, 1);
+            box-shadow: 
+                0 16px 48px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 40px rgba(240, 200, 80, 0.5),
+                inset 0 0 30px rgba(240, 200, 80, 0.15);
+        }
+
+        /* FIX: Evitar que bordas dos cards desapareçam no hover */
+        #listItemsExistentes {
+            padding: 40px 15px 15px 15px;
+            overflow: visible !important;
         }
 
         .item-image-container {
@@ -2161,6 +2302,16 @@
             50% { box-shadow: inset 0 0 30px rgba(243, 156, 18, 0.25), inset 0 0 60px rgba(243, 156, 18, 0.15); }
         }
 
+        @keyframes glowItemImageMitico {
+            0%, 100% { box-shadow: inset 0 0 20px rgba(231, 76, 60, 0.15), inset 0 0 40px rgba(231, 76, 60, 0.08); }
+            50% { box-shadow: inset 0 0 30px rgba(231, 76, 60, 0.25), inset 0 0 60px rgba(231, 76, 60, 0.15); }
+        }
+
+        @keyframes glowItemImageCelestial {
+            0%, 100% { box-shadow: inset 0 0 20px rgba(240, 200, 80, 0.15), inset 0 0 40px rgba(240, 200, 80, 0.08); }
+            50% { box-shadow: inset 0 0 30px rgba(240, 200, 80, 0.25), inset 0 0 60px rgba(240, 200, 80, 0.15); }
+        }
+
         /* IMAGEM POR QUALIDADE */
         [data-qualidade-item="comum"] .item-image-container {
             animation: glowItemImageComum 3s ease-in-out infinite;
@@ -2185,6 +2336,16 @@
         [data-qualidade-item="lendario"] .item-image-container {
             animation: glowItemImageLendario 3s ease-in-out infinite;
             border-bottom-color: rgba(243, 156, 18, 0.4);
+        }
+
+        [data-qualidade-item="mitico"] .item-image-container {
+            animation: glowItemImageMitico 3s ease-in-out infinite;
+            border-bottom-color: rgba(231, 76, 60, 0.4);
+        }
+
+        [data-qualidade-item="celestial"] .item-image-container {
+            animation: glowItemImageCelestial 3s ease-in-out infinite;
+            border-bottom-color: rgba(240, 200, 80, 0.4);
         }
 
         .item-image-container img {
@@ -3088,44 +3249,23 @@
 
         /* ============================================
            PADRÃO UNIFICADO DE FILTROS - TODAS AS ABAS
-           Refatoração Visual Profissional (27/01/2026)
            ============================================ */
 
         .filters-panel {
-            padding: 18px;
-            background: linear-gradient(
-                135deg,
-                rgba(22, 33, 62, 0.5) 0%,
-                rgba(52, 73, 94, 0.35) 50%,
-                rgba(212, 175, 55, 0.04) 100%
-            );
-            border: 1.5px solid rgba(212, 175, 55, 0.3);
-            border-radius: 12px;
-            margin-bottom: 20px;
-            backdrop-filter: blur(8px);
-            box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(212, 175, 55, 0.1);
-            animation: slideInDown 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .filters-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
-            opacity: 0.6;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(52, 152, 219, 0.06) 100%);
+            border: 2px solid rgba(212, 175, 55, 0.25);
+            border-radius: 10px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            animation: slideInDown 0.3s ease;
         }
 
         @keyframes slideInDown {
             from {
                 opacity: 0;
-                transform: translateY(-15px);
+                transform: translateY(-10px);
             }
             to {
                 opacity: 1;
@@ -3180,31 +3320,17 @@
         .filters-panel-title {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin: 0 0 14px 0;
+            gap: 8px;
+            margin: 0 0 12px 0;
             color: #d4af37;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .filters-panel-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, rgba(212, 175, 55, 0.3), transparent);
-            opacity: 0.5;
+            letter-spacing: 0.5px;
         }
 
         .filters-panel-title span {
-            font-size: 1.05rem;
-            flex-shrink: 0;
+            font-size: 1.1rem;
         }
 
         .filters-group {
@@ -3216,24 +3342,20 @@
         }
 
         .filter-btn {
-            padding: 9px 18px;
+            padding: 8px 16px;
             border: 2px solid;
             background: transparent;
             color: #ecf0f1;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             white-space: nowrap;
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(4px);
-            letter-spacing: 0.4px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            backdrop-filter: blur(2px);
+            letter-spacing: 0.3px;
         }
 
         .filter-btn::before {
@@ -3244,8 +3366,8 @@
             width: 100%;
             height: 100%;
             background: currentColor;
-            opacity: 0.1;
-            transition: left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0.12;
+            transition: left 0.3s ease;
             z-index: -1;
         }
 
@@ -3264,12 +3386,9 @@
         }
 
         .filter-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 
-                0 6px 20px rgba(0, 0, 0, 0.25),
-                0 0 12px currentColor,
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            filter: brightness(1.15);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px currentColor, currentColor 0px 0px 8px;
+            filter: brightness(1.2);
         }
 
         .filter-btn:hover::before {
@@ -3278,101 +3397,36 @@
 
         .filter-btn:active {
             transform: translateY(0);
-            box-shadow: 
-                0 3px 12px rgba(0, 0, 0, 0.2),
-                0 0 8px currentColor;
         }
 
         .filter-btn.active {
             background: currentColor;
             color: #1a1a2e;
-            box-shadow: 
-                0 6px 24px rgba(0, 0, 0, 0.3),
-                0 0 20px currentColor,
-                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 20px currentColor, 0 6px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
             font-weight: 700;
-            filter: brightness(1.05);
+            filter: brightness(1.1);
         }
 
         .filter-btn.active::after {
-            opacity: 0.15;
+            opacity: 0.2;
         }
 
         .filter-btn.active:hover {
-            filter: brightness(1);
-            box-shadow: 
-                0 8px 28px rgba(0, 0, 0, 0.35),
-                0 0 24px currentColor,
-                inset 0 1px 0 rgba(255, 255, 255, 0.25);
-            transform: translateY(-1px);
+            filter: brightness(1.05);
+            box-shadow: 0 0 24px currentColor, 0 8px 28px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
-        /* ===== INPUTS DE FILTRO - ESTILO UNIFICADO ===== */
-        .filters-panel input[type="text"],
-        .filters-panel select,
-        .filters-panel div[style*="margin-bottom: 20px"] input[type="text"] {
-            width: 100% !important;
-            padding: 12px 14px !important;
-            background: linear-gradient(135deg, rgba(30, 50, 80, 0.6) 0%, rgba(30, 50, 80, 0.4) 100%) !important;
-            color: #ecf0f1 !important;
-            border: 1.5px solid rgba(212, 175, 55, 0.3) !important;
-            border-radius: 8px !important;
-            font-size: 0.95rem !important;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-            backdrop-filter: blur(4px) !important;
-            font-weight: 500 !important;
-            letter-spacing: 0.3px !important;
-        }
-
-        .filters-panel input[type="text"]::placeholder {
-            color: rgba(236, 240, 241, 0.5) !important;
-        }
-
-        .filters-panel input[type="text"]:focus,
-        .filters-panel select:focus,
-        .filters-panel div[style*="margin-bottom: 20px"] input[type="text"]:focus {
-            background: linear-gradient(135deg, rgba(30, 50, 80, 0.8) 0%, rgba(30, 50, 80, 0.6) 100%) !important;
-            border-color: #d4af37 !important;
-            color: #ecf0f1 !important;
-            outline: none !important;
-            box-shadow: 
-                0 0 20px rgba(212, 175, 55, 0.3),
-                inset 0 1px 0 rgba(212, 175, 55, 0.15) !important;
-        }
-
-        .filters-panel input[type="text"]:hover,
-        .filters-panel select:hover,
-        .filters-panel div[style*="margin-bottom: 20px"] input[type="text"]:hover {
-            border-color: rgba(212, 175, 55, 0.5) !important;
-            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15) !important;
-        }
-
-        /* ===== DIVISOR VISUAL ENTRE FILTROS MÚLTIPLOS ===== */
-        .filters-panel + .filters-panel {
-            margin-top: 16px;
-        }
-
-        /* Espaço dentro de containers de filtros múltiplos */
-        .filters-panel > div + div {
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(212, 175, 55, 0.12);
-        }
-
-        .filters-panel > div:first-child {
-            margin-bottom: 0;
-        }
-
-        /* Variações de cores para diferentes filtros - APRIMORADO */
+        /* Variações de cores para diferentes filtros */
         .filter-gold {
             border-color: #d4af37;
             color: #d4af37;
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.04) 100%);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.03) 100%);
         }
 
         .filter-gold.active {
             background: linear-gradient(135deg, #d4af37 0%, #c49a2e 100%);
-            border-color: #f5dfa8;
+            border-color: #d4af37;
         }
 
         .filter-blue {
@@ -3761,104 +3815,8 @@
             transform: translateY(-2px);
         }
 
-        /* ===== SELECTS E DROPDOWNS - PADRÃO UNIFICADO ===== */
-        select[style*="width: 100%"],
-        .filters-panel select,
-        #filterArtsHabilidade,
-        #filterArtsCirculo,
-        #filterArtsTipoCusto,
-        #filterArtsTipoAcao,
-        #filterArtsCondicoes {
-            width: 100% !important;
-            padding: 10px 12px !important;
-            background: linear-gradient(135deg, rgba(30, 50, 80, 0.8) 0%, rgba(30, 50, 80, 0.6) 100%) !important;
-            color: #ecf0f1 !important;
-            border: 1.5px solid rgba(212, 175, 55, 0.4) !important;
-            border-radius: 8px !important;
-            cursor: pointer !important;
-            font-size: 0.85rem !important;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-            font-weight: 500 !important;
-            appearance: none !important;
-            -webkit-appearance: none !important;
-            -moz-appearance: none !important;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
-            background-repeat: no-repeat !important;
-            background-position: right 10px center !important;
-            background-size: 20px !important;
-            padding-right: 35px !important;
-        }
-
-        select[style*="width: 100%"]:hover,
-        .filters-panel select:hover,
-        #filterArtsHabilidade:hover,
-        #filterArtsCirculo:hover,
-        #filterArtsTipoCusto:hover,
-        #filterArtsTipoAcao:hover,
-        #filterArtsCondicoes:hover {
-            border-color: #d4af37 !important;
-            background: linear-gradient(135deg, rgba(30, 50, 80, 0.95) 0%, rgba(30, 50, 80, 0.8) 100%), url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
-            background-repeat: no-repeat !important;
-            background-position: right 10px center !important;
-            background-size: 20px !important;
-            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15) !important;
-        }
-
-        select[style*="width: 100%"]:focus,
-        .filters-panel select:focus,
-        #filterArtsHabilidade:focus,
-        #filterArtsCirculo:focus,
-        #filterArtsTipoCusto:focus,
-        #filterArtsTipoAcao:focus,
-        #filterArtsCondicoes:focus {
-            border-color: #d4af37 !important;
-            background: linear-gradient(135deg, rgba(30, 50, 80, 0.95) 0%, rgba(30, 50, 80, 0.8) 100%), url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
-            background-repeat: no-repeat !important;
-            background-position: right 10px center !important;
-            background-size: 20px !important;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3), inset 0 1px 0 rgba(212, 175, 55, 0.15) !important;
-            outline: none !important;
-        }
-
-        /* Estilizar as opções do dropdown */
-        select[style*="width: 100%"] option,
-        .filters-panel select option,
-        #filterArtsHabilidade option,
-        #filterArtsCirculo option,
-        #filterArtsTipoCusto option,
-        #filterArtsTipoAcao option,
-        #filterArtsCondicoes option {
-            background-color: #162140 !important;
-            color: #ecf0f1 !important;
-            padding: 10px !important;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2) !important;
-        }
-
-        select[style*="width: 100%"] option:checked,
-        .filters-panel select option:checked,
-        #filterArtsHabilidade option:checked,
-        #filterArtsCirculo option:checked,
-        #filterArtsTipoCusto option:checked,
-        #filterArtsTipoAcao option:checked,
-        #filterArtsCondicoes option:checked {
-            background: linear-gradient(#d4af37, #d4af37) !important;
-            background-color: #d4af37 !important;
-            color: #1a1a2e !important;
-        }
-
         /* Responsividade da Navegação Horizontal */
         @media (max-width: 1200px) {
-            .filters-panel {
-                padding: 16px;
-                margin-bottom: 18px;
-            }
-
-            .filter-btn {
-                padding: 8px 16px;
-                font-size: 0.8rem;
-                height: 38px;
-            }
-
             .nav-link {
                 font-size: 0.9rem;
                 padding: 12px 14px;
@@ -3867,30 +3825,6 @@
         }
 
         @media (max-width: 992px) {
-            .filters-panel {
-                padding: 14px;
-                margin-bottom: 16px;
-            }
-
-            .filters-panel-title {
-                font-size: 0.85rem;
-                gap: 8px;
-            }
-
-            .filter-btn {
-                padding: 8px 14px;
-                font-size: 0.75rem;
-                height: 36px;
-            }
-
-            .filters-group {
-                gap: 6px;
-            }
-
-            .filters-group-compact {
-                gap: 6px;
-            }
-
             .nav-link {
                 font-size: 0.85rem;
                 padding: 10px 12px;
@@ -3899,47 +3833,6 @@
         }
 
         @media (max-width: 768px) {
-            .filters-panel {
-                padding: 12px;
-                margin-bottom: 14px;
-            }
-
-            .filters-panel-title {
-                font-size: 0.8rem;
-                gap: 6px;
-                margin-bottom: 10px;
-            }
-
-            .filters-panel-title span {
-                font-size: 0.95rem;
-            }
-
-            .filter-btn {
-                padding: 7px 12px;
-                font-size: 0.7rem;
-                height: 34px;
-                border-radius: 6px;
-            }
-
-            .filters-group {
-                gap: 5px;
-            }
-
-            .filters-group-compact {
-                gap: 5px;
-            }
-
-            .filters-panel input[type="text"],
-            .filters-panel select {
-                padding: 10px 12px;
-                font-size: 0.9rem;
-            }
-
-            .filters-panel-compact {
-                padding: 10px 12px;
-                margin-bottom: 12px;
-            }
-
             .nav-tabs {
                 padding: 8px 6px;
             }
@@ -3953,49 +3846,6 @@
         }
 
         @media (max-width: 576px) {
-            .filters-panel {
-                padding: 10px;
-                margin-bottom: 12px;
-            }
-
-            .filters-panel-title {
-                font-size: 0.75rem;
-                gap: 4px;
-                margin-bottom: 8px;
-            }
-
-            .filters-panel-title span {
-                font-size: 0.9rem;
-            }
-
-            .filter-btn {
-                padding: 6px 10px;
-                font-size: 0.65rem;
-                height: 32px;
-                border-radius: 5px;
-                font-weight: 500;
-            }
-
-            .filters-group {
-                gap: 4px;
-            }
-
-            .filters-group-compact {
-                gap: 4px;
-            }
-
-            .filters-panel input[type="text"],
-            .filters-panel select {
-                padding: 9px 11px;
-                font-size: 0.85rem;
-                margin-bottom: 8px;
-            }
-
-            .filters-panel-compact {
-                padding: 8px 10px;
-                margin-bottom: 10px;
-            }
-
             .nav-tabs {
                 padding: 6px 4px;
             }
@@ -4010,38 +3860,6 @@
 
             .nav-item {
                 flex: 1 1 auto;
-            }
-        }
-
-        /* Extra-small devices */
-        @media (max-width: 400px) {
-            .filters-panel {
-                padding: 8px;
-                margin-bottom: 10px;
-            }
-
-            .filters-panel-title {
-                font-size: 0.7rem;
-                gap: 3px;
-                margin-bottom: 6px;
-            }
-
-            .filter-btn {
-                padding: 5px 9px;
-                font-size: 0.6rem;
-                height: 30px;
-            }
-
-            .filters-group,
-            .filters-group-compact {
-                gap: 3px;
-            }
-
-            .filters-panel input[type="text"],
-            .filters-panel select {
-                padding: 8px 10px;
-                font-size: 0.8rem;
-                margin-bottom: 6px;
             }
         }
 
@@ -5905,100 +5723,119 @@
             backdrop-filter: blur(12px);
         }
 
-        /* Estilos Compactos para Filtros de Itens - APRIMORADO */
+        /* Estilos Compactos para Filtros de Itens */
         .filters-panel-compact {
-            background: linear-gradient(
-                135deg,
-                rgba(22, 33, 62, 0.4) 0%,
-                rgba(52, 73, 94, 0.25) 50%,
-                rgba(212, 175, 55, 0.03) 100%
-            );
-            border: 1.5px solid rgba(212, 175, 55, 0.25);
-            border-radius: 10px;
-            padding: 14px 16px;
-            margin-bottom: 18px;
-            backdrop-filter: blur(6px);
-            box-shadow: 
-                0 6px 24px rgba(0, 0, 0, 0.15),
-                inset 0 1px 0 rgba(212, 175, 55, 0.08);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .filters-panel-compact::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.25), transparent);
-            opacity: 0.5;
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
         }
 
         .filters-group-compact {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-items: center;
+            flex-wrap: nowrap;
+            gap: 6px;
+            overflow-x: visible;
             padding-bottom: 8px;
         }
 
         /* Classes de cores para botões de filtro */
-        .filter-btn.filter-gray {
-            border-color: #95a5a6;
-            color: #95a5a6;
-            background: linear-gradient(135deg, rgba(149, 165, 166, 0.1) 0%, rgba(149, 165, 166, 0.04) 100%);
+        .filter-btn {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border: 2px solid;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
-        .filter-btn.filter-gray.active {
-            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
-            border-color: #bdc3c7;
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
-        .filter-btn.filter-brown {
-            border-color: #a0522d;
-            color: #daa520;
-            background: linear-gradient(135deg, rgba(160, 82, 45, 0.1) 0%, rgba(160, 82, 45, 0.04) 100%);
+        .filter-btn.active {
+            box-shadow: 0 0 20px currentColor;
+            border-width: 2px;
         }
 
-        .filter-btn.filter-brown.active {
-            background: linear-gradient(135deg, #a0522d 0%, #8b4513 100%);
-            border-color: #d2b48c;
+        /* Cores específicas dos botões */
+        .filter-btn.filter-gold {
+            background: linear-gradient(135deg, #d4af37 0%, #c9a961 100%);
+            color: #2c2416;
+            border-color: #f5dfa8;
         }
 
-        .filter-btn.filter-dust {
-            border-color: #c0a080;
-            color: #c0a080;
-            background: linear-gradient(135deg, rgba(192, 160, 128, 0.1) 0%, rgba(192, 160, 128, 0.04) 100%);
+        .filter-btn.filter-gold-light {
+            background: linear-gradient(135deg, #f5dfa8 0%, #e8d598 100%);
+            color: #2c2416;
+            border-color: #d4af37;
         }
 
-        .filter-btn.filter-dust.active {
-            background: linear-gradient(135deg, #c0a080 0%, #a0826d 100%);
-            border-color: #daa520;
+        .filter-btn.filter-blue {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: #ffffff;
+            border-color: #7fb3f5;
         }
 
-        .filter-btn.filter-amber {
-            border-color: #daa520;
-            color: #daa520;
-            background: linear-gradient(135deg, rgba(218, 165, 32, 0.1) 0%, rgba(218, 165, 32, 0.04) 100%);
+        .filter-btn.filter-green {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: #ffffff;
+            border-color: #58d68d;
         }
 
-        .filter-btn.filter-amber.active {
-            background: linear-gradient(135deg, #daa520 0%, #b8860b 100%);
-            border-color: #ffd700;
+        .filter-btn.filter-purple {
+            background: linear-gradient(135deg, #9b59b6 0%, #7d3c98 100%);
+            color: #ffffff;
+            border-color: #d7bde2;
         }
 
-        .filter-btn.filter-white {
+        .filter-btn.filter-orange {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            color: #ffffff;
+            border-color: #f8b88b;
+        }
+
+        .filter-btn.filter-orange-light {
+            background: linear-gradient(135deg, #f39c12 0%, #d68910 100%);
+            color: #ffffff;
+            border-color: #f8d88f;
+        }
+
+        .filter-btn.filter-red {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: #ffffff;
+            border-color: #f1948a;
+        }
+
+        .filter-btn.filter-cyan {
+            background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
+            color: #ffffff;
+            border-color: #48dbfb;
+        }
+
+        .filter-btn.filter-pink {
+            background: linear-gradient(135deg, #e84393 0%, #d63031 100%);
+            color: #ffffff;
+            border-color: #fd79a8;
+        }
+
+        .filter-btn.filter-silver {
+            background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
+            color: #2c3e50;
             border-color: #ecf0f1;
-            color: #ecf0f1;
-            background: linear-gradient(135deg, rgba(236, 240, 241, 0.08) 0%, rgba(236, 240, 241, 0.03) 100%);
         }
 
-        .filter-btn.filter-white.active {
-            background: linear-gradient(135deg, #ecf0f1 0%, #bdc3c7 100%);
-            border-color: #ffffff;
-            color: #1a1a2e;
+        .filter-yellow {
+            background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%);
+            color: #2c2416;
+            border-color: #f9e79f;
         }
 
         /* ========== ESTILOS PREMIUM PARA CARDS DE ORIGEM/REGIÃO/CENÁRIO ========== */
@@ -7706,375 +7543,6 @@
         body:has(#modalSeletorCondicoesArt.show) .modal:not(#modalSeletorCondicoesArt) {
             z-index: auto !important;
         }
-
-        /* ========================================================================= */
-        /* 🎯 CORREÇÃO LAYOUT MODAL CONDIÇÕES - ALTURA MÁXIMA + SCROLL INTERNO */
-        /* ========================================================================= */
-        
-        #modalNovaCondicao .modal-dialog {
-            max-width: 95vw !important;
-            max-height: 95vh !important;
-            height: auto !important;
-            display: flex !important;
-            flex-direction: column !important;
-            margin: 2.5vh auto !important;
-        }
-
-        #modalNovaCondicao .modal-content {
-            display: flex !important;
-            flex-direction: column !important;
-            max-height: 95vh !important;
-            height: auto !important;
-        }
-
-        #modalNovaCondicao .modal-header {
-            flex-shrink: 0 !important;
-            position: sticky !important;
-            top: 0 !important;
-            z-index: 10 !important;
-            background: linear-gradient(90deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05)) !important;
-            border-bottom: 2px solid #d4af37 !important;
-        }
-
-        #modalNovaCondicao .modal-body {
-            flex: 1 !important;
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
-            max-height: calc(95vh - 140px) !important;
-            padding: 20px !important;
-            display: flex !important;
-            flex-direction: column !important;
-        }
-
-        #modalNovaCondicao .modal-body form {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 0 !important;
-        }
-
-        #modalNovaCondicao .modal-body .row {
-            flex-shrink: 0 !important;
-        }
-
-        #modalNovaCondicao .modal-footer {
-            flex-shrink: 0 !important;
-            position: sticky !important;
-            bottom: 0 !important;
-            z-index: 10 !important;
-            background: rgba(22, 33, 62, 0.95) !important;
-            border-top: 2px solid #d4af37 !important;
-            padding: 12px 20px !important;
-        }
-
-        /* Garantir que o formulário não expanda além do container */
-        #formNovaCondicao {
-            max-width: 100% !important;
-            width: 100% !important;
-        }
-
-        /* Melhorar scroll interno com estilo moderno - WebKit */
-        #modalNovaCondicao .modal-body::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        #modalNovaCondicao .modal-body::-webkit-scrollbar-track {
-            background: rgba(212, 175, 55, 0.05);
-            border-radius: 10px;
-        }
-
-        #modalNovaCondicao .modal-body::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #d4af37, #a68a2a);
-            border-radius: 10px;
-            border: 2px solid rgba(212, 175, 55, 0.2);
-        }
-
-        #modalNovaCondicao .modal-body::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, #f0c850, #d4af37);
-        }
-
-        /* Firefox scrollbar */
-        #modalNovaCondicao .modal-body {
-            scrollbar-color: #d4af37 rgba(212, 175, 55, 0.05);
-            scrollbar-width: thin;
-        }
-
-        /* Responsividade para tablets e mobile */
-        @media (max-width: 1024px) {
-            #modalNovaCondicao .modal-dialog {
-                max-width: 90vw !important;
-                margin: 5vh auto !important;
-            }
-
-            #modalNovaCondicao .modal-body {
-                max-height: calc(90vh - 140px) !important;
-            }
-        }
-
-        @media (max-width: 768px) {
-            #modalNovaCondicao .modal-dialog {
-                max-width: 95vw !important;
-                max-height: 96vh !important;
-                margin: 2vh auto !important;
-            }
-
-            #modalNovaCondicao .modal-body {
-                max-height: calc(96vh - 140px) !important;
-                padding: 16px !important;
-            }
-
-            #modalNovaCondicao .modal-footer {
-                padding: 10px 16px !important;
-            }
-
-            #modalNovaCondicao .btn {
-                font-size: 0.85rem !important;
-                padding: 8px 12px !important;
-            }
-        }
-
-        @media (max-width: 576px) {
-            #modalNovaCondicao .modal-dialog {
-                max-width: 100vw !important;
-                max-height: 97vh !important;
-                margin: 1.5vh 0 !important;
-                border-radius: 0 !important;
-            }
-
-            #modalNovaCondicao .modal-content {
-                border-radius: 0 !important;
-            }
-
-            #modalNovaCondicao .modal-body {
-                max-height: calc(97vh - 150px) !important;
-                padding: 12px !important;
-            }
-
-            #modalNovaCondicao .modal-header h5 {
-                font-size: 1rem !important;
-            }
-
-            #modalNovaCondicao .modal-footer {
-                display: flex !important;
-                flex-direction: column !important;
-                gap: 8px !important;
-                padding: 12px !important;
-            }
-
-            #modalNovaCondicao .btn {
-                width: 100% !important;
-                font-size: 0.8rem !important;
-            }
-        }
-
-        /* ═════════════════════════════════════════════════════════════════════ */
-        /* CORREÇÃO DE LAYOUT: MODAIS DE SELEÇÃO DE CONDIÇÕES                    */
-        /* Problema: Modal ultrapassava altura da tela, sem scroll adequado       */
-        /* Solução: max-height viewport, grid responsivo, scroll interno         */
-        /* ═════════════════════════════════════════════════════════════════════ */
-
-        /* FIX PRINCIPAL: Modal genérico de condições */
-        #modalSeletorCondicoes .modal-dialog {
-            max-height: 90vh !important;
-            margin: 5vh auto !important;
-        }
-
-        #modalSeletorCondicoes .modal-content {
-            max-height: 90vh !important;
-            display: flex !important;
-            flex-direction: column !important;
-        }
-
-        #modalSeletorCondicoes .modal-header {
-            flex-shrink: 0 !important;
-            position: sticky !important;
-            top: 0 !important;
-            z-index: 1020 !important;
-        }
-
-        #modalSeletorCondicoes .modal-body {
-            flex: 1 !important;
-            min-height: 0 !important;
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
-            max-height: calc(90vh - 220px) !important;
-        }
-
-        /* Grid responsivo para lista de condições */
-        #listaSeletorCondicoes {
-            display: grid !important;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
-            gap: 10px !important;
-            grid-auto-rows: max-content !important;
-        }
-
-        /* Breakpoint tablet: 1 coluna */
-        @media (max-width: 768px) {
-            #listaSeletorCondicoes {
-                grid-template-columns: 1fr !important;
-            }
-        }
-
-        /* FIX: Modal de condições para Artes */
-        #modalSeletorCondicoesArt .modal-dialog {
-            max-height: 90vh !important;
-            margin: 5vh auto !important;
-        }
-
-        #modalSeletorCondicoesArt .modal-content {
-            max-height: 90vh !important;
-            display: flex !important;
-            flex-direction: column !important;
-        }
-
-        #modalSeletorCondicoesArt .modal-header {
-            flex-shrink: 0 !important;
-            position: sticky !important;
-            top: 0 !important;
-            z-index: 1020 !important;
-        }
-
-        #modalSeletorCondicoesArt > div:nth-child(2) {
-            flex-shrink: 0 !important;
-        }
-
-        #modalSeletorCondicoesArt .modal-body {
-            flex: 1 !important;
-            min-height: 0 !important;
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
-            max-height: calc(90vh - 240px) !important;
-        }
-
-        /* Grid responsivo para artes - padrão auto-fit */
-        #listaSeletorCondicoesArt {
-            display: grid !important;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
-            gap: 20px !important;
-            grid-auto-rows: max-content !important;
-        }
-
-        @media (max-width: 1024px) {
-            #listaSeletorCondicoesArt {
-                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important;
-            }
-        }
-
-        @media (max-width: 768px) {
-            #listaSeletorCondicoesArt {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
-            }
-        }
-
-        @media (max-width: 480px) {
-            #listaSeletorCondicoesArt {
-                grid-template-columns: 1fr !important;
-            }
-        }
-
-        /* FIX: Modal de condições para Skills */
-        #modalSeletorCondicoesSkill .modal-dialog {
-            max-height: 90vh !important;
-            margin: 5vh auto !important;
-        }
-
-        #modalSeletorCondicoesSkill .modal-content {
-            max-height: 90vh !important;
-            display: flex !important;
-            flex-direction: column !important;
-        }
-
-        #modalSeletorCondicoesSkill .modal-header {
-            flex-shrink: 0 !important;
-            position: sticky !important;
-            top: 0 !important;
-            z-index: 1020 !important;
-        }
-
-        #modalSeletorCondicoesSkill > div:nth-child(2) {
-            flex-shrink: 0 !important;
-        }
-
-        #modalSeletorCondicoesSkill .modal-body {
-            flex: 1 !important;
-            min-height: 0 !important;
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
-            max-height: calc(90vh - 240px) !important;
-        }
-
-        /* Grid responsivo para skills - padrão auto-fit */
-        #listaSeletorCondicoesSkill {
-            display: grid !important;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
-            gap: 20px !important;
-            grid-auto-rows: max-content !important;
-        }
-
-        @media (max-width: 1024px) {
-            #listaSeletorCondicoesSkill {
-                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important;
-            }
-        }
-
-        @media (max-width: 768px) {
-            #listaSeletorCondicoesSkill {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
-            }
-        }
-
-        @media (max-width: 480px) {
-            #listaSeletorCondicoesSkill {
-                grid-template-columns: 1fr !important;
-            }
-        }
-
-        /* Estilo melhorado para cards de condição dentro de modais */
-        #modalSeletorCondicoes .condition-card,
-        #modalSeletorCondicoesArt .condition-card,
-        #modalSeletorCondicoesSkill .condition-card {
-            word-wrap: break-word !important;
-            overflow-wrap: break-word !important;
-            hyphens: auto !important;
-        }
-
-        /* Garantir que o modal seja totalmente acessível */
-        .modal-dialog {
-            display: flex !important;
-            align-items: flex-start !important;
-            justify-content: center !important;
-            min-height: 0 !important;
-        }
-
-        .modal-content {
-            max-width: 100% !important;
-        }
-
-        /* Fix para scrollbar personalizado (melhor visual) */
-        #modalSeletorCondicoes .modal-body::-webkit-scrollbar,
-        #modalSeletorCondicoesArt .modal-body::-webkit-scrollbar,
-        #modalSeletorCondicoesSkill .modal-body::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        #modalSeletorCondicoes .modal-body::-webkit-scrollbar-track,
-        #modalSeletorCondicoesArt .modal-body::-webkit-scrollbar-track,
-        #modalSeletorCondicoesSkill .modal-body::-webkit-scrollbar-track {
-            background: rgba(212, 175, 55, 0.1);
-            border-radius: 10px;
-        }
-
-        #modalSeletorCondicoes .modal-body::-webkit-scrollbar-thumb,
-        #modalSeletorCondicoesArt .modal-body::-webkit-scrollbar-thumb,
-        #modalSeletorCondicoesSkill .modal-body::-webkit-scrollbar-thumb {
-            background: rgba(212, 175, 55, 0.5);
-            border-radius: 10px;
-        }
-
-        #modalSeletorCondicoes .modal-body::-webkit-scrollbar-thumb:hover,
-        #modalSeletorCondicoesArt .modal-body::-webkit-scrollbar-thumb:hover,
-        #modalSeletorCondicoesSkill .modal-body::-webkit-scrollbar-thumb:hover {
-            background: rgba(212, 175, 55, 0.8);
-        }
     </style>
     <script>
         // =============== OBSERVER PARA REMOVER aria-hidden DE MODAIS ATIVOS ===============
@@ -8398,16 +7866,16 @@
             <div class="top-nav-section">
                 <!-- Botões de Ação Principal -->
                 <div class="buttons-container">
-                    <button id="btn-salvar" class="btn btn-modern btn-salvar" data-bs-toggle="modal" data-bs-target="#modalEscolherEscopoSalvar" title="Salvar banco de dados (escolher escopo)">
+                    <button class="btn btn-modern btn-salvar" data-bs-toggle="modal" data-bs-target="#modalEscolherEscopoSalvar" title="Salvar banco de dados (escolher escopo)">
                         💾 Salvar
                     </button>
-                    <button id="btn-importar" class="btn btn-modern btn-importar" data-bs-toggle="modal" data-bs-target="#modalEscolherEscopoImportar" title="Importar arquivo JSON (escolher escopo)">
+                    <button class="btn btn-modern btn-importar" data-bs-toggle="modal" data-bs-target="#modalEscolherEscopoImportar" title="Importar arquivo JSON (escolher escopo)">
                         📥 Importar
                     </button>
-                    <button id="btn-sincronizar" class="btn btn-modern btn-sincronizar" onclick="abrirModalSincronizacao()" title="Sincronizar dados (mescla sem sobrescrever)">
+                    <button class="btn btn-modern btn-sincronizar" onclick="abrirModalSincronizacao()" title="Sincronizar dados (mescla sem sobrescrever)">
                         🔄 Sincronizar Dados
                     </button>
-                    <button id="btn-resetar" class="btn btn-modern btn-resetar" onclick="abrirModalEscopoReset()" title="Resetar o banco de dados (não pode ser desfeito)">
+                    <button class="btn btn-modern btn-resetar" onclick="abrirModalEscopoReset()" title="Resetar o banco de dados (não pode ser desfeito)">
                         🔄 Resetar
                     </button>
                     <input type="file" id="inputImportarJSON" accept=".json" style="display: none;" onchange="processarImportacao(event)">
@@ -8484,17 +7952,6 @@
                         </button>
                     </div>
 
-                    <!-- Filtro por Nome de História -->
-                    <div class="filters-panel">
-                        <div class="filters-panel-title">
-                            <span>🔍</span>
-                            <span>Filtro por Nome:</span>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <input type="text" id="searchHistoriaNome" placeholder="Digite o nome da história..." style="width: 100%; padding: 12px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; font-size: 1rem;" oninput="filtrarHistoriaNome(this.value)">
-                        </div>
-                    </div>
-
                     <!-- Filtros de História -->
                     <div class="filters-panel">
                         <div class="filters-panel-title">
@@ -8527,17 +7984,6 @@
                         <button class="btn btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#modalNovoCenario">
                             🏛️ Novo Cenário
                         </button>
-                    </div>
-
-                    <!-- Filtro por Nome de Origens -->
-                    <div class="filters-panel">
-                        <div class="filters-panel-title">
-                            <span>🔍</span>
-                            <span>Filtro por Nome:</span>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <input type="text" id="searchOrigensNome" placeholder="Digite o nome da origem, região ou cenário..." style="width: 100%; padding: 12px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; font-size: 1rem;" oninput="filtrarOrigensNome(this.value)">
-                        </div>
                     </div>
 
                     <!-- Filtros da aba Origens -->
@@ -8609,17 +8055,6 @@
                         ➕ Adicionar Nova Raça
                     </button>
 
-                    <!-- Filtro por Nome de Raças -->
-                    <div class="filters-panel">
-                        <div class="filters-panel-title">
-                            <span>🔍</span>
-                            <span>Filtro por Nome:</span>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <input type="text" id="searchRacasNome" placeholder="Digite o nome da raça..." style="width: 100%; padding: 12px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; font-size: 1rem;" oninput="filtrarRacasNome(this.value)">
-                        </div>
-                    </div>
-
                     <!-- Filtros de Raridades -->
                     <div class="filters-panel">
                         <div class="filters-panel-title">
@@ -8652,17 +8087,6 @@
                     <button class="btn btn-primary btn-lg mb-3" data-bs-toggle="modal" data-bs-target="#modalNovaClasse">
                         ➕ Adicionar Nova Classe
                     </button>
-
-                    <!-- Filtro por Nome de Classes -->
-                    <div class="filters-panel">
-                        <div class="filters-panel-title">
-                            <span>🔍</span>
-                            <span>Filtro por Nome:</span>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <input type="text" id="searchClassesNome" placeholder="Digite o nome da classe..." style="width: 100%; padding: 12px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; font-size: 1rem;" oninput="filtrarClassesNome(this.value)">
-                        </div>
-                    </div>
 
                     <!-- Filtros de Funções -->
                     <div class="filters-panel">
@@ -8721,17 +8145,6 @@
                         </button>
                     </div>
 
-                    <!-- Filtro por Nome de NPCs -->
-                    <div class="filters-panel">
-                        <div class="filters-panel-title">
-                            <span>🔍</span>
-                            <span>Filtro por Nome:</span>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <input type="text" id="searchNPCsNome" placeholder="Digite o nome do NPC..." style="width: 100%; padding: 12px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; font-size: 1rem;" oninput="filtrarNPCsNome(this.value)">
-                        </div>
-                    </div>
-
                     <!-- Filtro de Tipos -->
                     <div class="filters-panel">
                         <div class="filters-panel-title">
@@ -8771,17 +8184,6 @@
                     <button class="btn btn-primary btn-lg mb-3" data-bs-toggle="modal" data-bs-target="#modalNovoMaterial">
                         ➕ Adicionar Novo Material
                     </button>
-
-                    <!-- Filtro por Nome de Materiais -->
-                    <div class="filters-panel">
-                        <div class="filters-panel-title">
-                            <span>🔍</span>
-                            <span>Filtro por Nome:</span>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <input type="text" id="searchMateriaisNome" placeholder="Digite o nome do material..." style="width: 100%; padding: 12px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; font-size: 1rem;" oninput="filtrarMateriaisNome(this.value)">
-                        </div>
-                    </div>
 
                     <!-- Filtros de Materiais (Raridade e Tipo) -->
                     <div class="filters-panel">
@@ -8844,17 +8246,6 @@
                         ➕ Adicionar Nova Receita
                     </button>
 
-                    <!-- Filtro por Nome de Receitas -->
-                    <div class="filters-panel">
-                        <div class="filters-panel-title">
-                            <span>🔍</span>
-                            <span>Filtro por Nome:</span>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <input type="text" id="searchReceitasNome" placeholder="Digite o nome da receita..." style="width: 100%; padding: 12px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; font-size: 1rem;" oninput="filtrarReceitasNome(this.value)">
-                        </div>
-                    </div>
-
                     <!-- Filtros de Categoria -->
                     <div class="filters-panel">
                         <div class="filters-panel-title">
@@ -8862,15 +8253,15 @@
                             <span>Filtrar por Categoria:</span>
                         </div>
                         <div class="filters-group">
-                            <button type="button" class="filter-btn filter-gold active" data-categoria="todas" onclick="filtrarReceitasPorCategoria('todas')">✓ Todas</button>
-                            <button type="button" class="filter-btn filter-blue" data-categoria="Alquimia" onclick="filtrarReceitasPorCategoria('Alquimia')">🧪 Alquimia</button>
-                            <button type="button" class="filter-btn filter-orange-light" data-categoria="Culinária" onclick="filtrarReceitasPorCategoria('Culinária')">🍖 Culinária</button>
-                            <button type="button" class="filter-btn filter-purple" data-categoria="Engenharia" onclick="filtrarReceitasPorCategoria('Engenharia')">⚙️ Engenharia</button>
-                            <button type="button" class="filter-btn filter-purple" data-categoria="Ritual" onclick="filtrarReceitasPorCategoria('Ritual')">✨ Ritual</button>
-                            <button type="button" class="filter-btn filter-purple" data-categoria="Encantamento" onclick="filtrarReceitasPorCategoria('Encantamento')">🔮 Encantamento</button>
-                            <button type="button" class="filter-btn filter-orange" data-categoria="Ferraria" onclick="filtrarReceitasPorCategoria('Ferraria')">🔨 Ferraria</button>
-                            <button type="button" class="filter-btn filter-yellow" data-categoria="Talismanismo" onclick="filtrarReceitasPorCategoria('Talismanismo')">📿 Talismanismo</button>
-                            <button type="button" class="filter-btn filter-orange-light" data-categoria="Magia Runica" onclick="filtrarReceitasPorCategoria('Magia Runica')">⚡ Magia Runica</button>
+                            <button type="button" class="filter-btn filter-gold active" onclick="filtrarReceitasPorCategoria('todas')">✓ Todas</button>
+                            <button type="button" class="filter-btn filter-blue" onclick="filtrarReceitasPorCategoria('Alquimia')">🧪 Alquimia</button>
+                            <button type="button" class="filter-btn filter-orange-light" onclick="filtrarReceitasPorCategoria('Culinária')">🍖 Culinária</button>
+                            <button type="button" class="filter-btn filter-purple" onclick="filtrarReceitasPorCategoria('Engenharia')">⚙️ Engenharia</button>
+                            <button type="button" class="filter-btn filter-purple" onclick="filtrarReceitasPorCategoria('Ritual')">✨ Ritual</button>
+                            <button type="button" class="filter-btn filter-purple" onclick="filtrarReceitasPorCategoria('Encantamento')">🔮 Encantamento</button>
+                            <button type="button" class="filter-btn filter-orange" onclick="filtrarReceitasPorCategoria('Ferraria')">🔨 Ferraria</button>
+                            <button type="button" class="filter-btn filter-yellow" onclick="filtrarReceitasPorCategoria('Talismanismo')">📿 Talismanismo</button>
+                            <button type="button" class="filter-btn filter-orange-light" onclick="filtrarReceitasPorCategoria('Magia Runica')">⚡ Magia Runica</button>
                         </div>
                     </div>
 
@@ -8893,17 +8284,6 @@
                         <button class="btn btn-success btn-lg" onclick="abrirModalOpcaoGerarItem()" style="background: linear-gradient(135deg, #27ae60 0%, #229954 100%); border: none; color: #fff; font-weight: bold;">
                             🎲 Gerar Item
                         </button>
-                    </div>
-
-                    <!-- Filtro por Nome de Itens -->
-                    <div class="filters-panel">
-                        <div class="filters-panel-title">
-                            <span>🔍</span>
-                            <span>Filtro por Nome:</span>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <input type="text" id="searchItensNome" placeholder="Digite o nome do item..." style="width: 100%; padding: 12px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; font-size: 1rem;" oninput="filtrarItensNome(this.value)">
-                        </div>
                     </div>
 
                     <!-- Filtros Compactos de Itens -->
@@ -8962,17 +8342,6 @@
                         ➕ Adicionar Nova Condição
                     </button>
 
-                    <!-- Filtro por Nome de Condições -->
-                    <div class="filters-panel">
-                        <div class="filters-panel-title">
-                            <span>🔍</span>
-                            <span>Filtro por Nome:</span>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <input type="text" id="searchCondicoesNome" placeholder="Digite o nome da condição..." style="width: 100%; padding: 12px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; font-size: 1rem;" oninput="filtrarCondicoesNome(this.value)">
-                        </div>
-                    </div>
-
                     <!-- Filtros de Tipo -->
                     <div class="filters-panel">
                         <div class="filters-panel-title">
@@ -8980,13 +8349,13 @@
                             <span>Filtrar por Tipo:</span>
                         </div>
                         <div class="filters-group">
-                            <button type="button" class="filter-btn filter-gold active" data-tipo="todos" onclick="filtrarCondicoesPorTipo('todos')">✓ Todos</button>
-                            <button type="button" class="filter-btn filter-green" data-tipo="Buff" onclick="filtrarCondicoesPorTipo('Buff')">✅ Buff</button>
-                            <button type="button" class="filter-btn filter-red" data-tipo="Debuff" onclick="filtrarCondicoesPorTipo('Debuff')">❌ Debuff</button>
-                            <button type="button" class="filter-btn filter-purple" data-tipo="Maldição" onclick="filtrarCondicoesPorTipo('Maldição')">🔥 Maldição</button>
-                            <button type="button" class="filter-btn filter-orange-light" data-tipo="Bênção" onclick="filtrarCondicoesPorTipo('Bênção')">⭐ Bênção</button>
-                            <button type="button" class="filter-btn filter-blue" data-tipo="Estado" onclick="filtrarCondicoesPorTipo('Estado')">🎭 Estado</button>
-                            <button type="button" class="filter-btn filter-cyan" data-tipo="Efeito Temporal" onclick="filtrarCondicoesPorTipo('Efeito Temporal')">⏳ Efeito Temporal</button>
+                            <button type="button" class="filter-btn filter-gold active" onclick="filtrarCondicoesPorTipo('todos')">✓ Todos</button>
+                            <button type="button" class="filter-btn filter-green" onclick="filtrarCondicoesPorTipo('Buff')">✅ Buff</button>
+                            <button type="button" class="filter-btn filter-red" onclick="filtrarCondicoesPorTipo('Debuff')">❌ Debuff</button>
+                            <button type="button" class="filter-btn filter-purple" onclick="filtrarCondicoesPorTipo('Maldição')">🔥 Maldição</button>
+                            <button type="button" class="filter-btn filter-orange-light" onclick="filtrarCondicoesPorTipo('Bênção')">⭐ Bênção</button>
+                            <button type="button" class="filter-btn filter-blue" onclick="filtrarCondicoesPorTipo('Estado')">🎭 Estado</button>
+                            <button type="button" class="filter-btn filter-cyan" onclick="filtrarCondicoesPorTipo('Efeito Temporal')">⏳ Efeito Temporal</button>
                         </div>
                     </div>
 
@@ -9006,17 +8375,6 @@
                         ➕ Adicionar Nova Regra
                     </button>
 
-                    <!-- Filtro por Nome de Regras -->
-                    <div class="filters-panel">
-                        <div class="filters-panel-title">
-                            <span>🔍</span>
-                            <span>Filtro por Nome:</span>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <input type="text" id="searchRegrasNome" placeholder="Digite o nome da regra..." style="width: 100%; padding: 12px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; font-size: 1rem;" oninput="filtrarRegrasNome(this.value)">
-                        </div>
-                    </div>
-
                     <!-- Filtros de Categoria -->
                     <div class="filters-panel">
                         <div class="filters-panel-title">
@@ -9024,17 +8382,17 @@
                             <span>Filtrar por Categoria:</span>
                         </div>
                         <div class="filters-group">
-                            <button type="button" class="filter-btn filter-gold active" data-categoria="todas" onclick="filtrarRegrasPorCategoria('todas')">✓ Todas</button>
-                            <button type="button" class="filter-btn filter-red" data-categoria="Combate" onclick="filtrarRegrasPorCategoria('Combate')">⚔️ Combate</button>
-                            <button type="button" class="filter-btn filter-blue" data-categoria="Recursos" onclick="filtrarRegrasPorCategoria('Recursos')">🔋 Recursos</button>
-                            <button type="button" class="filter-btn filter-green" data-categoria="Progressão" onclick="filtrarRegrasPorCategoria('Progressão')">📈 Progressão</button>
-                            <button type="button" class="filter-btn filter-orange-light" data-categoria="Habilidades" onclick="filtrarRegrasPorCategoria('Habilidades')">⚡ Habilidades</button>
-                            <button type="button" class="filter-btn filter-purple" data-categoria="Condições" onclick="filtrarRegrasPorCategoria('Condições')">🎭 Condições</button>
-                            <button type="button" class="filter-btn filter-cyan" data-categoria="Atributos" onclick="filtrarRegrasPorCategoria('Atributos')">💪 Atributos</button>
-                            <button type="button" class="filter-btn filter-orange" data-categoria="Social" onclick="filtrarRegrasPorCategoria('Social')">👥 Social</button>
-                            <button type="button" class="filter-btn filter-gold" data-categoria="Economia" onclick="filtrarRegrasPorCategoria('Economia')">💰 Economia</button>
-                            <button type="button" class="filter-btn filter-teal" data-categoria="Ambiente" onclick="filtrarRegrasPorCategoria('Ambiente')">🌍 Ambiente</button>
-                            <button type="button" class="filter-btn filter-slate" data-categoria="Outro" onclick="filtrarRegrasPorCategoria('Outro')">📌 Outro</button>
+                            <button type="button" class="filter-btn filter-gold active" onclick="filtrarRegrasPorCategoria('todas')">✓ Todas</button>
+                            <button type="button" class="filter-btn filter-red" onclick="filtrarRegrasPorCategoria('Combate')">⚔️ Combate</button>
+                            <button type="button" class="filter-btn filter-blue" onclick="filtrarRegrasPorCategoria('Recursos')">🔋 Recursos</button>
+                            <button type="button" class="filter-btn filter-green" onclick="filtrarRegrasPorCategoria('Progressão')">📈 Progressão</button>
+                            <button type="button" class="filter-btn filter-orange-light" onclick="filtrarRegrasPorCategoria('Habilidades')">⚡ Habilidades</button>
+                            <button type="button" class="filter-btn filter-purple" onclick="filtrarRegrasPorCategoria('Condições')">🎭 Condições</button>
+                            <button type="button" class="filter-btn filter-cyan" onclick="filtrarRegrasPorCategoria('Atributos')">💪 Atributos</button>
+                            <button type="button" class="filter-btn filter-orange" onclick="filtrarRegrasPorCategoria('Social')">👥 Social</button>
+                            <button type="button" class="filter-btn filter-gold" onclick="filtrarRegrasPorCategoria('Economia')">💰 Economia</button>
+                            <button type="button" class="filter-btn filter-teal" onclick="filtrarRegrasPorCategoria('Ambiente')">🌍 Ambiente</button>
+                            <button type="button" class="filter-btn filter-slate" onclick="filtrarRegrasPorCategoria('Outro')">📌 Outro</button>
                         </div>
                     </div>
 
@@ -9068,16 +8426,12 @@
                     </div>
 
                     <!-- Filtros Dropdowns (Tipo Habilidade, Círculo Mágico, Custo, Ação, Condições) -->
-                    <div class="filters-panel">
-                        <div class="filters-panel-title">
-                            <span>🎨⚡🔮</span>
-                            <span>Filtros Avançados:</span>
-                        </div>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                    <div class="filters-panel" style="margin-bottom: 20px;">
+                        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px;">
                             <!-- Filtro Tipo de Habilidade -->
                             <div>
-                                <label style="color: #d4af37; font-weight: 700; margin-bottom: 6px; display: block; font-size: 0.8rem;">🎨 Tipo de Habilidade</label>
-                                <select id="filterArtsHabilidade" onchange="filtrarArtsPorTipoHabilidade(this.value)">
+                                <label style="color: #d4af37; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.85rem;">🎨 Tipo de Habilidade</label>
+                                <select id="filterArtsHabilidade" onchange="filtrarArtsPorTipoHabilidade(this.value)" style="width: 100%; padding: 8px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; cursor: pointer; font-size: 0.85rem;">
                                     <option value="todas">✓ Todas</option>
                                     <option value="Ofensivas">⚔️ Ofensivas</option>
                                     <option value="Defensivas">🛡️ Defensivas</option>
@@ -9095,8 +8449,8 @@
 
                             <!-- Filtro Círculos Mágicos -->
                             <div>
-                                <label style="color: #d4af37; font-weight: 700; margin-bottom: 6px; display: block; font-size: 0.8rem;">🔮 Círculo Mágico</label>
-                                <select id="filterArtsCirculo" onchange="filtrarArtsPorCirculo(this.value)">
+                                <label style="color: #d4af37; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.85rem;">🔮 Círculo Mágico</label>
+                                <select id="filterArtsCirculo" onchange="filtrarArtsPorCirculo(this.value)" style="width: 100%; padding: 8px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; cursor: pointer; font-size: 0.85rem;">
                                     <option value="todas">✓ Todos</option>
                                     <option value="1º Círculo">1º Círculo</option>
                                     <option value="2º Círculo">2º Círculo</option>
@@ -9115,8 +8469,8 @@
 
                             <!-- Filtro Custo -->
                             <div>
-                                <label style="color: #d4af37; font-weight: 700; margin-bottom: 6px; display: block; font-size: 0.8rem;">💰 Tipo de Custo</label>
-                                <select id="filterArtsTipoCusto" onchange="filtrarArtsPorTipoCusto(this.value)">
+                                <label style="color: #d4af37; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.85rem;">💰 Tipo de Custo</label>
+                                <select id="filterArtsTipoCusto" onchange="filtrarArtsPorTipoCusto(this.value)" style="width: 100%; padding: 8px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; cursor: pointer; font-size: 0.85rem;">
                                     <option value="todas">✓ Todos</option>
                                     <option value="Energia">⚡ Energia</option>
                                     <option value="Fadiga">😓 Fadiga</option>
@@ -9128,8 +8482,8 @@
 
                             <!-- Filtro Ação -->
                             <div>
-                                <label style="color: #d4af37; font-weight: 700; margin-bottom: 6px; display: block; font-size: 0.8rem;">⚡ Tipo de Ação</label>
-                                <select id="filterArtsTipoAcao" onchange="filtrarArtsPorTipoAcao(this.value)">
+                                <label style="color: #d4af37; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.85rem;">⚡ Tipo de Ação</label>
+                                <select id="filterArtsTipoAcao" onchange="filtrarArtsPorTipoAcao(this.value)" style="width: 100%; padding: 8px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; cursor: pointer; font-size: 0.85rem;">
                                     <option value="todas">✓ Todas</option>
                                     <option value="Imediata">⚡ Imediata</option>
                                     <option value="Duradoura">🕐 Duradoura</option>
@@ -9139,8 +8493,8 @@
 
                             <!-- Filtro Condições -->
                             <div>
-                                <label style="color: #d4af37; font-weight: 700; margin-bottom: 6px; display: block; font-size: 0.8rem;">🎭 Condições</label>
-                                <select id="filterArtsCondicoes" onchange="filtrarArtsPorCondicoes(this.value)">
+                                <label style="color: #d4af37; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.85rem;">🎭 Condições</label>
+                                <select id="filterArtsCondicoes" onchange="filtrarArtsPorCondicoes(this.value)" style="width: 100%; padding: 8px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; cursor: pointer; font-size: 0.85rem;">
                                     <option value="todas">✓ Todas</option>
                                     <option value="Buff">✅ Buff</option>
                                     <option value="Debuff">❌ Debuff</option>
@@ -10565,7 +9919,7 @@
                                         <input type="file" id="materialImagemFile" class="hidden-file-input" accept="image/*,.gif,.webp,.svg,.png,.jpg,.jpeg" onchange="previewMaterialFile(event, 'materialImagemUrl', 'previewMaterial')" style="display: none;">
                                     </div>
                                 </div>
-                                <div class="image-preview" id="previewMaterial" style="height: 380px; margin-bottom: 15px; background: rgba(0,0,0,0.4); border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 2px dashed rgba(212,175,55,0.3); overflow: hidden;">
+                                <div class="image-preview" id="previewMaterial" style="height: 500px; margin-bottom: 15px; background: rgba(0,0,0,0.4); border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 2px dashed rgba(212,175,55,0.3); overflow: hidden;">
                                     <span class="text-muted" style="font-size: 0.85rem;">Pré-visualização da imagem</span>
                                 </div>
                                 <button type="button" class="btn w-100 mb-3" id="btnDeletarMaterialModal" style="background: linear-gradient(135deg, rgba(220, 53, 69, 0.8), rgba(193, 34, 47, 0.9)); color: #fff; border: none; border-radius: 6px; font-weight: 700; transition: all 0.25s;" onmouseover="this.style.background='linear-gradient(135deg, rgba(220, 53, 69, 1), rgba(169, 20, 33, 1))'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='linear-gradient(135deg, rgba(220, 53, 69, 0.8), rgba(193, 34, 47, 0.9))'; this.style.transform='translateY(0)';">
@@ -10633,6 +9987,20 @@
                                     <span>50%</span>
                                     <span>100%</span>
                                 </div>
+
+                                <!-- BARRA DE TAXA DE DROP -->
+                                <div style="margin-top: 15px; padding-top: 12px; border-top: 1px solid rgba(212,175,55,0.15);">
+                                    <label class="form-label" style="color: #d4af37; font-weight: 700; font-size: 0.85rem; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                                        <span>📦 Taxa de Drop</span>
+                                        <span id="materialTaxaDropValor" style="color: #f0c850; font-size: 0.9rem;">50%</span>
+                                    </label>
+                                    <input type="range" class="form-range" id="materialTaxaDrop" min="0" max="100" value="50" style="height: 6px; accent-color: #3498db; cursor: pointer;" oninput="atualizarTaxaDropMaterial(this.value)">
+                                    <div style="display: flex; justify-content: space-between; margin-top: 6px; font-size: 0.7rem; color: #7f8c8d;">
+                                        <span>0%</span>
+                                        <span>50%</span>
+                                        <span>100%</span>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Abas de Conteúdo -->
@@ -10645,7 +10013,7 @@
                                         📖 Descrição
                                     </div>
                                 </div>
-                                <div class="card-body" style="max-height: 280px; overflow-y: auto; padding: 15px;">
+                                <div class="card-body" style="max-height: 380px; overflow-y: auto; padding: 15px;">
                                     <textarea class="form-control" id="materialPropriedades" rows="4" placeholder="Ex: Resistência ao fogo, Durabilidade alta..." style="display: none; background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; resize: vertical;" onfocus="this.style.borderColor='rgba(212,175,55,0.8)'; this.style.boxShadow='0 0 12px rgba(212,175,55,0.2)';" onblur="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.boxShadow='none';"></textarea>
                                     <textarea class="form-control" id="materialDescricao" rows="4" placeholder="Descreva o material..." style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; resize: vertical;" onfocus="this.style.borderColor='rgba(212,175,55,0.8)'; this.style.boxShadow='0 0 12px rgba(212,175,55,0.2)';" onblur="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.boxShadow='none';"></textarea>
                                 </div>
@@ -10984,13 +10352,13 @@
 
     <!-- MODAL ADICIONAR CONDIÇÃO -->
     <div class="modal fade" id="modalNovaCondicao" tabindex="-1" role="dialog" aria-modal="true">
-        <div class="modal-dialog" style="width: 850px; max-width: 90vw;">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content bg-dark border border-warning">
                 <div class="modal-header border-warning">
                     <h5 class="modal-title text-warning">⚡ Adicionar Nova Condição (Buff/Debuff)</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <div class="modal-body">
                     <form id="formNovaCondicao">
                         <!-- SEÇÃO 1: IDENTIFICAÇÃO -->
                         <div class="row mb-4">
@@ -12605,8 +11973,8 @@
                     </div>
                 </div>
 
-                <div class="modal-body" style="padding: 20px;">
-                    <div id="listaSeletorCondicoes">
+                <div class="modal-body" style="padding: 20px; max-height: 500px; overflow-y: auto;">
+                    <div id="listaSeletorCondicoes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                         <div style="text-align: center; color: #999;">Carregando condições...</div>
                     </div>
                 </div>
@@ -12646,8 +12014,8 @@
                     </div>
                 </div>
 
-                <div class="modal-body" style="padding: 30px;">
-                    <div id="listaSeletorCondicoesArt">
+                <div class="modal-body" style="padding: 30px; max-height: 65vh; overflow-y: auto; overflow-x: hidden; position: relative; z-index: auto; transform: none; filter: none; opacity: 1;">
+                    <div id="listaSeletorCondicoesArt" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
                         <div style="text-align: center; color: #999;">Carregando condições...</div>
                     </div>
                 </div>
@@ -12689,8 +12057,8 @@
                     </div>
                 </div>
 
-                <div class="modal-body" style="padding: 30px;">
-                    <div id="listaSeletorCondicoesSkill">
+                <div class="modal-body" style="padding: 30px; max-height: 65vh; overflow-y: auto; overflow-x: hidden; position: relative; z-index: auto; transform: none; filter: none; opacity: 1;">
+                    <div id="listaSeletorCondicoesSkill" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
                         <div style="text-align: center; color: #999;">Carregando condições...</div>
                     </div>
                 </div>
@@ -13121,23 +12489,18 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal-content-modern">
                 <div class="modal-header modal-header-modern">
-                    <h5 class="modal-title modal-title-modern">💾 Escolher Escopo e Local de Salvamento</h5>
+                    <h5 class="modal-title modal-title-modern">💾 Escolher Escopo de Salvamento</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body modal-body-modern">
                     <div style="display: flex; flex-direction: column; gap: 12px;">
-                                               
-                        <div style="padding: 12px; background: rgba(100, 200, 255, 0.05); border-radius: 8px; border-left: 3px solid #64c8ff;">
-                            <p style="margin: 0 0 8px 0; font-size: 0.9rem; color: #b0b0b0;">Ou escolha um local específico:</p>
-                        </div>
-                        
-                        <button type="button" class="btn btn-option" style="background: linear-gradient(135deg, rgba(100, 150, 255, 0.2), rgba(80, 120, 255, 0.2)); border: 1px solid rgba(100, 200, 255, 0.3);" onclick="abrirSeletorLocalizacaoSalvamento('tudo')" data-bs-dismiss="modal">
-                            <span class="btn-option-title">📂 Salvar Tudo em Local Específico</span>
-                            <span class="btn-option-desc">Escolha a pasta para salvar todos os dados</span>
+                        <button type="button" class="btn btn-option" onclick="salvarBancoDadosEscopo('tudo')" data-bs-dismiss="modal">
+                            <span class="btn-option-title">💾 Salvar Tudo</span>
+                            <span class="btn-option-desc">Exporta todo o banco de dados em um arquivo JSON</span>
                         </button>
-                        <button type="button" class="btn btn-option" style="background: linear-gradient(135deg, rgba(100, 150, 255, 0.2), rgba(80, 120, 255, 0.2)); border: 1px solid rgba(100, 200, 255, 0.3);" onclick="abrirSeletorLocalizacaoSalvamento('aba')" data-bs-dismiss="modal">
-                            <span class="btn-option-title">📂 Salvar Aba em Local Específico</span>
-                            <span class="btn-option-desc">Escolha a pasta para salvar a aba atual</span>
+                        <button type="button" class="btn btn-option option-green" onclick="salvarBancoDadosEscopo('aba')" data-bs-dismiss="modal">
+                            <span class="btn-option-title">📑 Salvar Aba Atual</span>
+                            <span class="btn-option-desc">Exporta apenas os dados da aba selecionada</span>
                         </button>
                     </div>
                 </div>
@@ -20422,46 +19785,6 @@
                     localStorage.removeItem('redungeon_itens');
                 }
                 console.log('✅ Itens recarregados do localStorage:', armazenar.itens);
-            } else if (tipo === 'receitas') {
-                try {
-                    const dadosRaw = localStorage.getItem('redungeon_receitas');
-                    armazenar.receitas = dadosRaw ? JSON.parse(dadosRaw) : [];
-                } catch (e) {
-                    console.warn('⚠️ Erro ao carregar receitas do localStorage, resetando:', e.message);
-                    armazenar.receitas = [];
-                    localStorage.removeItem('redungeon_receitas');
-                }
-                console.log('✅ Receitas recarregadas do localStorage:', armazenar.receitas);
-            } else if (tipo === 'condicoes') {
-                try {
-                    const dadosRaw = localStorage.getItem('redungeon_condicoes');
-                    armazenar.condicoes = dadosRaw ? JSON.parse(dadosRaw) : [];
-                } catch (e) {
-                    console.warn('⚠️ Erro ao carregar condições do localStorage, resetando:', e.message);
-                    armazenar.condicoes = [];
-                    localStorage.removeItem('redungeon_condicoes');
-                }
-                console.log('✅ Condições recarregadas do localStorage:', armazenar.condicoes);
-            } else if (tipo === 'regras') {
-                try {
-                    const dadosRaw = localStorage.getItem('redungeon_regras');
-                    armazenar.regras = dadosRaw ? JSON.parse(dadosRaw) : [];
-                } catch (e) {
-                    console.warn('⚠️ Erro ao carregar regras do localStorage, resetando:', e.message);
-                    armazenar.regras = [];
-                    localStorage.removeItem('redungeon_regras');
-                }
-                console.log('✅ Regras recarregadas do localStorage:', armazenar.regras);
-            } else if (tipo === 'materiais') {
-                try {
-                    const dadosRaw = localStorage.getItem('redungeon_materiais');
-                    armazenar.materiais = dadosRaw ? JSON.parse(dadosRaw) : [];
-                } catch (e) {
-                    console.warn('⚠️ Erro ao carregar materiais do localStorage, resetando:', e.message);
-                    armazenar.materiais = [];
-                    localStorage.removeItem('redungeon_materiais');
-                }
-                console.log('✅ Materiais recarregados do localStorage:', armazenar.materiais);
             }
         }
 
@@ -21133,14 +20456,6 @@
                 racasParaExibir = armazenar.racas.filter(r => r.raridade === filtroRaridade);
             }
 
-            // Aplicar filtro de nome
-            if (filtroRacasNomeAtivo.trim() !== '') {
-                const termo = filtroRacasNomeAtivo.toLowerCase().trim();
-                racasParaExibir = racasParaExibir.filter(r => 
-                    r.nome.toLowerCase().includes(termo)
-                );
-            }
-
             if (racasParaExibir.length === 0) {
                 container.innerHTML = `
                     <div class="col-12">
@@ -21747,14 +21062,6 @@
                     const funcoes = Array.isArray(c.funcoes) ? c.funcoes : [c.funcao];
                     return funcoes.includes(filtroFuncao);
                 });
-            }
-
-            // Aplicar filtro de nome
-            if (filtroClassesNomeAtivo.trim() !== '') {
-                const termo = filtroClassesNomeAtivo.toLowerCase().trim();
-                classesParaExibir = classesParaExibir.filter(c => 
-                    c.nome.toLowerCase().includes(termo)
-                );
             }
 
             if (classesParaExibir.length === 0) {
@@ -23038,10 +22345,6 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
 
         // Listar Regras
         function listarRegras() {
-            // 🔥 CRUCIAL: Recarregar do localStorage ANTES de listar
-            armazenar.regras = JSON.parse(localStorage.getItem('redungeon_regras')) || [];
-            console.log('📋 Regras carregadas do localStorage:', armazenar.regras);
-            
             const container = document.getElementById('listRegras');
             
             // Proteção: se elemento não existe, retorna sem erro
@@ -23055,42 +22358,6 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                     <div class="col-12">
                         <div class="no-data">
                             <p>Nenhuma regra adicionada ainda. Clique no botão acima para começar!</p>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
-            // Aplicar filtros ANTES de renderizar
-            let regrasFiltradas = armazenar.regras;
-            
-            // Filtro por categoria (obtém do DOM)
-            let categoriaAtiva = 'todas';
-            const botoesCategoria = document.querySelectorAll('#regras .filter-btn');
-            botoesCategoria.forEach(btn => {
-                if (btn.classList.contains('active')) {
-                    categoriaAtiva = btn.getAttribute('data-categoria') || 'todas';
-                }
-            });
-            
-            if (categoriaAtiva !== 'todas') {
-                regrasFiltradas = regrasFiltradas.filter(r => r.categoria === categoriaAtiva);
-            }
-            
-            // Filtro por nome
-            if (filtroRegrasNomeAtivo.trim()) {
-                const termoSearch = filtroRegrasNomeAtivo.toLowerCase();
-                regrasFiltradas = regrasFiltradas.filter(r => 
-                    r.nome.toLowerCase().includes(termoSearch)
-                );
-            }
-
-            // Se nenhuma regra passou pelos filtros
-            if (regrasFiltradas.length === 0) {
-                container.innerHTML = `
-                    <div class="col-12">
-                        <div class="no-data">
-                            <p>Nenhuma regra encontrada com esses filtros.</p>
                         </div>
                     </div>
                 `;
@@ -23124,13 +22391,13 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             };
 
             let html = '';
-            regrasFiltradas.forEach((regra, index) => {
+            armazenar.regras.forEach((regra, index) => {
                 const corCategoria = coresCategoria[regra.categoria] || '#d4af37';
                 const iconCategoria = iconsCategoria[regra.categoria] || '📋';
                 const corForca = regra.balanceamento.forca <= 3 ? '#2ecc71' : regra.balanceamento.forca <= 7 ? '#f39c12' : '#e74c3c';
 
                 html += `
-                    <div class="col-lg-6 mb-3" data-categoria-regra="${regra.categoria}" data-regra-nome="${regra.nome.toLowerCase()}">
+                    <div class="col-lg-6 mb-3" data-categoria-regra="${regra.categoria}">
                         <div class="condition-card-horizontal" style="
                             --condition-card-border: ${corCategoria};
                             --condition-card-glow: ${corCategoria}4d;
@@ -23147,7 +22414,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                             <div class="condition-card-content-horizontal">
                                 <div class="condition-card-top">
                                     <div style="flex: 1;">
-                                        <h5 class="condition-card-title-horizontal" data-regra-nome>${regra.nome}</h5>
+                                        <h5 class="condition-card-title-horizontal">${regra.nome}</h5>
                                         <div style="display: flex; gap: 8px; margin-top: 4px; flex-wrap: wrap;">
                                             <span class="condition-badge" style="
                                                 background: ${corCategoria}22;
@@ -23214,25 +22481,20 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             const cards = document.querySelectorAll('[data-categoria-regra]');
             const todosOsCards = Array.from(cards);
             
-            todosOsCards.forEach(card => {
-                const categCard = card.getAttribute('data-categoria-regra');
-                const nomeCard = card.getAttribute('data-regra-nome') || '';
-                
-                let mostrarPorCategoria = (categoria === 'todas') || (categCard === categoria);
-                
-                // Filtro por nome
-                let mostrarPorNome = true;
-                if (filtroRegrasNomeAtivo.trim()) {
-                    const termoSearch = filtroRegrasNomeAtivo.toLowerCase();
-                    mostrarPorNome = nomeCard.includes(termoSearch);
-                }
-                
-                if (mostrarPorCategoria && mostrarPorNome) {
+            if (categoria === 'todas') {
+                todosOsCards.forEach(card => {
                     card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+                });
+            } else {
+                todosOsCards.forEach(card => {
+                    const categCard = card.getAttribute('data-categoria-regra');
+                    if (categCard === categoria) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
         }
 
         // Função para filtrar Origens, Regiões e Cenários
@@ -23262,23 +22524,15 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             const container = document.getElementById('gridUnificado');
             if (!container) return;
 
-            let todosOrigens = armazenar.origens || [];
-            let todasRegioes = armazenar.regioes || [];
-            let todosCenarios = armazenar.cenarios || [];
-
-            // Aplicar filtro de nome
-            if (filtroOrigensNomeAtivo.trim() !== '') {
-                const termo = filtroOrigensNomeAtivo.toLowerCase().trim();
-                todosOrigens = todosOrigens.filter(o => o.nome.toLowerCase().includes(termo));
-                todasRegioes = todasRegioes.filter(r => r.nome.toLowerCase().includes(termo));
-                todosCenarios = todosCenarios.filter(c => c.nome.toLowerCase().includes(termo));
-            }
+            const todosOrigens = armazenar.origens || [];
+            const todasRegioes = armazenar.regioes || [];
+            const todosCenarios = armazenar.cenarios || [];
             
             if (todosOrigens.length === 0 && todasRegioes.length === 0 && todosCenarios.length === 0) {
                 container.innerHTML = `
                     <div class="origem-empty-state section-origens" style="grid-column: 1 / -1;">
                         <div class="origem-empty-state-icon">🔍</div>
-                        <p class="origem-empty-state-text">Nenhum item encontrado${filtroOrigensNomeAtivo.trim() !== '' ? ' com este nome' : ''}.</p>
+                        <p class="origem-empty-state-text">Nenhum item adicionado ainda.</p>
                     </div>
                 `;
                 return;
@@ -23414,21 +22668,18 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 secaoOrigens.style.display = '';
                 secaoRegioes.style.display = 'none';
                 secaoCenarios.style.display = 'none';
-                listarOrigens();
             } else if (contexto === 'regioesOnly') {
                 // Mostrar só regiões
                 gridUnificado.style.display = 'none';
                 secaoOrigens.style.display = 'none';
                 secaoRegioes.style.display = '';
                 secaoCenarios.style.display = 'none';
-                listarRegioes();
             } else if (contexto === 'cenarioOnly') {
                 // Mostrar só cenários
                 gridUnificado.style.display = 'none';
                 secaoOrigens.style.display = 'none';
                 secaoRegioes.style.display = 'none';
                 secaoCenarios.style.display = '';
-                listarCenarios();
             }
         }
 
@@ -24850,8 +24101,6 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                     btn.classList.remove('active');
                 });
                 document.querySelector('[onclick="filtrarOrigens(\'todas\')"]').classList.add('active');
-                // Renderizar grid unificado após inicialização
-                filtrarOrigens('todas');
             }
             
             // Inicializar filtros de Raças
@@ -25480,58 +24729,6 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 });
             }
 
-            // =============== EVENT LISTENER PARA ABA DE RECEITAS ===============
-            const abaBotaoReceitas = document.getElementById('receitas-tab');
-            if (abaBotaoReceitas) {
-                abaBotaoReceitas.addEventListener('shown.bs.tab', () => {
-                    console.log('📖 Aba de Receitas ativada - FORÇANDO atualização da lista...');
-                    recarregarDadosArmazenar('receitas');
-                    setTimeout(() => {
-                        listarReceitas();
-                        console.log('✅ Lista de receitas atualizada com sucesso');
-                    }, 100);
-                });
-            }
-
-            // =============== EVENT LISTENER PARA ABA DE CONDIÇÕES ===============
-            const abaBotaoCondicoes = document.getElementById('condicoes-tab');
-            if (abaBotaoCondicoes) {
-                abaBotaoCondicoes.addEventListener('shown.bs.tab', () => {
-                    console.log('⚡ Aba de Condições ativada - FORÇANDO atualização da lista...');
-                    recarregarDadosArmazenar('condicoes');
-                    setTimeout(() => {
-                        listarCondicoes();
-                        console.log('✅ Lista de condições atualizada com sucesso');
-                    }, 100);
-                });
-            }
-
-            // =============== EVENT LISTENER PARA ABA DE REGRAS ===============
-            const abaBotaoRegras = document.getElementById('regras-tab');
-            if (abaBotaoRegras) {
-                abaBotaoRegras.addEventListener('shown.bs.tab', () => {
-                    console.log('📋 Aba de Regras ativada - FORÇANDO atualização da lista...');
-                    recarregarDadosArmazenar('regras');
-                    setTimeout(() => {
-                        listarRegras();
-                        console.log('✅ Lista de regras atualizada com sucesso');
-                    }, 100);
-                });
-            }
-
-            // =============== EVENT LISTENER PARA ABA DE MATERIAIS ===============
-            const abaBotaoMateriais = document.getElementById('materiais-tab');
-            if (abaBotaoMateriais) {
-                abaBotaoMateriais.addEventListener('shown.bs.tab', () => {
-                    console.log('⚙️ Aba de Materiais ativada - FORÇANDO atualização da lista...');
-                    recarregarDadosArmazenar('materiais');
-                    setTimeout(() => {
-                        listarMateriais();
-                        console.log('✅ Lista de materiais atualizada com sucesso');
-                    }, 100);
-                });
-            }
-
             // =============== EVENT LISTENER PARA MODAL DE ITENS ===============
             const modalNovoItem = document.getElementById('modalNovoItem');
             if (modalNovoItem) {
@@ -25567,27 +24764,11 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 return;
             }
 
-            // Aplicar filtro de nome
-            let historiaParaExibir = armazenar.Historia;
-            if (filtroHistoriaNomeAtivo.trim() !== '') {
-                const termo = filtroHistoriaNomeAtivo.toLowerCase().trim();
-                historiaParaExibir = historiaParaExibir.filter(h => 
-                    h.nome.toLowerCase().includes(termo)
-                );
-            }
-
-            // Aplicar filtro de tipo
-            if (filtroHistoriaTipoAtivo !== 'todos') {
-                historiaParaExibir = historiaParaExibir.filter(h => 
-                    (h.tipo || 'Campanha') === filtroHistoriaTipoAtivo
-                );
-            }
-
-            if (historiaParaExibir.length === 0) {
+            if (armazenar.Historia.length === 0) {
                 container.innerHTML = `
                     <div class="col-12">
                         <div class="no-data">
-                            <p>Nenhum evento encontrado${filtroHistoriaNomeAtivo.trim() !== '' ? ' com este nome' : ''}. Clique no botão acima para começar!</p>
+                            <p>Nenhum evento adicionado ainda. Clique no botão acima para começar!</p>
                         </div>
                     </div>
                 `;
@@ -25596,7 +24777,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
 
             let html = '<div class="historia-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; width: 100%;">';
             
-            for (const evento of historiaParaExibir) {
+            for (const evento of armazenar.Historia) {
                 const numCapitulos = evento.capitulos ? evento.capitulos.length : 0;
                 // Usar await para obter a imagem de forma assíncrona
                 const imagemUrl = (await obterImagemDeEstrutura(evento.imagem)) || criarPlaceholder(280, 180, 'Sem Capa');
@@ -25737,13 +24918,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
         }
 
         // Função para filtrar história por tipo
-        // Variável global para armazenar filtro ativo de tipo de história
-        let filtroHistoriaTipoAtivo = 'todos';
-
         function filtrarHistoriaPorTipo(tipo) {
-            // Salvar o filtro ativo
-            filtroHistoriaTipoAtivo = tipo;
-            
             // Atualizar estado dos botões de filtro
             document.querySelectorAll('#Historia .filter-btn').forEach(btn => {
                 btn.classList.remove('active');
@@ -25759,8 +24934,31 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 });
             }
             
-            // Recarregar lista com o novo filtro
-            listarHistoria();
+            const cards = document.querySelectorAll('[data-tipo-historia]');
+            const todosOsCards = Array.from(cards);
+            
+            if (tipo === 'todos') {
+                // Mostrar todos
+                todosOsCards.forEach(card => {
+                    card.style.display = '';
+                });
+            } else {
+                // Filtrar por tipo específico
+                todosOsCards.forEach(card => {
+                    const tipoCard = card.getAttribute('data-tipo-historia');
+                    if (tipoCard === tipo) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Verificar se há cards visíveis
+            const cardsVisiveis = todosOsCards.filter(card => card.style.display !== 'none');
+            if (cardsVisiveis.length === 0 && tipo !== 'todos') {
+                console.log(`Nenhuma ${tipo} encontrada`);
+            }
         }
         
         // Carregar imagens armazenadas em IndexedDB
@@ -29409,25 +28607,18 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 return;
             }
 
-            // Aplicar filtro de nome
-            let origensParaExibir = armazenar.origens || [];
-            if (filtroOrigensNomeAtivo.trim() !== '') {
-                const termo = filtroOrigensNomeAtivo.toLowerCase().trim();
-                origensParaExibir = origensParaExibir.filter(o => o.nome.toLowerCase().includes(termo));
-            }
-
-            if (origensParaExibir.length === 0) {
+            if (armazenar.origens.length === 0) {
                 container.innerHTML = `
                     <div class="origem-empty-state section-origens">
                         <div class="origem-empty-state-icon">📖</div>
-                        <p class="origem-empty-state-text">Nenhuma origem encontrada${filtroOrigensNomeAtivo.trim() !== '' ? ' com este nome' : ''}.</p>
+                        <p class="origem-empty-state-text">Nenhuma origem adicionada ainda. Clique no botão acima para começar!</p>
                     </div>
                 `;
                 return;
             }
 
             let html = '<div class="origem-cards-grid">';
-            origensParaExibir.forEach(origem => {
+            armazenar.origens.forEach(origem => {
                 const imagemHtml = origem.imagem ? 
                     `<div class="origem-card-image">
                         <img src="${sanitizarImagemUrl(origem.imagem)}" alt="${origem.nome}" onerror="this.style.display='none'">
@@ -29468,25 +28659,18 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 return;
             }
 
-            // Aplicar filtro de nome
-            let regioesParaExibir = armazenar.regioes || [];
-            if (filtroOrigensNomeAtivo.trim() !== '') {
-                const termo = filtroOrigensNomeAtivo.toLowerCase().trim();
-                regioesParaExibir = regioesParaExibir.filter(r => r.nome.toLowerCase().includes(termo));
-            }
-
-            if (regioesParaExibir.length === 0) {
+            if (!armazenar.regioes || armazenar.regioes.length === 0) {
                 container.innerHTML = `
                     <div class="origem-empty-state section-regioes">
                         <div class="origem-empty-state-icon">🗺️</div>
-                        <p class="origem-empty-state-text">Nenhuma região encontrada${filtroOrigensNomeAtivo.trim() !== '' ? ' com este nome' : ''}.</p>
+                        <p class="origem-empty-state-text">Nenhuma região adicionada ainda. Use o botão "Nova Região" acima!</p>
                     </div>
                 `;
                 return;
             }
 
             let html = '<div class="origem-cards-grid">';
-            regioesParaExibir.forEach(regiao => {
+            armazenar.regioes.forEach(regiao => {
                 const imagemHtml = regiao.imagem ? 
                     `<div class="origem-card-image">
                         <img src="${sanitizarImagemUrl(regiao.imagem)}" alt="${regiao.nome}" onerror="this.style.display='none'">
@@ -29530,25 +28714,18 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 return;
             }
 
-            // Aplicar filtro de nome
-            let cenarioParaExibir = armazenar.cenarios || [];
-            if (filtroOrigensNomeAtivo.trim() !== '') {
-                const termo = filtroOrigensNomeAtivo.toLowerCase().trim();
-                cenarioParaExibir = cenarioParaExibir.filter(c => c.nome.toLowerCase().includes(termo));
-            }
-
-            if (cenarioParaExibir.length === 0) {
+            if (!armazenar.cenarios || armazenar.cenarios.length === 0) {
                 container.innerHTML = `
                     <div class="origem-empty-state section-cenarios">
                         <div class="origem-empty-state-icon">🏛️</div>
-                        <p class="origem-empty-state-text">Nenhum cenário encontrado${filtroOrigensNomeAtivo.trim() !== '' ? ' com este nome' : ''}.</p>
+                        <p class="origem-empty-state-text">Nenhum cenário adicionado ainda. Use o botão "Novo Cenário" acima!</p>
                     </div>
                 `;
                 return;
             }
 
             let html = '<div class="origem-cards-grid">';
-            cenarioParaExibir.forEach(cenario => {
+            armazenar.cenarios.forEach(cenario => {
                 const imagemHtml = cenario.imagem ? 
                     `<div class="origem-card-image">
                         <img src="${sanitizarImagemUrl(cenario.imagem)}" alt="${cenario.nome}" onerror="this.style.display='none'">
@@ -29687,99 +28864,6 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
 
         // Variável para armazenar o filtro ativo
         let filtroNPCAtivo = 'todos';
-        let filtroNPCsNomeAtivo = '';
-
-        // Função para filtrar NPCs por nome
-        function filtrarNPCsNome(termo) {
-            filtroNPCsNomeAtivo = termo;
-            listarNPCsComFiltro();
-        }
-
-        // Variáveis de filtro de nome para outras abas
-        let filtroMateriaisNomeAtivo = '';
-        let filtroReceitasNomeAtivo = '';
-        let filtroItensNomeAtivo = '';
-        let filtroCondicoesNomeAtivo = '';
-        let filtroRegrasNomeAtivo = '';
-
-        // Função para filtrar Materiais por nome
-        function filtrarMateriaisNome(termo) {
-            filtroMateriaisNomeAtivo = termo;
-            listarMateriais();
-        }
-
-        // Função para filtrar Receitas por nome
-        function filtrarReceitasNome(termo) {
-            filtroReceitasNomeAtivo = termo;
-            listarReceitas();
-        }
-
-        // Função para filtrar Itens por nome
-        function filtrarItensNome(termo) {
-            filtroItensNomeAtivo = termo;
-            listarItens();
-        }
-
-        // Função para filtrar Condições por nome
-        function filtrarCondicoesNome(termo) {
-            filtroCondicoesNomeAtivo = termo;
-            listarCondicoes();
-        }
-
-        // Função para filtrar Regras por nome
-        function filtrarRegrasNome(termo) {
-            filtroRegrasNomeAtivo = termo;
-            listarRegras();
-        }
-
-        // Variáveis de filtro de nome para Classes, Raças, Origens e História
-        let filtroClassesNomeAtivo = '';
-        let filtroRacasNomeAtivo = '';
-        let filtroOrigensNomeAtivo = '';
-        let filtroHistoriaNomeAtivo = '';
-
-        // Função para filtrar Classes por nome
-        function filtrarClassesNome(termo) {
-            filtroClassesNomeAtivo = termo;
-            listarClasses();
-        }
-
-        // Função para filtrar Raças por nome
-        function filtrarRacasNome(termo) {
-            filtroRacasNomeAtivo = termo;
-            listarRacas();
-        }
-
-        // Função para filtrar Origens por nome
-        function filtrarOrigensNome(termo) {
-            filtroOrigensNomeAtivo = termo;
-            
-            // Determinar qual view está ativa e chamar a função apropriada
-            const gridUnificado = document.getElementById('gridUnificado');
-            const secaoOrigens = document.getElementById('secaoOrigens');
-            const secaoRegioes = document.getElementById('secaoRegioes');
-            const secaoCenarios = document.getElementById('secaoCenarios');
-            
-            if (gridUnificado.style.display !== 'none') {
-                // View "Todas" está ativa
-                renderizarGridUnificado();
-            } else if (secaoOrigens.style.display !== 'none') {
-                // View "Apenas Origens" está ativa
-                listarOrigens();
-            } else if (secaoRegioes.style.display !== 'none') {
-                // View "Apenas Regiões" está ativa
-                listarRegioes();
-            } else if (secaoCenarios.style.display !== 'none') {
-                // View "Apenas Cenários" está ativa
-                listarCenarios();
-            }
-        }
-
-        // Função para filtrar História por nome
-        function filtrarHistoriaNome(termo) {
-            filtroHistoriaNomeAtivo = termo;
-            listarHistoria();
-        }
 
         // Editar NPC - MOVIDO PARA ANTES DE listarNPCsComFiltro PARA EVITAR ERRO DE REFERÊNCIA
         async function editarNPC(index) {
@@ -30063,21 +29147,8 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             }
 
             let npcsFiltrados = armazenar.npcs;
-            
-            // Filtro 1: por tipo (NPC, MOB, BOSS)
             if (filtroNPCAtivo !== 'todos') {
-                npcsFiltrados = npcsFiltrados.filter(npc => (npc.tipo || 'NPC') === filtroNPCAtivo);
-            }
-
-            // Filtro 2: por nome
-            if (filtroNPCsNomeAtivo.trim()) {
-                const termoSearch = filtroNPCsNomeAtivo.toLowerCase();
-                npcsFiltrados = npcsFiltrados.filter(npc => {
-                    const nome = (npc.nome || '').toLowerCase();
-                    const raca = (npc.raca || '').toLowerCase();
-                    const classe = (npc.classe || '').toLowerCase();
-                    return nome.includes(termoSearch) || raca.includes(termoSearch) || classe.includes(termoSearch);
-                });
+                npcsFiltrados = armazenar.npcs.filter(npc => (npc.tipo || 'NPC') === filtroNPCAtivo);
             }
 
             if (npcsFiltrados.length === 0) {
@@ -30750,60 +29821,10 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                     return;
                 }
 
-                // Aplicar filtros ANTES de renderizar
-                let itensFiltrados = armazenar.itens;
-                
-                // Filtro por qualidade (obtém do DOM)
-                let qualidadeAtiva = 'todas';
-                const botoesQualidade = document.querySelectorAll('#itens .filter-qualidade');
-                botoesQualidade.forEach(btn => {
-                    if (btn.classList.contains('active')) {
-                        qualidadeAtiva = btn.getAttribute('data-qualidade');
-                    }
-                });
-                
-                if (qualidadeAtiva !== 'todas') {
-                    itensFiltrados = itensFiltrados.filter(i => i.qualidade === qualidadeAtiva);
-                }
-                
-                // Filtro por tipo (obtém do DOM)
-                let tipoAtivo = 'todos';
-                const botoesTipo = document.querySelectorAll('#itens .filter-tipo');
-                botoesTipo.forEach(btn => {
-                    if (btn.classList.contains('active')) {
-                        tipoAtivo = btn.getAttribute('data-tipo');
-                    }
-                });
-                
-                if (tipoAtivo !== 'todos') {
-                    itensFiltrados = itensFiltrados.filter(i => i.tipo === tipoAtivo);
-                }
-                
-                // Filtro por nome
-                if (filtroItensNomeAtivo.trim()) {
-                    const termoSearch = filtroItensNomeAtivo.toLowerCase();
-                    itensFiltrados = itensFiltrados.filter(i => 
-                        i.nome.toLowerCase().includes(termoSearch)
-                    );
-                }
-
-                // Se nenhum item passou pelos filtros
-                if (itensFiltrados.length === 0) {
-                    container.innerHTML = `
-                        <div class="col-12">
-                            <div class="no-data">
-                                <p>Nenhum item encontrado com esses filtros.</p>
-                            </div>
-                        </div>
-                    `;
-                    return;
-                }
-
                 let html = '';
                 
                 // Processar items com async para carregar imagens do IndexedDB
-                for (let i = 0; i < itensFiltrados.length; i++) {
-                    const index = armazenar.itens.indexOf(itensFiltrados[i]);
+                for (let index = 0; index < armazenar.itens.length; index++) {
                     const item = armazenar.itens[index];
                     if (!item || !item.nome) {
                         console.warn('⚠️ Item inválido no índice:', index);
@@ -30840,8 +29861,8 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                     const corHex = coresQualidade.color || '#d4af37';
                     const corShadow = coresQualidade.shadowColor || 'rgba(212, 175, 55, 0.3)';
                     html += `
-                        <div class="col-md-6 col-lg-4 mb-4" data-qualidade-item="${item.qualidade || 'comum'}" data-tipo-item="${item.tipo || 'todos'}" data-item-nome="${item.nome.toLowerCase()}">
-                            <div style="border-radius: 12px; overflow: hidden; border: 2px solid ${corHex}; box-shadow: 0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(212,175,55,0.2); transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); background: linear-gradient(135deg, rgba(22, 33, 62, 0.98) 0%, rgba(15, 20, 40, 0.95) 100%); cursor: pointer; transform: translateY(0) scale(1);" onmouseover="this.style.transform='translateY(-8px) scale(1.02)'; this.style.boxShadow='0 16px 40px rgba(212,175,55,0.3), inset 0 1px 0 rgba(212,175,55,0.3)';" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(212,175,55,0.2)';">
+                        <div class="col-md-6 col-lg-4 mb-4" data-qualidade-item="${item.qualidade || 'comum'}" data-tipo-item="${item.tipo || 'todos'}">
+                            <div style="border-radius: 12px; overflow: hidden; border: 2px solid ${corHex}; box-shadow: 0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(212,175,55,0.2); transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); background: linear-gradient(135deg, rgba(22, 33, 62, 0.98) 0%, rgba(15, 20, 40, 0.95) 100%); cursor: pointer; transform: translateY(0) scale(1);" onmouseover="this.style.transform='scale(1.005)'; this.style.boxShadow='0 16px 40px rgba(212,175,55,0.3), inset 0 1px 0 rgba(212,175,55,0.3)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(212,175,55,0.2)';">
                                 <!-- Imagem -->
                                 <div style="height: 280px; background: linear-gradient(135deg, ${corShadow}15 0%, rgba(0,0,0,0.4) 100%); display: flex; align-items: center; justify-content: center; overflow: hidden; border-bottom: 1px solid ${corHex}30; position: relative;">
                                     ${imagemParaExibir && typeof imagemParaExibir === 'string' ? `<img src="${imagemParaExibir}" alt="${item.nome}" style="width: 100%; height: 100%; object-fit: contain; padding: 15px; filter: drop-shadow(0 4px 12px ${corShadow}); transition: all 0.3s;" onerror="this.style.display=&quot;none&quot;; this.parentElement.innerHTML=&quot;<span class=&quot;text-muted&quot; style=&quot;font-size: 0.9rem;&quot;>Sem imagem</span>&quot;">` : '<span class="text-muted" style="font-size: 0.9rem;">Sem imagem</span>'}
@@ -30850,7 +29871,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                                 <!-- Dados do Item -->
                                 <div style="padding: 16px; background: rgba(0,0,0,0.2);">
                                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 8px;">
-                                        <h5 class="text-gold mb-0" style="margin: 0; font-size: 1.15rem; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.5); flex: 1; line-height: 1.3;" data-item-nome>${item.nome}</h5>
+                                        <h5 class="text-gold mb-0" style="margin: 0; font-size: 1.15rem; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.5); flex: 1; line-height: 1.3;">${item.nome}</h5>
                                         <span style="background: linear-gradient(135deg, ${coresQualidade.bg}, ${coresQualidade.color}20); color: ${coresQualidade.color}; border: 1px solid ${corHex}; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">${item.qualidade || 'Comum'}</span>
                                     </div>
                                     
@@ -30937,27 +29958,19 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 });
             }
             
-            // Aplicar filtros combinados (qualidade + tipo + nome)
+            // Aplicar filtros combinados (qualidade + tipo)
             const cards = document.querySelectorAll('[data-qualidade-item]');
             const todosOsCards = Array.from(cards);
             
             todosOsCards.forEach(card => {
                 const qualidadeCard = card.getAttribute('data-qualidade-item');
                 const tipoCard = card.getAttribute('data-tipo-item') || 'todos';
-                const nomeCard = card.querySelector('[data-item-nome]')?.textContent.toLowerCase() || '';
                 
                 // Verificar se o card atende aos critérios de ambos os filtros
                 const passaQualidade = qualidade === 'todas' || qualidadeCard === qualidade;
                 const passaTipo = tipoAtivo === 'todos' || tipoCard === tipoAtivo;
                 
-                // Filtro por nome
-                let passaNome = true;
-                if (filtroItensNomeAtivo.trim()) {
-                    const termoSearch = filtroItensNomeAtivo.toLowerCase();
-                    passaNome = nomeCard.includes(termoSearch);
-                }
-                
-                if (passaQualidade && passaTipo && passaNome) {
+                if (passaQualidade && passaTipo) {
                     card.style.display = '';
                 } else {
                     card.style.display = 'none';
@@ -30991,27 +30004,19 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 });
             }
             
-            // Aplicar filtros combinados (qualidade + tipo + nome)
+            // Aplicar filtros combinados (qualidade + tipo)
             const cards = document.querySelectorAll('[data-qualidade-item]');
             const todosOsCards = Array.from(cards);
             
             todosOsCards.forEach(card => {
                 const qualidadeCard = card.getAttribute('data-qualidade-item');
                 const tipoCard = card.getAttribute('data-tipo-item') || 'todos';
-                const nomeCard = card.querySelector('[data-item-nome]')?.textContent.toLowerCase() || '';
                 
                 // Verificar se o card atende aos critérios de ambos os filtros
                 const passaQualidade = qualidadeAtiva === 'todas' || qualidadeCard === qualidadeAtiva;
                 const passaTipo = tipo === 'todos' || tipoCard === tipo;
                 
-                // Filtro por nome
-                let passaNome = true;
-                if (filtroItensNomeAtivo.trim()) {
-                    const termoSearch = filtroItensNomeAtivo.toLowerCase();
-                    passaNome = nomeCard.includes(termoSearch);
-                }
-                
-                if (passaQualidade && passaTipo && passaNome) {
+                if (passaQualidade && passaTipo) {
                     card.style.display = '';
                 } else {
                     card.style.display = 'none';
@@ -32249,10 +31254,6 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
 
         // Listar Materiais
         function listarMateriais() {
-            // 🔥 CRUCIAL: Recarregar do localStorage ANTES de listar
-            armazenar.materiais = JSON.parse(localStorage.getItem('redungeon_materiais')) || [];
-            console.log('⚙️ Materiais carregados do localStorage:', armazenar.materiais);
-            
             const container = document.getElementById('listMateriais');
             
             // Proteção: se elemento não existe, retorna sem erro
@@ -32273,42 +31274,8 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 return;
             }
 
-            // Aplicar filtros
-            let materialsFiltrados = armazenar.materiais;
-            
-            // Filtro por raridade
-            if (filtroRaridadeSelecionada !== 'todas') {
-                materialsFiltrados = materialsFiltrados.filter(m => m.raridade === filtroRaridadeSelecionada);
-            }
-            
-            // Filtro por tipo
-            if (filtroTipoSelecionado !== 'todas') {
-                materialsFiltrados = materialsFiltrados.filter(m => m.tipo === filtroTipoSelecionado);
-            }
-            
-            // Filtro por nome
-            if (filtroMateriaisNomeAtivo.trim()) {
-                const termoSearch = filtroMateriaisNomeAtivo.toLowerCase();
-                materialsFiltrados = materialsFiltrados.filter(m => 
-                    m.nome.toLowerCase().includes(termoSearch)
-                );
-            }
-
-            // Se nenhum material passou pelos filtros
-            if (materialsFiltrados.length === 0) {
-                container.innerHTML = `
-                    <div class="material-cards-grid">
-                        <div style="grid-column: 1 / -1; padding: 60px 20px; text-align: center; background: linear-gradient(135deg, rgba(22, 33, 62, 0.5) 0%, rgba(20, 30, 55, 0.7) 100%); border-radius: 12px; border: 2px dashed #555;">
-                            <div style="font-size: 3.5rem; margin-bottom: 15px; opacity: 0.6;">🔍</div>
-                            <div style="color: #95a5a6; font-size: 1.1rem;">Nenhum material encontrado com esses filtros.</div>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
             let html = '<div class="material-cards-grid">';
-            materialsFiltrados.forEach((material, index) => {
+            armazenar.materiais.forEach((material, index) => {
                 const tipoIcon = {
                     'Cristal': '💎',
                     'Minério': '⛏️',
@@ -32327,7 +31294,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 const coresRaridade = obterCoresRaridade(material.raridade);
 
                 html += `
-                    <div class="material-card-lux" data-raridade-material="${material.raridade}" data-tipo-material="${material.tipo}" data-material-nome="${material.nome.toLowerCase()}">
+                    <div class="material-card-lux" data-raridade-material="${material.raridade}" data-tipo-material="${material.tipo}">
                         <!-- IMAGEM -->
                         <div class="material-card-image">
                             ${imagemUrl 
@@ -32339,7 +31306,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                         <!-- HEADER COM NOME E BADGES -->
                         <div class="material-card-header">
                             <div class="material-card-header-left">
-                                <h3 class="material-card-title" data-material-nome>${material.nome}</h3>
+                                <h3 class="material-card-title">${material.nome}</h3>
                                 <div class="material-card-badges">
                                     <span class="material-badge tipo">${tipoIcon[material.tipo] || '⛏️'} ${material.tipo}</span>
                                     <span class="material-badge raridade">⭐ ${material.raridade}</span>
@@ -32363,6 +31330,10 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                                 <div class="material-info-item">
                                     <span class="material-info-label">🔮 Pureza</span>
                                     <span class="material-info-value text-gold">${material.pureza || '100%'}</span>
+                                </div>
+                                <div class="material-info-item">
+                                    <span class="material-info-label">📥 Drop</span>
+                                    <span class="material-info-value text-gold">${material.taxaDrop || '50%'}</span>
                                 </div>
                             </div>
 
@@ -32448,19 +31419,11 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             todosOsCards.forEach(card => {
                 const raridadeCard = card.getAttribute('data-raridade-material');
                 const tipoCard = card.getAttribute('data-tipo-material');
-                const nomeCard = card.getAttribute('data-material-nome') || '';
                 
                 let mostrarPorRaridade = (filtroRaridadeSelecionada === 'todas') || (raridadeCard === filtroRaridadeSelecionada);
                 let mostrarPorTipo = (filtroTipoSelecionado === 'todas') || (tipoCard === filtroTipoSelecionado);
                 
-                // Filtro por nome
-                let mostrarPorNome = true;
-                if (filtroMateriaisNomeAtivo.trim()) {
-                    const termoSearch = filtroMateriaisNomeAtivo.toLowerCase();
-                    mostrarPorNome = nomeCard.includes(termoSearch);
-                }
-                
-                if (mostrarPorRaridade && mostrarPorTipo && mostrarPorNome) {
+                if (mostrarPorRaridade && mostrarPorTipo) {
                     card.style.display = '';
                 } else {
                     card.style.display = 'none';
@@ -32517,6 +31480,10 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             document.getElementById('materialPurezaValor').textContent = valor + '%';
         }
 
+        function atualizarTaxaDropMaterial(valor) {
+            document.getElementById('materialTaxaDropValor').textContent = valor + '%';
+        }
+
         function salvarMaterial() {
             const nome = document.getElementById('materialNome').value.trim();
             const tipo = document.getElementById('materialTipo').value.trim();
@@ -32524,6 +31491,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             const valor = document.getElementById('materialValor').value.trim();
             const quantidade = parseInt(document.getElementById('materialQuantidade').value) || 1;
             const pureza = document.getElementById('materialPureza').value + '%';
+            const taxaDrop = document.getElementById('materialTaxaDrop').value + '%';
             const propriedades = document.getElementById('materialPropriedades').value.trim();
             const descricao = document.getElementById('materialDescricao').value.trim();
             const imagem = obterImagemMaterial();
@@ -32540,6 +31508,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 valor,
                 quantidade,
                 pureza,
+                taxaDrop,
                 propriedades,
                 descricao,
                 imagem
@@ -32556,6 +31525,8 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             document.getElementById('materialQuantidade').value = '1';
             document.getElementById('materialPureza').value = '100';
             document.getElementById('materialPurezaValor').textContent = '100%';
+            document.getElementById('materialTaxaDrop').value = '50';
+            document.getElementById('materialTaxaDropValor').textContent = '50%';
             document.getElementById('previewMaterial').innerHTML = '<span class="text-muted" style="font-size: 0.85rem;">Pré-visualização da imagem</span>';
             document.getElementById('materialPropriedades').style.display = 'none';
             document.getElementById('materialDescricao').style.display = 'block';
@@ -32848,6 +31819,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                         <div><strong>Valor:</strong> ${material.valor || '-'}</div>
                         <div><strong>Quantidade:</strong> ${material.quantidade || 1}</div>
                         <div><strong>Pureza:</strong> ${material.pureza || '100%'}</div>
+                        <div><strong>Taxa de Drop:</strong> ${material.taxaDrop || '50%'}</div>
                     </div>
 
                     ${material.propriedades ? `
@@ -33438,10 +32410,6 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
 
         // Listar Receitas
         function listarReceitas() {
-            // 🔥 CRUCIAL: Recarregar do localStorage ANTES de listar
-            armazenar.receitas = JSON.parse(localStorage.getItem('redungeon_receitas')) || [];
-            console.log('📖 Receitas carregadas do localStorage:', armazenar.receitas);
-            
             const container = document.getElementById('listReceitas');
             
             // Proteção: se elemento não existe, retorna sem erro
@@ -33462,45 +32430,8 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 return;
             }
 
-            // Aplicar filtros
-            let receitasFiltradas = armazenar.receitas;
-            
-            // Filtro por categoria (obtém do DOM)
-            let categoriaAtiva = 'todas';
-            const botoesCategoria = document.querySelectorAll('#receitas .filter-btn');
-            botoesCategoria.forEach(btn => {
-                if (btn.classList.contains('active')) {
-                    categoriaAtiva = btn.getAttribute('data-categoria') || 'todas';
-                }
-            });
-            
-            if (categoriaAtiva !== 'todas') {
-                receitasFiltradas = receitasFiltradas.filter(r => r.categoria === categoriaAtiva);
-            }
-            
-            // Filtro por nome
-            if (filtroReceitasNomeAtivo.trim()) {
-                const termoSearch = filtroReceitasNomeAtivo.toLowerCase();
-                receitasFiltradas = receitasFiltradas.filter(r => 
-                    r.nome.toLowerCase().includes(termoSearch)
-                );
-            }
-
-            // Se nenhuma receita passou pelos filtros
-            if (receitasFiltradas.length === 0) {
-                container.innerHTML = `
-                    <div class="receita-cards-grid">
-                        <div style="grid-column: 1 / -1; padding: 60px 20px; text-align: center; background: linear-gradient(135deg, rgba(22, 33, 62, 0.5) 0%, rgba(20, 30, 55, 0.7) 100%); border-radius: 12px; border: 2px dashed #555;">
-                            <div style="font-size: 3.5rem; margin-bottom: 15px; opacity: 0.6;">🔍</div>
-                            <div style="color: #95a5a6; font-size: 1.1rem;">Nenhuma receita encontrada com esses filtros.</div>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
             let html = '<div class="receita-cards-grid">';
-            receitasFiltradas.forEach(receita => {
+            armazenar.receitas.forEach(receita => {
                 const categoriaIcon = {
                     'Alquimia': '🧪',
                     'Culinária': '🍖',
@@ -33518,7 +32449,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                     : '<li>Nenhum ingrediente</li>';
 
                 html += `
-                    <div class="receita-card-lux" data-categoria-receita="${receita.categoria}" data-raridade-receita="${receita.raridade}" data-receita-nome="${receita.nome.toLowerCase()}">
+                    <div class="receita-card-lux" data-categoria-receita="${receita.categoria}" data-raridade-receita="${receita.raridade}">
                         <!-- IMAGEM -->
                         <div class="receita-card-image">
                             ${imagemUrl 
@@ -33530,7 +32461,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                         <!-- HEADER COM NOME E BADGES -->
                         <div class="receita-card-header">
                             <div class="receita-card-header-left">
-                                <h3 class="receita-card-title" data-receita-nome>${receita.nome}</h3>
+                                <h3 class="receita-card-title">${receita.nome}</h3>
                                 <div class="receita-card-badges">
                                     <span class="receita-badge categoria">${categoriaIcon[receita.categoria] || '📖'} ${receita.categoria}</span>
                                     <span class="receita-badge raridade">⭐ ${receita.raridade}</span>
@@ -33636,25 +32567,22 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             const cards = document.querySelectorAll('[data-categoria-receita]');
             const todosOsCards = Array.from(cards);
             
-            todosOsCards.forEach(card => {
-                const categCard = card.getAttribute('data-categoria-receita');
-                const nomeCard = card.getAttribute('data-receita-nome') || '';
-                
-                let mostrarPorCategoria = (categoria === 'todas') || (categCard === categoria);
-                
-                // Filtro por nome
-                let mostrarPorNome = true;
-                if (filtroReceitasNomeAtivo.trim()) {
-                    const termoSearch = filtroReceitasNomeAtivo.toLowerCase();
-                    mostrarPorNome = nomeCard.includes(termoSearch);
-                }
-                
-                if (mostrarPorCategoria && mostrarPorNome) {
+            if (categoria === 'todas') {
+                // Mostrar todos
+                todosOsCards.forEach(card => {
                     card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+                });
+            } else {
+                // Filtrar por categoria específica
+                todosOsCards.forEach(card => {
+                    const categCard = card.getAttribute('data-categoria-receita');
+                    if (categCard === categoria) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
         }
 
         // Visualizar Receita Completa
@@ -33968,10 +32896,6 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
 
         // Listar Condições
         function listarCondicoes() {
-            // 🔥 CRUCIAL: Recarregar do localStorage ANTES de listar
-            armazenar.condicoes = JSON.parse(localStorage.getItem('redungeon_condicoes')) || [];
-            console.log('⚡ Condições carregadas do localStorage:', armazenar.condicoes);
-            
             const container = document.getElementById('listCondicoes');
             
             // Proteção: se elemento não existe, retorna sem erro
@@ -33985,42 +32909,6 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                     <div class="col-12">
                         <div class="no-data">
                             <p>Nenhuma condição adicionada ainda. Clique no botão acima para começar!</p>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
-            // Aplicar filtros ANTES de renderizar
-            let condicoesFiltradas = armazenar.condicoes;
-            
-            // Filtro por tipo (obtém do DOM)
-            let tipoAtivo = 'todos';
-            const botoesTipo = document.querySelectorAll('#condicoes .filter-btn');
-            botoesTipo.forEach(btn => {
-                if (btn.classList.contains('active')) {
-                    tipoAtivo = btn.getAttribute('data-tipo') || 'todos';
-                }
-            });
-            
-            if (tipoAtivo !== 'todos') {
-                condicoesFiltradas = condicoesFiltradas.filter(c => c.tipo === tipoAtivo);
-            }
-            
-            // Filtro por nome
-            if (filtroCondicoesNomeAtivo.trim()) {
-                const termoSearch = filtroCondicoesNomeAtivo.toLowerCase();
-                condicoesFiltradas = condicoesFiltradas.filter(c => 
-                    c.nome.toLowerCase().includes(termoSearch)
-                );
-            }
-
-            // Se nenhuma condição passou pelos filtros
-            if (condicoesFiltradas.length === 0) {
-                container.innerHTML = `
-                    <div class="col-12">
-                        <div class="no-data">
-                            <p>Nenhuma condição encontrada com esses filtros.</p>
                         </div>
                     </div>
                 `;
@@ -34047,13 +32935,13 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             };
 
             let html = '';
-            condicoesFiltradas.forEach((condicao, index) => {
+            armazenar.condicoes.forEach((condicao, index) => {
                 const corTipo = coresTipo[condicao.tipo] || '#d4af37';
                 const iconTipo = iconsTipo[condicao.tipo] || '⚡';
                 const coresRaridade = obterCoresRaridade(condicao.raridade);
 
                 html += `
-                    <div class="col-lg-6 mb-3" data-tipo-condicao="${condicao.tipo}" data-condicao-nome="${condicao.nome.toLowerCase()}">
+                    <div class="col-lg-6 mb-3" data-tipo-condicao="${condicao.tipo}">
                         <div class="condition-card-horizontal" style="
                             --condition-card-border: ${corTipo};
                             --condition-card-glow: ${corTipo}4d;
@@ -34070,7 +32958,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                             <div class="condition-card-content-horizontal">
                                 <div class="condition-card-top">
                                     <div style="flex: 1;">
-                                        <h5 class="condition-card-title-horizontal" data-condicao-nome>${condicao.nome}</h5>
+                                        <h5 class="condition-card-title-horizontal">${condicao.nome}</h5>
                                         <div style="display: flex; gap: 8px; margin-top: 4px;">
                                             <span class="condition-badge" style="
                                                 background: ${corTipo}22;
@@ -34137,25 +33025,22 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             const cards = document.querySelectorAll('[data-tipo-condicao]');
             const todosOsCards = Array.from(cards);
             
-            todosOsCards.forEach(card => {
-                const tipoCard = card.getAttribute('data-tipo-condicao');
-                const nomeCard = card.getAttribute('data-condicao-nome') || '';
-                
-                let mostrarPorTipo = (tipo === 'todos') || (tipoCard === tipo);
-                
-                // Filtro por nome
-                let mostrarPorNome = true;
-                if (filtroCondicoesNomeAtivo.trim()) {
-                    const termoSearch = filtroCondicoesNomeAtivo.toLowerCase();
-                    mostrarPorNome = nomeCard.includes(termoSearch);
-                }
-                
-                if (mostrarPorTipo && mostrarPorNome) {
+            if (tipo === 'todos') {
+                // Mostrar todos
+                todosOsCards.forEach(card => {
                     card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+                });
+            } else {
+                // Filtrar por tipo específico
+                todosOsCards.forEach(card => {
+                    const tipoCard = card.getAttribute('data-tipo-condicao');
+                    if (tipoCard === tipo) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
         }
 
         // ===== NOVA FUNÇÃO ISOLADA: COPIAR CONDIÇÃO EM FORMATO TXT =====
@@ -35209,7 +34094,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
         /**
          * Abre modal para o usuário escolher entre sincronizar aba atual ou todas as abas
          */
-        window.abrirModalSincronizacao = function() {
+        function abrirModalSincronizacao() {
             const abaAtiva = document.querySelector('.nav-link.active');
             if (!abaAtiva) {
                 alert('❌ Nenhuma aba ativa encontrada');
@@ -35269,33 +34154,33 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             document.getElementById(modalId).addEventListener('hidden.bs.modal', function() {
                 this.parentElement.remove();
             });
-        };
+        }
 
         /**
          * Fecha o modal de sincronização
          */
-        window.closeModal = function(modalId) {
+        function closeModal(modalId) {
             const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
             if (modal) {
                 modal.hide();
             }
-        };
+        }
 
         /**
          * Sincroniza apenas a aba atual (chamada do modal)
          */
-        window.sincronizarAbaAtualModal = async function(modalId) {
+        async function sincronizarAbaAtualModal(modalId) {
             console.log(`🔄 Abrindo sincronização para aba atual`);
             await sincronizarAbaAtual();
-        };
+        }
 
         /**
          * Sincroniza todas as abas (chamada do modal)
          */
-        window.sincronizarTodosDadosModal = async function(modalId) {
+        async function sincronizarTodosDadosModal(modalId) {
             console.log(`🔄 Abrindo sincronização para todas as abas`);
             await sincronizarTodosDados();
-        };
+        }
 
         /**
          * Sincroniza dados da aba atual com dados importados.
@@ -35386,14 +34271,9 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                                     funcao();
                                 }
                                 
-                                // Se foi sincronizado origens, regiões ou cenários, renderizar grid unificado
-                                if (['origens', 'regioes', 'cenarios'].includes(idAba)) {
-                                    renderizarGridUnificado();
-                                }
-                                
-                                // Garantir que o DOM foi atualizado antes de reinicializar filtros
-                                await new Promise(resolve => setTimeout(resolve, 100));
-                                inicializarEstadosFiltros();
+                                setTimeout(() => {
+                                    inicializarEstadosFiltros();
+                                }, 50);
                             }
 
                             // Exibir resultado detalhado
@@ -35494,27 +34374,22 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                             listarOrigens();
                             listarRegioes();
                             listarCenarios();
-                            renderizarGridUnificado();
                             listarRacas();
                             listarClasses();
                             listarAptidoes();
+                            await listarNPCs();
                             listarCriaturas();
                             listarMateriais();
                             listarReceitas();
+                            await atualizarListaItems();
                             listarCondicoes();
                             listarRegras();
                             artes = armazenar.arts;
-
-                            // Atualizar abas assíncronas
-                            await listarNPCs();
-                            await atualizarListaItems();
                             await renderizarArtes();
 
-                            // Garantir que o DOM foi atualizado
-                            await new Promise(resolve => setTimeout(resolve, 100));
-
-                            // Reinicializar filtros
-                            inicializarEstadosFiltros();
+                            setTimeout(() => {
+                                inicializarEstadosFiltros();
+                            }, 100);
 
                             // Exibir resultado detalhado
                             const resumoAbas = (resultado?.abasProcessadas || [])
@@ -35722,32 +34597,23 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                                 throw storageError;
                             }
 
-                            // Atualizar interface com garantia de execução
+                            // Atualizar interface
                             listarHistoria();
                             listarOrigens();
                             listarRegioes();
                             listarCenarios();
-                            renderizarGridUnificado();
                             listarRacas();
                             listarClasses();
                             listarAptidoes();
+                            await listarNPCs();
                             listarCriaturas();
                             listarMateriais();
                             listarReceitas();
+                            await atualizarListaItems();
                             listarCondicoes();
                             listarRegras();
                             artes = armazenar.arts;
-
-                            // Atualizar abas assíncronas
-                            await listarNPCs();
-                            await atualizarListaItems();
                             await renderizarArtes();
-
-                            // Garantir que o DOM foi atualizado
-                            await new Promise(resolve => setTimeout(resolve, 100));
-
-                            // Reinicializar filtros
-                            inicializarEstadosFiltros();
 
                             alert(`✅ Banco de dados importado com sucesso!\n\nTotal de itens importados: ${totalItens}`);
                         } catch (processError) {
@@ -35913,277 +34779,6 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             }
         }
 
-        // ============================================================================
-        // 🎯 SISTEMA DE SALVAMENTO COM SELETOR DE LOCALIZAÇÃO
-        // ============================================================================
-        
-        // Estado global para o seletor de salvamento
-        let estadoSeletorSalvamento = {
-            escopoAtual: 'tudo',
-            localizacaoEscolhida: null
-        };
-        
-        // Função auxiliar para preparar salvamento (compatibilidade com botões antigos)
-        function prepararSalvarComLocalizacao(escopo, tipo) {
-            if (tipo === 'padrao') {
-                // Usar comportamento padrão (download direto no browser)
-                salvarBancoDadosEscopo(escopo);
-            }
-        }
-        
-        // Abrir seletor de localização para salvamento
-        function abrirSeletorLocalizacaoSalvamento(escopo) {
-            estadoSeletorSalvamento.escopoAtual = escopo;
-            
-            // Se estiver em ambiente Electron, usar showSaveDialog
-            if (typeof window.electron !== 'undefined' && window.electron.ipcRenderer) {
-                abrirDialogoSalvamentoElectron(escopo);
-            } else {
-                // Se estiver no navegador, usar File System Access API (se disponível)
-                abrirDialogoSalvamentoWeb(escopo);
-            }
-        }
-        
-        // Implementação para Electron
-        function abrirDialogoSalvamentoElectron(escopo) {
-            try {
-                let nomeArquivoPadrao = '';
-                
-                if (escopo === 'tudo') {
-                    nomeArquivoPadrao = `redungeon_banco_dados_${new Date().getTime()}.json`;
-                } else if (escopo === 'aba') {
-                    let idAba = obterAbaAtual();
-                    if (idAba === 'arts') idAba = 'artes';
-                    nomeArquivoPadrao = `redungeon_${idAba}_${new Date().getTime()}.json`;
-                }
-                
-                // Enviar mensagem ao processo principal do Electron
-                if (window.electron && window.electron.ipcRenderer) {
-                    window.electron.ipcRenderer.invoke('mostrar-salvar-como', {
-                        defaultPath: nomeArquivoPadrao,
-                        filters: [
-                            { name: 'JSON Files', extensions: ['json'] },
-                            { name: 'All Files', extensions: ['*'] }
-                        ]
-                    }).then(resultado => {
-                        if (!resultado.canceled && resultado.filePath) {
-                            realizarSalvamentoEmLocalizacao(resultado.filePath, escopo);
-                        }
-                    }).catch(err => {
-                        console.error('Erro ao abrir diálogo de salvamento:', err);
-                        alert('❌ Erro ao abrir seletor de pasta: ' + err.message);
-                    });
-                }
-            } catch (erro) {
-                console.error('❌ Erro ao tentar abrir diálogo do Electron:', erro);
-                alert('❌ Erro ao abrir seletor de localização');
-            }
-        }
-        
-        // Implementação para navegadores modernos (File System Access API)
-        function abrirDialogoSalvamentoWeb(escopo) {
-            try {
-                // Verificar se o navegador suporta File System Access API
-                if (!window.showSaveFilePicker) {
-                    alert('⚠️ Seu navegador não suporta seletor de pasta.\n\nUse o botão "Salvar" padrão ou atualize seu navegador para Chrome/Edge v86+');
-                    return;
-                }
-                
-                let nomeArquivoPadrao = '';
-                
-                if (escopo === 'tudo') {
-                    nomeArquivoPadrao = `redungeon_banco_dados_${new Date().getTime()}.json`;
-                } else if (escopo === 'aba') {
-                    let idAba = obterAbaAtual();
-                    if (idAba === 'arts') idAba = 'artes';
-                    nomeArquivoPadrao = `redungeon_${idAba}_${new Date().getTime()}.json`;
-                }
-                
-                // Usar File System Access API
-                window.showSaveFilePicker({
-                    suggestedName: nomeArquivoPadrao,
-                    types: [
-                        {
-                            description: 'JSON Files',
-                            accept: { 'application/json': ['.json'] }
-                        }
-                    ]
-                }).then(fileHandle => {
-                    realizarSalvamentoWeb(fileHandle, escopo);
-                }).catch(err => {
-                    if (err.name !== 'AbortError') {
-                        console.error('Erro ao selecionar arquivo:', err);
-                    }
-                });
-            } catch (erro) {
-                console.error('❌ Erro ao tentar abrir diálogo web:', erro);
-                alert('❌ Erro ao abrir seletor de localização');
-            }
-        }
-        
-        // Realizar salvamento em localização específica (Web)
-        async function realizarSalvamentoWeb(fileHandle, escopo) {
-            try {
-                let dataObj = {};
-                
-                if (escopo === 'tudo') {
-                    dataObj = {
-                        Historia: JSON.parse(localStorage.getItem('redungeon_Historia')) || [],
-                        origens: JSON.parse(localStorage.getItem('redungeon_origens')) || [],
-                        regioes: JSON.parse(localStorage.getItem('redungeon_regioes')) || [],
-                        cenarios: JSON.parse(localStorage.getItem('redungeon_cenarios')) || [],
-                        racas: JSON.parse(localStorage.getItem('redungeon_racas')) || [],
-                        classes: JSON.parse(localStorage.getItem('redungeon_classes')) || [],
-                        aptidoes: JSON.parse(localStorage.getItem('redungeon_aptidoes')) || [],
-                        npcs: JSON.parse(localStorage.getItem('redungeon_npcs')) || [],
-                        criaturas: JSON.parse(localStorage.getItem('redungeon_criaturas')) || [],
-                        materiais: JSON.parse(localStorage.getItem('redungeon_materiais')) || [],
-                        receitas: JSON.parse(localStorage.getItem('redungeon_receitas')) || [],
-                        itens: JSON.parse(localStorage.getItem('redungeon_itens')) || [],
-                        condicoes: JSON.parse(localStorage.getItem('redungeon_condicoes')) || [],
-                        regras: JSON.parse(localStorage.getItem('redungeon_regras')) || [],
-                        artes: JSON.parse(localStorage.getItem('artes')) || [],
-                        dataSalvamento: new Date().toLocaleString('pt-BR'),
-                        versao: '1.0',
-                        tipo: 'banco_completo'
-                    };
-                    
-                    const totalItens = Object.keys(dataObj).filter(k => Array.isArray(dataObj[k])).reduce((sum, k) => sum + dataObj[k].length, 0);
-                    dataObj.totalItens = totalItens;
-                    
-                } else if (escopo === 'aba') {
-                    let idAba = obterAbaAtual();
-                    if (!idAba) {
-                        alert('❌ Erro: Nenhuma aba válida selecionada.');
-                        return;
-                    }
-                    
-                    if (idAba === 'arts') idAba = 'artes';
-                    
-                    if (!mapaAbas[idAba]) {
-                        alert('❌ Erro: Nenhuma aba válida selecionada.');
-                        return;
-                    }
-                    
-                    const infoAba = mapaAbas[idAba];
-                    const dadosAba = JSON.parse(localStorage.getItem(infoAba.key)) || [];
-                    
-                    if (dadosAba.length === 0) {
-                        alert(`⚠️ Aviso: A aba "${infoAba.nome}" está vazia. Nada a salvar.`);
-                        return;
-                    }
-                    
-                    dataObj = {
-                        [idAba]: dadosAba,
-                        dataSalvamento: new Date().toLocaleString('pt-BR'),
-                        versao: '1.0',
-                        tipo: 'aba_unica',
-                        abaId: idAba
-                    };
-                }
-                
-                // Escrever arquivo
-                const writable = await fileHandle.createWritable();
-                const jsonString = JSON.stringify(dataObj, null, 2);
-                await writable.write(jsonString);
-                await writable.close();
-                
-                const quantidadeItens = Object.keys(dataObj).filter(k => Array.isArray(dataObj[k])).reduce((sum, k) => sum + dataObj[k].length, 0);
-                alert(`✅ Banco de dados salvo com sucesso!\n\nItens exportados: ${quantidadeItens}\nLocal: ${fileHandle.name}`);
-                
-            } catch (erro) {
-                console.error('❌ Erro ao salvar arquivo:', erro);
-                alert(`❌ Erro ao salvar arquivo:\n${erro.message}`);
-            }
-        }
-        
-        // Realizar salvamento em localização específica (Electron)
-        function realizarSalvamentoEmLocalizacao(caminhoArquivo, escopo) {
-            try {
-                let dataObj = {};
-                
-                if (escopo === 'tudo') {
-                    dataObj = {
-                        Historia: JSON.parse(localStorage.getItem('redungeon_Historia')) || [],
-                        origens: JSON.parse(localStorage.getItem('redungeon_origens')) || [],
-                        regioes: JSON.parse(localStorage.getItem('redungeon_regioes')) || [],
-                        cenarios: JSON.parse(localStorage.getItem('redungeon_cenarios')) || [],
-                        racas: JSON.parse(localStorage.getItem('redungeon_racas')) || [],
-                        classes: JSON.parse(localStorage.getItem('redungeon_classes')) || [],
-                        aptidoes: JSON.parse(localStorage.getItem('redungeon_aptidoes')) || [],
-                        npcs: JSON.parse(localStorage.getItem('redungeon_npcs')) || [],
-                        criaturas: JSON.parse(localStorage.getItem('redungeon_criaturas')) || [],
-                        materiais: JSON.parse(localStorage.getItem('redungeon_materiais')) || [],
-                        receitas: JSON.parse(localStorage.getItem('redungeon_receitas')) || [],
-                        itens: JSON.parse(localStorage.getItem('redungeon_itens')) || [],
-                        condicoes: JSON.parse(localStorage.getItem('redungeon_condicoes')) || [],
-                        regras: JSON.parse(localStorage.getItem('redungeon_regras')) || [],
-                        artes: JSON.parse(localStorage.getItem('artes')) || [],
-                        dataSalvamento: new Date().toLocaleString('pt-BR'),
-                        versao: '1.0',
-                        tipo: 'banco_completo'
-                    };
-                    
-                    const totalItens = Object.keys(dataObj).filter(k => Array.isArray(dataObj[k])).reduce((sum, k) => sum + dataObj[k].length, 0);
-                    dataObj.totalItens = totalItens;
-                    
-                } else if (escopo === 'aba') {
-                    let idAba = obterAbaAtual();
-                    if (!idAba) {
-                        alert('❌ Erro: Nenhuma aba válida selecionada.');
-                        return;
-                    }
-                    
-                    if (idAba === 'arts') idAba = 'artes';
-                    
-                    if (!mapaAbas[idAba]) {
-                        alert('❌ Erro: Nenhuma aba válida selecionada.');
-                        return;
-                    }
-                    
-                    const infoAba = mapaAbas[idAba];
-                    const dadosAba = JSON.parse(localStorage.getItem(infoAba.key)) || [];
-                    
-                    if (dadosAba.length === 0) {
-                        alert(`⚠️ Aviso: A aba "${infoAba.nome}" está vazia. Nada a salvar.`);
-                        return;
-                    }
-                    
-                    dataObj = {
-                        [idAba]: dadosAba,
-                        dataSalvamento: new Date().toLocaleString('pt-BR'),
-                        versao: '1.0',
-                        tipo: 'aba_unica',
-                        abaId: idAba
-                    };
-                }
-                
-                // Usar IPC do Electron para salvar arquivo
-                if (window.electron && window.electron.ipcRenderer) {
-                    const jsonString = JSON.stringify(dataObj, null, 2);
-                    
-                    window.electron.ipcRenderer.invoke('salvar-arquivo', {
-                        caminho: caminhoArquivo,
-                        conteudo: jsonString
-                    }).then(resultado => {
-                        if (resultado.sucesso) {
-                            const quantidadeItens = Object.keys(dataObj).filter(k => Array.isArray(dataObj[k])).reduce((sum, k) => sum + dataObj[k].length, 0);
-                            alert(`✅ Banco de dados salvo com sucesso!\n\nItens exportados: ${quantidadeItens}\nLocal: ${caminhoArquivo}`);
-                        } else {
-                            alert(`❌ Erro ao salvar: ${resultado.erro}`);
-                        }
-                    }).catch(err => {
-                        console.error('Erro ao salvar arquivo:', err);
-                        alert(`❌ Erro ao salvar arquivo:\n${err.message}`);
-                    });
-                }
-                
-            } catch (erro) {
-                console.error('❌ Erro ao salvar:', erro);
-                alert(`❌ Erro ao salvar:\n${erro.message}`);
-            }
-        }
-
         // Abrir diálogo de importação com escopo
         function abrirDialogoImportacao(escopo) {
             // Criar input dinâmico para leitura do arquivo
@@ -36304,32 +34899,23 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                                 throw storageError;
                             }
 
-                            // Atualizar interface com garantia de execução
+                            // Atualizar interface
                             listarHistoria();
                             listarOrigens();
                             listarRegioes();
                             listarCenarios();
-                            renderizarGridUnificado();
                             listarRacas();
                             listarClasses();
                             listarAptidoes();
+                            await listarNPCs();
                             listarCriaturas();
                             listarMateriais();
                             listarReceitas();
+                            await atualizarListaItems();
                             listarCondicoes();
                             listarRegras();
                             artes = armazenar.arts;
-
-                            // Atualizar abas assíncronas
-                            await listarNPCs();
-                            await atualizarListaItems();
                             await renderizarArtes();
-
-                            // Garantir que o DOM foi atualizado
-                            await new Promise(resolve => setTimeout(resolve, 100));
-
-                            // Reinicializar filtros
-                            inicializarEstadosFiltros();
 
                             alert(`✅ Banco de dados importado com sucesso!\n\nTotal de itens importados: ${totalItens}`);
                         }
@@ -36433,7 +35019,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
         /**
          * Abre modal para escolher escopo de reset (aba atual ou tudo)
          */
-        window.abrirModalEscopoReset = function() {
+        function abrirModalEscopoReset() {
             const abaAtiva = document.querySelector('.nav-link.active');
             if (!abaAtiva) {
                 alert('❌ Nenhuma aba ativa encontrada');
@@ -36488,12 +35074,12 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             document.getElementById(modalId).addEventListener('hidden.bs.modal', function() {
                 this.parentElement.remove();
             });
-        };
+        }
 
         /**
          * Reset apenas da aba atual com confirmação dupla
          */
-        window.resetarAbaAtualConfirm = async function(modalId) {
+        async function resetarAbaAtualConfirm(modalId) {
             const abaAtiva = document.querySelector('.nav-link.active');
             if (!abaAtiva) {
                 alert('❌ Nenhuma aba ativa encontrada');
@@ -36529,23 +35115,23 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                     await resetarAbaAtual(chaveAba);
                 }
             }
-        };
+        }
 
         /**
          * Reset de todas as abas com confirmação dupla
          */
-        window.resetarTodosDadosConfirm = async function(modalId) {
+        function resetarTodosDadosConfirm(modalId) {
             if (confirm('⚠️ ATENÇÃO: Isso vai deletar TODOS os dados (Historia, origens, regiões, cenários, raças, classes, aptidões, NPCs, criaturas, materiais, receitas, itens, condições, regras e ART\'s). Essa ação NÃO pode ser desfeita!\n\nDeseja continuar?')) {
                 if (confirm('🔥 Última confirmação: Tem certeza que deseja resetar o banco de dados COMPLETO?')) {
-                    await resetarTodosDados();
+                    resetarTodosDados();
                 }
             }
-        };
+        }
 
         /**
          * Executa o reset de uma aba específica
          */
-        window.resetarAbaAtual = async function(chaveAba) {
+        async function resetarAbaAtual(chaveAba) {
             console.log(`🗑️ Resetando aba: ${chaveAba}`);
 
             // Resetar dados em memória
@@ -36553,20 +35139,12 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 armazenar[chaveAba] = [];
             }
 
-            // Resetar no localStorage - GARANTIR SINCRONIZAÇÃO
+            // Resetar no localStorage
             const chaveLocalStorage = chaveAba === 'Historia' ? 
                 'redungeon_Historia' : 
                 (chaveAba === 'arts' ? 'artes' : `redungeon_${chaveAba}`);
             
-            // Primeiro limpar completamente
-            localStorage.removeItem(chaveLocalStorage);
-            
-            // Depois salvar array vazio
             localStorage.setItem(chaveLocalStorage, JSON.stringify([]));
-            
-            // Verificar se foi salvo corretamente
-            const verificacao = localStorage.getItem(chaveLocalStorage);
-            console.log(`✅ Verificação de reset - ${chaveLocalStorage}:`, verificacao);
 
             // Recarregar a lista específica
             const funcaoRecarregar = {
@@ -36591,11 +35169,6 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 await funcaoRecarregar[chaveAba]();
             }
 
-            // Se foi resetado origens, regiões ou cenários, renderizar grid unificado
-            if (['origens', 'regioes', 'cenarios'].includes(chaveAba)) {
-                renderizarGridUnificado();
-            }
-
             // ✅ Limpar filtros das habilidades se NPC foi resetado
             if (chaveAba === 'npcs') {
                 tipoHabilidadeSelecionadoNPC = "todos";
@@ -36607,12 +35180,12 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             }
 
             alert(`✅ Aba resetada com sucesso!`);
-        };
+        }
 
         /**
          * Executa o reset de todas as abas (tudo)
          */
-        window.resetarTodosDados = async function() {
+        async function resetarTodosDados() {
             console.log('🗑️ Resetando todos os dados');
 
             armazenar.Historia = [];
@@ -36631,24 +35204,6 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             armazenar.regras = [];
             armazenar.arts = [];
 
-            // Limpar localStorage PRIMEIRO para garantir sincronização
-            localStorage.removeItem('redungeon_Historia');
-            localStorage.removeItem('redungeon_origens');
-            localStorage.removeItem('redungeon_regioes');
-            localStorage.removeItem('redungeon_cenarios');
-            localStorage.removeItem('redungeon_racas');
-            localStorage.removeItem('redungeon_classes');
-            localStorage.removeItem('redungeon_aptidoes');
-            localStorage.removeItem('redungeon_npcs');
-            localStorage.removeItem('redungeon_criaturas');
-            localStorage.removeItem('redungeon_materiais');
-            localStorage.removeItem('redungeon_receitas');
-            localStorage.removeItem('redungeon_itens');
-            localStorage.removeItem('redungeon_condicoes');
-            localStorage.removeItem('redungeon_regras');
-            localStorage.removeItem('artes');
-
-            // Depois salvar arrays vazios
             localStorage.setItem('redungeon_Historia', JSON.stringify(armazenar.Historia));
             localStorage.setItem('redungeon_origens', JSON.stringify(armazenar.origens));
             localStorage.setItem('redungeon_regioes', JSON.stringify(armazenar.regioes));
@@ -36670,29 +35225,20 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             listarOrigens();
             listarRegioes();
             listarCenarios();
-            renderizarGridUnificado();
             listarRacas();
             listarClasses();
             listarAptidoes();
+            await listarNPCs();
             listarCriaturas();
             listarMateriais();
             listarReceitas();
+            await atualizarListaItems();
             listarCondicoes();
             listarRegras();
-
-            // Atualizar abas assíncronas
-            await listarNPCs();
-            await atualizarListaItems();
             await renderizarArtes();
 
-            // Garantir que o DOM foi atualizado
-            await new Promise(resolve => setTimeout(resolve, 100));
-
-            // Reinicializar filtros
-            inicializarEstadosFiltros();
-
             alert('✅ Banco de dados resetado completamente!');
-        };
+        }
 
         // Event listeners para campos de bônus de atributos primários
         // Quando um bônus muda, recalcula o Total
@@ -45707,7 +44253,7 @@ ${arteGerada.justificativa}`;
     </script>
 
     </div><!-- Fecha div.container-lg -->
-
+    
     <!-- ===== RENDERER SETUP: Listeners de IPC e Zoom ===== -->
     <!-- CORRIGIDO: Remover require() do Electron e substituir por código seguro -->
     <script>
@@ -45749,8 +44295,5 @@ ${arteGerada.justificativa}`;
             document.body.style.zoom = savedZoom;
         }
     </script>
-
-    <!-- ✅ CRITICAL: Vite entry point - carrega main.ts e todos os módulos (incluindo app.ts) -->
-    <script type="module" src="./src/main.ts"></script>
 </body>
 </html>
