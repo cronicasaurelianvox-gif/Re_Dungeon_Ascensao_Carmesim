@@ -76,6 +76,17 @@ export async function resetData() {
     // Exibir mensagem de sucesso e recarregar
     alert("✅ RESET CONCLUÍDO!\n\nTodos os dados foram deletados.\n\nA página será recarregada agora...");
     
+    // Chamar função de atualizar UI global (se existir)
+    const atualizarUIGlobal = (window as any).atualizarUIGlobal;
+    if (atualizarUIGlobal && typeof atualizarUIGlobal === 'function') {
+      try {
+        await atualizarUIGlobal();
+        console.log("✅ UI global atualizada após reset");
+      } catch (uiError) {
+        console.warn("⚠️ Erro ao atualizar UI após reset:", uiError);
+      }
+    }
+    
     // Recarregar a página após 1 segundo para garantir que tudo foi limpo
     setTimeout(() => {
       window.location.reload();

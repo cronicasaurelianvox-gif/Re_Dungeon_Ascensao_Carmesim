@@ -10636,10 +10636,10 @@
 
                     <!-- Lista de Itens -->
                     <div id="listItens">
-                        <div style="grid-column: 1 / -1; text-align: center; color: #999; padding: 40px 20px;">
-                            <div class="no-data">
-                                <p>Nenhum item adicionado ainda. Clique no botão acima para começar!</p>
-                            </div>
+                        <div style="grid-column: 1 / -1; padding: 60px 20px; text-align: center; background: linear-gradient(135deg, rgba(22, 33, 62, 0.5) 0%, rgba(20, 30, 55, 0.7) 100%); border-radius: 12px; border: 2px dashed #555;">
+                            <div style="font-size: 3.5rem; margin-bottom: 15px; opacity: 0.6;">🎒</div>
+                            <div style="color: #95a5a6; font-size: 1.1rem;">Nenhum item adicionado ainda.</div>
+                            <div style="color: #7f8c8d; font-size: 0.9rem; margin-top: 10px;">Clique no botão acima para começar!</div>
                         </div>
                     </div>
                 </div>
@@ -36828,10 +36828,10 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
 
                 if (armazenar.itens.length === 0) {
                     container.innerHTML = `
-                        <div class="col-12">
-                            <div class="no-data">
-                                <p>Nenhum item adicionado ainda. Clique no botão acima para começar!</p>
-                            </div>
+                        <div style="grid-column: 1 / -1; padding: 60px 20px; text-align: center; background: linear-gradient(135deg, rgba(22, 33, 62, 0.5) 0%, rgba(20, 30, 55, 0.7) 100%); border-radius: 12px; border: 2px dashed #555;">
+                            <div style="font-size: 3.5rem; margin-bottom: 15px; opacity: 0.6;">🎒</div>
+                            <div style="color: #95a5a6; font-size: 1.1rem;">Nenhum item adicionado ainda.</div>
+                            <div style="color: #7f8c8d; font-size: 0.9rem; margin-top: 10px;">Clique no botão acima para começar!</div>
                         </div>
                     `;
                     return;
@@ -41706,18 +41706,8 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                                 'artes': renderizarArtes
                             };
 
-                            const funcao = funcoes[idAba];
-                            if (funcao) {
-                                if (funcao.constructor.name === 'AsyncFunction') {
-                                    await funcao();
-                                } else {
-                                    funcao();
-                                }
-                                
-                                setTimeout(() => {
-                                    inicializarEstadosFiltros();
-                                }, 50);
-                            }
+                            // Atualizar UI global automaticamente
+                            await atualizarUIGlobal();
 
                             // Exibir resultado detalhado
                             const resumoAbas = (resultado?.abasProcessadas || [])
@@ -41818,27 +41808,8 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                             // Executar sincronização de todas as abas
                             const resultado = await sincronizarDados(dadosImportados, 'tudo');
 
-                            // Atualizar interface de todas as abas
-                            listarMesa();
-                            listarOrigens();
-                            listarRegioes();
-                            listarCenarios();
-                            listarRacas();
-                            listarClasses();
-                            listarAptidoes();
-                            await listarNPCs();
-                            listarCriaturas();
-                            listarMateriais();
-                            listarReceitas();
-                            await atualizarListaItems();
-                            listarCondicoes();
-                            listarRegras();
-                            artes = armazenar.arts;
-                            await renderizarArtes();
-
-                            setTimeout(() => {
-                                inicializarEstadosFiltros();
-                            }, 100);
+                            // Atualizar UI global automaticamente
+                            await atualizarUIGlobal();
 
                             // Exibir resultado detalhado
                             const resumoAbas = (resultado?.abasProcessadas || [])
@@ -42047,22 +42018,8 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                             }
 
                             // Atualizar interface
-                            listarMesa();
-                            listarOrigens();
-                            listarRegioes();
-                            listarCenarios();
-                            listarRacas();
-                            listarClasses();
-                            listarAptidoes();
-                            await listarNPCs();
-                            listarCriaturas();
-                            listarMateriais();
-                            listarReceitas();
-                            await atualizarListaItems();
-                            listarCondicoes();
-                            listarRegras();
-                            artes = armazenar.arts;
-                            await renderizarArtes();
+                            // Atualizar UI global automaticamente
+                            await atualizarUIGlobal();
 
                             alert(`✅ Banco de dados importado com sucesso!\n\nTotal de itens importados: ${totalItens}`);
                         } catch (processError) {
@@ -42113,6 +42070,41 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             const abaAtiva = document.querySelector('.nav-link.active');
             if (!abaAtiva) return null;
             return abaAtiva.id.replace('-tab', '');
+        }
+
+        /**
+         * 🔄 ATUALIZAR UI GLOBAL - Recarrega todas as listas sem F5
+         * Chamada automática após importar, sincronizar ou resetar
+         */
+        async function atualizarUIGlobal() {
+            console.log('🔄 Atualizando UI global de todas as abas...');
+            try {
+                // Atualizar todas as listas simultaneamente
+                listarMesa();
+                listarOrigens();
+                listarRegioes();
+                listarCenarios();
+                listarRacas();
+                listarClasses();
+                listarAptidoes();
+                await listarNPCs();
+                listarCriaturas();
+                listarMateriais();
+                listarReceitas();
+                await atualizarListaItems();
+                listarCondicoes();
+                listarRegras();
+                artes = armazenar.arts;
+                await renderizarArtes();
+                
+                // Reinicializar filtros e estados
+                setTimeout(() => {
+                    inicializarEstadosFiltros();
+                    console.log('✅ UI global atualizada com sucesso!');
+                }, 100);
+            } catch (erro) {
+                console.error('❌ Erro ao atualizar UI global:', erro);
+            }
         }
 
         // Salvar banco de dados com escopo (tudo ou apenas aba atual)
@@ -42458,16 +42450,8 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                                 'artes': renderizarArtes
                             };
 
-                            const funcaoAtualizar = funcoesAtualizacao[abaEncontrada];
-                            if (funcaoAtualizar) {
-                                // Se é função async, usar await
-                                if (funcaoAtualizar.constructor.name === 'AsyncFunction') {
-                                    await funcaoAtualizar();
-                                } else {
-                                    funcaoAtualizar();
-                                }
-                                console.log(`✅ Interface da aba "${abaEncontrada}" atualizada`);
-                            }
+                            // Atualizar UI global automaticamente
+                            await atualizarUIGlobal();
 
                             alert(`✅ Aba importada com sucesso!\n\n${infoAbaAtual.nome}\nItens importados: ${dadosAba.length}`);
                         }
@@ -42710,38 +42694,8 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             
             localStorage.setItem(chaveLocalStorage, JSON.stringify([]));
 
-            // Recarregar a lista específica
-            const funcaoRecarregar = {
-                'Mesa': listarMesa,
-                'origens': listarOrigens,
-                'regioes': listarRegioes,
-                'cenarios': listarCenarios,
-                'racas': listarRacas,
-                'classes': listarClasses,
-                'aptidoes': listarAptidoes,
-                'npcs': listarNPCs,
-                'criaturas': listarCriaturas,
-                'materiais': listarMateriais,
-                'receitas': listarReceitas,
-                'itens': atualizarListaItems,
-                'condicoes': listarCondicoes,
-                'regras': listarRegras,
-                'arts': renderizarArtes
-            };
-
-            if (funcaoRecarregar[chaveAba]) {
-                await funcaoRecarregar[chaveAba]();
-            }
-
-            // ✅ Limpar filtros das habilidades se NPC foi resetado
-            if (chaveAba === 'npcs') {
-                tipoHabilidadeSelecionadoNPC = "todos";
-                textoBuscaHabilidades = "";
-                const inputBusca = document.getElementById('buscaHabilidades');
-                if (inputBusca) {
-                    inputBusca.value = "";
-                }
-            }
+            // Atualizar UI global automaticamente
+            await atualizarUIGlobal();
 
             alert(`✅ Aba resetada com sucesso!`);
         }
@@ -42785,21 +42739,8 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             localStorage.setItem('artes', JSON.stringify(armazenar.arts));
             artes = armazenar.arts;
 
-            listarMesa();
-            listarOrigens();
-            listarRegioes();
-            listarCenarios();
-            listarRacas();
-            listarClasses();
-            listarAptidoes();
-            await listarNPCs();
-            listarCriaturas();
-            listarMateriais();
-            listarReceitas();
-            await atualizarListaItems();
-            listarCondicoes();
-            listarRegras();
-            await renderizarArtes();
+            // Atualizar UI global automaticamente
+            await atualizarUIGlobal();
 
             alert('✅ Banco de dados resetado completamente!');
         }
