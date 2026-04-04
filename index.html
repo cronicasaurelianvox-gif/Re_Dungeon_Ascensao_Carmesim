@@ -23915,6 +23915,14 @@
                         idAba = 'artes';
                     }
                     
+                    // MODO LEGADO: Mapear "Historia" para "Mesa"
+                    if (dadosImportados['Historia'] && !dadosImportados[idAba]) {
+                        if (idAba === 'Mesa') {
+                            dadosImportados['Mesa'] = dadosImportados['Historia'];
+                            console.log('✅ Modo legacy: Historia mapeado para Mesa na sincronização');
+                        }
+                    }
+                    
                     const metadadosAba = mapaAbas[idAba];
 
                     if (!metadadosAba) {
@@ -23950,6 +23958,12 @@
                     }
                 } else if (escopo === 'tudo') {
                     // Sincronizar todas as abas
+                    // MODO LEGADO: Mapear "Historia" para "Mesa" se existir
+                    if (dadosImportados['Historia'] && !dadosImportados['Mesa']) {
+                        dadosImportados['Mesa'] = dadosImportados['Historia'];
+                        console.log('✅ Modo legacy: Historia mapeado para Mesa na sincronização global');
+                    }
+                    
                     for (const [idAba, metadadosAba] of Object.entries(mapaAbas)) {
                         if (Array.isArray(dadosImportados[idAba])) {
                             const dadosExistentes = parseJsonSeguro(metadadosAba.key) || [];
@@ -41647,9 +41661,15 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                     try {
                         const dadosImportados = JSON.parse(e.target.result);
 
+                        // MODO LEGADO: Mapear "Historia" para "Mesa" se necessário
+                        if (idAba === 'Mesa' && dadosImportados['Historia'] && !dadosImportados['Mesa']) {
+                            dadosImportados['Mesa'] = dadosImportados['Historia'];
+                            console.log('✅ Modo legacy: Historia mapeado para Mesa');
+                        }
+
                         // Validar se o JSON tem dados para a aba atual
                         if (!Array.isArray(dadosImportados[idAba])) {
-                            alert(`⚠️ Aviso: O arquivo JSON não contém dados para a aba "${idAba}".`);
+                            alert(`⚠️ Aviso: O arquivo JSON não contém dados para a aba "${idAba}".\n\n💡 Se você está importando um arquivo antigo, verifique se está usando o formato correto.`);
                             return;
                         }
 
@@ -41753,12 +41773,18 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                     try {
                         const dadosImportados = JSON.parse(e.target.result);
 
+                        // MODO LEGADO: Mapear "Historia" para "Mesa" se existir
+                        if (dadosImportados['Historia'] && !dadosImportados['Mesa']) {
+                            dadosImportados['Mesa'] = dadosImportados['Historia'];
+                            console.log('✅ Modo legacy: Historia mapeado para Mesa na sincronização global');
+                        }
+
                         // Validar se o JSON tem pelo menos um campo válido
                         const camposValidos = ['Mesa', 'origens', 'regioes', 'cenarios', 'racas', 'classes', 'aptidoes', 'npcs', 'criaturas', 'materiais', 'receitas', 'itens', 'condicoes', 'regras', 'artes'];
                         const temCamposValidos = camposValidos.some(campo => Array.isArray(dadosImportados[campo]));
 
                         if (!temCamposValidos) {
-                            alert(`❌ Arquivo JSON inválido. Nenhum campo ReDungeon válido encontrado.\n\nCampos esperados:\n• Mesa\n• origens\n• regioes\n• cenarios\n• racas\n• classes\n• aptidoes\n• npcs\n• criaturas\n• materiais\n• receitas\n• itens\n• condicoes\n• regras\n\n(O arquivo pode ter alguns ou todos os campos acima)`);
+                            alert(`❌ Arquivo JSON inválido. Nenhum campo ReDungeon válido encontrado.\n\nCampos esperados:\n• Mesa\n• origens\n• regioes\n• cenarios\n• racas\n• classes\n• aptidoes\n• npcs\n• criaturas\n• materiais\n• receitas\n• itens\n• condicoes\n• regras\n\n(O arquivo pode ter alguns ou todos os campos acima)\n\n💡 Se está usando um arquivo antigo, tente com a chave "Historia" mapeada para "Mesa".`);
                             return;
                         }
 
@@ -42357,13 +42383,19 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                         let abaEncontrada = null;
                         let dadosAba = null;
 
-                        // MODO LEGADO: Mapear "historia" para "Mesa"
-                        if (Array.isArray(dados['historia']) && dados['historia'].length > 0) {
+                        // MODO LEGADO: Mapear "historia", "Historia", "redungeon_historia" para "Mesa"
+                        if (Array.isArray(dados['Historia']) && dados['Historia'].length > 0) {
+                            abaEncontrada = 'Mesa';
+                            dadosAba = dados['Historia'];
+                            console.log('✅ Detectado formato legacy Historia (maiúscula), mapeado para Mesa');
+                        } else if (Array.isArray(dados['historia']) && dados['historia'].length > 0) {
                             abaEncontrada = 'Mesa';
                             dadosAba = dados['historia'];
+                            console.log('✅ Detectado formato legacy historia (minúscula), mapeado para Mesa');
                         } else if (Array.isArray(dados['redungeon_historia']) && dados['redungeon_historia'].length > 0) {
                             abaEncontrada = 'Mesa';
                             dadosAba = dados['redungeon_historia'];
+                            console.log('✅ Detectado formato legacy redungeon_historia, mapeado para Mesa');
                         }
 
                         // Se não achou "historia", procurar normalmente
