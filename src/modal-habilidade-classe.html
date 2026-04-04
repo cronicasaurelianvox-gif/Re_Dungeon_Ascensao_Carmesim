@@ -1,0 +1,128 @@
+<!-- ╔════════════════════════════════════════════════════════════╗
+     ║              MODAL - CRIAR/EDITAR HABILIDADE              ║
+     ║                    SISTEMA DE SKILLS RPG                   ║
+     ╚════════════════════════════════════════════════════════════╝ -->
+
+<div class="modal fade" id="modalNovaHabilidadeClasse" tabindex="-1" role="dialog" aria-modal="true">
+    <div class="modal-dialog modal-lg" style="max-width: 700px;">
+        <div class="modal-content" style="background: linear-gradient(135deg, rgba(15, 15, 30, 0.98) 0%, rgba(22, 33, 62, 0.98) 100%); border: 2px solid rgba(212,175,55,0.3); border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.6);">
+            <div class="modal-header border-0" style="border-bottom: 2px solid rgba(212,175,55,0.2); padding: 20px; background: rgba(212,175,55,0.05);">
+                <h5 class="modal-title text-gold" id="habilidadeModalTitle" style="font-size: 1.3rem; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.5);">⚡ Nova Habilidade</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));"></button>
+            </div>
+            <div class="modal-body" style="padding: 25px; max-height: 70vh; overflow-y: auto;">
+                <form id="formNovaHabilidadeClasse">
+                    <!-- SEÇÃO 1: INFORMAÇÕES PRINCIPAIS -->
+                    <div class="mb-4">
+                        <label class="form-label" style="color: #d4af37; font-weight: 700; font-size: 0.95rem; margin-bottom: 10px; display: block;">📜 Nome da Habilidade</label>
+                        <input type="text" class="form-control" id="habilidadeNome" placeholder="Ex: Golpe Devastador" required style="background: rgba(0,0,0,0.5); border: 1.5px solid rgba(212,175,55,0.4); color: #fff; border-radius: 8px; padding: 12px; font-weight: 500; transition: all 0.25s;" onfocus="this.style.borderColor='rgba(212,175,55,0.8)'; this.style.boxShadow='0 0 12px rgba(212,175,55,0.2)';" onblur="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.boxShadow='none';">
+                    </div>
+
+                    <!-- IMAGEM E PREVIEW -->
+                    <div class="row mb-4 g-3">
+                        <div class="col-md-5">
+                            <label class="form-label" style="color: #d4af37; font-weight: 700; font-size: 0.95rem; margin-bottom: 10px; display: block;">📸 Imagem da Habilidade</label>
+                            <div class="input-group mb-3">
+                                <input type="url" class="form-control" id="habilidadeImagemUrl" placeholder="https://exemplo.com/imagem.jpg" onchange="previewHabilidadeImagem(this.value)" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 8px 0 0 8px;">
+                                <button class="btn" type="button" onclick="document.getElementById('habilidadeImagemFile').click()" style="background: linear-gradient(135deg, #d4af37, #f0c850); color: #1a1a2e; font-weight: 700; border: none; border-radius: 0 8px 8px 0; transition: all 0.25s;" onmouseover="this.style.background='linear-gradient(135deg, #f0c850, #d4af37)';" onmouseout="this.style.background='linear-gradient(135deg, #d4af37, #f0c850)';">
+                                    📁
+                                </button>
+                                <input type="file" id="habilidadeImagemFile" class="hidden-file-input" accept="image/*" onchange="previewHabilidadeFile(event)">
+                            </div>
+                            <div class="image-preview" id="previewHabilidade" style="height: 150px; margin-bottom: 15px; background: rgba(0,0,0,0.4); border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 2px dashed rgba(212,175,55,0.3); overflow: hidden;">
+                                <span class="text-muted" style="font-size: 0.8rem;">Imagem da habilidade</span>
+                            </div>
+                        </div>
+
+                        <!-- CONFIGURAÇÕES BÁSICAS -->
+                        <div class="col-md-7">
+                            <label class="form-label" style="color: #d4af37; font-weight: 700; font-size: 0.95rem; margin-bottom: 10px; display: block;">⚙️ Configuração</label>
+                            <div class="mb-3">
+                                <label style="color: #a0a0a0; font-size: 0.85rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.3px;">Tipo de Habilidade</label>
+                                <select class="form-control" id="habilidadeTipo" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px;">
+                                    <option value="">Selecione o tipo...</option>
+                                    <option value="Ofensiva">⚔️ Ofensiva</option>
+                                    <option value="Defensiva">🛡️ Defensiva</option>
+                                    <option value="Estratégica">🎯 Estratégica</option>
+                                    <option value="Suporte">💖 Suporte</option>
+                                    <option value="Controle">🔴 Controle</option>
+                                    <option value="Invocação">👻 Invocação</option>
+                                    <option value="Transformação">🌀 Transformação</option>
+                                    <option value="Passiva">✨ Passiva</option>
+                                    <option value="Racial">👑 Racial</option>
+                                </select>
+                            </div>
+
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <label style="color: #a0a0a0; font-size: 0.85rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.3px;">Ação</label>
+                                    <select class="form-control" id="habilidadeAcao" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px;">
+                                        <option value="">Selecione...</option>
+                                        <option value="Imediata">⚡ Imediata</option>
+                                        <option value="Duradoura">🕐 Duradoura</option>
+                                        <option value="Sustentada">🔄 Sustentada</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label style="color: #a0a0a0; font-size: 0.85rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.3px;">Domínio</label>
+                                    <select class="form-control" id="habilidadeDominio" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px;">
+                                        <option value="">Selecione...</option>
+                                        <option value="I">I</option>
+                                        <option value="II">II</option>
+                                        <option value="III">III</option>
+                                        <option value="IV">IV</option>
+                                        <option value="V">V</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SEÇÃO 2: ATRIBUTOS DA HABILIDADE -->
+                    <div class="mb-4" style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.03) 100%); padding: 18px; border-radius: 10px; border: 2px solid rgba(212, 175, 55, 0.2);">
+                        <label style="color: #d4af37; font-weight: 700; font-size: 0.95rem; margin-bottom: 15px; display: block; text-transform: uppercase; letter-spacing: 0.3px;">📊 Atributos</label>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label style="color: #a0a0a0; font-size: 0.8rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.3px;">Custo (MP/Energia)</label>
+                                <input type="text" class="form-control" id="habilidadeCusto" placeholder="Ex: 7 MP" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px; text-align: center; font-weight: 600;">
+                            </div>
+                            <div class="col-md-6">
+                                <label style="color: #a0a0a0; font-size: 0.8rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.3px;">Dano (Roll)</label>
+                                <input type="text" class="form-control" id="habilidadeDano" placeholder="Ex: 6d8" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px; text-align: center; font-weight: 600;">
+                            </div>
+                            <div class="col-md-6">
+                                <label style="color: #a0a0a0; font-size: 0.8rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.3px;">Recarga (Turnos)</label>
+                                <input type="text" class="form-control" id="habilidadeRecarga" placeholder="Ex: 3" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px; text-align: center; font-weight: 600;">
+                            </div>
+                            <div class="col-md-6">
+                                <label style="color: #a0a0a0; font-size: 0.8rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.3px;">Duração (Turnos/min)</label>
+                                <input type="text" class="form-control" id="habilidadeDuracao" placeholder="Ex: 3 T" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px; text-align: center; font-weight: 600;">
+                            </div>
+                            <div class="col-md-6">
+                                <label style="color: #a0a0a0; font-size: 0.8rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.3px;">Alcance (metros)</label>
+                                <input type="text" class="form-control" id="habilidadeAlcance" placeholder="Ex: 3m" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px; text-align: center; font-weight: 600;">
+                            </div>
+                            <div class="col-md-6">
+                                <label style="color: #a0a0a0; font-size: 0.8rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.3px;">Alvos</label>
+                                <input type="text" class="form-control" id="habilidadeAlvos" placeholder="Ex: 3 a 5" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px; text-align: center; font-weight: 600;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SEÇÃO 3: DESCRIÇÃO -->
+                    <div class="mb-4">
+                        <label class="form-label" style="color: #d4af37; font-weight: 700; font-size: 0.95rem; margin-bottom: 10px; display: block; text-transform: uppercase; letter-spacing: 0.3px;">📖 Descrição</label>
+                        <textarea class="form-control" id="habilidadeDescricao" rows="5" placeholder="Descreva o funcionamento completo da habilidade..." style="background: rgba(0,0,0,0.5); border: 1.5px solid rgba(212,175,55,0.4); color: #fff; border-radius: 8px; padding: 12px; font-weight: 500; resize: vertical; transition: all 0.25s;" onfocus="this.style.borderColor='rgba(212,175,55,0.8)'; this.style.boxShadow='0 0 12px rgba(212,175,55,0.2)';" onblur="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.boxShadow='none';"></textarea>
+                    </div>
+
+                    <!-- Campo Hidden para tracking de edição -->
+                    <input type="hidden" id="habilidadeEditIndex" value="">
+                </form>
+            </div>
+            <div class="modal-footer border-0" style="border-top: 2px solid rgba(212,175,55,0.2); padding: 15px 20px; background: rgba(212,175,55,0.03);">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background: rgba(100,110,120,0.8); border: none; border-radius: 6px; padding: 8px 20px; font-weight: 600; transition: all 0.25s;" onmouseover="this.style.background='rgba(100,110,120,1)'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='rgba(100,110,120,0.8)'; this.style.transform='translateY(0)';">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="salvarHabilidadeClasse()" style="background: linear-gradient(135deg, #d4af37, #f0c850); color: #1a1a2e; border: none; border-radius: 6px; padding: 8px 30px; font-weight: 700; transition: all 0.25s; box-shadow: 0 4px 12px rgba(212,175,55,0.3);" onmouseover="this.style.background='linear-gradient(135deg, #f0c850, #d4af37)'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 16px rgba(212,175,55,0.5)';" onmouseout="this.style.background='linear-gradient(135deg, #d4af37, #f0c850)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(212,175,55,0.3)';">Salvar Habilidade</button>
+            </div>
+        </div>
+    </div>
+</div>

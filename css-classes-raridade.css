@@ -1,0 +1,1351 @@
+/* ╔════════════════════════════════════════════════════════════╗
+   ║     🎮 REDESIGN COMPLETO - CARDS DE CLASSES                ║
+   ║        SISTEMA DE RARIDADE VISUAL + EFEITOS RPG            ║
+   ║              Versão: Premium Remaster 3.0                  ║
+   ║              Layout: Nome → Funções → 2 Colunas            ║
+   ╚════════════════════════════════════════════════════════════╝ */
+
+/* ═══════════════════════════════════════════════════════════════
+   VARIÁVEIS DE RARIDADE E CORES
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+    /* Comum - Cinza */
+    --rarity-comum-bg: rgba(128, 128, 128, 0.1);
+    --rarity-comum-border: #707070;
+    --rarity-comum-glow: rgba(112, 112, 112, 0.3);
+    
+    /* Incomum - Verde */
+    --rarity-incomum-bg: rgba(76, 175, 80, 0.1);
+    --rarity-incomum-border: #4caf50;
+    --rarity-incomum-glow: rgba(76, 175, 80, 0.4);
+    
+    /* Raro - Azul */
+    --rarity-raro-bg: rgba(33, 150, 243, 0.1);
+    --rarity-raro-border: #2196f3;
+    --rarity-raro-glow: rgba(33, 150, 243, 0.5);
+    
+    /* Épico - Roxo */
+    --rarity-epico-bg: rgba(156, 39, 176, 0.1);
+    --rarity-epico-border: #9c27b0;
+    --rarity-epico-glow: rgba(156, 39, 176, 0.6);
+    
+    /* Lendário - Dourado */
+    --rarity-lendario-bg: rgba(255, 193, 7, 0.15);
+    --rarity-lendario-border: #ffc107;
+    --rarity-lendario-glow: rgba(255, 193, 7, 0.8);
+    
+    /* Mítica - Vermelho */
+    --rarity-mitica-bg: rgba(244, 67, 54, 0.15);
+    --rarity-mitica-border: #f44336;
+    --rarity-mitica-glow: rgba(244, 67, 54, 0.8);
+    
+    /* Celestial - Ciano */
+    --rarity-celestial-bg: rgba(0, 188, 212, 0.15);
+    --rarity-celestial-border: #00bcd4;
+    --rarity-celestial-glow: rgba(0, 188, 212, 0.8);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GRID RESPONSIVO PARA CARDS DE CLASSE
+   ═══════════════════════════════════════════════════════════════ */
+
+#listClasses {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 20px 0;
+}
+
+/* Grid completo para mensagem de nenhuma classe encontrada */
+.no-data-grid-full {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+}
+
+@media (max-width: 1600px) {
+    #listClasses {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 1400px) {
+    #listClasses {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+    }
+}
+
+@media (max-width: 1200px) {
+    #listClasses {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (max-width: 992px) {
+    #listClasses {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    #listClasses {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (max-width: 576px) {
+    #listClasses {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ESTRUTURA PRINCIPAL DO CARD
+   ═══════════════════════════════════════════════════════════════ */
+
+.classe-card-wrapper {
+    perspective: 1000px;
+    will-change: transform;
+}
+
+.classe-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(22, 33, 62, 0.95) 0%, rgba(20, 30, 55, 0.98) 100%) !important;
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(212, 175, 55, 0.2);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SISTEMA DE RARIDADE - BORDAS E GLOWS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* COMUM */
+.classe-card.rarity-comum {
+    border-color: var(--rarity-comum-border);
+    box-shadow: 
+        0 0 15px var(--rarity-comum-glow),
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.classe-card.rarity-comum::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--rarity-comum-border), transparent);
+}
+
+.classe-card.rarity-comum:hover {
+    border-color: var(--rarity-comum-border);
+    box-shadow: 
+        0 0 25px var(--rarity-comum-glow),
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transform: translateY(-8px);
+}
+
+/* INCOMUM */
+.classe-card.rarity-incomum {
+    border-color: var(--rarity-incomum-border);
+    box-shadow: 
+        0 0 20px var(--rarity-incomum-glow),
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.classe-card.rarity-incomum::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--rarity-incomum-border), transparent);
+}
+
+.classe-card.rarity-incomum:hover {
+    border-color: var(--rarity-incomum-border);
+    box-shadow: 
+        0 0 35px var(--rarity-incomum-glow),
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-8px);
+}
+
+/* RARO */
+.classe-card.rarity-raro {
+    border-color: var(--rarity-raro-border);
+    box-shadow: 
+        0 0 25px var(--rarity-raro-glow),
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.classe-card.rarity-raro::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--rarity-raro-border), transparent);
+}
+
+.classe-card.rarity-raro:hover {
+    border-color: var(--rarity-raro-border);
+    box-shadow: 
+        0 0 40px var(--rarity-raro-glow),
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-8px);
+}
+
+/* ÉPICO */
+.classe-card.rarity-epico {
+    border-color: var(--rarity-epico-border);
+    box-shadow: 
+        0 0 30px var(--rarity-epico-glow),
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.classe-card.rarity-epico::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--rarity-epico-border), transparent);
+}
+
+.classe-card.rarity-epico:hover {
+    border-color: var(--rarity-epico-border);
+    box-shadow: 
+        0 0 50px var(--rarity-epico-glow),
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-8px);
+}
+
+/* LENDÁRIO - COM ANIMAÇÃO */
+@keyframes glowLendario {
+    0%, 100% {
+        box-shadow: 
+            0 0 40px var(--rarity-lendario-glow),
+            0 8px 32px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+    50% {
+        box-shadow: 
+            0 0 60px var(--rarity-lendario-glow),
+            0 8px 40px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+}
+
+.classe-card.rarity-lendario {
+    border-color: var(--rarity-lendario-border);
+    animation: glowLendario 3s ease-in-out infinite;
+}
+
+.classe-card.rarity-lendario::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, transparent, var(--rarity-lendario-border), var(--rarity-lendario-border), transparent);
+    box-shadow: 0 0 15px var(--rarity-lendario-glow);
+}
+
+.classe-card.rarity-lendario:hover {
+    border-color: var(--rarity-lendario-border);
+    animation: none;
+    box-shadow: 
+        0 0 70px var(--rarity-lendario-glow),
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    transform: translateY(-8px) scale(1.02);
+}
+
+/* MÍTICA - COM ANIMAÇÃO */
+@keyframes glowMitica {
+    0%, 100% {
+        box-shadow: 
+            0 0 40px var(--rarity-mitica-glow),
+            0 8px 32px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+    50% {
+        box-shadow: 
+            0 0 60px var(--rarity-mitica-glow),
+            0 8px 40px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+}
+
+.classe-card.rarity-mitica {
+    border-color: var(--rarity-mitica-border);
+    animation: glowMitica 3s ease-in-out infinite;
+}
+
+.classe-card.rarity-mitica::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, transparent, var(--rarity-mitica-border), var(--rarity-mitica-border), transparent);
+    box-shadow: 0 0 15px var(--rarity-mitica-glow);
+}
+
+.classe-card.rarity-mitica:hover {
+    border-color: var(--rarity-mitica-border);
+    animation: none;
+    box-shadow: 
+        0 0 70px var(--rarity-mitica-glow),
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    transform: translateY(-8px) scale(1.02);
+}
+
+/* CELESTIAL - COM ANIMAÇÃO */
+@keyframes glowCelestial {
+    0%, 100% {
+        box-shadow: 
+            0 0 40px var(--rarity-celestial-glow),
+            0 8px 32px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+    50% {
+        box-shadow: 
+            0 0 60px var(--rarity-celestial-glow),
+            0 8px 40px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+}
+
+.classe-card.rarity-celestial {
+    border-color: var(--rarity-celestial-border);
+    animation: glowCelestial 3s ease-in-out infinite;
+}
+
+.classe-card.rarity-celestial::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, transparent, var(--rarity-celestial-border), var(--rarity-celestial-border), transparent);
+    box-shadow: 0 0 15px var(--rarity-celestial-glow);
+}
+
+.classe-card.rarity-celestial:hover {
+    border-color: var(--rarity-celestial-border);
+    animation: none;
+    box-shadow: 
+        0 0 70px var(--rarity-celestial-glow),
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    transform: translateY(-8px) scale(1.02);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SEÇÃO 1: TÍTULO CENTRALIZADO
+   ═══════════════════════════════════════════════════════════════ */
+
+.classe-card-title-section {
+    padding: 16px;
+    text-align: center;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.classe-card-title {
+    color: #f0c850;
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SEÇÃO 2: FUNÇÕES (TOKENS)
+   ═══════════════════════════════════════════════════════════════ */
+
+.classe-card-functions-section {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+}
+
+.classe-card-function-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 12px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.05));
+    border: 1.5px solid rgba(212, 175, 55, 0.35);
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #d4af37;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.classe-card-function-badge:hover {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(212, 175, 55, 0.15));
+    border-color: rgba(212, 175, 55, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SEÇÃO 3: CONTEÚDO (2 COLUNAS - IMAGEM + ATRIBUTOS)
+   ═══════════════════════════════════════════════════════════════ */
+
+.classe-card-main-content {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 16px;
+    padding: 16px;
+    flex-grow: 1;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+/* Coluna Esquerda: Imagem */
+.classe-card-image-container {
+    position: relative;
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(52, 152, 219, 0.08) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
+    box-shadow: inset 0 -4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.classe-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s ease;
+}
+
+.classe-card:hover .classe-card-image {
+    transform: scale(1.12);
+}
+
+.classe-card-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.3) 100%);
+    pointer-events: none;
+}
+
+/* Coluna Direita: Atributos em Linhas */
+.classe-card-attributes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    justify-content: center;
+}
+
+.classe-card-attribute-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 4px;
+    transition: all 0.25s ease;
+    font-size: 0.9rem;
+}
+
+.classe-card-attribute-line:hover {
+    background: rgba(212, 175, 55, 0.08);
+    border-color: rgba(212, 175, 55, 0.5);
+    transform: translateX(2px);
+}
+
+.classe-card-attribute-label {
+    font-weight: 700;
+    color: #a0a0a0;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-size: 0.75rem;
+}
+
+.classe-card-attribute-value {
+    font-weight: 800;
+    color: #f0c850;
+    font-size: 1rem;
+    min-width: 24px;
+    text-align: right;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SEÇÃO 4: BOTÕES DE AÇÃO
+   ═══════════════════════════════════════════════════════════════ */
+
+.classe-card-footer {
+    padding: 12px 14px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.classe-card-btn {
+    padding: 10px 0;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(212, 175, 55, 0.02));
+    color: #d4af37;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+}
+
+.classe-card-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(212, 175, 55, 0.2);
+    transition: left 0.3s ease;
+    z-index: -1;
+}
+
+.classe-card-btn:hover::before {
+    left: 0;
+}
+
+.classe-card-btn:hover {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.08));
+    border-color: rgba(212, 175, 55, 0.8);
+    color: #ffd700;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+}
+
+.classe-card-btn:active {
+    transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVIDADE
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .classe-card-title {
+        font-size: 1.1rem;
+    }
+    
+    .classe-card-main-content {
+        grid-template-columns: 100px 1fr;
+        gap: 12px;
+        padding: 12px;
+    }
+    
+    .classe-card-image-container {
+        height: 120px;
+    }
+    
+    .classe-card-btn {
+        font-size: 0.65rem;
+        padding: 8px 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .classe-card {
+        border-radius: 12px;
+    }
+    
+    .classe-card-title {
+        font-size: 1rem;
+    }
+    
+    .classe-card-title-section {
+        padding: 12px;
+    }
+    
+    .classe-card-functions-section {
+        padding: 10px 12px;
+    }
+    
+    .classe-card-main-content {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    .classe-card-image-container {
+        height: 100px;
+    }
+    
+    .classe-card-attribute-line {
+        padding: 6px;
+        font-size: 0.85rem;
+    }
+    
+    .classe-card-footer {
+        padding: 10px 10px;
+        gap: 6px;
+    }
+    
+    .classe-card-btn {
+        font-size: 0.6rem;
+        padding: 7px 0;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MODAL DE DETALHES - MODO VISUALIZAÇÃO APENAS (NÃO EDITÁVEL)
+   ═══════════════════════════════════════════════════════════════ */
+
+#modalDetalhesClasse[data-modo="visualizacao"] input,
+#modalDetalhesClasse[data-modo="visualizacao"] select,
+#modalDetalhesClasse[data-modo="visualizacao"] textarea {
+    pointer-events: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    cursor: not-allowed !important;
+    opacity: 0.6 !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+}
+
+#modalDetalhesClasse[data-modo="visualizacao"] input:focus,
+#modalDetalhesClasse[data-modo="visualizacao"] select:focus,
+#modalDetalhesClasse[data-modo="visualizacao"] textarea:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: rgba(212, 175, 55, 0.2) !important;
+}
+
+/* Permitir clique nas abas */
+#modalDetalhesClasse[data-modo="visualizacao"] .aba-habilidade-btn {
+    pointer-events: auto !important;
+    user-select: auto !important;
+    -webkit-user-select: auto !important;
+    opacity: 1 !important;
+    cursor: pointer !important;
+}
+
+/* Permitir clique nos botões do rodapé */
+#modalDetalhesClasse[data-modo="visualizacao"] .modal-footer button {
+    pointer-events: auto !important;
+    user-select: auto !important;
+    -webkit-user-select: auto !important;
+    opacity: 1 !important;
+    cursor: pointer !important;
+}
+
+/* Prevenir seleção de texto em campos desabilitados */
+#modalDetalhesClasse[data-modo="visualizacao"] input::selection,
+#modalDetalhesClasse[data-modo="visualizacao"] textarea::selection {
+    background-color: transparent !important;
+    color: inherit !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SISTEMA DE RARIDADE - BORDAS E GLOWS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* COMUM */
+.classe-card.rarity-comum {
+    border-color: var(--rarity-comum-border);
+    box-shadow: 
+        0 0 15px var(--rarity-comum-glow),
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.classe-card.rarity-comum::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--rarity-comum-border), transparent);
+}
+
+.classe-card.rarity-comum:hover {
+    border-color: var(--rarity-comum-border);
+    box-shadow: 
+        0 0 25px var(--rarity-comum-glow),
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transform: translateY(-8px);
+}
+
+/* INCOMUM */
+.classe-card.rarity-incomum {
+    border-color: var(--rarity-incomum-border);
+    box-shadow: 
+        0 0 20px var(--rarity-incomum-glow),
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.classe-card.rarity-incomum::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--rarity-incomum-border), transparent);
+}
+
+.classe-card.rarity-incomum:hover {
+    border-color: var(--rarity-incomum-border);
+    box-shadow: 
+        0 0 35px var(--rarity-incomum-glow),
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-8px);
+}
+
+/* RARO */
+.classe-card.rarity-raro {
+    border-color: var(--rarity-raro-border);
+    box-shadow: 
+        0 0 25px var(--rarity-raro-glow),
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.classe-card.rarity-raro::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--rarity-raro-border), transparent);
+}
+
+.classe-card.rarity-raro:hover {
+    border-color: var(--rarity-raro-border);
+    box-shadow: 
+        0 0 40px var(--rarity-raro-glow),
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-8px);
+}
+
+/* ÉPICO */
+.classe-card.rarity-epico {
+    border-color: var(--rarity-epico-border);
+    box-shadow: 
+        0 0 30px var(--rarity-epico-glow),
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.classe-card.rarity-epico::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--rarity-epico-border), transparent);
+}
+
+.classe-card.rarity-epico:hover {
+    border-color: var(--rarity-epico-border);
+    box-shadow: 
+        0 0 50px var(--rarity-epico-glow),
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-8px);
+}
+
+/* LENDÁRIO - COM ANIMAÇÃO */
+@keyframes glowLendario {
+    0%, 100% {
+        box-shadow: 
+            0 0 40px var(--rarity-lendario-glow),
+            0 8px 32px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+    50% {
+        box-shadow: 
+            0 0 60px var(--rarity-lendario-glow),
+            0 8px 40px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+}
+
+.classe-card.rarity-lendario {
+    border-color: var(--rarity-lendario-border);
+    animation: glowLendario 3s ease-in-out infinite;
+}
+
+.classe-card.rarity-lendario::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, transparent, var(--rarity-lendario-border), var(--rarity-lendario-border), transparent);
+    box-shadow: 0 0 15px var(--rarity-lendario-glow);
+}
+
+.classe-card.rarity-lendario:hover {
+    border-color: var(--rarity-lendario-border);
+    animation: none;
+    box-shadow: 
+        0 0 70px var(--rarity-lendario-glow),
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    transform: translateY(-8px) scale(1.02);
+}
+
+/* MÍTICA - COM ANIMAÇÃO */
+@keyframes glowMitica {
+    0%, 100% {
+        box-shadow: 
+            0 0 40px var(--rarity-mitica-glow),
+            0 8px 32px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+    50% {
+        box-shadow: 
+            0 0 60px var(--rarity-mitica-glow),
+            0 8px 40px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+}
+
+.classe-card.rarity-mitica {
+    border-color: var(--rarity-mitica-border);
+    animation: glowMitica 3s ease-in-out infinite;
+}
+
+.classe-card.rarity-mitica::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, transparent, var(--rarity-mitica-border), var(--rarity-mitica-border), transparent);
+    box-shadow: 0 0 15px var(--rarity-mitica-glow);
+}
+
+.classe-card.rarity-mitica:hover {
+    border-color: var(--rarity-mitica-border);
+    animation: none;
+    box-shadow: 
+        0 0 70px var(--rarity-mitica-glow),
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    transform: translateY(-8px) scale(1.02);
+}
+
+/* CELESTIAL - COM ANIMAÇÃO */
+@keyframes glowCelestial {
+    0%, 100% {
+        box-shadow: 
+            0 0 40px var(--rarity-celestial-glow),
+            0 8px 32px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+    50% {
+        box-shadow: 
+            0 0 60px var(--rarity-celestial-glow),
+            0 8px 40px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+}
+
+.classe-card.rarity-celestial {
+    border-color: var(--rarity-celestial-border);
+    animation: glowCelestial 3s ease-in-out infinite;
+}
+
+.classe-card.rarity-celestial::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, transparent, var(--rarity-celestial-border), var(--rarity-celestial-border), transparent);
+    box-shadow: 0 0 15px var(--rarity-celestial-glow);
+}
+
+.classe-card.rarity-celestial:hover {
+    border-color: var(--rarity-celestial-border);
+    animation: none;
+    box-shadow: 
+        0 0 70px var(--rarity-celestial-glow),
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    transform: translateY(-8px) scale(1.02);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   IMAGEM DO CARD
+   ═══════════════════════════════════════════════════════════════ */
+
+.classe-card-image-container {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(52, 152, 219, 0.08) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+    box-shadow: inset 0 -8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.classe-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.classe-card:hover .classe-card-image {
+    transform: scale(1.15) translateY(-5px);
+}
+
+.classe-card-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.4) 100%);
+    pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CONTEÚDO DO CARD
+   ═══════════════════════════════════════════════════════════════ */
+
+.classe-card-content {
+    padding: 18px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.classe-card-title {
+    color: #f0c850;
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FUNÇÕES (TAGS)
+   ═══════════════════════════════════════════════════════════════ */
+
+.classe-card-functions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.classe-card-function-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 12px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.05));
+    border: 1.5px solid rgba(212, 175, 55, 0.35);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #d4af37;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.classe-card-function-badge:hover {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(212, 175, 55, 0.15));
+    border-color: rgba(212, 175, 55, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SEPARADOR
+   ═══════════════════════════════════════════════════════════════ */
+
+.classe-card-separator {
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(212, 175, 55, 0.3) 50%, 
+        transparent 100%);
+    margin: 4px 0 8px 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GRID DE ATRIBUTOS
+   ═══════════════════════════════════════════════════════════════ */
+
+.classe-card-attributes {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.classe-card-attribute-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 10px 6px;
+    border: 1.5px solid rgba(212, 175, 55, 0.3);
+    border-radius: 6px;
+    transition: all 0.25s ease;
+    min-height: 55px;
+    position: relative;
+    overflow: hidden;
+}
+
+.classe-card-attribute-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.2), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.classe-card-attribute-item:hover {
+    background: rgba(212, 175, 55, 0.08);
+    border-color: rgba(212, 175, 55, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
+}
+
+.classe-card-attribute-item:hover::before {
+    opacity: 1;
+}
+
+.classe-card-attribute-value {
+    font-size: 0.95rem;
+    color: #d4af37;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.5px;
+}
+
+.classe-card-attribute-label {
+    font-size: 0.48rem;
+    color: #a0a0a0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 900;
+    text-align: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RODAPÉ COM BOTÕES
+   ═══════════════════════════════════════════════════════════════ */
+
+.classe-card-footer {
+    padding: 12px 14px;
+    border-top: 1px solid rgba(212, 175, 55, 0.2);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    flex-shrink: 0;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.classe-card-btn {
+    padding: 8px 0;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(212, 175, 55, 0.02));
+    color: #d4af37;
+    border-radius: 5px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    overflow: hidden;
+    position: relative;
+}
+
+.classe-card-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(212, 175, 55, 0.2);
+    transition: left 0.3s ease;
+    z-index: -1;
+}
+
+.classe-card-btn:hover::before {
+    left: 0;
+}
+
+.classe-card-btn:hover {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.08));
+    border-color: rgba(212, 175, 55, 0.8);
+    color: #ffd700;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+}
+
+.classe-card-btn:active {
+    transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVIDADE
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1200px) {
+    .classe-card {
+        min-height: 500px;
+    }
+    
+    .classe-card-image-container {
+        height: 200px;
+    }
+    
+    .classe-card-title {
+        font-size: 1.15rem;
+    }
+    
+    .classe-card-attributes {
+        gap: 5px;
+        padding: 6px;
+    }
+    
+    .classe-card-attribute-item {
+        min-height: 50px;
+        padding: 8px 4px;
+    }
+}
+
+@media (max-width: 768px) {
+    .classe-card {
+        min-height: auto;
+    }
+    
+    .classe-card-image-container {
+        height: 180px;
+    }
+    
+    .classe-card-content {
+        padding: 14px;
+        gap: 8px;
+    }
+    
+    .classe-card-title {
+        font-size: 1rem;
+    }
+    
+    .classe-card-attributes {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4px;
+        padding: 4px;
+    }
+    
+    .classe-card-attribute-item {
+        min-height: 45px;
+        padding: 6px 3px;
+    }
+    
+    .classe-card-btn {
+        font-size: 0.6rem;
+        padding: 6px 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .classe-card {
+        border-radius: 12px;
+    }
+    
+    .classe-card-image-container {
+        height: 160px;
+        border-radius: 12px 12px 0 0;
+    }
+    
+    .classe-card-content {
+        padding: 12px;
+    }
+    
+    .classe-card-title {
+        font-size: 0.95rem;
+    }
+    
+    .classe-card-attributes {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 3px;
+        padding: 3px;
+    }
+    
+    .classe-card-attribute-item {
+        min-height: 40px;
+        padding: 5px 2px;
+    }
+    
+    .classe-card-attribute-value {
+        font-size: 0.85rem;
+    }
+    
+    .classe-card-attribute-label {
+        font-size: 0.45rem;
+    }
+    
+    .classe-card-footer {
+        padding: 10px 10px;
+        gap: 4px;
+    }
+    
+    .classe-card-btn {
+        font-size: 0.55rem;
+        padding: 5px 0;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ESTILO DAS ABAS DE HABILIDADES
+   ═══════════════════════════════════════════════════════════════ */
+
+.aba-habilidade-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.aba-habilidade-btn:hover {
+    transform: translateY(-2px);
+}
+
+.aba-habilidade-btn:active {
+    transform: translateY(0);
+}
+
+.aba-habilidade-content {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Grid Layout para Raças */
+#listRacas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+    justify-items: center;
+    place-items: start center;
+}
+
+/* Responsivo para tablets */
+@media (max-width: 1200px) {
+    #listRacas {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 900px;
+    }
+}
+
+/* Responsivo para mobile */
+@media (max-width: 768px) {
+    #listRacas {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+    }
+}
+

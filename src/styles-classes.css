@@ -1,0 +1,510 @@
+/* ╔════════════════════════════════════════════════════════════╗
+   ║     REDESIGN COMPLETO - CLASSES (CARDS + FORM)             ║
+   ║              LAYOUT MODERNO RPG PREMIUM v2.0               ║
+   ║                  Atualizado: 31/03/2026                     ║
+   ╚════════════════════════════════════════════════════════════╝ */
+
+/* ═══════════════════════════════════════════════════════════════
+   GRID RESPONSIVO PARA EXIBIÇÃO DE CARDS
+   ═══════════════════════════════════════════════════════════════ */
+
+#listClasses {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 20px 0;
+}
+
+@media (max-width: 1600px) {
+    #listClasses {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 1400px) {
+    #listClasses {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+    }
+}
+
+@media (max-width: 1200px) {
+    #listClasses {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (max-width: 992px) {
+    #listClasses {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    #listClasses {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+}
+
+@media (max-width: 576px) {
+    #listClasses {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MODAL FORM - MELHORIAS VISUAIS
+   ═══════════════════════════════════════════════════════════════ */
+
+#modalNovaClasse .modal-body {
+    background: linear-gradient(135deg, rgba(15, 15, 30, 0.5) 0%, rgba(22, 33, 62, 0.5) 100%);
+}
+
+#formNovaClasse .form-label {
+    color: #d4af37;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-size: 0.9rem;
+}
+
+#formNovaClasse .form-control,
+#formNovaClasse textarea {
+    background: rgba(0, 0, 0, 0.5) !important;
+    border: 1.5px solid rgba(212, 175, 55, 0.4) !important;
+    color: #ffffff !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    font-weight: 500 !important;
+    transition: all 0.25s ease !important;
+}
+
+#formNovaClasse .form-control:focus,
+#formNovaClasse textarea:focus {
+    background: rgba(0, 0, 0, 0.7) !important;
+    border-color: rgba(212, 175, 55, 0.8) !important;
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.2) !important;
+}
+
+#formNovaClasse .form-control::placeholder {
+    color: #888888 !important;
+}
+
+/* Funções - Custom Checkboxes Styling */
+#classeFuncoesContainer label:has(input[type="checkbox"]:checked) {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(212, 175, 55, 0.12) 100%) !important;
+    border-color: #d4af37 !important;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25), 0 0 20px rgba(212, 175, 55, 0.1) !important;
+}
+
+#classeFuncoesContainer label:has(input[type="checkbox"]:checked) span {
+    color: #f0c850 !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 8px rgba(240, 200, 80, 0.4) !important;
+}
+
+#classeFuncoesContainer label:hover {
+    background: linear-gradient(135deg, rgba(44, 62, 80, 0.8) 0%, rgba(44, 62, 80, 0.6) 100%) !important;
+    border-color: rgba(212, 175, 55, 0.6) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PREVIEW DE IMAGEM
+   ═══════════════════════════════════════════════════════════════ */
+
+.image-preview {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%) !important;
+    border: 2px dashed rgba(212, 175, 55, 0.3) !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    transition: all 0.3s ease !important;
+}
+
+.image-preview:hover {
+    border-color: rgba(212, 175, 55, 0.6) !important;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%) !important;
+}
+
+.image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ATRIBUTOS - GRID MELHORADO
+   ═══════════════════════════════════════════════════════════════ */
+
+.attributes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.attribute-item {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.03) 100%) !important;
+    padding: 12px !important;
+    border-left: 4px solid #d4af37 !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(212, 175, 55, 0.2) !important;
+    transition: all 0.3s ease !important;
+}
+
+.attribute-item:hover {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.08) 100%) !important;
+    border-color: rgba(212, 175, 55, 0.5) !important;
+    transform: translateY(-2px) !important;
+}
+
+.attribute-item label {
+    color: #d4af37 !important;
+    font-weight: 700 !important;
+    margin-bottom: 8px !important;
+    display: block !important;
+    font-size: 0.85rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.3px !important;
+}
+
+.attribute-item input {
+    width: 100% !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    border: 1px solid rgba(212, 175, 55, 0.4) !important;
+    color: #ffffff !important;
+    border-radius: 6px !important;
+    padding: 8px !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+    transition: all 0.25s ease !important;
+}
+
+.attribute-item input:focus {
+    background: rgba(0, 0, 0, 0.7) !important;
+    border-color: rgba(212, 175, 55, 0.8) !important;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FILTROS PANEL - MELHORADO
+   ═══════════════════════════════════════════════════════════════ */
+
+.filters-panel {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.03) 100%);
+    padding: 18px;
+    border-radius: 12px;
+    border: 2px solid rgba(212, 175, 55, 0.25);
+    margin-bottom: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.filters-panel-title {
+    color: #d4af37;
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.filters-panel-title span:first-child {
+    font-size: 1.2rem;
+}
+
+.filters-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+}
+
+@media (max-width: 1200px) {
+    .filters-group {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .filters-group {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    }
+}
+
+.filter-btn {
+    padding: 9px 12px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid rgba(212, 175, 55, 0.3) !important;
+    color: #bdc3c7 !important;
+    font-weight: 600 !important;
+    font-size: 0.8rem !important;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    cursor: pointer !important;
+    background: rgba(44, 62, 80, 0.4) !important;
+    text-transform: capitalize !important;
+    white-space: nowrap !important;
+}
+
+.filter-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    border-color: rgba(212, 175, 55, 0.5) !important;
+}
+
+.filter-btn.active {
+    background: linear-gradient(135deg, #d4af37 0%, #f0c850 100%) !important;
+    color: #1a1a2e !important;
+    border-color: #d4af37 !important;
+    font-weight: 800 !important;
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4) !important;
+    transform: translateY(-4px) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SKILLS SECTION - MELHORADO
+   ═══════════════════════════════════════════════════════════════ */
+
+.skills-section {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.1) 100%);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    min-height: 60px;
+}
+
+.skill-item {
+    background: rgba(44, 62, 80, 0.6);
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    border-left: 3px solid #d4af37;
+    transition: all 0.3s ease;
+}
+
+.skill-item:hover {
+    background: rgba(44, 62, 80, 0.8);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
+    transform: translateX(4px);
+}
+
+.skill-item strong {
+    color: #d4af37;
+    font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMAÇÕES E TRANSIÇÕES
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes glowPulse {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+    }
+}
+
+.classe-card {
+    animation: slideInUp 0.5s ease-out;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DARK THEME REFINEMENTS
+   ═══════════════════════════════════════════════════════════════ */
+
+.modal-content {
+    background: linear-gradient(135deg, rgba(15, 15, 30, 0.98) 0%, rgba(22, 33, 62, 0.98) 100%) !important;
+}
+
+.modal-header {
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%) !important;
+}
+
+.modal-footer {
+    background: rgba(212, 175, 55, 0.03) !important;
+}
+
+.text-gold {
+    color: #d4af37 !important;
+}
+
+.text-muted {
+    color: #888888 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   UTILITIES
+   ═══════════════════════════════════════════════════════════════ */
+
+.hidden-file-input {
+    display: none !important;
+}
+
+.no-data {
+    text-align: center;
+    padding: 40px;
+    color: #95a5a6;
+}
+
+.no-data p {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SKILL CARDS - SISTEMA RPG PREMIUM
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Container de habilidades */
+#habilidadesClasse {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 8px 0;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+#habilidadesClasse::-webkit-scrollbar {
+    width: 6px;
+}
+
+#habilidadesClasse::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+#habilidadesClasse::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.4);
+    border-radius: 10px;
+    transition: background 0.25s;
+}
+
+#habilidadesClasse::-webkit-scrollbar-thumb:hover {
+    background: rgba(212, 175, 55, 0.7);
+}
+
+/* Skill card container */
+.skill-card-rpg {
+    position: relative;
+    animation: slideInCard 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    opacity: 0;
+}
+
+@keyframes slideInCard {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.skill-card-rpg:hover {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.08) 100%) !important;
+    border-color: rgba(212, 175, 55, 0.5) !important;
+    box-shadow: 0 8px 24px rgba(212, 175, 55, 0.15) !important;
+    transform: translateY(-2px);
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Responsivos para skill cards */
+@media (max-width: 768px) {
+    .skill-card-rpg {
+        grid-template-columns: 100px 1fr !important;
+        gap: 12px !important;
+        padding: 12px !important;
+    }
+
+    .skill-card-rpg img {
+        width: 100px !important;
+        height: 100px !important;
+    }
+
+    .skill-card-rpg h6 {
+        font-size: 1rem !important;
+    }
+
+    .skill-card-rpg button {
+        padding: 4px 10px !important;
+        font-size: 0.75rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .skill-card-rpg {
+        grid-template-columns: 80px 1fr !important;
+        gap: 10px !important;
+        padding: 10px !important;
+    }
+
+    .skill-card-rpg img {
+        width: 80px !important;
+        height: 80px !important;
+    }
+
+    .skill-card-rpg h6 {
+        font-size: 0.95rem !important;
+    }
+
+    .skill-card-rpg div[style*="grid-template-columns"] {
+        grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)) !important;
+    }
+
+    .skill-card-rpg button {
+        padding: 4px 8px !important;
+        font-size: 0.7rem !important;
+    }
+}
+
+/* Animações para botões de skill */
+.skill-card-rpg button:active {
+    transform: translateY(2px) scale(0.98);
+    transition: all 0.1s;
+}
+
+/* Badges/Tags de tipo */
+.skill-card-rpg span[style*="display: inline-block"] {
+    transition: all 0.2s;
+}
+
+.skill-card-rpg span[style*="display: inline-block"]:hover {
+    transform: scale(1.05);
+}
+
+/* Grid de atributos responsivo */
+@media (max-width: 576px) {
+    .skill-card-rpg div[style*="grid-template-columns: repeat(auto-fit"] {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px !important;
+        padding: 6px !important;
+    }
+}
+
