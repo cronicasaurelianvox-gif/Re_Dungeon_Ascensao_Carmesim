@@ -26399,7 +26399,7 @@
 
             // DESCRIÇÃO DA CLASSE
             if (classe.descricao && classe.descricao.trim() !== '') {
-                textoClasse += `📖  DESCRIÇÃO:\n`;
+                textoClasse += `📖  DESCRIÇÃO:\n`;es
                 textoClasse += `────────────────────────────────────────────────────────────\n`;
                 textoClasse += `${classe.descricao}\n\n`;
             }
@@ -42250,9 +42250,10 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                         // Importação completa - comportamento idêntico ao anterior
                         console.log('🔄 Importando TUDO...');
 
-                        // MODO LEGADO: Mapear "historia" e "redungeon_historia" para "Mesa"
-                        if ((dados['historia'] || dados['redungeon_historia']) && !dados['Mesa']) {
-                            dados['Mesa'] = dados['historia'] || dados['redungeon_historia'];
+                        // MODO LEGADO: Mapear "historia", "Historia", "redungeon_historia" para "Mesa"
+                        if ((dados['historia'] || dados['Historia'] || dados['redungeon_historia']) && !dados['Mesa']) {
+                            dados['Mesa'] = dados['Historia'] || dados['historia'] || dados['redungeon_historia'];
+                            console.log('✅ Detectado formato legacy de Historia, mapeado para Mesa');
                         }
 
                         const camposValidos = ['Mesa', 'origens', 'regioes', 'cenarios', 'racas', 'classes', 'aptidoes', 'npcs', 'criaturas', 'materiais', 'receitas', 'itens', 'condicoes', 'regras', 'artes'];
