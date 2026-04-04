@@ -17743,7 +17743,12 @@
             document.getElementById('editInteligencia').value = document.getElementById('npcInteligenciaBase').value || 10;
             document.getElementById('editPercepcao').value = document.getElementById('npcPercepcaoBase').value || 10;
             document.getElementById('editSorte').value = document.getElementById('npcSorteBase').value || 10;
-            const modal = new bootstrap.Modal(document.getElementById('modalEditarAtributosBase'));
+            const modalElement = document.getElementById('modalEditarAtributosBase');
+            if (!modalElement) {
+                console.error('❌ Elemento modalEditarAtributosBase não encontrado');
+                return;
+            }
+            const modal = new bootstrap.Modal(modalElement);
             modal.show();
             safeOpenModal('modalEditarAtributosBase');
         }
@@ -17852,7 +17857,12 @@
             document.getElementById('classeRolagemInfo').textContent = nomeClasse;
 
             // Abrir modal
-            const modal = new bootstrap.Modal(document.getElementById('modalRolarAtributosClasse'));
+            const modalElement = document.getElementById('modalRolarAtributosClasse');
+            if (!modalElement) {
+                console.error('❌ Elemento modalRolarAtributosClasse não encontrado');
+                return;
+            }
+            const modal = new bootstrap.Modal(modalElement);
             modal.show();
             safeOpenModal('modalRolarAtributosClasse');
         }
@@ -20435,6 +20445,10 @@
             // Manter condições já selecionadas
             carregarCondicoesSeletorSkill();
             const modalElement = document.getElementById('modalSeletorCondicoesSkill');
+            if (!modalElement) {
+                console.error('❌ Elemento modalSeletorCondicoesSkill não encontrado');
+                return;
+            }
             const modal = new bootstrap.Modal(modalElement, {
                 backdrop: true,
                 keyboard: true
@@ -20492,6 +20506,10 @@
         function abrirSeletorCondicoesSkillCreate() {
             carregarCondicoesSeletorSkillCreate();
             const modalElement = document.getElementById('modalSeletorCondicoesSkill');
+            if (!modalElement) {
+                console.error('❌ Elemento modalSeletorCondicoesSkill não encontrado');
+                return;
+            }
             const modal = new bootstrap.Modal(modalElement, {
                 backdrop: true,
                 keyboard: true
@@ -20895,7 +20913,12 @@
             document.getElementById('containerModaisDinamicos').insertAdjacentHTML('beforeend', html);
 
             // Mostra modal
-            const novoModal = new bootstrap.Modal(document.getElementById('modalCriarAptidaoNPC'));
+            const modalElement = document.getElementById('modalCriarAptidaoNPC');
+            if (!modalElement) {
+                console.error('❌ Elemento modalCriarAptidaoNPC não encontrado');
+                return;
+            }
+            const novoModal = new bootstrap.Modal(modalElement);
             novoModal.show();
             safeOpenModal('modalCriarAptidaoNPC');
 
@@ -20968,7 +20991,12 @@
             habImagemIndexedDBIdTemp = null;
             
             // Mostra o modal
-            const modal = new bootstrap.Modal(document.getElementById('modalCriarNovaHabilidadeNPC'));
+            const modalElement = document.getElementById('modalCriarNovaHabilidadeNPC');
+            if (!modalElement) {
+                console.error('❌ Elemento modalCriarNovaHabilidadeNPC não encontrado');
+                return;
+            }
+            const modal = new bootstrap.Modal(modalElement);
             modal.show();
             safeOpenModal('modalCriarNovaHabilidadeNPC');
         }
@@ -22176,7 +22204,12 @@
                 body.setAttribute('style', 'flex: 1 1 auto !important; overflow-y: auto !important; overflow-x: hidden !important; min-height: 0 !important; max-height: calc(90vh - 140px) !important; display: block !important;');
             }
             
-            const modal = new bootstrap.Modal(document.getElementById('modalSeletorCondicoes'));
+            const modalElement = document.getElementById('modalSeletorCondicoes');
+            if (!modalElement) {
+                console.error('❌ Elemento modalSeletorCondicoes não encontrado');
+                return;
+            }
+            const modal = new bootstrap.Modal(modalElement);
             modal.show();
             safeOpenModal('modalSeletorCondicoes');
             
@@ -24972,7 +25005,12 @@
             document.getElementById('habilidadeRacaModalTitle').textContent = '⚡ Nova Habilidade de Raça';
             
             // Abrir modal
-            const modal = new bootstrap.Modal(document.getElementById('modalNovaHabilidadeRaca'));
+            const modalElement = document.getElementById('modalNovaHabilidadeRaca');
+            if (!modalElement) {
+                console.error('❌ Elemento modalNovaHabilidadeRaca não encontrado');
+                return;
+            }
+            const modal = new bootstrap.Modal(modalElement);
             modal.show();
         }
 
@@ -25214,7 +25252,12 @@
             document.getElementById('habilidadeRacaModalTitle').textContent = '✏️ Editar Habilidade de Raça';
 
             // Abrir modal
-            const modal = new bootstrap.Modal(document.getElementById('modalNovaHabilidadeRaca'));
+            const modalElement = document.getElementById('modalNovaHabilidadeRaca');
+            if (!modalElement) {
+                console.error('❌ Elemento modalNovaHabilidadeRaca não encontrado');
+                return;
+            }
+            const modal = new bootstrap.Modal(modalElement);
             modal.show();
         }
 
@@ -25412,7 +25455,12 @@
 
         // Abrir modal para gerenciar funções
         function abrirModalFuncoes() {
-            const modal = new bootstrap.Modal(document.getElementById('modalGerenciarFuncoes'));
+            const modalElement = document.getElementById('modalGerenciarFuncoes');
+            if (!modalElement) {
+                console.error('❌ Elemento modalGerenciarFuncoes não encontrado');
+                return;
+            }
+            const modal = new bootstrap.Modal(modalElement);
             modal.show();
         }
 
@@ -25583,7 +25631,12 @@
             document.getElementById('habilidadeModalTitle').textContent = '⚡ Nova Habilidade';
             
             // Abrir modal
-            const modal = new bootstrap.Modal(document.getElementById('modalNovaHabilidadeClasse'));
+            const modalElement = document.getElementById('modalNovaHabilidadeClasse');
+            if (!modalElement) {
+                console.error('❌ Elemento modalNovaHabilidadeClasse não encontrado');
+                return;
+            }
+            const modal = new bootstrap.Modal(modalElement);
             modal.show();
         }
 
@@ -25832,7 +25885,12 @@
                         document.getElementById('habilidadeModalTitle').textContent = '✏️ Editar Habilidade';
                         
                         // Abrir modal
-                        const modal = new bootstrap.Modal(document.getElementById('modalNovaHabilidadeClasse'));
+                        const modalElement = document.getElementById('modalNovaHabilidadeClasse');
+                        if (!modalElement) {
+                            console.error('❌ Elemento modalNovaHabilidadeClasse não encontrado');
+                            throw new Error('Modal não encontrado');
+                        }
+                        const modal = new bootstrap.Modal(modalElement);
                         modal.show();
                     } catch (e) {
                         console.error('Erro ao parsear dados da habilidade:', e);
@@ -26305,11 +26363,14 @@
             // Animar saída após 3 segundos
             setTimeout(() => {
                 toast.classList.remove('show');
-                toast.classList.add('hide');
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.4s';
                 
                 // Remover do DOM após a animação
                 setTimeout(() => {
-                    toast.remove();
+                    if (toast && toast.parentNode) {
+                        toast.remove();
+                    }
                 }, 400);
             }, 3000);
         }
@@ -28827,7 +28888,12 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
         function abrirModalAdicionarItemExistente() {
             npcInventarioItens = JSON.parse(document.getElementById('npcInventarioData').value || '[]');
             filtroRaridadeAtual = 'todos'; // Reset do filtro
-            const modal = new bootstrap.Modal(document.getElementById('modalAdicionarItemExistente'));
+            const modalElement = document.getElementById('modalAdicionarItemExistente');
+            if (!modalElement) {
+                console.error('❌ Elemento modalAdicionarItemExistente não encontrado');
+                return;
+            }
+            const modal = new bootstrap.Modal(modalElement);
             renderizarItensExistentesFiltrados();
             modal.show();
             safeOpenModal('modalAdicionarItemExistente');
@@ -29026,7 +29092,12 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 btnExcluir.style.display = 'none';
             }
             
-            const modal = new bootstrap.Modal(document.getElementById('modalCriarNovoItemNPC'));
+            const modalElement = document.getElementById('modalCriarNovoItemNPC');
+            if (!modalElement) {
+                console.error('❌ Elemento modalCriarNovoItemNPC não encontrado');
+                return;
+            }
+            const modal = new bootstrap.Modal(modalElement);
             modal.show();
             safeOpenModal('modalCriarNovoItemNPC');
         }
@@ -29343,7 +29414,12 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
         // Abrir modal para remover itens
         function abrirModalRemoverItens() {
             npcInventarioItens = JSON.parse(document.getElementById('npcInventarioData').value || '[]');
-            const modal = new bootstrap.Modal(document.getElementById('modalRemoverItensNpc'));
+            const modalElement = document.getElementById('modalRemoverItensNpc');
+            if (!modalElement) {
+                console.error('❌ Elemento modalRemoverItensNpc não encontrado');
+                return;
+            }
+            const modal = new bootstrap.Modal(modalElement);
             renderizarItensRemover();
             modal.show();
             safeOpenModal('modalRemoverItensNpc');
@@ -38915,8 +38991,15 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
 
             // Remover após 3 segundos
             setTimeout(() => {
-                feedback.classList.add('hide');
-                setTimeout(() => feedback.remove(), 300);
+                if (feedback) {
+                    feedback.style.opacity = '0';
+                    feedback.style.transition = 'opacity 0.3s';
+                }
+                setTimeout(() => {
+                    if (feedback && feedback.parentNode) {
+                        feedback.remove();
+                    }
+                }, 300);
             }, 3000);
         }
 
@@ -39436,7 +39519,11 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             localStorage.setItem('redungeon_receitas', JSON.stringify(armazenar.receitas));
             editandoReceita = null;
             limparFormularioReceita();
-            bootstrap.Modal.getInstance(document.getElementById('modalNovaReceita')).hide();
+            const modalElement = document.getElementById('modalNovaReceita');
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
             listarReceitas();
             alert('✅ Receita deletada com sucesso!');
         }
@@ -39531,8 +39618,15 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
 
             // Remover após 3 segundos
             setTimeout(() => {
-                feedback.classList.add('hide');
-                setTimeout(() => feedback.remove(), 300);
+                if (feedback) {
+                    feedback.style.opacity = '0';
+                    feedback.style.transition = 'opacity 0.3s';
+                }
+                setTimeout(() => {
+                    if (feedback && feedback.parentNode) {
+                        feedback.remove();
+                    }
+                }, 300);
             }, 3000);
         }
 
