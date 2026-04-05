@@ -12430,6 +12430,7 @@
 
                         <!-- Campo Hidden para tracking de edição -->
                         <input type="hidden" id="habilidadeRacaEditIndex" value="">
+                        <input type="hidden" id="habilidadeRacaIdEditando" value="">
                     </form>
                 </div>
                 <div class="modal-footer border-0" style="border-top: 2px solid rgba(212,175,55,0.2); padding: 15px 20px; background: rgba(212,175,55,0.03);">
@@ -25050,6 +25051,7 @@
             // Limpar formulário e abrir modal para nova habilidade
             document.getElementById('formNovaHabilidadeRaca').reset();
             document.getElementById('habilidadeRacaEditIndex').value = '';
+            document.getElementById('habilidadeRacaIdEditando').value = '';
             document.getElementById('previewHabilidadeRaca').innerHTML = '<span class="text-muted" style="font-size: 0.8rem;">Imagem da habilidade</span>';
             document.getElementById('habilidadeRacaModalTitle').textContent = '⚡ Nova Habilidade de Raça';
             
@@ -25182,6 +25184,9 @@
             const form = document.getElementById('formNovaHabilidadeRaca');
             const nome = document.getElementById('habilidadeRacaNome').value;
             const editIndex = document.getElementById('habilidadeRacaEditIndex').value;
+            const habilidadeIdExistente = document.getElementById('habilidadeRacaIdEditando').value;
+            
+            console.log('💾 [salvarHabilidadeRaca] Iniciando salvamento:', {editando: editIndex !== '', nome, habilidadeIdExistente});
             
             if (!nome) {
                 alert('Por favor, preencha o nome da habilidade!');
@@ -25189,6 +25194,7 @@
             }
 
             const habilidade = {
+                id: habilidadeIdExistente || Date.now().toString() + Math.random().toString(36).substr(2, 9),
                 nome: nome,
                 tipo: document.getElementById('habilidadeRacaTipo').value,
                 acao: document.getElementById('habilidadeRacaAcao').value,
@@ -25202,11 +25208,15 @@
                 alvos: document.getElementById('habilidadeRacaAlvos').value,
                 descricao: document.getElementById('habilidadeRacaDescricao').value
             };
+            
+            console.log('📝 [salvarHabilidadeRaca] Objeto habilidade:', habilidade);
 
             // Determinar qual aba está ativa
             const abaAtiva = document.querySelector('#racaHeracas-tab.active') ? 'heracas' : 'habilidades';
             const containerId = abaAtiva === 'heracas' ? 'habilidadesRaca' : 'habilidadesRacaAvancadas';
             const container = document.getElementById(containerId);
+            
+            console.log('📍 [salvarHabilidadeRaca] Aba ativa:', abaAtiva, '| Container ID:', containerId);
             
             // Coletar todas as habilidades atuais
             let todasHabilidades = [];
@@ -25215,30 +25225,51 @@
                 try {
                     todasHabilidades.push(JSON.parse(json));
                 } catch(e) {
-                    console.error('Erro ao parsear habilidade:', e);
+                    console.error('❌ [salvarHabilidadeRaca] Erro ao parsear habilidade:', e);
                 }
             });
+            
+            console.log('📊 [salvarHabilidadeRaca] Habilidades atuais antes:', todasHabilidades.length);
 
             if (editIndex !== '') {
-                const cardIndex = parseInt(editIndex);
-                if (cardIndex >= 0 && cardIndex < todasHabilidades.length) {
-                    todasHabilidades[cardIndex] = habilidade;
+                // Editar: encontrar por ID (mais confiável que índice)
+                const indexEncontrado = todasHabilidades.findIndex(h => h.id === habilidade.id);
+                console.log('🔍 [salvarHabilidadeRaca] Procurando por ID:', habilidade.id, '| Encontrado em:', indexEncontrado);
+                
+                if (indexEncontrado !== -1) {
+                    todasHabilidades[indexEncontrado] = habilidade;
+                    console.log('✅ [salvarHabilidadeRaca] Habilidade atualizada em index:', indexEncontrado);
+                } else {
+                    console.warn('⚠️ [salvarHabilidadeRaca] Habilidade com ID não encontrada, adicionando como nova');
+                    todasHabilidades.push(habilidade);
                 }
             } else {
+                // Criar nova
                 todasHabilidades.push(habilidade);
+                console.log('✅ [salvarHabilidadeRaca] Nova habilidade criada com ID:', habilidade.id);
             }
+            
+            console.log('📊 [salvarHabilidadeRaca] Total de habilidades após operação:', todasHabilidades.length);
 
             // Refazer o container
             container.innerHTML = renderizarHabilidadesRacaCards(todasHabilidades);
+            console.log('🎨 [salvarHabilidadeRaca] Container renderizado com', todasHabilidades.length, 'habilidades');
 
             // Fechar modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('modalNovaHabilidadeRaca'));
-            if (modal) modal.hide();
+            if (modal) {
+                modal.hide();
+                console.log('📴 [salvarHabilidadeRaca] Modal fechado');
+            }
 
-            // Limpar formulário
+            // Limpar formulário - IMPORTANTE limpar TODOS os campos
             form.reset();
             document.getElementById('habilidadeRacaEditIndex').value = '';
+            document.getElementById('habilidadeRacaIdEditando').value = '';
             document.getElementById('previewHabilidadeRaca').innerHTML = '<span class="text-muted" style="font-size: 0.8rem;">Imagem da habilidade</span>';
+            document.getElementById('habilidadeRacaModalTitle').textContent = '⚡ Nova Habilidade de Raça';
+            
+            console.log('✨ [salvarHabilidadeRaca] Processo concluído com sucesso');
         }
 
         // Renderizar cards de habilidades de raça
@@ -25249,6 +25280,12 @@
 
             let html = '';
             habilidades.forEach((habilidade, index) => {
+                // Garantir que todas as habilidades têm um ID único
+                if (!habilidade.id) {
+                    habilidade.id = Date.now().toString() + Math.random().toString(36).substr(2, 9);
+                    console.warn('⚠️ Habilidade sem ID encontrada, gerando novo:', habilidade.id);
+                }
+
                 const imagemHtml = habilidade.imagem 
                     ? `<img src="${habilidade.imagem}" alt="${habilidade.nome}" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">` 
                     : '<span class="text-muted">Sem imagem</span>';
@@ -25268,11 +25305,11 @@
                     'Sustentada': '🔄'
                 };
 
-                // Armazenar os dados em JSON para posterior coleta
+                // Armazenar os dados em JSON para posterior coleta - INCLUINDO ID
                 const habilidadeJSON = JSON.stringify(habilidade);
 
                 html += `
-                    <div class="skill-card-rpg-raca" data-skill-index="${index}" data-skill-name="${habilidade.nome}" data-habilidade-json='${habilidadeJSON}' style="background: linear-gradient(135deg, rgba(30, 30, 50, 0.8) 0%, rgba(20, 20, 40, 0.9) 100%); border: 2px solid rgba(212,175,55,0.4); border-radius: 10px; overflow: hidden; margin-bottom: 12px; transition: all 0.25s; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                    <div class="skill-card-rpg-raca" data-skill-index="${index}" data-skill-id="${habilidade.id}" data-skill-name="${habilidade.nome}" data-habilidade-json='${habilidadeJSON}' style="background: linear-gradient(135deg, rgba(30, 30, 50, 0.8) 0%, rgba(20, 20, 40, 0.9) 100%); border: 2px solid rgba(212,175,55,0.4); border-radius: 10px; overflow: hidden; margin-bottom: 12px; transition: all 0.25s; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
                         
                         <!-- Conteúdo sem coluna de imagem -->
                         <div style="display: flex; flex-direction: column;">
@@ -25319,16 +25356,33 @@
 
         // Editar habilidade de raça
         function editarHabilidadeRaca(index) {
+            console.log('✏️ [editarHabilidadeRaca] Abrindo edição, index:', index);
+            
             // Determinar qual aba está ativa
             const abaAtiva = document.querySelector('#racaHeracas-tab.active') ? 'heracas' : 'habilidades';
             const containerId = abaAtiva === 'heracas' ? 'habilidadesRaca' : 'habilidadesRacaAvancadas';
             const container = document.getElementById(containerId);
             
+            console.log('📍 [editarHabilidadeRaca] Aba ativa:', abaAtiva, '| Container:', containerId);
+            
             const cards = container.querySelectorAll('[data-habilidade-json]');
-            if (index < 0 || index >= cards.length) return;
+            console.log('📊 [editarHabilidadeRaca] Total de cards encontrados:', cards.length);
+            
+            if (index < 0 || index >= cards.length) {
+                console.error('❌ [editarHabilidadeRaca] Índice fora do intervalo:', index, 'de', cards.length);
+                return;
+            }
 
             const cardElement = cards[index];
             const habilidade = JSON.parse(cardElement.getAttribute('data-habilidade-json'));
+            
+            console.log('📝 [editarHabilidadeRaca] Habilidade a editar:', habilidade);
+
+            // Validar que a habilidade tem ID
+            if (!habilidade.id) {
+                console.warn('⚠️ [editarHabilidadeRaca] Habilidade sem ID detectada, gerando novo ID');
+                habilidade.id = Date.now().toString() + Math.random().toString(36).substr(2, 9);
+            }
 
             // Preencher formulário
             document.getElementById('habilidadeRacaNome').value = habilidade.nome || '';
@@ -25344,6 +25398,11 @@
             document.getElementById('habilidadeRacaAlvos').value = habilidade.alvos || '';
             document.getElementById('habilidadeRacaDescricao').value = habilidade.descricao || '';
             document.getElementById('habilidadeRacaEditIndex').value = index;
+            
+            // ✅ IMPORTANTE: Armazenar o ID para sincronização ao salvar
+            document.getElementById('habilidadeRacaIdEditando').value = habilidade.id;
+            
+            console.log('✅ [editarHabilidadeRaca] Formulário preenchido | ID:', habilidade.id);
 
             // Preview de imagem
             if (habilidade.imagem) {
@@ -25353,6 +25412,7 @@
                 img.style.cssText = 'width: 100%; height: 100%; object-fit: cover; object-position: center;';
                 preview.innerHTML = '';
                 preview.appendChild(img);
+                console.log('🖼️ [editarHabilidadeRaca] Preview de imagem carregada');
             }
 
             document.getElementById('habilidadeRacaModalTitle').textContent = '✏️ Editar Habilidade de Raça';
@@ -25360,11 +25420,13 @@
             // Abrir modal
             const modalElement = document.getElementById('modalNovaHabilidadeRaca');
             if (!modalElement) {
-                console.error('❌ Elemento modalNovaHabilidadeRaca não encontrado');
+                console.error('❌ [editarHabilidadeRaca] Elemento modalNovaHabilidadeRaca não encontrado');
                 return;
             }
             const modal = new bootstrap.Modal(modalElement);
             modal.show();
+            
+            console.log('📴 [editarHabilidadeRaca] Modal aberto para edição');
         }
 
         // Copiar habilidade de raça para texto
