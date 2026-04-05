@@ -27751,6 +27751,8 @@
 
         // Reset de modais quando abrir nova
         document.getElementById('modalNovaRaca').addEventListener('show.bs.modal', function() {
+            console.log('📂 [show.bs.modal modalNovaRaca] Disparado | editandoRaca:', editandoRaca);
+            
             // Fechar autocomplete do filtro
             const autocompleteRacas = document.getElementById('autocompleteRacas');
             if (autocompleteRacas) autocompleteRacas.style.display = 'none';
@@ -27759,13 +27761,22 @@
             const titulo = document.querySelector('#modalNovaRaca .modal-title');
             if (titulo) {
                 titulo.textContent = editandoRaca ? '✏️ Editar Raça' : '➕ Nova Raça';
+                console.log('📝 Título atualizado:', titulo.textContent);
             }
             
+            // 🔥 IMPORTANTE: NUNCA LIMPAR HABILIDADES/HERANÇAS AQUI!
+            // Elas são gerenciadas pelo prepararFormulario() em modo edição
+            // e pelo formulário em modo criação
             if (!editandoRaca) {
+                // Apenas em modo CRIAÇÃO:
+                console.log('✨ [show.bs.modal] Modo CRIAÇÃO - resetando formulário');
                 document.getElementById('formNovaRaca').reset();
-                document.getElementById('habilidadesRaca').innerHTML = '';
-                document.getElementById('habilidadesRacaAvancadas').innerHTML = '';
                 document.getElementById('previewRaca').innerHTML = '<span class="text-muted">Pré-visualização da imagem</span>';
+                // NÃO limpar containers - deixar que a criação de nova habilidade populate
+                // document.getElementById('habilidadesRaca').innerHTML = '';
+                // document.getElementById('habilidadesRacaAvancadas').innerHTML = '';
+            } else {
+                console.log('✏️ [show.bs.modal] Modo EDIÇÃO - preservando dados carregados');
             }
         });
 
