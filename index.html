@@ -11946,7 +11946,7 @@
                                 <div class="mb-4">
                                     <label class="form-label" style="color: #d4af37; font-weight: 700; font-size: 0.95rem; margin-bottom: 10px; display: block;">📸 Imagem da Raça</label>
                                     <div class="input-group mb-3">
-                                        <input type="url" class="form-control" id="racaImagemUrl" placeholder="https://exemplo.com/imagem.jpg" onchange="previewImagemRaca(this.value)" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 8px 0 0 8px;">
+                                        <input type="url" class="form-control" id="racaImagemUrl" placeholder="https://exemplo.com/imagem.jpg" onchange="previewRacaImagem(this.value)" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 8px 0 0 8px;">
                                         <button class="btn" type="button" onclick="document.getElementById('racaImagemFile').click()" style="background: linear-gradient(135deg, #d4af37, #f0c850); color: #1a1a2e; font-weight: 700; border: none; border-radius: 0 8px 8px 0; transition: all 0.25s;" onmouseover="this.style.background='linear-gradient(135deg, #f0c850, #d4af37)';" onmouseout="this.style.background='linear-gradient(135deg, #d4af37, #f0c850)';">
                                             📁 Arquivo
                                         </button>
@@ -24334,11 +24334,15 @@
 
         // Salvar Raça
         function salvarRaca() {
+            console.log('💾 Salvando raça. editandoRaca:', editandoRaca);
+            
             const nome = document.getElementById('racaNome').value;
             const raridade = document.getElementById('racaRaridade').value;
             const imagemUrl = document.getElementById('racaImagemUrl').value;
             const descricao = document.getElementById('racaDescricao').value;
             const limiteAtributo = document.getElementById('racaLimiteAtributo').value;
+
+            console.log('📋 Dados do formulário:', {nome, raridade, descricao, limiteAtributo});
 
             if (!nome || !raridade || !descricao || !limiteAtributo) {
                 alert('Preencha todos os campos obrigatórios!');
@@ -24347,9 +24351,10 @@
 
             // Coletar atributos - com inicialização segura
             const atributos = {};
-            document.querySelectorAll('#formNovaRaca .atributo-input').forEach(input => {
-                atributos[input.dataset.atributo] = input.value || '0';
+            document.querySelectorAll('#formNovaRaca .atributo-input-raca').forEach(input => {
+                atributos[input.dataset.atributo] = parseInt(input.value) || 0;
             });
+            console.log('✅ Atributos coletados:', atributos);
 
             // Coletar habilidades (Heranças)
             const habilidades = [];
@@ -24361,6 +24366,7 @@
                     console.error('Erro ao parsear habilidade:', e);
                 }
             });
+            console.log('✅ Habilidades coletadas:', habilidades.length);
 
             // Coletar habilidades avançadas
             const habilidadesAvancadas = [];
@@ -24372,6 +24378,7 @@
                     console.error('Erro ao parsear habilidade avançada:', e);
                 }
             });
+            console.log('✅ Habilidades avançadas coletadas:', habilidadesAvancadas.length);
 
             const raca = {
                 id: editandoRaca || Date.now(),
@@ -24379,20 +24386,32 @@
                 raridade,
                 imagem: imagemUrl,
                 descricao,
-                limiteAtributo: limiteAtributo,
+                limiteAtributo: parseInt(limiteAtributo) || 20,
                 atributos,
                 habilidades,
                 habilidadesAvancadas: habilidadesAvancadas
             };
 
+            console.log('🔍 Raça a salvar:', raca);
+
             if (editandoRaca) {
-                armazenar.racas = armazenar.racas.map(r => r.id === editandoRaca ? raca : r);
+                console.log('✏️ Atualizando raça ID:', editandoRaca);
+                armazenar.racas = armazenar.racas.map(r => {
+                    if (r.id === editandoRaca) {
+                        console.log('✅ Raça atualizada:', r.nome, '→', raca.nome);
+                        return raca;
+                    }
+                    return r;
+                });
                 editandoRaca = null;
             } else {
+                console.log('➕ Criando nova raça:', raca.nome);
                 armazenar.racas.push(raca);
             }
             
+            console.log('📊 Total de raças após salvar:', armazenar.racas.length);
             localStorage.setItem('redungeon_racas', JSON.stringify(armazenar.racas));
+            console.log('✅ Salvo no localStorage');
             
             // ✅ RESTAURAR SCROLL APÓS SALVAR RAÇA
             ScrollProtector.restore();
@@ -24411,12 +24430,24 @@
                 console.log('Modal não estava aberto');
             }
 
-            // Atualizar lista
-            listarRacas();
+            // Atualizar lista com filtro/busca atual preservada
+            const filtroInput = document.getElementById('filtroRacasInput');
+            const termoBuscaAtual = filtroInput ? filtroInput.value : '';
+            console.log('🔄 Chamando listarRacas com termo de busca:', termoBuscaAtual);
+            
+            if (termoBuscaAtual) {
+                listarRacas(null, termoBuscaAtual);
+            } else {
+                listarRacas();
+            }
+            
+            console.log('✅ Lista de raças atualizada no front-end');
         }
 
         // Listar Raças
         function listarRacas(filtroRaridade = null, termoBusca = null) {
+            console.log('📋 listarRacas chamada com:', {filtroRaridade, termoBusca});
+            
             const container = document.getElementById('listRacas');
 
             // Filtrar raças baseado na raridade ou termo de busca
@@ -24460,6 +24491,8 @@
                     }
                 });
             }
+
+            console.log('📊 Total de raças a exibir:', racasParaExibir.length, 'de', armazenar.racas.length);
 
             if (racasParaExibir.length === 0) {
                 let mensagem = 'Nenhuma raça encontrada';
@@ -24563,7 +24596,7 @@
                 // Preparar atributos com boxes premium
                 let atributosHtml = '';
                 Object.entries(atributosMap).forEach(([chave, info]) => {
-                    const valor = raca.atributos && raca.atributos[chave] ? raca.atributos[chave] : '0';
+                    const valor = raca.atributos && raca.atributos[chave] ? raca.atributos[chave] : 0;
                     atributosHtml += `
                         <div style="
                             flex: 1;
@@ -24829,7 +24862,9 @@
                 `;
             });
 
+            console.log('🎨 Renderizando cards das raças no DOM...');
             container.innerHTML = html;
+            console.log('✅ Cards de raças renderizados com sucesso! Total:', racasParaExibir.length);
         }
 
         // Filtrar raças por raridade
@@ -24967,7 +25002,7 @@
             
             for (const [key, elementId] of Object.entries(atributos)) {
                 const el = document.getElementById(elementId);
-                if (el) el.textContent = raca.atributos[key] || '0';
+                if (el) el.textContent = raca.atributos[key] || 0;
             }
 
             // Habilidades (Heranças)
@@ -25069,7 +25104,64 @@
             }
         }
 
+        // Preview de Imagem - Raça (URL)
+        function previewRacaImagem(urlOrEvent) {
+            const preview = document.getElementById('previewRaca');
+            if (!preview) return;
+            
+            try {
+                if (urlOrEvent && typeof urlOrEvent === 'object' && urlOrEvent.target && urlOrEvent.target.files) {
+                    const file = urlOrEvent.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.style.cssText = 'width: 100%; height: 100%; object-fit: contain; object-position: center;';
+                            preview.innerHTML = '';
+                            preview.appendChild(img);
+                        };
+                        reader.onerror = function() {
+                            preview.innerHTML = '<span class="text-muted" style="font-size: 0.8rem;">❌ Erro ao ler arquivo</span>';
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                } else if (typeof urlOrEvent === 'string') {
+                    if (urlOrEvent && urlOrEvent.trim() !== '') {
+                        const img = document.createElement('img');
+                        img.src = urlOrEvent;
+                        img.style.cssText = 'width: 100%; height: 100%; object-fit: contain; object-position: center;';
+                        img.onerror = function() {
+                            preview.innerHTML = '<span class="text-muted" style="font-size: 0.8rem;">❌ URL inválida</span>';
+                        };
+                        img.onload = function() {
+                            preview.innerHTML = '';
+                            preview.appendChild(img);
+                        };
+                    }
+                }
+            } catch(e) {
+                console.error('Erro ao preview raça:', e);
+            }
+        }
+
         // Upload de arquivo para habilidade de raça
+        // Upload de arquivo para raça
+        function previewRacaFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                document.getElementById('racaImagemUrl').value = e.target.result;
+                previewRacaImagem(e.target.result);
+            };
+            reader.onerror = function() {
+                alert('❌ Erro ao ler o arquivo!');
+            };
+            reader.readAsDataURL(file);
+        }
+
         function previewHabilidadeRacaFile(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -25386,42 +25478,87 @@
 
             editandoRaca = id;
             console.log('✅ Raça encontrada:', raca.nome);
+            console.log('📍 editandoRaca setado para:', editandoRaca);
             
             // Função para preparar os dados do formulário
             const prepararFormulario = () => {
-                // Preencher formulário
-                document.getElementById('racaNome').value = raca.nome;
-                document.getElementById('racaRaridade').value = raca.raridade || 'comum';
-                document.getElementById('racaImagemUrl').value = raca.imagem;
-                document.getElementById('racaDescricao').value = raca.descricao;
-                document.getElementById('racaLimiteAtributo').value = raca.limiteAtributo;
+                // Usar setTimeout para garantir que o DOM do modal está totalmente pronto
+                setTimeout(() => {
+                    try {
+                        console.log('⚙️ Iniciando preparação do formulário para edição...');
+                        
+                        // Preencher formulário
+                        const inputNome = document.getElementById('racaNome');
+                        if (inputNome) {
+                            inputNome.value = raca.nome;
+                            console.log('✅ Nome carregado:', raca.nome);
+                        }
+                        
+                        const selectRaridade = document.getElementById('racaRaridade');
+                        if (selectRaridade) {
+                            selectRaridade.value = raca.raridade || 'comum';
+                            console.log('✅ Raridade carregada:', raca.raridade);
+                        }
+                        
+                        const inputImagem = document.getElementById('racaImagemUrl');
+                        if (inputImagem) {
+                            inputImagem.value = raca.imagem;
+                            console.log('✅ Imagem carregada');
+                        }
+                        
+                        const textareaDesc = document.getElementById('racaDescricao');
+                        if (textareaDesc) {
+                            textareaDesc.value = raca.descricao;
+                            console.log('✅ Descrição carregada');
+                        }
+                        
+                        const inputLimite = document.getElementById('racaLimiteAtributo');
+                        if (inputLimite) {
+                            inputLimite.value = raca.limiteAtributo;
+                            console.log('✅ Limite de atributo carregado:', raca.limiteAtributo);
+                        }
 
-                // Atributos - com verificação de segurança
-                document.querySelectorAll('#formNovaRaca .atributo-input').forEach(input => {
-                    const atributoNome = input.dataset.atributo;
-                    const valor = (raca.atributos && raca.atributos[atributoNome]) ? raca.atributos[atributoNome] : '0';
-                    input.value = valor;
-                });
+                        // Atributos - com verificação de segurança
+                        document.querySelectorAll('#formNovaRaca .atributo-input-raca').forEach(input => {
+                            const atributoNome = input.dataset.atributo;
+                            const valor = (raca.atributos && raca.atributos[atributoNome]) ? raca.atributos[atributoNome] : '0';
+                            input.value = valor;
+                        });
+                        console.log('✅ Atributos carregados');
 
-                // Habilidades
-                const containerHab = document.getElementById('habilidadesRaca');
-                containerHab.innerHTML = raca.habilidades && raca.habilidades.length > 0 
-                    ? renderizarHabilidadesRacaCards(raca.habilidades)
-                    : '<p style="color: #a0a0a0; text-align: center; padding: 20px; margin: 0;">Nenhuma herança adicionada</p>';
+                        // Habilidades
+                        const containerHab = document.getElementById('habilidadesRaca');
+                        if (containerHab) {
+                            containerHab.innerHTML = raca.habilidades && raca.habilidades.length > 0 
+                                ? renderizarHabilidadesRacaCards(raca.habilidades)
+                                : '<p style="color: #a0a0a0; text-align: center; padding: 20px; margin: 0;">Nenhuma herança adicionada</p>';
+                            console.log('✅ Habilidades carregadas:', raca.habilidades?.length || 0);
+                        }
 
-                // Habilidades Avançadas
-                const containerHabAvancadas = document.getElementById('habilidadesRacaAvancadas');
-                containerHabAvancadas.innerHTML = raca.habilidadesAvancadas && raca.habilidadesAvancadas.length > 0 
-                    ? renderizarHabilidadesRacaCards(raca.habilidadesAvancadas)
-                    : '<p style="color: #a0a0a0; text-align: center; padding: 20px; margin: 0;">Nenhuma habilidade adicionada</p>';
+                        // Habilidades Avançadas
+                        const containerHabAvancadas = document.getElementById('habilidadesRacaAvancadas');
+                        if (containerHabAvancadas) {
+                            containerHabAvancadas.innerHTML = raca.habilidadesAvancadas && raca.habilidadesAvancadas.length > 0 
+                                ? renderizarHabilidadesRacaCards(raca.habilidadesAvancadas)
+                                : '<p style="color: #a0a0a0; text-align: center; padding: 20px; margin: 0;">Nenhuma habilidade adicionada</p>';
+                            console.log('✅ Habilidades avançadas carregadas:', raca.habilidadesAvancadas?.length || 0);
+                        }
 
-                // Preview
-                if (raca.imagem) {
-                    const racaImagemPreview = typeof raca.imagem === 'string' ? raca.imagem : null;
-                    document.getElementById('previewRaca').innerHTML = racaImagemPreview ? `<img src="${racaImagemPreview}" alt="Preview" style="width: 100%; height: 100%; object-fit: contain;">` : '<span class="text-muted">Imagem inválida</span>';
-                }
-                
-                console.log('⚙️ Formulário preparado com sucesso');
+                        // Preview
+                        if (raca.imagem) {
+                            const racaImagemPreview = typeof raca.imagem === 'string' ? raca.imagem : null;
+                            const previewEl = document.getElementById('previewRaca');
+                            if (previewEl) {
+                                previewEl.innerHTML = racaImagemPreview ? `<img src="${racaImagemPreview}" alt="Preview" style="width: 100%; height: 100%; object-fit: contain;">` : '<span class="text-muted">Imagem inválida</span>';
+                            }
+                        }
+                        
+                        console.log('⚙️ Formulário preparado com sucesso');
+                        console.log('📍 editandoRaca ainda é:', editandoRaca);
+                    } catch (erro) {
+                        console.error('❌ Erro ao preparar formulário:', erro);
+                    }
+                }, 50);
             };
 
             // Fechar modal de detalhes se aberto
@@ -27556,11 +27693,23 @@
             const autocompleteRacas = document.getElementById('autocompleteRacas');
             if (autocompleteRacas) autocompleteRacas.style.display = 'none';
             
+            // Atualizar título
+            const titulo = document.querySelector('#modalNovaRaca .modal-title');
+            if (titulo) {
+                titulo.textContent = editandoRaca ? '✏️ Editar Raça' : '➕ Nova Raça';
+            }
+            
             if (!editandoRaca) {
                 document.getElementById('formNovaRaca').reset();
                 document.getElementById('habilidadesRaca').innerHTML = '';
+                document.getElementById('habilidadesRacaAvancadas').innerHTML = '';
                 document.getElementById('previewRaca').innerHTML = '<span class="text-muted">Pré-visualização da imagem</span>';
             }
+        });
+
+        document.getElementById('modalNovaRaca').addEventListener('hidden.bs.modal', function() {
+            console.log('Modal Raças fechado. Resetando editandoRaca');
+            editandoRaca = null;
         });
 
         document.getElementById('modalNovaClasse').addEventListener('show.bs.modal', function() {
