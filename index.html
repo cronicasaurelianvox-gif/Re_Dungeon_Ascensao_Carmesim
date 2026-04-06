@@ -24394,6 +24394,21 @@
             };
 
             console.log('🔍 Raça a salvar:', raca);
+            
+            // ⭐ VERIFICAÇÃO DE INTEGRIDADE - Garantir que habilidades não estão vazias
+            console.log('📊 [salvarRaca] Habilidades coletadas do DOM:', habilidades.length);
+            console.log('📊 [salvarRaca] Habilidades Avançadas coletadas do DOM:', habilidadesAvancadas.length);
+            
+            // Se está editando, verificar se há discrepância entre DOM e objeto em edição
+            if (editandoRaca) {
+                const racaEmEdicao = armazenar.racas.find(r => r.id === editandoRaca);
+                if (racaEmEdicao) {
+                    console.log('🔍 [salvarRaca] Raça em edição antes:', {
+                        habilidades: racaEmEdicao.habilidades?.length || 0,
+                        habilidadesAvancadas: racaEmEdicao.habilidadesAvancadas?.length || 0
+                    });
+                }
+            }
 
             if (editandoRaca) {
                 console.log('✏️ Atualizando raça ID:', editandoRaca);
@@ -25179,6 +25194,46 @@
             reader.readAsDataURL(file);
         }
 
+        // ============ SINCRONIZAR HABILIDADES COM PERSISTÊNCIA ============
+        // ⭐ FUNÇÃO CRÍTICA: Garante que habilidades sejam salvas em TEMPO REAL
+        function sincronizarHabilidadesComPersistencia(abaAtiva, todasHabilidades) {
+            console.log('🔄 [sincronizarHabilidadesComPersistencia] Sincronizando com localStorage...');
+            console.log('📊 Habilidades a sincronizar:', todasHabilidades.length);
+            
+            // 1. Atualizar DOM
+            const containerId = abaAtiva === 'heracas' ? 'habilidadesRaca' : 'habilidadesRacaAvancadas';
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = renderizarHabilidadesRacaCards(todasHabilidades);
+                console.log('✅ [sincronizarHabilidadesComPersistencia] DOM atualizado:', containerId);
+            }
+            
+            // 2. Atualizar objeto da raça atual EM MEMÓRIA e PERSISTIR
+            if (editandoRaca) {
+                console.log('📝 [sincronizarHabilidadesComPersistencia] Atualizando raça ID:', editandoRaca);
+                
+                const raca = armazenar.racas.find(r => r.id === editandoRaca);
+                if (raca) {
+                    // Atualizar o array correto
+                    if (abaAtiva === 'heracas') {
+                        raca.habilidades = JSON.parse(JSON.stringify(todasHabilidades)); // Deep copy
+                        console.log('⭐ Habilidades (Heranças) atualizadas:', raca.habilidades.length);
+                    } else {
+                        raca.habilidadesAvancadas = JSON.parse(JSON.stringify(todasHabilidades)); // Deep copy
+                        console.log('⭐ Habilidades Avançadas atualizadas:', raca.habilidadesAvancadas.length);
+                    }
+                    
+                    // ⭐⭐ SALVAR IMEDIATAMENTE NO LOCALSTORAGE
+                    localStorage.setItem('redungeon_racas', JSON.stringify(armazenar.racas));
+                    console.log('💾 [sincronizarHabilidadesComPersistencia] SALVO NO LOCALSTORAGE com sucesso!');
+                } else {
+                    console.warn('⚠️ [sincronizarHabilidadesComPersistencia] Raça não encontrada para sincronização');
+                }
+            } else {
+                console.log('ℹ️ [sincronizarHabilidadesComPersistencia] Nenhuma raça em edição no momento');
+            }
+        }
+
         // Salvar habilidade de raça
         function salvarHabilidadeRaca() {
             const form = document.getElementById('formNovaHabilidadeRaca');
@@ -25251,9 +25306,8 @@
             
             console.log('📊 [salvarHabilidadeRaca] Total de habilidades após operação:', todasHabilidades.length);
 
-            // Refazer o container
-            container.innerHTML = renderizarHabilidadesRacaCards(todasHabilidades);
-            console.log('🎨 [salvarHabilidadeRaca] Container renderizado com', todasHabilidades.length, 'habilidades');
+            // ⭐⭐ SINCRONIZAR COM PERSISTÊNCIA (CRÍTICO!)
+            sincronizarHabilidadesComPersistencia(abaAtiva, todasHabilidades);
 
             // Fechar modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('modalNovaHabilidadeRaca'));
@@ -25522,8 +25576,10 @@
                     // Remover do array
                     todasHabilidades.splice(index, 1);
                     
-                    // Refazer o container
-                    container.innerHTML = renderizarHabilidadesRacaCards(todasHabilidades);
+                    // ⭐⭐ SINCRONIZAR COM PERSISTÊNCIA (CRÍTICO!)
+                    sincronizarHabilidadesComPersistencia(abaAtiva, todasHabilidades);
+                    
+                    console.log('🗑️ [confirmarRemocaoHabilidadeRaca] Habilidade removida e sincronizada');
                 }
             }
         }
