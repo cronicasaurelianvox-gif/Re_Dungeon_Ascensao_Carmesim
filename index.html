@@ -130,6 +130,38 @@
 
     <script>
     /**
+     * 🧹 LIMPAR LOCALSTORAGE CORROMPIDO
+     * Remove dados inválidos que causam JSON.parse errors
+     */
+    (function cleanupCorruptedStorage() {
+        const keysToClean = [
+            'redungeon_racas',
+            'redungeon_classes',
+            'redungeon_origens',
+            'redungeon_regioes',
+            'redungeon_cenarios',
+            'redungeon_npcs',
+            'redungeon_materiais',
+            'redungeon_receitas',
+            'redungeon_itens',
+            'redungeon_condicoes',
+            'redungeon_regras'
+        ];
+        
+        keysToClean.forEach(key => {
+            try {
+                const value = localStorage.getItem(key);
+                if (value && value.trim()) {
+                    JSON.parse(value);
+                }
+            } catch (e) {
+                console.warn(`🧹 Limpando localStorage corrompido: ${key}`);
+                localStorage.removeItem(key);
+            }
+        });
+    })();
+    
+    /**
      * 🔐 DATA STORE - CAMADA DE ABSTRAÇÃO CENTRALIZADA
      * Sistema profissional de persistência com IndexedDB + localStorage
      * SEM eval(), sem interpretação dinâmica, 100% seguro
@@ -1071,10 +1103,8 @@
                 const openedModal = e.target;
                 console.log('✅ Modal completamente aberto:', openedModal.id);
                 
-                // Chamar safeOpenModal para garantir foco após Bootstrap terminar animação
-                setTimeout(() => {
-                    safeOpenModal(openedModal);
-                }, 100);
+                // ⚠️ REMOVIDO: Chamar safeOpenModal causava recursão infinita
+                // Deixar o Bootstrap gerenciar o foco normalmente
             }
         }, false);
         window._shownModalListenerAdded = true;
@@ -5762,8 +5792,8 @@
             pointer-events: auto !important;
         }
 
-        /* Remover backdrops duplicados (apenas o último fica visível) */
-        .modal-backdrop:nth-of-type(n+2) {
+        /* Remover backdrops DUPLICADOS (apenas mantém últimos 2 visíveis para modais aninhados) */
+        .modal-backdrop:nth-of-type(n+3) {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
@@ -10258,7 +10288,7 @@
                             <span>🔍</span>
                             <span>Filtro:</span>
                         </div>
-                        <div style="position: relative;">
+                        <div style="position: relative;">A
                             <input 
                                 type="text" 
                                 id="filtroRacasInput" 
@@ -12178,8 +12208,8 @@
          ║                    SISTEMA DE SKILLS RPG                   ║
          ╚════════════════════════════════════════════════════════════╝ -->
 
-    <div class="modal fade" id="modalNovaHabilidadeClasse" tabindex="-1" role="dialog" aria-modal="true">
-        <div class="modal-dialog modal-lg" style="max-width: 700px;">
+    <div class="modal fade" id="modalNovaHabilidadeClasse" tabindex="-1" role="dialog" aria-modal="true" style="z-index: 1100 !important;">
+        <div class="modal-dialog modal-lg" style="max-width: 700px; z-index: 1100 !important;">
             <div class="modal-content" style="background: linear-gradient(135deg, rgba(15, 15, 30, 0.98) 0%, rgba(22, 33, 62, 0.98) 100%); border: 2px solid rgba(212,175,55,0.3); border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.6);">
                 <div class="modal-header border-0" style="border-bottom: 2px solid rgba(212,175,55,0.2); padding: 20px; background: rgba(212,175,55,0.05);">
                     <h5 class="modal-title text-gold" id="habilidadeModalTitle" style="font-size: 1.3rem; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.5);">⚡ Nova Habilidade</h5>
@@ -12319,8 +12349,8 @@
          ║                    SISTEMA DE SKILLS RPG - RAÇAS            ║
          ╚════════════════════════════════════════════════════════════╝ -->
 
-    <div class="modal fade" id="modalNovaHabilidadeRaca" tabindex="-1" role="dialog" aria-modal="true">
-        <div class="modal-dialog modal-lg" style="max-width: 700px;">
+    <div class="modal fade" id="modalNovaHabilidadeRaca" tabindex="-1" role="dialog" aria-modal="true" style="z-index: 1100 !important;">
+        <div class="modal-dialog modal-lg" style="max-width: 700px; z-index: 1100 !important;">
             <div class="modal-content" style="background: linear-gradient(135deg, rgba(15, 15, 30, 0.98) 0%, rgba(22, 33, 62, 0.98) 100%); border: 2px solid rgba(212,175,55,0.3); border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.6);">
                 <div class="modal-header border-0" style="border-bottom: 2px solid rgba(212,175,55,0.2); padding: 20px; background: rgba(212,175,55,0.05);">
                     <h5 class="modal-title text-gold" id="habilidadeRacaModalTitle" style="font-size: 1.3rem; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.5);">⚡ Nova Habilidade de Raça</h5>
@@ -15022,8 +15052,8 @@
     </div>
 
     <!-- 🎯 MODAL: SELECIONAR CONDIÇÕES PARA ARTES (ISOLADO TOTALMENTE) -->
-    <div class="modal fade" id="modalSeletorCondicoesArt" tabindex="-1" role="dialog" aria-modal="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal fade" id="modalSeletorCondicoesArt" tabindex="-1" role="dialog" aria-modal="true" style="z-index: 1150 !important;">
+        <div class="modal-dialog modal-dialog-centered modal-xl" style="z-index: 1150 !important;">
             <div class="modal-content bg-dark border-0" style="background: #1a1a1a; border: 2px solid #d4af37; border-radius: 12px; box-shadow: 0 10px 60px rgba(0, 0, 0, 0.8);">
                 <div class="modal-header" style="background: #c41e3a; border: none; padding: 20px; display: flex; justify-content: center; align-items: center;">
                     <h5 class="modal-title" style="color: white; font-weight: bold; margin: 0; font-size: 1.3rem;">🔗 Selecionar Condições</h5>
@@ -15065,8 +15095,8 @@
     <!-- ============================================================================= -->
     <!-- MODAL SELETOR DE CONDIÇÕES PARA HABILIDADES (ISOLADO) -->
     <!-- ============================================================================= -->
-    <div class="modal fade" id="modalSeletorCondicoesSkill" tabindex="-1" role="dialog" aria-modal="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal fade" id="modalSeletorCondicoesSkill" tabindex="-1" role="dialog" aria-modal="true" style="z-index: 1150 !important;">
+        <div class="modal-dialog modal-dialog-centered modal-lg" style="z-index: 1150 !important;">
             <div class="modal-content bg-dark border-0" style="background: #1a1a1a; border: 2px solid #d4af37; border-radius: 12px; box-shadow: 0 10px 60px rgba(0, 0, 0, 0.8);">
                 <div class="modal-header" style="background: #c41e3a; border: none; padding: 20px; display: flex; justify-content: center; align-items: center;">
                     <h5 class="modal-title" style="color: white; font-weight: bold; margin: 0; font-size: 1.3rem;">🔗 Selecionar Condições para Habilidade</h5>
@@ -20231,7 +20261,7 @@
             
             if (!nome) {
                 alert('❌ O nome da habilidade não pode estar vazio!');
-                document.getElementById('editSkillNome').focus();
+                document.getElementById('editSkillNome')?.blur();
                 return;
             }
 
@@ -20452,55 +20482,25 @@
             }
             const modal = new bootstrap.Modal(modalElement, {
                 backdrop: true,
-                keyboard: true
+                keyboard: false
             });
             
-            // Função para forçar z-index ao máximo
-            const forcarZIndexMaximo = () => {
-                // Aplicar z-index inline IMEDIATAMENTE
-                modalElement.style.zIndex = '3000 !important';
-                
-                // Encontrar e elevar os backdrops
-                const backdrops = document.querySelectorAll('.modal-backdrop');
-                backdrops.forEach((backdrop, idx) => {
-                    // O último backdrop é o do modal de condições
-                    if (idx === backdrops.length - 1) {
-                        backdrop.style.zIndex = '2999 !important';
-                    } else {
-                        // Backdrops anteriores ficam bem abaixo
-                        backdrop.style.zIndex = '1050 !important';
-                    }
-                });
-                
-                // Garantir que o modal de condições está acima de todos
-                modalElement.style.position = 'fixed !important';
-                sincronizarZIndexModalCondicoesSkill();
-            };
-            
-            modalElement.addEventListener('show.bs.modal', function() {
-                setTimeout(forcarZIndexMaximo, 10);
-            });
-            
+            // Sincronizar z-index quando modal abre
             modalElement.addEventListener('shown.bs.modal', function() {
-                setTimeout(forcarZIndexMaximo, 50);
-                setTimeout(forcarZIndexMaximo, 100);
-                setTimeout(forcarZIndexMaximo, 300);
-            });
-            
-            // Restaurar z-index quando fechar
-            modalElement.addEventListener('hidden.bs.modal', function() {
-                modalElement.style.zIndex = '';
-                const backdrops = document.querySelectorAll('.modal-backdrop');
-                backdrops.forEach(b => {
-                    b.style.zIndex = '';
-                });
-            });
+                setTimeout(() => {
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach((backdrop, idx) => {
+                        if (idx === backdrops.length - 1) {
+                            backdrop.style.zIndex = '1149 !important';
+                        } else {
+                            backdrop.style.zIndex = '1049 !important';
+                        }
+                    });
+                    modalElement.style.zIndex = '1150 !important';
+                }, 10);
+            }, { once: true });
             
             modal.show();
-            safeOpenModal('modalSeletorCondicoes');
-            
-            // Sincronizar imediatamente após o show
-            setTimeout(forcarZIndexMaximo, 200);
         }
 
         // Função para abrir seletor de condições ao CRIAR habilidade
@@ -20513,44 +20513,25 @@
             }
             const modal = new bootstrap.Modal(modalElement, {
                 backdrop: true,
-                keyboard: true
+                keyboard: false
             });
             
-            const forcarZIndexMaximo = () => {
-                modalElement.style.zIndex = '3000 !important';
-                const backdrops = document.querySelectorAll('.modal-backdrop');
-                backdrops.forEach((backdrop, idx) => {
-                    if (idx === backdrops.length - 1) {
-                        backdrop.style.zIndex = '2999 !important';
-                    } else {
-                        backdrop.style.zIndex = '1050 !important';
-                    }
-                });
-                modalElement.style.position = 'fixed !important';
-                sincronizarZIndexModalCondicoesSkill();
-            };
-            
-            modalElement.addEventListener('show.bs.modal', function() {
-                setTimeout(forcarZIndexMaximo, 10);
-            });
-            
+            // Sincronizar z-index quando modal abre
             modalElement.addEventListener('shown.bs.modal', function() {
-                setTimeout(forcarZIndexMaximo, 50);
-                setTimeout(forcarZIndexMaximo, 100);
-                setTimeout(forcarZIndexMaximo, 300);
-            });
-            
-            modalElement.addEventListener('hidden.bs.modal', function() {
-                modalElement.style.zIndex = '';
-                const backdrops = document.querySelectorAll('.modal-backdrop');
-                backdrops.forEach(b => {
-                    b.style.zIndex = '';
-                });
-            });
+                setTimeout(() => {
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach((backdrop, idx) => {
+                        if (idx === backdrops.length - 1) {
+                            backdrop.style.zIndex = '1149 !important';
+                        } else {
+                            backdrop.style.zIndex = '1049 !important';
+                        }
+                    });
+                    modalElement.style.zIndex = '1150 !important';
+                }, 10);
+            }, { once: true });
             
             modal.show();
-            safeOpenModal('modalSeletorSkill');
-            setTimeout(forcarZIndexMaximo, 200);
         }
 
         // Função para carregar as condições no seletor de HABILIDADES
@@ -22787,38 +22768,25 @@
             const modalElement = document.getElementById('modalSeletorCondicoesArt');
             const modal = new bootstrap.Modal(modalElement, {
                 backdrop: true,
-                keyboard: true
+                keyboard: false
             });
             
-            // Sincronizar z-index em múltiplos pontos do ciclo de vida
-            const sincronizarMultiplas = () => {
-                sincronizarZIndexModalCondicoesArt();
-            };
-            
-            modalElement.addEventListener('show.bs.modal', function() {
-                setTimeout(sincronizarMultiplas, 10);
-            });
-            
+            // Sincronizar z-index quando modal abre
             modalElement.addEventListener('shown.bs.modal', function() {
-                setTimeout(sincronizarMultiplas, 50);
-                setTimeout(sincronizarMultiplas, 100);
-            });
-            
-            // Limpar z-index quando fechar
-            modalElement.addEventListener('hidden.bs.modal', function() {
-                const backdrops = document.querySelectorAll('.modal-backdrop');
-                backdrops.forEach(b => {
-                    if (b.style.zIndex === '999998') {
-                        b.style.zIndex = '';
-                    }
-                });
-            });
+                setTimeout(() => {
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach((backdrop, idx) => {
+                        if (idx === backdrops.length - 1) {
+                            backdrop.style.zIndex = '1149 !important';
+                        } else {
+                            backdrop.style.zIndex = '1049 !important';
+                        }
+                    });
+                    modalElement.style.zIndex = '1150 !important';
+                }, 10);
+            }, { once: true });
             
             modal.show();
-            safeOpenModal('modalSeletorCondicoesArt');
-            
-            // Sincronizar mais uma vez após o show ser chamado
-            setTimeout(sincronizarMultiplas, 200);
         }
 
         // Função para abrir o seletor de condições no modo edição
@@ -22828,37 +22796,26 @@
             const modalElement = document.getElementById('modalSeletorCondicoesArt');
             const modal = new bootstrap.Modal(modalElement, {
                 backdrop: true,
-                keyboard: true
+                keyboard: false,
+                focus: false
             });
             
-            // Sincronizar z-index em múltiplos pontos do ciclo de vida
-            const sincronizarMultiplas = () => {
-                sincronizarZIndexModalCondicoesArt();
-            };
-            
-            modalElement.addEventListener('show.bs.modal', function() {
-                setTimeout(sincronizarMultiplas, 10);
-            });
-            
+            // Sincronizar z-index quando modal abre
             modalElement.addEventListener('shown.bs.modal', function() {
-                setTimeout(sincronizarMultiplas, 50);
-                setTimeout(sincronizarMultiplas, 100);
-            });
-            
-            // Limpar z-index quando fechar
-            modalElement.addEventListener('hidden.bs.modal', function() {
-                const backdrops = document.querySelectorAll('.modal-backdrop');
-                backdrops.forEach(b => {
-                    if (b.style.zIndex === '999998') {
-                        b.style.zIndex = '';
-                    }
-                });
-            });
+                setTimeout(() => {
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach((backdrop, idx) => {
+                        if (idx === backdrops.length - 1) {
+                            backdrop.style.zIndex = '1149 !important';
+                        } else {
+                            backdrop.style.zIndex = '1049 !important';
+                        }
+                    });
+                    modalElement.style.zIndex = '1150 !important';
+                }, 10);
+            }, { once: true });
             
             modal.show();
-            
-            // Sincronizar mais uma vez após o show ser chamado
-            setTimeout(sincronizarMultiplas, 200);
         }
 
         // Função para carregar as condições no seletor de ARTES
@@ -23702,7 +23659,8 @@
             receitas: parseJsonSeguro('redungeon_receitas'),
             itens: parseJsonSeguro('redungeon_itens'),
             condicoes: parseJsonSeguro('redungeon_condicoes'),
-            regras: parseJsonSeguro('redungeon_regras')
+            regras: parseJsonSeguro('redungeon_regras'),
+            arts: parseJsonSeguro('artes')
         };
 
         // Função para migrar dados antigos adicionando novos campos
@@ -24361,10 +24319,9 @@
             const habilidades = [];
             document.querySelectorAll('#habilidadesRaca [data-habilidade-json]').forEach(item => {
                 const json = item.getAttribute('data-habilidade-json');
-                try {
-                    habilidades.push(JSON.parse(json));
-                } catch(e) {
-                    console.error('Erro ao parsear habilidade:', e);
+                const habilidade = parsearJsonHabilidade(json);
+                if (habilidade) {
+                    habilidades.push(habilidade);
                 }
             });
             console.log('✅ Habilidades coletadas:', habilidades.length);
@@ -24373,10 +24330,9 @@
             const habilidadesAvancadas = [];
             document.querySelectorAll('#habilidadesRacaAvancadas [data-habilidade-json]').forEach(item => {
                 const json = item.getAttribute('data-habilidade-json');
-                try {
-                    habilidadesAvancadas.push(JSON.parse(json));
-                } catch(e) {
-                    console.error('Erro ao parsear habilidade avançada:', e);
+                const habilidade = parsearJsonHabilidade(json);
+                if (habilidade) {
+                    habilidadesAvancadas.push(habilidade);
                 }
             });
             console.log('✅ Habilidades avançadas coletadas:', habilidadesAvancadas.length);
@@ -25076,7 +25032,27 @@
                 console.error('❌ Elemento modalNovaHabilidadeRaca não encontrado');
                 return;
             }
-            const modal = new bootstrap.Modal(modalElement);
+            // Usar getInstance para evitar múltiplas instâncias
+            const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement, {
+                keyboard: false,
+                backdrop: 'static'
+            });
+            
+            // Sincronizar z-index dos backdrops quando modal abre
+            modalElement.addEventListener('shown.bs.modal', function() {
+                setTimeout(() => {
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach((backdrop, idx) => {
+                        if (idx === backdrops.length - 1) {
+                            backdrop.style.zIndex = '1099 !important';
+                        } else {
+                            backdrop.style.zIndex = '1049 !important';
+                        }
+                    });
+                    modalElement.style.zIndex = '1100 !important';
+                }, 10);
+            }, { once: true });
+            
             modal.show();
         }
 
@@ -25194,6 +25170,75 @@
             reader.readAsDataURL(file);
         }
 
+        // ============ FUNÇÃO AUXILIAR: DETECTAR ABA ATIVA ============
+        // ⭐ IMPORTANTE: Detecta corretamente qual aba está visível no modal de raças
+        function detectarAbaAtivaRaca() {
+            // Verificar se a aba "Heranças" está ativa
+            const abHeracas = document.querySelector('#racaHeracas-tab.active');
+            const abHabilidades = document.querySelector('#racaHabilidades-tab.active');
+            
+            console.log('🔍 [detectarAbaAtivaRaca] Heranças.active:', !!abHeracas, '| Habilidades.active:', !!abHabilidades);
+            
+            // Se nenhuma estiver marcada como active, verificar qual tab-pane está visível
+            if (!abHeracas && !abHabilidades) {
+                const tabHeracas = document.querySelector('#racaHeracas.tab-pane.show.active');
+                const tabHabilidades = document.querySelector('#racaHabilidades.tab-pane.show.active');
+                
+                console.log('🔍 [detectarAbaAtivaRaca] Tab visível - Heranças:', !!tabHeracas, '| Habilidades:', !!tabHabilidades);
+                
+                if (tabHabilidades) return 'habilidades';
+                if (tabHeracas) return 'heracas';
+            }
+            
+            // Padrão: se Heranças está active, retorna heracas, senão habilidades
+            return abHeracas ? 'heracas' : 'habilidades';
+        }
+
+        // ============ FUNÇÃO AUXILIAR: PARSE JSON DE HABILIDADE ============
+        // ⭐ IMPORTANTE: Decodifica entidades HTML antes de fazer parse
+        function parsearJsonHabilidade(jsonString) {
+            try {
+                // Decodificar entidades HTML
+                let json = jsonString.replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+                return JSON.parse(json);
+            } catch(e) {
+                console.error('❌ Erro ao parsear JSON da habilidade:', e, '| Original:', jsonString);
+                return null;
+            }
+        }
+
+        // ============ FUNÇÃO AUXILIAR: ABRIR MODAL COM SEGURANÇA ============
+        // Evita múltiplas instâncias do mesmo modal
+        function abrirModalComSeguranca(idModal) {
+            const modalElement = typeof idModal === 'string' ? document.getElementById(idModal) : idModal;
+            if (!modalElement) {
+                console.error('❌ Modal não encontrado:', typeof idModal === 'string' ? idModal : 'elemento');
+                return;
+            }
+            
+            // GARANTIR QUE TODOS OS INPUTS ESTÃO HABILITADOS (para modais de criação/edição)
+            const allInputs = modalElement.querySelectorAll('input, select, textarea, button');
+            allInputs.forEach(input => {
+                input.disabled = false;
+                input.readOnly = false;
+                input.removeAttribute('readonly');
+                input.removeAttribute('disabled');
+                input.style.pointerEvents = 'auto';
+                input.style.opacity = '1';
+            });
+            
+            // Usar getInstance para reutilizar ou criar nova instância
+            let modal = bootstrap.Modal.getInstance(modalElement);
+            if (!modal) {
+                modal = new bootstrap.Modal(modalElement, {
+                    backdrop: 'static',  // Evita fechar ao clicar fora
+                    keyboard: false      // Evita fechar ao pressionar ESC (pode ser reativado se necessário)
+                });
+            }
+            modal.show();
+            return modal;
+        }
+
         // ============ SINCRONIZAR HABILIDADES COM PERSISTÊNCIA ============
         // ⭐ FUNÇÃO CRÍTICA: Garante que habilidades sejam salvas em TEMPO REAL
         function sincronizarHabilidadesComPersistencia(abaAtiva, todasHabilidades) {
@@ -25267,7 +25312,7 @@
             console.log('📝 [salvarHabilidadeRaca] Objeto habilidade:', habilidade);
 
             // Determinar qual aba está ativa
-            const abaAtiva = document.querySelector('#racaHeracas-tab.active') ? 'heracas' : 'habilidades';
+            const abaAtiva = detectarAbaAtivaRaca();
             const containerId = abaAtiva === 'heracas' ? 'habilidadesRaca' : 'habilidadesRacaAvancadas';
             const container = document.getElementById(containerId);
             
@@ -25277,10 +25322,9 @@
             let todasHabilidades = [];
             container.querySelectorAll('[data-habilidade-json]').forEach(card => {
                 const json = card.getAttribute('data-habilidade-json');
-                try {
-                    todasHabilidades.push(JSON.parse(json));
-                } catch(e) {
-                    console.error('❌ [salvarHabilidadeRaca] Erro ao parsear habilidade:', e);
+                const habilidade = parsearJsonHabilidade(json);
+                if (habilidade) {
+                    todasHabilidades.push(habilidade);
                 }
             });
             
@@ -25360,10 +25404,11 @@
                 };
 
                 // Armazenar os dados em JSON para posterior coleta - INCLUINDO ID
-                const habilidadeJSON = JSON.stringify(habilidade);
+                // IMPORTANTE: Escapar aspas para evitar quebra de atributo HTML
+                const habilidadeJSON = JSON.stringify(habilidade).replace(/'/g, '&#39;').replace(/"/g, '&quot;');
 
                 html += `
-                    <div class="skill-card-rpg-raca" data-skill-index="${index}" data-skill-id="${habilidade.id}" data-skill-name="${habilidade.nome}" data-habilidade-json='${habilidadeJSON}' style="background: linear-gradient(135deg, rgba(30, 30, 50, 0.8) 0%, rgba(20, 20, 40, 0.9) 100%); border: 2px solid rgba(212,175,55,0.4); border-radius: 10px; overflow: hidden; margin-bottom: 12px; transition: all 0.25s; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                    <div class="skill-card-rpg-raca" data-skill-index="${index}" data-skill-id="${habilidade.id.toString().replace(/"/g, '&quot;')}" data-skill-name="${habilidade.nome.replace(/"/g, '&quot;')}" data-habilidade-json='${habilidadeJSON}' style="background: linear-gradient(135deg, rgba(30, 30, 50, 0.8) 0%, rgba(20, 20, 40, 0.9) 100%); border: 2px solid rgba(212,175,55,0.4); border-radius: 10px; overflow: hidden; margin-bottom: 12px; transition: all 0.25s; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
                         
                         <!-- Conteúdo sem coluna de imagem -->
                         <div style="display: flex; flex-direction: column;">
@@ -25413,7 +25458,7 @@
             console.log('✏️ [editarHabilidadeRaca] Abrindo edição, index:', index);
             
             // Determinar qual aba está ativa
-            const abaAtiva = document.querySelector('#racaHeracas-tab.active') ? 'heracas' : 'habilidades';
+            const abaAtiva = detectarAbaAtivaRaca();
             const containerId = abaAtiva === 'heracas' ? 'habilidadesRaca' : 'habilidadesRacaAvancadas';
             const container = document.getElementById(containerId);
             
@@ -25428,7 +25473,12 @@
             }
 
             const cardElement = cards[index];
-            const habilidade = JSON.parse(cardElement.getAttribute('data-habilidade-json'));
+            const habilidade = parsearJsonHabilidade(cardElement.getAttribute('data-habilidade-json'));
+            
+            if (!habilidade) {
+                console.error('❌ [editarHabilidadeRaca] Falha ao parsear habilidade');
+                return;
+            }
             
             console.log('📝 [editarHabilidadeRaca] Habilidade a editar:', habilidade);
 
@@ -25477,8 +25527,7 @@
                 console.error('❌ [editarHabilidadeRaca] Elemento modalNovaHabilidadeRaca não encontrado');
                 return;
             }
-            const modal = new bootstrap.Modal(modalElement);
-            modal.show();
+            abrirModalComSeguranca('modalNovaHabilidadeRaca');
             
             console.log('📴 [editarHabilidadeRaca] Modal aberto para edição');
         }
@@ -25486,7 +25535,7 @@
         // Copiar habilidade de raça para texto
         function copiarHabilidadeRacaTexto(index) {
             // Determinar qual aba está ativa
-            const abaAtiva = document.querySelector('#racaHeracas-tab.active') ? 'heracas' : 'habilidades';
+            const abaAtiva = detectarAbaAtivaRaca();
             const containerId = abaAtiva === 'heracas' ? 'habilidadesRaca' : 'habilidadesRacaAvancadas';
             const container = document.getElementById(containerId);
             
@@ -25494,10 +25543,9 @@
             let todasHabilidades = [];
             container.querySelectorAll('[data-habilidade-json]').forEach(card => {
                 const json = card.getAttribute('data-habilidade-json');
-                try {
-                    todasHabilidades.push(JSON.parse(json));
-                } catch(e) {
-                    console.error('Erro ao parsear habilidade:', e);
+                const habilidade = parsearJsonHabilidade(json);
+                if (habilidade) {
+                    todasHabilidades.push(habilidade);
                 }
             });
             
@@ -25555,7 +25603,7 @@
         // Confirmar remoção de habilidade de raça
         function confirmarRemocaoHabilidadeRaca(index) {
             // Determinar qual aba está ativa
-            const abaAtiva = document.querySelector('#racaHeracas-tab.active') ? 'heracas' : 'habilidades';
+            const abaAtiva = detectarAbaAtivaRaca();
             const containerId = abaAtiva === 'heracas' ? 'habilidadesRaca' : 'habilidadesRacaAvancadas';
             const container = document.getElementById(containerId);
             
@@ -25563,10 +25611,9 @@
             let todasHabilidades = [];
             container.querySelectorAll('[data-habilidade-json]').forEach(card => {
                 const json = card.getAttribute('data-habilidade-json');
-                try {
-                    todasHabilidades.push(JSON.parse(json));
-                } catch(e) {
-                    console.error('Erro ao parsear habilidade:', e);
+                const habilidade = parsearJsonHabilidade(json);
+                if (habilidade) {
+                    todasHabilidades.push(habilidade);
                 }
             });
             
@@ -25729,8 +25776,7 @@
                 console.error('❌ Elemento modalGerenciarFuncoes não encontrado');
                 return;
             }
-            const modal = new bootstrap.Modal(modalElement);
-            modal.show();
+            abrirModalComSeguranca('modalGerenciarFuncoes');
         }
 
         // Adicionar função à classe
@@ -25896,8 +25942,12 @@
             // Limpar formulário e abrir modal para nova habilidade
             document.getElementById('formNovaHabilidadeClasse').reset();
             document.getElementById('habilidadeEditIndex').value = '';
-            document.getElementById('previewHabilidade').innerHTML = '<span class="text-muted" style="font-size: 0.8rem;">Imagem da habilidade</span>';
             document.getElementById('habilidadeModalTitle').textContent = '⚡ Nova Habilidade';
+            
+            // DEFINIR ABA PADRÃO COMO "BÁSICAS"
+            document.getElementById('habilidadeTipoAba').value = 'basicas';
+            
+            document.getElementById('previewHabilidade').innerHTML = '<span class="text-muted" style="font-size: 0.8rem;">Imagem da habilidade</span>';
             
             // Abrir modal
             const modalElement = document.getElementById('modalNovaHabilidadeClasse');
@@ -25905,7 +25955,39 @@
                 console.error('❌ Elemento modalNovaHabilidadeClasse não encontrado');
                 return;
             }
-            const modal = new bootstrap.Modal(modalElement);
+            
+            // GARANTIR QUE TODOS OS INPUTS ESTÃO HABILITADOS
+            const allInputs = modalElement.querySelectorAll('input, select, textarea, button');
+            allInputs.forEach(input => {
+                input.disabled = false;
+                input.readOnly = false;
+                input.removeAttribute('readonly');
+                input.removeAttribute('disabled');
+                input.style.pointerEvents = 'auto';
+                input.style.opacity = '1';
+            });
+            
+            // Usar getInstance para evitar múltiplas instâncias
+            const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement, {
+                keyboard: false,
+                backdrop: 'static'
+            });
+            
+            // Sincronizar z-index dos backdrops quando modal abre
+            modalElement.addEventListener('shown.bs.modal', function() {
+                setTimeout(() => {
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach((backdrop, idx) => {
+                        if (idx === backdrops.length - 1) {
+                            backdrop.style.zIndex = '1099 !important';
+                        } else {
+                            backdrop.style.zIndex = '1049 !important';
+                        }
+                    });
+                    modalElement.style.zIndex = '1100 !important';
+                }, 10);
+            }, { once: true });
+            
             modal.show();
         }
 
@@ -26127,7 +26209,11 @@
                 
                 if (habilidadeJSON) {
                     try {
-                        const habilidade = JSON.parse(habilidadeJSON);
+                        const habilidade = parsearJsonHabilidade(habilidadeJSON);
+                        if (!habilidade) {
+                            console.error('❌ Falha ao parsear habilidade');
+                            return;
+                        }
                         
                         // Preencher formulário com dados da habilidade
                         document.getElementById('formNovaHabilidadeClasse').reset();
@@ -26135,7 +26221,7 @@
                         document.getElementById('habilidadeTipo').value = habilidade.tipo || '';
                         document.getElementById('habilidadeAcao').value = habilidade.acao || '';
                         document.getElementById('habilidadeDominio').value = habilidade.dominio || '';
-                        document.getElementById('habilidadeTipoAba').value = habilidade.tipo_aba || '';
+                        document.getElementById('habilidadeTipoAba').value = habilidade.tipo_aba || 'basicas'; // DEFAULT: BÁSICAS
                         document.getElementById('habilidadeImagemUrl').value = habilidade.imagem || '';
                         document.getElementById('habilidadeCusto').value = habilidade.custo || '';
                         document.getElementById('habilidadeDano').value = habilidade.dano || '';
@@ -26153,14 +26239,8 @@
                         
                         document.getElementById('habilidadeModalTitle').textContent = '✏️ Editar Habilidade';
                         
-                        // Abrir modal
-                        const modalElement = document.getElementById('modalNovaHabilidadeClasse');
-                        if (!modalElement) {
-                            console.error('❌ Elemento modalNovaHabilidadeClasse não encontrado');
-                            throw new Error('Modal não encontrado');
-                        }
-                        const modal = new bootstrap.Modal(modalElement);
-                        modal.show();
+                        // Abrir modal com segurança
+                        abrirModalComSeguranca('modalNovaHabilidadeClasse');
                     } catch (e) {
                         console.error('Erro ao parsear dados da habilidade:', e);
                         alert('Erro ao editar habilidade');
@@ -27325,63 +27405,61 @@
                 // 7. Preencher Habilidades com Abas
                 const habilidadesContainer = document.getElementById('detalhesClasseHabilidadesContainer');
                 if (habilidadesContainer) {
+                    // Sempre organizar habilidades por tipo de aba (mesmo que vazio)
+                    const habilidadesPorAba = {
+                        basicas: [],
+                        avancadas: [],
+                        extremas: []
+                    };
+                    
                     if (classe.habilidades && classe.habilidades.length > 0) {
-                        // Organizar habilidades por tipo de aba
-                        const habilidadesPorAba = {
-                            basicas: [],
-                            avancadas: [],
-                            extremas: []
-                        };
-                        
                         classe.habilidades.forEach((hab, index) => {
                             const tipoAba = hab.tipo_aba || 'basicas';
                             habilidadesPorAba[tipoAba].push(hab);
                         });
-
-                        // Criar HTML das abas
-                        let abasHtml = `
-                            <div style="display: flex; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid rgba(212,175,55,0.2); flex-wrap: wrap;">
-                                <button type="button" class="aba-habilidade-btn" data-aba="basicas" onclick="mudarAbaHabilidades('basicas', event)" style="padding: 12px 24px; background: linear-gradient(135deg, rgba(212,175,55,0.3), rgba(212,175,55,0.1)); border: 2px solid rgba(212,175,55,0.5); color: #d4af37; border-radius: 8px 8px 0 0; font-weight: 700; cursor: pointer; transition: all 0.25s;">📖 Básicas</button>
-                                <button type="button" class="aba-habilidade-btn" data-aba="avancadas" onclick="mudarAbaHabilidades('avancadas', event)" style="padding: 12px 24px; background: transparent; border: 2px solid rgba(212,175,55,0.2); color: #a0a0a0; border-radius: 8px 8px 0 0; font-weight: 700; cursor: pointer; transition: all 0.25s;">⚔️ Avançadas</button>
-                                <button type="button" class="aba-habilidade-btn" data-aba="extremas" onclick="mudarAbaHabilidades('extremas', event)" style="padding: 12px 24px; background: transparent; border: 2px solid rgba(212,175,55,0.2); color: #a0a0a0; border-radius: 8px 8px 0 0; font-weight: 700; cursor: pointer; transition: all 0.25s;">💥 Extremas</button>
-                            </div>
-                        `;
-
-                        // Renderizar conteúdo de cada aba
-                        abasHtml += `<div id="aba-basicas-content" class="aba-habilidade-content">`;
-                        if (habilidadesPorAba.basicas.length > 0) {
-                            habilidadesPorAba.basicas.forEach((hab) => {
-                                abasHtml += renderizarCardHabilidadeDetalhes(hab);
-                            });
-                        } else {
-                            abasHtml += '<p style="color: #a0a0a0; text-align: center; padding: 20px;">Nenhuma habilidade básica</p>';
-                        }
-                        abasHtml += `</div>`;
-
-                        abasHtml += `<div id="aba-avancadas-content" class="aba-habilidade-content" style="display: none;">`;
-                        if (habilidadesPorAba.avancadas.length > 0) {
-                            habilidadesPorAba.avancadas.forEach((hab) => {
-                                abasHtml += renderizarCardHabilidadeDetalhes(hab);
-                            });
-                        } else {
-                            abasHtml += '<p style="color: #a0a0a0; text-align: center; padding: 20px;">Nenhuma habilidade avançada</p>';
-                        }
-                        abasHtml += `</div>`;
-
-                        abasHtml += `<div id="aba-extremas-content" class="aba-habilidade-content" style="display: none;">`;
-                        if (habilidadesPorAba.extremas.length > 0) {
-                            habilidadesPorAba.extremas.forEach((hab) => {
-                                abasHtml += renderizarCardHabilidadeDetalhes(hab);
-                            });
-                        } else {
-                            abasHtml += '<p style="color: #a0a0a0; text-align: center; padding: 20px;">Nenhuma habilidade extrema</p>';
-                        }
-                        abasHtml += `</div>`;
-
-                        habilidadesContainer.innerHTML = abasHtml;
-                    } else {
-                        habilidadesContainer.innerHTML = '<p style="color: #a0a0a0; text-align: center; padding: 20px; margin: 0;">Nenhuma habilidade adicionada</p>';
                     }
+
+                    // Criar HTML das abas (SEMPRE renderizar, mesmo que vazio)
+                    let abasHtml = `
+                        <div style="display: flex; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid rgba(212,175,55,0.2); flex-wrap: wrap;">
+                            <button type="button" class="aba-habilidade-btn" data-aba="basicas" onclick="mudarAbaHabilidades('basicas', event)" style="padding: 12px 24px; background: linear-gradient(135deg, rgba(212,175,55,0.3), rgba(212,175,55,0.1)); border: 2px solid rgba(212,175,55,0.5); color: #d4af37; border-radius: 8px 8px 0 0; font-weight: 700; cursor: pointer; transition: all 0.25s;">📖 Básicas</button>
+                            <button type="button" class="aba-habilidade-btn" data-aba="avancadas" onclick="mudarAbaHabilidades('avancadas', event)" style="padding: 12px 24px; background: transparent; border: 2px solid rgba(212,175,55,0.2); color: #a0a0a0; border-radius: 8px 8px 0 0; font-weight: 700; cursor: pointer; transition: all 0.25s;">⚔️ Avançadas</button>
+                            <button type="button" class="aba-habilidade-btn" data-aba="extremas" onclick="mudarAbaHabilidades('extremas', event)" style="padding: 12px 24px; background: transparent; border: 2px solid rgba(212,175,55,0.2); color: #a0a0a0; border-radius: 8px 8px 0 0; font-weight: 700; cursor: pointer; transition: all 0.25s;">💥 Extremas</button>
+                        </div>
+                    `;
+
+                    // Renderizar conteúdo de cada aba
+                    abasHtml += `<div id="aba-basicas-content" class="aba-habilidade-content">`;
+                    if (habilidadesPorAba.basicas.length > 0) {
+                        habilidadesPorAba.basicas.forEach((hab) => {
+                            abasHtml += renderizarCardHabilidadeDetalhes(hab);
+                        });
+                    } else {
+                        abasHtml += '<p style="color: #a0a0a0; text-align: center; padding: 20px;">Nenhuma habilidade básica</p>';
+                    }
+                    abasHtml += `</div>`;
+
+                    abasHtml += `<div id="aba-avancadas-content" class="aba-habilidade-content" style="display: none;">`;
+                    if (habilidadesPorAba.avancadas.length > 0) {
+                        habilidadesPorAba.avancadas.forEach((hab) => {
+                            abasHtml += renderizarCardHabilidadeDetalhes(hab);
+                        });
+                    } else {
+                        abasHtml += '<p style="color: #a0a0a0; text-align: center; padding: 20px;">Nenhuma habilidade avançada</p>';
+                    }
+                    abasHtml += `</div>`;
+
+                    abasHtml += `<div id="aba-extremas-content" class="aba-habilidade-content" style="display: none;">`;
+                    if (habilidadesPorAba.extremas.length > 0) {
+                        habilidadesPorAba.extremas.forEach((hab) => {
+                            abasHtml += renderizarCardHabilidadeDetalhes(hab);
+                        });
+                    } else {
+                        abasHtml += '<p style="color: #a0a0a0; text-align: center; padding: 20px;">Nenhuma habilidade extrema</p>';
+                    }
+                    abasHtml += `</div>`;
+
+                    habilidadesContainer.innerHTML = abasHtml;
                 } else {
                     console.warn('⚠️ Container habilidades não encontrado');
                 }
