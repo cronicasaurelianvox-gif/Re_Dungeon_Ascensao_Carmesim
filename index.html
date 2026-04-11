@@ -138,6 +138,7 @@
             'redungeon_racas',
             'redungeon_classes',
             'redungeon_origens',
+            'redungeon_cardflux',
             'redungeon_regioes',
             'redungeon_cenarios',
             'redungeon_npcs',
@@ -171,7 +172,7 @@
             dbName: 'ReDungeonDB',
             dbVersion: 1,
             stores: [
-                'Mesa', 'origens', 'regioes', 'cenarios', 'racas', 'classes', 'aptidoes', 'npcs', 'criaturas',
+                'Mesa', 'origens', 'cardflux', 'regioes', 'cenarios', 'racas', 'classes', 'aptidoes', 'npcs', 'criaturas',
                 'materiais', 'receitas', 'itens', 'condicoes', 'regras'
             ],
             localStoragePrefix: 'redungeon_'
@@ -345,6 +346,8 @@
                     // Todas as outras entidades
                     'redungeon_origens': 'origens',
                     'origens': 'origens',
+                    'redungeon_cardflux': 'cardflux',
+                    'cardflux': 'cardflux',
                     'redungeon_regioes': 'regioes',
                     'regioes': 'regioes',
                     'redungeon_cenarios': 'cenarios',
@@ -1359,10 +1362,10 @@
         .nav-link {
             color: rgba(180, 180, 195, 0.8);
             border: 1px solid rgba(212, 175, 55, 0.15);
-            font-size: 0.95rem;
+            font-size: 0.90rem;
             font-weight: 600;
             transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-            padding: 12px 22px;
+            padding: 11px 21px;
             flex-shrink: 0;
             width: auto;
             text-align: center;
@@ -3736,9 +3739,9 @@
         }
 
         .rarity-lendario {
-            background: #ff9900;
+            background: #F39C12;
             color: white;
-            border: 1px solid #cc7700;
+            border: 1px solid #D68910;
         }
 
         .rarity-mitica {
@@ -4389,14 +4392,14 @@
         }
 
         .filter-orange {
-            border-color: #e67e22;
-            color: #e67e22;
-            background: linear-gradient(135deg, rgba(230, 126, 34, 0.08) 0%, rgba(230, 126, 34, 0.03) 100%);
+            border-color: #F39C12;
+            color: #F39C12;
+            background: linear-gradient(135deg, rgba(243, 156, 18, 0.08) 0%, rgba(243, 156, 18, 0.03) 100%);
         }
 
         .filter-orange.active {
-            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
-            border-color: #e67e22;
+            background: linear-gradient(135deg, #F39C12 0%, #D68910 100%);
+            border-color: #F39C12;
         }
 
         .filter-orange-light {
@@ -5281,8 +5284,8 @@
         }
 
         @keyframes glowLendario {
-            0%, 100% { box-shadow: 0 0 20px rgba(230, 126, 34, 0.25), 0 0 40px rgba(230, 126, 34, 0.15), 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
-            50% { box-shadow: 0 0 30px rgba(230, 126, 34, 0.35), 0 0 60px rgba(230, 126, 34, 0.25), 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+            0%, 100% { box-shadow: 0 0 20px rgba(243, 156, 18, 0.25), 0 0 40px rgba(243, 156, 18, 0.15), 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+            50% { box-shadow: 0 0 30px rgba(243, 156, 18, 0.35), 0 0 60px rgba(243, 156, 18, 0.25), 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
         }
 
         @keyframes glowMitica {
@@ -5372,27 +5375,27 @@
 
         /* Lendário - Laranja */
         .raca-card.raridade-lendario {
-            border-color: rgba(230, 126, 34, 0.6);
+            border-color: rgba(243, 156, 18, 0.6);
             box-shadow: 
                 0 8px 32px rgba(0, 0, 0, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.05),
-                0 0 20px rgba(230, 126, 34, 0.25),
-                0 0 40px rgba(230, 126, 34, 0.15);
+                0 0 20px rgba(243, 156, 18, 0.25),
+                0 0 40px rgba(243, 156, 18, 0.15);
             animation: glowLendario 3s ease-in-out infinite;
         }
 
         .raca-card.raridade-lendario:hover {
-            border-color: rgba(230, 126, 34, 0.9);
+            border-color: rgba(243, 156, 18, 0.9);
             box-shadow: 
                 0 16px 48px rgba(0, 0, 0, 0.4),
                 inset 0 1px 0 rgba(255, 255, 255, 0.08),
-                0 0 30px rgba(230, 126, 34, 0.4),
-                0 0 60px rgba(230, 126, 34, 0.25);
+                0 0 30px rgba(243, 156, 18, 0.4),
+                0 0 60px rgba(243, 156, 18, 0.25);
             animation: none;
         }
 
         .raca-card.raridade-lendario .raca-card-top-line {
-            background: linear-gradient(90deg, transparent, rgba(230, 126, 34, 0.8), transparent);
+            background: linear-gradient(90deg, transparent, rgba(243, 156, 18, 0.8), transparent);
         }
 
         /* Mítica - Vermelho */
@@ -6570,9 +6573,9 @@
         }
 
         .filter-btn.filter-orange {
-            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            background: linear-gradient(135deg, #F39C12 0%, #D68910 100%);
             color: #ffffff;
-            border-color: #f8b88b;
+            border-color: #f8d88f;
         }
 
         .filter-btn.filter-orange-light {
@@ -8359,8 +8362,8 @@
         }
 
         @keyframes glowReceitaLendario {
-            0%, 100% { box-shadow: 0 0 20px rgba(230, 126, 34, 0.25), 0 0 40px rgba(230, 126, 34, 0.15), 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
-            50% { box-shadow: 0 0 30px rgba(230, 126, 34, 0.35), 0 0 60px rgba(230, 126, 34, 0.25), 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+            0%, 100% { box-shadow: 0 0 20px rgba(243, 156, 18, 0.25), 0 0 40px rgba(243, 156, 18, 0.15), 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+            50% { box-shadow: 0 0 30px rgba(243, 156, 18, 0.35), 0 0 60px rgba(243, 156, 18, 0.25), 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
         }
 
         .receita-card-lux {
@@ -8412,7 +8415,7 @@
 
         .receita-card-lux[data-raridade-receita="lendário"],
         .receita-card-lux[data-raridade-receita="Lendário"] {
-            border-color: rgba(230, 126, 34, 0.6);
+            border-color: rgba(243, 156, 18, 0.6);
             animation: receitaCardEnter 0.6s ease-out, glowReceitaLendario 3s ease-in-out infinite;
         }
 
@@ -8779,8 +8782,8 @@
         }
 
         @keyframes glowMaterialLendario {
-            0%, 100% { box-shadow: 0 0 20px rgba(230, 126, 34, 0.25), 0 0 40px rgba(230, 126, 34, 0.15), 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
-            50% { box-shadow: 0 0 30px rgba(230, 126, 34, 0.35), 0 0 60px rgba(230, 126, 34, 0.25), 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+            0%, 100% { box-shadow: 0 0 20px rgba(243, 156, 18, 0.25), 0 0 40px rgba(243, 156, 18, 0.15), 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+            50% { box-shadow: 0 0 30px rgba(243, 156, 18, 0.35), 0 0 60px rgba(243, 156, 18, 0.25), 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
         }
 
         @keyframes glowMaterialMitica {
@@ -8834,7 +8837,7 @@
         }
 
         .material-card-lux[data-raridade-material="lendario"] {
-            border-color: rgba(230, 126, 34, 0.6);
+            border-color: rgba(243, 156, 18, 0.6);
         }
 
         .material-card-lux[data-raridade-material="mitica"] {
@@ -9789,6 +9792,111 @@
         #modalLocaisUnificado [id*="seccao"] {
             animation: fadeInDown 0.3s ease-out;
         }
+
+        /* ====================================== ESTILOS CARDFLUX ====================================== */
+        
+        .cardflux-card {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cardflux-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            transition: left 0.6s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .cardflux-card:hover {
+            transform: translateY(-8px);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(52, 152, 219, 0.1)) !important;
+            border-color: rgba(212, 175, 55, 0.5) !important;
+            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.2), 0 0 20px rgba(212, 175, 55, 0.15);
+        }
+
+        .cardflux-card:hover::before {
+            left: 100%;
+        }
+
+        /* Grid responsivo */
+        .origem-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            padding: 10px 0;
+        }
+
+        @media (max-width: 1200px) {
+            .origem-cards-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .origem-cards-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        /* Animação de flip de carta */
+        @keyframes cardfluxFlip {
+            0% {
+                transform: rotateY(0deg);
+                opacity: 0;
+            }
+            50% {
+                transform: rotateY(90deg);
+            }
+            100% {
+                transform: rotateY(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* Animação de entrada */
+        @keyframes cardfluxEnter {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .cardflux-card {
+            animation: cardfluxEnter 0.5s ease-out;
+        }
+
+        /* Destaque para sorteio */
+        .cardflux-sorteada {
+            animation: cardfluxFlip 0.8s ease-in-out;
+            border-color: rgba(126, 211, 33, 0.8) !important;
+            background: linear-gradient(135deg, rgba(126, 211, 33, 0.3), rgba(52, 152, 219, 0.2)) !important;
+            box-shadow: 0 0 30px rgba(126, 211, 33, 0.4), inset 0 0 20px rgba(126, 211, 33, 0.1) !important;
+        }
+
+        /* Pulse subtle para itens em cooldown */
+        @keyframes cooldownPulse {
+            0%, 100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        .cardflux-cooldown {
+            animation: cooldownPulse 2s ease-in-out infinite;
+        }
     </style>
     <script>
         // =============== OBSERVER PARA REMOVER aria-hidden DE MODAIS ATIVOS ===============
@@ -10067,6 +10175,7 @@
             const chavesRedungeon = [
                 'redungeon_Mesa',
                 'redungeon_origens',
+                'redungeon_cardflux',
                 'redungeon_regioes',
                 'redungeon_cenarios',
                 'redungeon_racas',
@@ -10159,6 +10268,11 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="origens-tab" data-bs-toggle="tab" data-bs-target="#origens" type="button" role="tab">
                         🌍 Origens
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="cardflux-tab" data-bs-toggle="tab" data-bs-target="#cardflux" type="button" role="tab">
+                        🂡 Cardflux
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -10271,6 +10385,46 @@
                     <div id="gridUnificado" class="origem-cards-grid">
                         <div class="origem-empty-state section-origens" style="grid-column: 1 / -1;">
                             <div class="origem-empty-state-icon">🔍</div>
+                            <p class="origem-empty-state-text">Carregando itens...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARDFLUX TAB -->
+                <div class="tab-pane fade" id="cardflux" role="tabpanel">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+                        <button class="btn btn-primary btn-lg" onclick="abrirModalCardfluxUnificado()">
+                            ➕ Nova Carta
+                        </button>
+                        <button class="btn btn-success btn-lg" onclick="abrirModalCardfluxExecucao()" style="background: linear-gradient(135deg, #7ED321, #9FD356); border: none; color: #1a1a2e; font-weight: 700;">
+                            🎲 Iniciar Cardflux
+                        </button>
+                    </div>
+
+                    <!-- Filtro de Busca Unificado com Autocomplete -->
+                    <div style="margin-bottom: 20px; position: relative; z-index: 10000; overflow: visible;">
+                        <div class="filters-panel-title" style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                            <span>🔍</span>
+                            <span>Filtro:</span>
+                        </div>
+                        <div style="position: relative;">
+                            <input 
+                                type="text" 
+                                id="filtroCardfluxInput" 
+                                class="form-control" 
+                                placeholder="Digite para filtrar por nome ou raridade (raro, comum, épica, lendário, etc)..."
+                                oninput="filtrarCardfluxInteligente(this.value)"
+                                style="max-width: 100%; margin-bottom: 10px; padding: 12px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; font-size: 1rem; position: relative; z-index: 10001;"
+                                autocomplete="off"
+                            >
+                            <div id="autocompleteCardflux" style="position: absolute; top: 100%; left: 0; right: 0; background: rgba(30, 50, 80, 0.95); border: 1px solid rgba(212, 175, 55, 0.3); border-top: none; border-radius: 0 0 8px 8px; max-height: 200px; overflow-y: auto; display: none; z-index: 100; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);"></div>
+                        </div>
+                    </div>
+
+                    <!-- Grid de Cards Cardflux -->
+                    <div id="gridCardflux" class="origem-cards-grid">
+                        <div class="origem-empty-state section-cardflux" style="grid-column: 1 / -1;">
+                            <div class="origem-empty-state-icon">🂡</div>
                             <p class="origem-empty-state-text">Carregando itens...</p>
                         </div>
                     </div>
@@ -10895,12 +11049,12 @@
                                         <label class="form-label" style="color: #d4af37; font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 8px;">Raridade (opcional)</label>
                                         <select class="form-control" id="unificadoRaridade" style="background: rgba(0,0,0,0.5); border: 1.5px solid rgba(212,175,55,0.4); color: #fff; border-radius: 8px; padding: 12px; font-weight: 500; transition: all 0.25s; cursor: pointer;" onfocus="this.style.borderColor='rgba(212,175,55,0.8)'; this.style.boxShadow='0 0 12px rgba(212,175,55,0.2)';" onblur="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.boxShadow='none';">
                                             <option value="">-- Sem raridade --</option>
-                                            <option value="comum">🔵 Comum</option>
-                                            <option value="raro">🟢 Raro</option>
+                                            <option value="comum">⚪ Comum</option>
+                                            <option value="raro">🟡 Raro</option>
                                             <option value="epico">🟣 Épico</option>
                                             <option value="lendario">🟠 Lendário</option>
                                             <option value="mitico">🔴 Mítico</option>
-                                            <option value="celestial">🟡 Celestial</option>
+                                            <option value="celestial">⭐ Celestial</option>
                                         </select>
                                     </div>
                                 </div>
@@ -11959,11 +12113,11 @@
                                     <option value="">-- Selecione --</option>
                                     <option value="comum">⚪ Comum</option>
                                     <option value="incomum">🟢 Incomum</option>
-                                    <option value="raro">🔵 Raro</option>
+                                    <option value="raro">🟡 Raro</option>
                                     <option value="epico">🟣 Épico</option>
-                                    <option value="lendario">⭐ Lendário</option>
+                                    <option value="lendario">🟠 Lendário</option>
                                     <option value="mitica">🔴 Mítica</option>
-                                    <option value="celestial">🔵 Celestial</option>
+                                    <option value="celestial">⭐ Celestial</option>
                                 </select>
                             </div>
                         </div>
@@ -12102,11 +12256,11 @@
                                     <option value="">-- Selecione --</option>
                                     <option value="comum">⚪ Comum</option>
                                     <option value="incomum">🟢 Incomum</option>
-                                    <option value="raro">🔵 Raro</option>
+                                    <option value="raro">🟡 Raro</option>
                                     <option value="epico">🟣 Épico</option>
-                                    <option value="lendario">⭐ Lendário</option>
+                                    <option value="lendario">🟠 Lendário</option>
                                     <option value="mitica">🔴 Mítica</option>
-                                    <option value="celestial">🔵 Celestial</option>
+                                    <option value="celestial">⭐ Celestial</option>
                                 </select>
                             </div>
                         </div>
@@ -12746,11 +12900,11 @@
                                 <option value="">-- Selecione --</option>
                                 <option value="comum">⚪ Comum</option>
                                 <option value="incomum">🟢 Incomum</option>
-                                <option value="raro">🔵 Raro</option>
+                                <option value="raro">🟡 Raro</option>
                                 <option value="epico">🟣 Épico</option>
-                                <option value="lendario">⭐ Lendário</option>
+                                <option value="lendario">🟠 Lendário</option>
                                 <option value="mitica">🔴 Mítica</option>
-                                <option value="celestial">🔵 Celestial</option>
+                                <option value="celestial">⭐ Celestial</option>
                             </select>
                         </div>
                     </div>
@@ -12888,8 +13042,8 @@
                                         <option value="Comum">Comum</option>
                                         <option value="Raro">Raro</option>
                                         <option value="Épico">Épico</option>
-                                        <option value="Mítico">Mítico</option>                                    
                                         <option value="Lendário">Lendário</option>
+                                        <option value="Mítico">Mítico</option>                                    
                                         <option value="Celestial">Celestial</option>
                                     </select>
                                 </div>
@@ -13020,8 +13174,8 @@
                                         <option value="Comum">Comum</option>
                                         <option value="Raro">Raro</option>
                                         <option value="Épico">Épico</option>
-                                        <option value="Mítico">Mítico</option>                                      
                                         <option value="Lendário">Lendário</option>
+                                        <option value="Mítico">Mítico</option>                                      
                                         <option value="Celestial">Celestial</option>
                                     </select>
                                 </div>
@@ -13136,8 +13290,8 @@
                                                     <option value="Comum">Comum</option>
                                                     <option value="Raro">Raro</option>
                                                     <option value="Épico">Épico</option>
-                                                    <option value="Mítico">Mítico</option>
                                                     <option value="Lendário">Lendário</option>
+                                                    <option value="Mítico">Mítico</option>
                                                     <option value="Celestial">Celestial</option>
                                                 </select>
                                             </div>
@@ -13474,8 +13628,8 @@
                                                     <option value="Comum">Comum</option>
                                                     <option value="Raro">Raro</option>
                                                     <option value="Épico">Épico</option>
-                                                    <option value="Mítico">Mítico</option>
                                                     <option value="Lendário">Lendário</option>
+                                                    <option value="Mítico">Mítico</option>
                                                     <option value="Celestial">Celestial</option>
                                                 </select>
                                             </div>
@@ -14724,7 +14878,7 @@
                             <button type="button" class="btn btn-sm" onclick="filtrarItensExistentesPorRaridade('Épico')" style="background: rgba(155, 89, 182, 0.3); color: #9b59b6; border: 2px solid rgba(155, 89, 182, 0.5); border-radius: 6px; font-weight: 700; padding: 6px 14px; transition: all 0.25s; cursor: pointer;" onmouseover="this.style.background='rgba(155, 89, 182, 0.5)'; this.style.borderColor='#9b59b6';" onmouseout="this.style.background='rgba(155, 89, 182, 0.3)'; this.style.borderColor='rgba(155, 89, 182, 0.5)';">
                                  🟣 Épico
                             </button>
-                            <button type="button" class="btn btn-sm" onclick="filtrarItensExistentesPorRaridade('Lendário')" style="background: rgba(230, 126, 34, 0.3); color: #e67e22; border: 2px solid rgba(230, 126, 34, 0.5); border-radius: 6px; font-weight: 700; padding: 6px 14px; transition: all 0.25s; cursor: pointer;" onmouseover="this.style.background='rgba(230, 126, 34, 0.5)'; this.style.borderColor='#e67e22';" onmouseout="this.style.background='rgba(230, 126, 34, 0.3)'; this.style.borderColor='rgba(230, 126, 34, 0.5)';">
+                            <button type="button" class="btn btn-sm" onclick="filtrarItensExistentesPorRaridade('Lendário')" style="background: rgba(243, 156, 18, 0.3); color: #F39C12; border: 2px solid rgba(243, 156, 18, 0.5); border-radius: 6px; font-weight: 700; padding: 6px 14px; transition: all 0.25s; cursor: pointer;" onmouseover="this.style.background='rgba(243, 156, 18, 0.5)'; this.style.borderColor='#F39C12';" onmouseout="this.style.background='rgba(243, 156, 18, 0.3)'; this.style.borderColor='rgba(243, 156, 18, 0.5)';">
                                 🟠 Lendário
                             </button>
                             <button type="button" class="btn btn-sm" onclick="filtrarItensExistentesPorRaridade('Mítico')" style="background: rgba(231, 76, 60, 0.3); color: #e74c3c; border: 2px solid rgba(231, 76, 60, 0.5); border-radius: 6px; font-weight: 700; padding: 6px 14px; transition: all 0.25s; cursor: pointer;" onmouseover="this.style.background='rgba(231, 76, 60, 0.5)'; this.style.borderColor='#e74c3c';" onmouseout="this.style.background='rgba(231, 76, 60, 0.3)'; this.style.borderColor='rgba(231, 76, 60, 0.5)';">
@@ -14967,10 +15121,10 @@
                             <select class="form-control" id="manualAssitidoQualidade" style="background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(212, 175, 55, 0.4); color: #fff; padding: 12px 15px; border-radius: 8px;" required>
                                 <option value="">Selecione a qualidade</option>
                                 <option value="Comum">⚪ Comum</option>
-                                <option value="Raro">🟢 Raro</option>
+                                <option value="Raro">🟡 Raro</option>
                                 <option value="Épico">🟣 Épico</option>
-                                <option value="Mítico">🟠 Mítico</option>
-                                <option value="Lendário">🔴 Lendário</option>
+                                <option value="Lendário">🟠 Lendário</option>
+                                <option value="Mítico">🔴 Mítico</option>
                                 <option value="Celestial">⭐ Celestial</option>
                             </select>
                         </div>
@@ -15704,6 +15858,493 @@
                             <span class="btn-option-desc">Atualiza apenas uma aba, mantendo outras intactas</span>
                         </button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CARDFLUX - Execução / Sorteio -->
+    <div class="modal fade" id="modalCardfluxExecucao" tabindex="-1" role="dialog" aria-modal="true" style="z-index: 1050 !important;">
+        <div class="modal-dialog modal-fullscreen-lg-down modal-lg" style="max-width: 900px; z-index: 1050 !important;">
+            <div class="modal-content" style="background: linear-gradient(135deg, rgba(15, 15, 20, 0.98) 0%, rgba(22, 33, 62, 0.98) 100%); border: 2px solid rgba(126, 211, 33, 0.4); border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.6);">
+                <div class="modal-header border-0" style="border-bottom: 2px solid rgba(126, 211, 33, 0.3); padding: 20px; background: rgba(126, 211, 33, 0.08);">
+                    <h5 class="modal-title" style="font-size: 1.4rem; font-weight: 700; color: #7ED321; text-shadow: 0 2px 6px rgba(0,0,0,0.5);">🎲 MODO EXECUÇÃO - Cardflux / FADO</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));"></button>
+                </div>
+                <div class="modal-body" style="padding: 25px; max-height: 85vh; overflow-y: auto;">
+                    <!-- Painel de Configuração -->
+                    <div style="background: linear-gradient(135deg, rgba(126, 211, 33, 0.15), rgba(126, 211, 33, 0.05)); padding: 20px; border-radius: 12px; border: 2px solid rgba(126, 211, 33, 0.3); margin-bottom: 25px;">
+                        <h6 style="color: #7ED321; font-weight: 700; margin-bottom: 15px; font-size: 1.1rem;">⚙️ CONFIGURAÇÃO DA SESSÃO</h6>
+                        
+                        <!-- Row 1: Deck e Distância -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <!-- Deck Ativo -->
+                            <div>
+                                <label style="color: #7ED321; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">🗂️ Deck Principal</label>
+                                <select id="cardfluxExecucaoDeck" onchange="calcularTotalCartas()" style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(126, 211, 33, 0.4); color: #7ED321; border-radius: 8px; padding: 10px; font-weight: 600; width: 100%; cursor: pointer;">
+                                    <option value="todos">📚 Todos os Decks</option>
+                                    <option value="jornada">🛣️ Jornada</option>
+                                    <option value="floresta">🌲 Floresta</option>
+                                    <option value="tundra">❄️ Tundra / Gelo</option>
+                                    <option value="deserto">🏜️ Deserto</option>
+                                    <option value="montanha">⛰️ Montanha</option>
+                                    <option value="pantano">🪱 Pântano</option>
+                                    <option value="costa">🏖️ Costa / Praia</option>
+                                    <option value="maraberto">🌊 Mar Aberto</option>
+                                    <option value="subterraneo">⛓️ Subterrâneo / Caverna</option>
+                                    <option value="vulcanico">🌋 Vulcânico / Infernal</option>
+                                    <option value="espiritual">✨ Plano Espiritual</option>
+                                    <option value="celestial">⭐ Plano Celestial</option>
+                                    <option value="sombrio">🌑 Plano Sombrio / Abissal</option>
+                                    <option value="guerra">⚔️ Guerra</option>
+                                    <option value="cerco">🏰 Cerco / Invasão</option>
+                                    <option value="perseguicao">🏃 Perseguição</option>
+                                    <option value="boss">👹 Boss / Eventos Lendários</option>
+                                    <option value="cidade">🏘️ Cidade / Urbano</option>
+                                    <option value="dungeon">🗝️ Dungeon / Ruínas</option>
+                                    <option value="presagios">🔮 Presságios / Plot</option>
+                                    <option value="social">🤝 Social / Diplomacia</option>
+                                </select>
+                            </div>
+
+                            <!-- Distância Base -->
+                            <div>
+                                <label style="color: #7ED321; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">🛣️ Distância Base</label>
+                                <select id="cardfluxDistancia" onchange="calcularTotalCartas()" style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(126, 211, 33, 0.4); color: #7ED321; border-radius: 8px; padding: 10px; font-weight: 600; width: 100%; cursor: pointer;">
+                                    <option value="1">🏠 Curta (1)</option>
+                                    <option value="2">📍 Média (2)</option>
+                                    <option value="4" selected>📍 Longa (4)</option>
+                                    <option value="6">🗺️ Muito Longa (6)</option>
+                                </select>
+                            </div>
+
+                            <!-- Ritmo -->
+                            <div>
+                                <label style="color: #7ED321; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">⏱️ Ritmo da Viagem</label>
+                                <select id="cardfluxRitmo" onchange="calcularTotalCartas()" style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(126, 211, 33, 0.4); color: #7ED321; border-radius: 8px; padding: 10px; font-weight: 600; width: 100%; cursor: pointer;">
+                                    <option value="-1">🐢 Cauteloso (-1)</option>
+                                    <option value="0" selected>🚶 Normal (0)</option>
+                                    <option value="1">🏃 Apressado (+1)</option>
+                                    <option value="2">🏇 Corrida (+2)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Row 2: Sorte, Intensidade, Total -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <!-- Modificador Sorte -->
+                            <div>
+                                <label style="color: #7ED321; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">🍀 Modificador Sorte</label>
+                                <input type="number" id="cardfluxExecucaoSorte" min="-5" max="5" value="0" step="1" onchange="calcularTotalCartas()" style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(126, 211, 33, 0.4); color: #7ED321; border-radius: 8px; padding: 10px; font-weight: 600; width: 100%; text-align: center;">
+                            </div>
+
+                            <!-- Intensidade Mínima -->
+                            <div>
+                                <label style="color: #7ED321; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">🔥 Intensidade Mín.</label>
+                                <input type="number" id="cardfluxExecucaoIntensidade" min="1" max="10" value="1" onchange="atualizarDeckExecucao()" style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(126, 211, 33, 0.4); color: #7ED321; border-radius: 8px; padding: 10px; font-weight: 600; width: 100%; text-align: center;">
+                            </div>
+
+                            <!-- Total de Cartas -->
+                            <div>
+                                <label style="color: #7ED321; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">🎰 Total de Cartas</label>
+                                <div id="cardfluxTotalDisplay" style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(126, 211, 33, 0.4); color: #7ED321; border-radius: 8px; padding: 10px; font-weight: 600; width: 100%; text-align: center; display: flex; align-items: center; justify-content: space-between;">
+                                    <span id="cardfluxTotalValor">4</span>
+                                    <small style="color: rgba(126, 211, 33, 0.7); font-size: 0.8rem;">(<span id="cardfluxCartasCompradas">0</span>/<span id="cardfluxTotalPlano">4</span>)</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <button type="button" class="btn" onclick="limparCooldownsCardflux()" style="background: rgba(233, 212, 96, 0.2); color: #e9d460; border: 1px solid rgba(233, 212, 96, 0.4); border-radius: 8px; padding: 10px 16px; font-weight: 600; flex: 1; transition: all 0.25s;" onmouseover="this.style.background='rgba(233, 212, 96, 0.4)'; this.style.boxShadow='0 0 12px rgba(233, 212, 96, 0.3)';" onmouseout="this.style.background='rgba(233, 212, 96, 0.2)'; this.style.boxShadow='';">
+                                ⏱️ Limpar Cooldowns
+                            </button>
+                            <button type="button" class="btn" onclick="reembaralharDeckCardflux()" style="background: rgba(126, 211, 33, 0.2); color: #7ED321; border: 1px solid rgba(126, 211, 33, 0.4); border-radius: 8px; padding: 10px 16px; font-weight: 600; flex: 1; transition: all 0.25s;" onmouseover="this.style.background='rgba(126, 211, 33, 0.4)'; this.style.boxShadow='0 0 12px rgba(126, 211, 33, 0.3)';" onmouseout="this.style.background='rgba(126, 211, 33, 0.2)'; this.style.boxShadow='';">
+                                🔄 Reembaralhar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Botão de Sorteio -->
+                    <div style="margin-bottom: 20px;">
+                        <button type="button" class="btn" onclick="sortearCartaCardflux()" style="background: linear-gradient(135deg, #7ED321, #9FD356); color: #1a1a2e; border: none; border-radius: 8px; padding: 18px; font-weight: 700; width: 100%; font-size: 1.2rem; transition: all 0.25s;" onmouseover="this.style.background='linear-gradient(135deg, #9FD356, #7ED321)'; this.style.transform='scale(1.01)'; this.style.boxShadow='0 8px 24px rgba(126, 211, 33, 0.4)';" onmouseout="this.style.background='linear-gradient(135deg, #7ED321, #9FD356)'; this.style.transform='scale(1)'; this.style.boxShadow='';">
+                            🎲 COMPRAR CARTA
+                        </button>
+                    </div>
+
+                    <!-- Painel Principal de Execução - Novo Layout -->
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 25px;">
+                        <!-- Coluna Esquerda: Carta Sorteada (com imagem destaque) -->
+                        <div id="cartaSorteadaContainer" style="
+                            background: linear-gradient(135deg, rgba(126, 211, 33, 0.15), rgba(52, 152, 219, 0.08));
+                            padding: 20px;
+                            border-radius: 12px;
+                            border: 2px solid rgba(126, 211, 33, 0.3);
+                            min-height: 400px;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            text-align: center;
+                            color: rgba(236, 240, 241, 0.6);
+                        ">
+                            <div style="font-size: 4rem; margin-bottom: 15px;">🂡</div>
+                            <p style="font-size: 1.1rem; font-weight: 500;">Nenhuma carta sorteada ainda...</p>
+                        </div>
+
+                        <!-- Coluna Direita: Histórico -->
+                        <div style="background: rgba(212, 175, 55, 0.08); padding: 20px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.3); display: flex; flex-direction: column;">
+                            <h6 style="color: #d4af37; font-weight: 700; margin-bottom: 15px; margin-top: 0;">📋 HISTÓRICO</h6>
+                            <div id="cardfluxHistorico" style="
+                                background: rgba(0,0,0,0.3);
+                                padding: 15px;
+                                border-radius: 8px;
+                                max-height: 380px;
+                                overflow-y: auto;
+                                font-size: 0.85rem;
+                                color: #ecf0f1;
+                                flex: 1;
+                            ">
+                                <span style="color: rgba(236, 240, 241, 0.5);">Nenhuma carta sorteada ainda...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Exibição Ampliada de Carta (Detalhes Completos) -->
+                    <div id="cartaExibidaContainer" style="
+                        background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(126, 211, 33, 0.08));
+                        padding: 25px;
+                        border-radius: 12px;
+                        border: 2px solid rgba(212, 175, 55, 0.4);
+                        display: none;
+                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+                    ">
+                        <div id="cartaExibida" style="color: #ecf0f1;"></div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0" style="border-top: 2px solid rgba(126, 211, 33, 0.3); padding: 15px 20px; background: rgba(126, 211, 33, 0.05);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background: rgba(100,110,120,0.8); border: none; border-radius: 6px; padding: 8px 20px; font-weight: 600;">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CARDFLUX - Criar/Editar Cartas -->
+    <div class="modal fade" id="modalCardfluxEditor" tabindex="-1" role="dialog" aria-modal="true" style="z-index: 1050 !important;">
+        <div class="modal-dialog modal-xl" style="max-width: 1140px; z-index: 1050 !important;">
+            <div class="modal-content" style="background: linear-gradient(135deg, rgba(15, 15, 20, 0.98) 0%, rgba(22, 33, 62, 0.98) 100%); border: 2px solid rgba(212,175,55,0.3); border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.6);">
+                <div class="modal-header border-0" style="border-bottom: 2px solid rgba(212,175,55,0.2); padding: 18px; background: rgba(212,175,55,0.05);">
+                    <h5 class="modal-title text-gold" style="font-size: 1.2rem; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.5);">🂡 Criar / Editar Carta Cardflux</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));"></button>
+                </div>
+                <div class="modal-body" style="padding: 18px; max-height: 80vh; overflow-y: auto; display: grid; grid-template-columns: 1fr 340px; grid-template-rows: auto auto auto; gap: 18px; grid-auto-flow: dense;">
+                    <!-- COLUNA ESQUERDA: FORMULÁRIO -->
+                    <form id="formCardfluxEditor" style="display: grid; grid-template-columns: 1fr; gap: 16px; grid-column: 1; grid-row: 1 / 3;">
+                        <!-- SEÇÃO RÁPIDA: Essenciais em destaque -->
+                        <div style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(52, 152, 219, 0.08) 100%); padding: 16px; border-radius: 10px; border: 2px solid rgba(212, 175, 55, 0.4); box-shadow: 0 8px 20px rgba(212, 175, 55, 0.15);">
+                            <label style="color: #d4af37; font-weight: 700; font-size: 0.85rem; margin-bottom: 10px; display: block; letter-spacing: 0.5px; text-transform: uppercase;">⚡ Dados Essenciais</label>
+                            
+                            <!-- Nome + Tipo em 2 cols -->
+                            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 10px;">
+                                <div>
+                                    <label style="color: rgba(212,175,55,0.9); font-size: 0.75rem; font-weight: 600; margin-bottom: 3px; display: block;">📝 Nome</label>
+                                    <input type="text" id="cardfluxNome" placeholder="O Ataque dos Goblins" required style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 8px 10px; font-size: 0.85rem; width: 100%; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(212,175,55,0.8)'; this.style.boxShadow='0 0 10px rgba(212,175,55,0.2)';" onblur="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.boxShadow='none';" oninput="atualizarPreviewCardflux();">
+                                </div>
+                                <div>
+                                    <label style="color: rgba(212,175,55,0.9); font-size: 0.75rem; font-weight: 600; margin-bottom: 3px; display: block;">⚡ Tipo</label>
+                                    <select id="cardfluxTipo" required style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 8px 6px; font-size: 0.8rem; width: 100%; cursor: pointer; transition: all 0.2s;" onchange="atualizarPreviewCardflux();">
+                                        <option value="">-- Selecionar Tipo --</option>
+                                        <option value="Emboscada">🗡️ Emboscada</option>
+                                        <option value="Obstáculo">🚧 Obstáculo</option>
+                                        <option value="Descoberta">💎 Descoberta</option>
+                                        <option value="Social">🤝 Social</option>
+                                        <option value="Catástrofe">💥 Catástrofe</option>
+                                        <option value="Presságio">⚠️ Presságio</option>
+                                        <option value="Boss">👹 Boss</option>
+                                        <option value="Mistério">🔍 Mistério</option>
+                                        <option value="Perseguição">🏃 Perseguição</option>
+                                        <option value="Sobrevivência">🌪️ Sobrevivência</option>
+                                        <option value="Exploração">🗺️ Exploração</option>
+                                        <option value="Interação">💬 Interação</option>
+                                        <option value="Encontro">👥 Encontro</option>
+                                        <option value="Evento Ambiental">🌍 Evento Ambiental</option>
+                                        <option value="Evento Sobrenatural">👻 Evento Sobrenatural</option>
+                                        <option value="Evento de Guerra">⚔️ Evento de Guerra</option>
+                                        <option value="Evento Político">👑 Evento Político</option>
+                                        <option value="Oportunidade">✨ Oportunidade</option>
+                                        <option value="Recompensa">🎁 Recompensa</option>
+                                        <option value="Dilema Moral">⚖️ Dilema Moral</option>
+                                        <option value="Investigação">🔎 Investigação</option>
+                                        <option value="Armadilha">🪤 Armadilha</option>
+                                        <option value="Comércio">💰 Comércio</option>
+                                        <option value="Ruína">🏚️ Ruína</option>
+                                        <option value="Ritual">🕯️ Ritual</option>
+                                        <option value="Corrupção">🌑 Corrupção</option>
+                                        <option value="Provação">🔥 Provação</option>
+                                        <option value="Caçada">🎯 Caçada</option>
+                                        <option value="Escolta">🛡️ Escolta</option>
+                                        <option value="Defesa">🏰 Defesa</option>
+                                        <option value="Invasão">⚔️ Invasão</option>
+                                        <option value="Fuga">💨 Fuga</option>
+                                        <option value="Puzzle / Enigma">🧩 Puzzle / Enigma</option>
+                                        <option value="Descanso / Acampamento">🏕️ Descanso / Acampamento</option>
+                                        <option value="Evento de Lore">📜 Evento de Lore</option>
+                                        <option value="Pressão Temporal">⏰ Pressão Temporal</option>
+                                        <option value="Evento Lendário">⭐ Evento Lendário</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Intensidade + Raridade em 2 cols -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                                <div>
+                                    <label style="color: rgba(212,175,55,0.9); font-size: 0.75rem; font-weight: 600; margin-bottom: 3px; display: block;">🔥 Intensidade</label>
+                                    <input type="number" id="cardfluxIntensidade" min="1" max="10" value="5" required style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 8px; font-size: 0.85rem; width: 100%; text-align: center; transition: all 0.2s;" oninput="atualizarPreviewCardflux();">
+                                </div>
+                                <div>
+                                    <label style="color: rgba(212,175,55,0.9); font-size: 0.75rem; font-weight: 600; margin-bottom: 3px; display: block;">✨ Raridade</label>
+                                    <select id="cardfluxRaridade" required style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 8px 6px; font-size: 0.8rem; width: 100%; cursor: pointer; transition: all 0.2s;" onchange="atualizarPreviewCardflux();">
+                                        <option value="Comum">⚪ Comum</option>
+                                        <option value="Raro">🟡 Raro</option>
+                                        <option value="Épico">🟣 Épico</option>
+                                        <option value="Lendário">🟠 Lendário</option>
+                                        <option value="Mítico">🔴 Mítico</option>
+                                        <option value="Celestial">⭐ Celestial</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Deck + Peso + CD em 3 cols -->
+                            <div style="display: grid; grid-template-columns: 1fr 0.8fr 0.8fr; gap: 10px;">
+                                <div>
+                                    <label style="color: rgba(212,175,55,0.9); font-size: 0.75rem; font-weight: 600; margin-bottom: 3px; display: block;">🗂️ Deck</label>
+                                    <select id="cardfluxDeck" required style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 6px; font-size: 0.75rem; width: 100%; cursor: pointer; transition: all 0.2s;" onchange="atualizarPreviewCardflux();">
+                                        <option value="jornada">🛣️ Jornada</option>
+                                        <option value="floresta">🌲 Floresta</option>
+                                        <option value="tundra">❄️ Tundra</option>
+                                        <option value="deserto">🏜️ Deserto</option>
+                                        <option value="montanha">⛰️ Montanha</option>
+                                        <option value="pantano">🪱 Pântano</option>
+                                        <option value="costa">🏖️ Costa</option>
+                                        <option value="maraberto">🌊 Mar Aberto</option>
+                                        <option value="subterraneo">⛓️ Subterrâneo</option>
+                                        <option value="vulcanico">🌋 Vulcânico</option>
+                                        <option value="espiritual">✨ Espiritual</option>
+                                        <option value="celestial">⭐ Celestial</option>
+                                        <option value="sombrio">🌑 Sombrio</option>
+                                        <option value="guerra">⚔️ Guerra</option>
+                                        <option value="cerco">🏰 Cerco</option>
+                                        <option value="perseguicao">🏃 Perseguição</option>
+                                        <option value="boss">👹 Boss</option>
+                                        <option value="cidade">🏘️ Cidade</option>
+                                        <option value="dungeon">🗝️ Dungeon</option>
+                                        <option value="presagios">🔮 Presságios</option>
+                                        <option value="social">🤝 Social</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="color: rgba(212,175,55,0.9); font-size: 0.75rem; font-weight: 600; margin-bottom: 3px; display: block;">⚙️ Peso</label>
+                                    <input type="number" id="cardfluxPeso" min="0.1" max="10" value="1" step="0.1" required style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 6px; font-size: 0.8rem; width: 100%; text-align: center; transition: all 0.2s;" oninput="atualizarPreviewCardflux();">
+                                </div>
+                                <div>
+                                    <label style="color: rgba(212,175,55,0.9); font-size: 0.75rem; font-weight: 600; margin-bottom: 3px; display: block;">⏱️ CD</label>
+                                    <input type="number" id="cardfluxCooldown" min="0" value="0" required style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 6px; font-size: 0.8rem; width: 100%; text-align: center; transition: all 0.2s;" oninput="atualizarPreviewCardflux();">
+                                </div>
+                            </div>
+
+                            <!-- Status + Tags quick -->
+                            <div style="display: flex; gap: 10px; margin-top: 10px; align-items: center;">
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: #ecf0f1; margin: 0;">
+                                    <input type="checkbox" id="cardfluxAtiva" checked style="cursor: pointer; width: 14px; height: 14px;" onchange="atualizarPreviewCardflux();">
+                                    <span style="font-weight: 600; font-size: 0.85rem;">✅ Ativa</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- SEÇÃO: Tags e Imagem -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div style="background: rgba(212, 175, 55, 0.08); padding: 14px; border-radius: 10px; border: 1px solid rgba(212, 175, 55, 0.2);">
+                                <label style="color: #d4af37; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; display: block;">🏷️ Tags</label>
+                                <input type="text" id="cardfluxTags" placeholder="encontro, combate, mistério" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.3); color: #fff; border-radius: 8px; padding: 8px; font-size: 0.85rem; width: 100%; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(212,175,55,0.6)';" onblur="this.style.borderColor='rgba(212,175,55,0.3)';" oninput="atualizarPreviewCardflux();">
+                            </div>
+
+                            <div style="background: rgba(212, 175, 55, 0.08); padding: 14px; border-radius: 10px; border: 1px solid rgba(212, 175, 55, 0.2);">
+                                <label style="color: #d4af37; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; display: block;">🖼️ URL Imagem</label>
+                                <input type="url" id="cardfluxImagemUrl" placeholder="https://..." style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.3); color: #fff; border-radius: 8px; padding: 8px; font-size: 0.85rem; width: 100%; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(212,175,55,0.6)';" onblur="this.style.borderColor='rgba(212,175,55,0.3)';" oninput="atualizarPreviewCardflux();">
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- SEÇÃO: Conteúdo com abas compactas - LARGURA TOTAL -->
+                    <div style="border-radius: 10px; border: 2px solid rgba(212, 175, 55, 0.3); overflow: hidden; grid-column: 1 / -1; grid-row: 3; background: linear-gradient(135deg, rgba(15,15,20,0.8), rgba(22,33,62,0.8)); box-shadow: 0 8px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(212,175,55,0.1);">
+                        <ul class="nav" role="tablist" style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), rgba(52, 152, 219, 0.08)); margin: 0; display: flex; border-bottom: 2px solid rgba(212, 175, 55, 0.25); padding: 0;">
+                            <li class="nav-item" role="presentation" style="flex: 1;">
+                                <button class="nav-link active" id="cardfluxConteudo-tab" data-bs-toggle="tab" data-bs-target="#cardfluxConteudo" type="button" role="tab" style="color: #d4af37; font-weight: 700; padding: 12px 16px; text-align: center; font-size: 0.9rem; width: 100%; border: none; background: transparent; transition: all 0.25s; position: relative;" onmouseover="this.style.color='#f0c850'; this.style.background='rgba(212,175,55,0.1)';" onmouseout="this.style.color='#d4af37'; this.style.background='transparent';">📖 Narrativa</button>
+                            </li>
+                            <li class="nav-item" role="presentation" style="flex: 1; border-left: 1px solid rgba(212, 175, 55, 0.15);">
+                                <button class="nav-link" id="cardfluxResultados-tab" data-bs-toggle="tab" data-bs-target="#cardfluxResultados" type="button" role="tab" style="color: rgba(212,175,55,0.5); font-weight: 700; padding: 12px 16px; text-align: center; font-size: 0.9rem; width: 100%; border: none; background: transparent; transition: all 0.25s; position: relative;" onmouseover="this.style.color='rgba(212,175,55,0.8)'; this.style.background='rgba(212,175,55,0.08)';" onmouseout="this.style.color='rgba(212,175,55,0.5)'; this.style.background='transparent';">🎲 Resultados</button>
+                            </li>
+                            <li class="nav-item" role="presentation" style="flex: 1; border-left: 1px solid rgba(212, 175, 55, 0.15);">
+                                <button class="nav-link" id="cardfluxRecompensas-tab" data-bs-toggle="tab" data-bs-target="#cardfluxRecompensas" type="button" role="tab" style="color: rgba(212,175,55,0.5); font-weight: 700; padding: 12px 16px; text-align: center; font-size: 0.9rem; width: 100%; border: none; background: transparent; transition: all 0.25s; position: relative;" onmouseover="this.style.color='rgba(212,175,55,0.8)'; this.style.background='rgba(212,175,55,0.08)';" onmouseout="this.style.color='rgba(212,175,55,0.5)'; this.style.background='transparent';">🎁 Consequências</button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" style="padding: 16px; max-height: 320px; overflow-y: auto;">
+                            <!-- ABA 1: NARRATIVA -->
+                            <div class="tab-pane fade show active" id="cardfluxConteudo" role="tabpanel">
+                                <div style="margin-bottom: 12px;">
+                                    <label style="color: #d4af37; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">📜 Descrição Geral</label>
+                                    <textarea id="cardfluxDescricao" rows="2" placeholder="Descreva o evento principal de forma concisa e envolvente..." style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.25); color: #ecf0f1; border-radius: 6px; padding: 10px; font-size: 0.8rem; width: 100%; resize: vertical; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(212,175,55,0.5)'; this.style.boxShadow='0 0 8px rgba(212,175,55,0.1)';" onblur="this.style.borderColor='rgba(212,175,55,0.25)'; this.style.boxShadow='none';"></textarea>
+                                </div>
+
+                                <div style="margin-bottom: 12px;">
+                                    <label style="color: #3498db; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">🎭 Como Apresentar</label>
+                                    <textarea id="cardfluxContexto" rows="2" placeholder="Contexto, atmosfera e como os jogadores descobrem/recebem a missão..." style="background: rgba(52,152,219,0.08); border: 1px solid rgba(52,152,219,0.25); color: #ecf0f1; border-radius: 6px; padding: 10px; font-size: 0.8rem; width: 100%; resize: vertical; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(52,152,219,0.5)'; this.style.boxShadow='0 0 8px rgba(52,152,219,0.1)';" onblur="this.style.borderColor='rgba(52,152,219,0.25)'; this.style.boxShadow='none';"></textarea>
+                                </div>
+
+                                <div>
+                                    <label style="color: #f39c12; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">⚔️ Mecânicas & Desafios</label>
+                                    <textarea id="cardfluxTestes" rows="2" placeholder="Testes necessários, dificuldades, combates, puzzles, ou obstáculos..." style="background: rgba(243,156,18,0.08); border: 1px solid rgba(243,156,18,0.25); color: #ecf0f1; border-radius: 6px; padding: 10px; font-size: 0.8rem; width: 100%; resize: vertical; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(243,156,18,0.5)'; this.style.boxShadow='0 0 8px rgba(243,156,18,0.1)';" onblur="this.style.borderColor='rgba(243,156,18,0.25)'; this.style.boxShadow='none';"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- ABA 2: RESULTADOS -->
+                            <div class="tab-pane fade" id="cardfluxResultados" role="tabpanel">
+                                <div style="margin-bottom: 12px;">
+                                    <label style="color: #7ED321; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">✅ Se Conseguirem</label>
+                                    <textarea id="cardfluxSucessos" rows="3" placeholder="Descreva o que acontece se os jogadores tiverem sucesso... Recompensas, novos caminhos, aliados ganhos..." style="background: rgba(126,211,33,0.08); border: 1px solid rgba(126,211,33,0.3); color: #7ED321; border-radius: 6px; padding: 10px; font-size: 0.8rem; width: 100%; margin-bottom: 12px; resize: vertical; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(126,211,33,0.5)'; this.style.boxShadow='0 0 8px rgba(126,211,33,0.15)';" onblur="this.style.borderColor='rgba(126,211,33,0.3)'; this.style.boxShadow='none';"></textarea>
+                                </div>
+
+                                <div>
+                                    <label style="color: #E74C3C; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">❌ Se Falharem</label>
+                                    <textarea id="cardfluxFalhas" rows="3" placeholder="Descreva as consequências da falha... Inimigos mais fortes, perda de aliados, limites de tempo..." style="background: rgba(231,76,60,0.08); border: 1px solid rgba(231,76,60,0.3); color: #E74C3C; border-radius: 6px; padding: 10px; font-size: 0.8rem; width: 100%; resize: vertical; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(231,76,60,0.5)'; this.style.boxShadow='0 0 8px rgba(231,76,60,0.15)';" onblur="this.style.borderColor='rgba(231,76,60,0.3)'; this.style.boxShadow='none';"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- ABA 3: CONSEQUÊNCIAS -->
+                            <div class="tab-pane fade" id="cardfluxRecompensas" role="tabpanel">
+                                <div style="margin-bottom: 12px;">
+                                    <label style="color: #F0C850; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">🎁 Recompensas</label>
+                                    <textarea id="cardfluxRecompensas" rows="2" placeholder="Ouro, XP, itens mágicos, favores, informações secretas..." style="background: rgba(240,200,80,0.08); border: 1px solid rgba(240,200,80,0.3); color: #F0C850; border-radius: 6px; padding: 10px; font-size: 0.8rem; width: 100%; margin-bottom: 12px; resize: vertical; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(240,200,80,0.5)'; this.style.boxShadow='0 0 8px rgba(240,200,80,0.15)';" onblur="this.style.borderColor='rgba(240,200,80,0.3)'; this.style.boxShadow='none';"></textarea>
+                                </div>
+
+                                <div style="margin-bottom: 12px;">
+                                    <label style="color: #E74C3C; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">⚠️ Impacto no Mundo</label>
+                                    <textarea id="cardfluxConsequencias" rows="2" placeholder="Mudanças permanentes, inimigos ganhados, fações aliadas, segredos revelados..." style="background: rgba(231,76,60,0.08); border: 1px solid rgba(231,76,60,0.3); color: #E74C3C; border-radius: 6px; padding: 10px; font-size: 0.8rem; width: 100%; margin-bottom: 12px; resize: vertical; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(231,76,60,0.5)'; this.style.boxShadow='0 0 8px rgba(231,76,60,0.15)';" onblur="this.style.borderColor='rgba(231,76,60,0.3)'; this.style.boxShadow='none';"></textarea>
+                                </div>
+
+                                <div>
+                                    <label style="color: #9B59B6; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">🔮 Ganchos Narrativos</label>
+                                    <textarea id="cardfluxGanchos" rows="2" placeholder="Mistérios adicionais, próximas missões, personagens importantes, pistas..." style="background: rgba(155,89,182,0.08); border: 1px solid rgba(155,89,182,0.3); color: #9B59B6; border-radius: 6px; padding: 10px; font-size: 0.8rem; width: 100%; resize: vertical; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(155,89,182,0.5)'; this.style.boxShadow='0 0 8px rgba(155,89,182,0.15)';" onblur="this.style.borderColor='rgba(155,89,182,0.3)'; this.style.boxShadow='none';"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COLUNA DIREITA: PREVIEW EM TEMPO REAL -->
+                    <div id="cardfluxPreviewContainer" style="
+                        display: flex;
+                        flex-direction: column;
+                        gap: 12px;
+                        grid-column: 2;
+                        grid-row: 1 / 3;
+                    ">
+                        <div style="
+                            background: linear-gradient(135deg, rgba(15, 15, 20, 0.95), rgba(22, 33, 62, 0.95));
+                            border: 1px solid rgba(212, 175, 55, 0.25);
+                            border-radius: 12px;
+                            overflow: hidden;
+                            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+                        ">
+                            <!-- Imagem Preview -->
+                            <div id="cardfluxPreviewImagem" style="
+                                width: 100%;
+                                height: 140px;
+                                background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(52, 152, 219, 0.08));
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 3rem;
+                                border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+                            ">🂡</div>
+
+                            <!-- Conteúdo Preview -->
+                            <div style="padding: 14px;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 10px;">
+                                    <h3 id="cardfluxPreviewNome" style="
+                                        margin: 0;
+                                        color: #ecf0f1;
+                                        font-size: 0.95rem;
+                                        font-weight: 700;
+                                        flex: 1;
+                                        word-break: break-word;
+                                        line-height: 1.2;
+                                    ">Sem nome</h3>
+                                    <span id="cardfluxPreviewRaridade" style="
+                                        background: linear-gradient(135deg, #95A5A6dd, #95A5A6);
+                                        color: white;
+                                        padding: 8px 14px;
+                                        border-radius: 10px;
+                                        font-size: 0.75rem;
+                                        font-weight: 800;
+                                        white-space: nowrap;
+                                        flex-shrink: 0;
+                                        box-shadow: 0 6px 16px rgba(149, 165, 166, 0.33), inset 0 1px 0 rgba(255,255,255,0.3);
+                                        border: 1px solid rgba(255,255,255,0.2);
+                                        text-transform: uppercase;
+                                        letter-spacing: 1px;
+                                        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                                    ">Comum</span>
+                                </div>
+
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
+                                    <div style="background: rgba(52, 152, 219, 0.15); border-radius: 6px; padding: 8px; text-align: center; font-size: 0.75rem;">
+                                        <div style="color: rgba(236, 240, 241, 0.5); margin-bottom: 2px;">Tipo</div>
+                                        <div style="color: #3498db; font-weight: 600;" id="cardfluxPreviewTipo">Flash</div>
+                                    </div>
+                                    <div style="background: rgba(220, 53, 69, 0.15); border-radius: 6px; padding: 8px; text-align: center; font-size: 0.75rem;">
+                                        <div style="color: rgba(236, 240, 241, 0.5); margin-bottom: 2px;">Intens.</div>
+                                        <div style="color: #dc3545; font-weight: 600;" id="cardfluxPreviewIntensidade">5</div>
+                                    </div>
+                                </div>
+
+                                <div style="background: rgba(212, 175, 55, 0.1); border-radius: 6px; padding: 8px; margin-bottom: 10px; font-size: 0.8rem;">
+                                    <div style="color: rgba(236, 240, 241, 0.5); margin-bottom: 2px;">Deck</div>
+                                    <div style="color: #d4af37; font-weight: 600;" id="cardfluxPreviewDeck">-</div>
+                                </div>
+
+                                <div style="padding-top: 8px; border-top: 1px solid rgba(212, 175, 55, 0.15); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem;">
+                                    <span style="
+                                        background: linear-gradient(135deg, #7ED321dd, #7ED321);
+                                        color: white;
+                                        padding: 6px 12px;
+                                        border-radius: 10px;
+                                        font-weight: 700;
+                                        border: 1px solid rgba(255,255,255,0.2);
+                                        box-shadow: 0 6px 16px rgba(126, 211, 33, 0.33), inset 0 1px 0 rgba(255,255,255,0.3);
+                                        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                                        display: inline-block;
+                                    " id="cardfluxPreviewStatus">✓ ATIVA</span>
+                                    <span style="opacity: 0.5;">⭐</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info compacta -->
+                        <div style="background: rgba(212, 175, 55, 0.08); padding: 10px; border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.2); font-size: 0.75rem; color: rgba(236, 240, 241, 0.6);">
+                            <div style="margin-bottom: 6px;">
+                                <strong style="color: #d4af37;">Peso:</strong> <span id="cardfluxPreviewPeso">1</span>
+                                <strong style="color: #d4af37; margin-left: 8px;">CD:</strong> <span id="cardfluxPreviewCD">0</span>
+                            </div>
+                            <div id="cardfluxPreviewTags" style="display: flex; flex-wrap: wrap; gap: 4px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0" style="border-top: 2px solid rgba(212,175,55,0.2); padding: 10px 14px; background: linear-gradient(135deg, rgba(212,175,55,0.05), rgba(52,152,219,0.03)); display: flex; gap: 6px;">
+                    <button type="button" class="btn btn-sm" data-bs-dismiss="modal" style="background: rgba(100,110,120,0.6); color: #fff; border: none; border-radius: 5px; padding: 6px 14px; font-weight: 600; font-size: 0.8rem; transition: all 0.2s; cursor: pointer;" onmouseover="this.style.background='rgba(100,110,120,0.8)'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='rgba(100,110,120,0.6)'; this.style.transform='translateY(0)';">Cancelar</button>
+                    
+                    <button type="button" class="btn btn-sm" onclick="deletarCartaCardfluxEditor()" style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.4), rgba(192, 57, 43, 0.4)); color: #ff9999; border: 1px solid rgba(231,76,60,0.4); border-radius: 5px; padding: 6px 12px; font-weight: 600; font-size: 0.8rem; transition: all 0.2s; cursor: pointer; display: none; margin-left: auto;" id="btnDeletarCardflux" onmouseover="this.style.background='linear-gradient(135deg, rgba(231, 76, 60, 0.6), rgba(192, 57, 43, 0.6))'; this.style.transform='translateY(-1px)'; this.style.color='#fff';" onmouseout="this.style.background='linear-gradient(135deg, rgba(231, 76, 60, 0.4), rgba(192, 57, 43, 0.4))'; this.style.transform='translateY(0)'; this.style.color='#ff9999';">🗑️ Deletar</button>
+                    
+                    <button type="button" class="btn btn-sm" onclick="salvarCartaCardfluxEditor()" style="background: linear-gradient(135deg, #d4af37, #f0c850); color: #1a1a2e; border: none; border-radius: 5px; padding: 8px 22px; font-weight: 700; font-size: 0.85rem; transition: all 0.25s; box-shadow: 0 4px 12px rgba(212,175,55,0.3); cursor: pointer;" onmouseover="this.style.background='linear-gradient(135deg, #f0c850, #d4af37)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(212,175,55,0.5)';" onmouseout="this.style.background='linear-gradient(135deg, #d4af37, #f0c850)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(212,175,55,0.3)';">💾 Salvar</button>
                 </div>
             </div>
         </div>
@@ -23648,6 +24289,7 @@
                 return dados;
             })(),
             origens: parseJsonSeguro('redungeon_origens'),
+            cardflux: parseJsonSeguro('redungeon_cardflux'),
             regioes: parseJsonSeguro('redungeon_regioes'),
             cenarios: parseJsonSeguro('redungeon_cenarios'),
             racas: parseJsonSeguro('redungeon_racas'),
@@ -23840,6 +24482,7 @@
             const mapaAbas = {
                 'Mesa': { key: 'redungeon_Mesa', nome: '📅 História' },
                 'origens': { key: 'redungeon_origens', nome: '🌍 Origens' },
+                'cardflux': { key: 'redungeon_cardflux', nome: '🂡 Cardflux' },
                 'regioes': { key: 'redungeon_regioes', nome: '🌍 Regiões' },
                 'cenarios': { key: 'redungeon_cenarios', nome: '🏛️ Cenários' },
                 'racas': { key: 'redungeon_racas', nome: '👥 Raças' },
@@ -24490,7 +25133,7 @@
                 'comum': { emoji: '🔵', cor: '#3498db' },
                 'raro': { emoji: '🟢', cor: '#2ecc71' },
                 'epica': { emoji: '🟣', cor: '#9b59b6' },
-                'lendario': { emoji: '🟠', cor: '#e67e22' },
+                'lendario': { emoji: '🟠', cor: '#F39C12' },
                 'mitica': { emoji: '🔴', cor: '#e74c3c' },
                 'celestial': { emoji: '🟡', cor: '#f39c12' }
             };
@@ -26618,7 +27261,7 @@
                     'incomum': { cor: '#4caf50', bg: 'rgba(76, 175, 80, 0.15)', texto: '🟢 Incomum', classe: 'rarity-incomum' },
                     'raro': { cor: '#2196f3', bg: 'rgba(33, 150, 243, 0.15)', texto: '🔵 Raro', classe: 'rarity-raro' },
                     'epico': { cor: '#9c27b0', bg: 'rgba(156, 39, 176, 0.15)', texto: '💜 Épico', classe: 'rarity-epico' },
-                    'lendario': { cor: '#ffc107', bg: 'rgba(255, 193, 7, 0.15)', texto: '⭐ Lendário', classe: 'rarity-lendario' }
+                    'lendario': { cor: '#F39C12', bg: 'rgba(243, 156, 18, 0.15)', texto: '🟠 Lendário', classe: 'rarity-lendario' }
                 };
                 const rarity = raridadeConfig[classe.raridade] || { cor: '#d4af37', bg: 'rgba(212,175,55,0.15)', texto: '❓ Desconhecida', classe: 'rarity-comum' };
                 
@@ -26997,7 +27640,7 @@
                     'incomum': { cor: '#4caf50', bg: 'rgba(76, 175, 80, 0.15)', texto: '🟢 Incomum', classe: 'rarity-incomum' },
                     'raro': { cor: '#2196f3', bg: 'rgba(33, 150, 243, 0.15)', texto: '🔵 Raro', classe: 'rarity-raro' },
                     'epico': { cor: '#9c27b0', bg: 'rgba(156, 39, 176, 0.15)', texto: '💜 Épico', classe: 'rarity-epico' },
-                    'lendario': { cor: '#ffc107', bg: 'rgba(255, 193, 7, 0.15)', texto: '⭐ Lendário', classe: 'rarity-lendario' }
+                    'lendario': { cor: '#F39C12', bg: 'rgba(243, 156, 18, 0.15)', texto: '🟠 Lendário', classe: 'rarity-lendario' }
                 };
                 const rarity = raridadeConfig[classe.raridade] || { cor: '#d4af37', bg: 'rgba(212,175,55,0.15)', texto: '❓ Desconhecida', classe: 'rarity-comum' };
                 
@@ -27986,7 +28629,7 @@
                 'Comum': { bg: 'rgba(52, 152, 219, 0.3)', color: '#3498db', border: '#3498db', shadowColor: 'rgba(52, 152, 219, 0.3)' },
                 'Raro': { bg: 'rgba(46, 204, 113, 0.3)', color: '#2ecc71', border: '#2ecc71', shadowColor: 'rgba(46, 204, 113, 0.3)' },
                 'Épico': { bg: 'rgba(155, 89, 182, 0.3)', color: '#9b59b6', border: '#9b59b6', shadowColor: 'rgba(155, 89, 182, 0.3)' },
-                'Lendário': { bg: 'rgba(230, 126, 34, 0.3)', color: '#e67e22', border: '#e67e22', shadowColor: 'rgba(230, 126, 34, 0.3)' },
+                'Lendário': { bg: 'rgba(243, 156, 18, 0.3)', color: '#F39C12', border: '#F39C12', shadowColor: 'rgba(243, 156, 18, 0.3)' },
                 'Mítico': { bg: 'rgba(231, 76, 60, 0.3)', color: '#e74c3c', border: '#e74c3c', shadowColor: 'rgba(231, 76, 60, 0.3)' },
                 'Celestial': { bg: 'rgba(212, 175, 55, 0.3)', color: '#f0c850', border: '#f0c850', shadowColor: 'rgba(212, 175, 55, 0.3)' }
             };
@@ -29336,7 +29979,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 'Comum': { border: '#3498db', bg: 'rgba(52, 152, 219, 0.15)' },
                 'Raro': { border: '#2ecc71', bg: 'rgba(46, 204, 113, 0.15)' },
                 'Épico': { border: '#9b59b6', bg: 'rgba(155, 89, 182, 0.15)' },
-                'Lendário': { border: '#e67e22', bg: 'rgba(230, 126, 34, 0.15)' },
+                'Lendário': { border: '#F39C12', bg: 'rgba(243, 156, 18, 0.15)' },
                 'Mítico': { border: '#e74c3c', bg: 'rgba(231, 76, 60, 0.15)' },
                 'Celestial': { border: '#f0c850', bg: 'rgba(240, 200, 80, 0.15)' }
             };
@@ -40319,7 +40962,7 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
                 'Raro': '#2ecc71',
                 'Épico': '#9b59b6',
                 'Mítico': '#e74c3c',
-                'Lendário': '#e67e22',
+                'Lendário': '#F39C12',
                 'Celestial': '#f0c850'
             };
 
@@ -52328,6 +52971,1373 @@ ${arteGerada.justificativa}`;
         console.log('  2. Abrir o modal de edição');
         console.log('  3. Verificar se os campos foram preenchidos');
         console.log('🧪 =======================================\n');
+
+        // ============================================
+        // SISTEMA COMPLETO CARDFLUX / FADO
+        // ============================================
+
+        // Inicializar estrutura de dados
+        function inicializarCardfluxEstrutura() {
+            if (!armazenar.cardflux) armazenar.cardflux = [];
+            
+            // Garantir que existe ao menos estrutura básica
+            if (armazenar.cardflux.length === 0) {
+                console.log('📇 Inicializando estrutura Cardflux...');
+                
+                // Criar carta de exemplo para demonstração
+                const cartaExemplo = {
+                    id: gerarIdCarta(),
+                    nome: 'Assalto à Caravana',
+                    tipo: 'Flash Event',
+                    intensidade: 7,
+                    deck: 'jornada',
+                    raridade: 'Rara',
+                    tags: ['encontro', 'combate', 'inimigos'],
+                    descricao: 'A jornada é interrompida por um grupo de banditos que atacam a caravana.',
+                    contexto: 'Enquanto viajam pela estrada, os personagens ouvem gritos e cascos de cavalos galopando.',
+                    testes: 'Percepção para notar emboscada, Atletismo para se defender, Inteligência para estratégia de combate.',
+                    sucessos: 'Os personagens repelem o ataque e podem capturar ou desabilitara os banditos.',
+                    falhas: 'Perdem suprimentos valiosos ou sofrem ferimentos significativos.',
+                    recompensas: 'Ouro dos banditos, possível artefato raro, confiança de aliados comerciantes.',
+                    consequencias: 'Banditos podem procurar vingança, reputação melhorada em cidades.',
+                    ganchos: 'Descobrir quem contratou os banditos, levar informações a um feudo afetado.',
+                    cooldown: 3,
+                    pesoSorteio: 1.5,
+                    ativa: true,
+                    dataCriacao: new Date().toISOString()
+                };
+
+                armazenar.cardflux.push(cartaExemplo);
+                localStorage.setItem('redungeon_cardflux', JSON.stringify(armazenar.cardflux));
+                console.log('✅ Carta de exemplo criada! Você pode começar a editar e criar mais cartas.');
+            }
+        }
+
+        // Decks padrão disponíveis
+        const DECKS_DISPONIVEIS = [
+            // Ambientes Naturais
+            { id: 'jornada', nome: '🛣️ Jornada', cor: '#4A90E2' },
+            { id: 'floresta', nome: '🌲 Floresta', cor: '#2ECC71' },
+            { id: 'tundra', nome: '❄️ Tundra / Gelo', cor: '#50E3C2' },
+            { id: 'deserto', nome: '🏜️ Deserto', cor: '#F5A623' },
+            { id: 'montanha', nome: '⛰️ Montanha', cor: '#95A5A6' },
+            { id: 'pantano', nome: '🪱 Pântano', cor: '#8E7E6F' },
+            { id: 'costa', nome: '🏖️ Costa / Praia', cor: '#3498DB' },
+            { id: 'maraberto', nome: '🌊 Mar Aberto', cor: '#1E90FF' },
+            { id: 'subterraneo', nome: '⛓️ Subterrâneo / Caverna', cor: '#34495E' },
+            { id: 'vulcanico', nome: '🌋 Vulcânico / Infernal', cor: '#E74C3C' },
+            
+            // Planos Místicos
+            { id: 'espiritual', nome: '✨ Plano Espiritual', cor: '#F8E71C' },
+            { id: 'celestial', nome: '⭐ Plano Celestial', cor: '#FFD700' },
+            { id: 'sombrio', nome: '🌑 Plano Sombrio / Abissal', cor: '#2C3E50' },
+            
+            // Eventos de Combate e Conflito
+            { id: 'guerra', nome: '⚔️ Guerra', cor: '#C0392B' },
+            { id: 'cerco', nome: '🏰 Cerco / Invasão', cor: '#D35400' },
+            { id: 'perseguicao', nome: '🏃 Perseguição', cor: '#E67E22' },
+            { id: 'boss', nome: '👹 Boss / Eventos Lendários', cor: '#8B0000' },
+            
+            // Ambientes Urbanos e Estruturados
+            { id: 'cidade', nome: '🏘️ Cidade / Urbano', cor: '#9013FE' },
+            { id: 'dungeon', nome: '🗝️ Dungeon / Ruínas', cor: '#7B68EE' },
+            
+            // Eventos Especiais
+            { id: 'presagios', nome: '🔮 Presságios / Plot', cor: '#B19CD9' },
+            { id: 'social', nome: '🤝 Social / Diplomacia', cor: '#6C5B7B' }
+        ];
+
+        // Tipos de cartas
+        const TIPOS_CARTA = ['Flash Event', 'Scene Event'];
+
+        // Raridades
+        const RARIDADES = ['Comum', 'Raro', 'Épico', 'Lendário', 'Mítico', 'Celestial'];
+
+        /**
+         * Gerar ID único para carta
+         */
+        function gerarIdCarta() {
+            return 'card_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        /**
+         * Criar nova carta vazia
+         */
+        function criarCartaVazia() {
+            return {
+                id: gerarIdCarta(),
+                nome: '',
+                tipo: 'Flash Event',
+                intensidade: 5,
+                deck: 'jornada',
+                raridade: 'Comum',
+                tags: [],
+                descricao: '',
+                contexto: '',
+                testes: '',
+                sucessos: '',
+                falhas: '',
+                recompensas: '',
+                consequencias: '',
+                ganchos: '',
+                imagemUrl: '',
+                cooldown: 0,
+                pesoSorteio: 1,
+                ativa: true,
+                dataCriacao: new Date().toISOString()
+            };
+        }
+
+        /**
+         * Abrir modal para criar/editar carta
+         */
+        function abrirModalCardfluxUnificado(cartaId = null) {
+            inicializarCardfluxEstrutura();
+            
+            let carta = cartaId ? armazenar.cardflux.find(c => c.id === cartaId) : criarCartaVazia();
+            
+            if (!carta && cartaId) {
+                alert('❌ Carta não encontrada!');
+                return;
+            }
+
+            // Mostrar modal ou alert enquanto desenvolvemos a interface
+            if (cartaId) {
+                alert(`📝 Editando: ${carta.nome}\n\nInterfaz de edição em desenvolvimento...`);
+            } else {
+                alert(`🂡 Nova Carta Cardflux\n\nInterfaz de criação em desenvolvimento...`);
+            }
+        }
+
+        /**
+         * Converter HEX para RGB
+         */
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? [
+                parseInt(result[1], 16),
+                parseInt(result[2], 16),
+                parseInt(result[3], 16)
+            ] : [0, 0, 0];
+        }
+
+        /**
+         * Ajustar brilho de cor HEX
+         */
+        function ajustarBrilho(hex, factor) {
+            const [r, g, b] = hexToRgb(hex);
+            const nr = Math.min(255, Math.round(r * factor));
+            const ng = Math.min(255, Math.round(g * factor));
+            const nb = Math.min(255, Math.round(b * factor));
+            return '#' + [nr, ng, nb].map(x => {
+                const hex = x.toString(16);
+                return hex.length === 1 ? '0' + hex : hex;
+            }).join('');
+        }
+
+        /**
+         * Renderizar grid de cartas
+         */
+        function renderizarGridCardflux(filtro = null) {
+            inicializarCardfluxEstrutura();
+            
+            const gridContainer = document.getElementById('gridCardflux');
+            if (!gridContainer) return;
+
+            let cartas = armazenar.cardflux || [];
+
+            // Aplicar filtro se fornecido
+            if (filtro && filtro.trim()) {
+                const termoFiltro = filtro.toLowerCase();
+                cartas = cartas.filter(c => 
+                    c.nome.toLowerCase().includes(termoFiltro) ||
+                    (c.tags && c.tags.some(t => t.toLowerCase().includes(termoFiltro)))
+                );
+            }
+
+            if (cartas.length === 0) {
+                gridContainer.innerHTML = `
+                    <div class="origem-empty-state section-cardflux" style="grid-column: 1 / -1;">
+                        <div class="origem-empty-state-icon">🂡</div>
+                        <p class="origem-empty-state-text">Nenhuma carta no deck. Comece criando uma nova!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            gridContainer.innerHTML = cartas.map(carta => {
+                const corRaridade = obterCorRaridade(carta.raridade);
+                const corIntensidade = obterCorIntensidade(carta.intensidade);
+                const temImagem = carta.imagemUrl ? true : false;
+                
+                return `
+                    <div class="cardflux-premium" onclick="abrirModalCardfluxUnificado('${carta.id}')" style="
+                        position: relative;
+                        background: linear-gradient(135deg, rgba(15, 15, 20, 0.95), rgba(22, 33, 62, 0.95));
+                        border: 1px solid rgba(212, 175, 55, 0.25);
+                        border-radius: 16px;
+                        cursor: pointer;
+                        overflow: hidden;
+                        display: flex;
+                        flex-direction: column;
+                        min-height: 380px;
+                        transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(212, 175, 55, 0.1);
+                    " onmouseover="this.style.boxShadow='0 16px 48px rgba(212, 175, 55, 0.15), inset 0 1px 0 rgba(212, 175, 55, 0.2)'; this.style.borderColor='rgba(212, 175, 55, 0.5)'; this.style.transform='translateY(-4px)'; const img = this.querySelector('img'); if(img) img.style.transform='scale(1.08)';
+                        " onmouseout="this.style.boxShadow='0 8px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(212, 175, 55, 0.1)'; this.style.borderColor='rgba(212, 175, 55, 0.25)'; this.style.transform='translateY(0)'; const img = this.querySelector('img'); if(img) img.style.transform='scale(1)';
+                        ">
+                        
+                        <!-- BANNER/IMAGEM TOPO -->
+                        ${temImagem ? `
+                            <div style="
+                                position: relative;
+                                width: 100%;
+                                height: 160px;
+                                background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(52, 152, 219, 0.08));
+                                overflow: hidden;
+                                border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+                            ">
+                                <img src="${carta.imagemUrl}" alt="${carta.nome}" style="
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: cover;
+                                    transition: transform 0.4s ease;
+                                " onerror="this.parentElement.style.display='none';">
+                                
+                                <!-- Overlay Gradient -->
+                                <div style="
+                                    position: absolute;
+                                    inset: 0;
+                                    background: linear-gradient(180deg, rgba(0,0,0,0), rgba(15,15,20,0.6));
+                                    pointer-events: none;
+                                "></div>
+                            </div>
+                        ` : `
+                            <div style="
+                                width: 100%;
+                                height: 160px;
+                                background: linear-gradient(135deg, ${corRaridade}22, ${corIntensidade}11);
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 3.5rem;
+                                border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+                            ">🂡</div>
+                        `}
+                        
+                        <!-- CONTEÚDO PRINCIPAL -->
+                        <div style="
+                            padding: 18px;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 14px;
+                            flex: 1;
+                        ">
+                            <!-- NOME + RARIDADE -->
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
+                                <h3 style="
+                                    margin: 0;
+                                    color: #ecf0f1;
+                                    font-size: 1.1rem;
+                                    font-weight: 700;
+                                    line-height: 1.3;
+                                    flex: 1;
+                                    word-break: break-word;
+                                    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+                                ">
+                                    ${carta.nome || 'Sem nome'}
+                                </h3>
+                                <span style="
+                                    background: linear-gradient(135deg, ${corRaridade}dd, ${ajustarBrilho(corRaridade, 1.3)});
+                                    color: white;
+                                    padding: 8px 14px;
+                                    border-radius: 10px;
+                                    font-size: 0.75rem;
+                                    font-weight: 800;
+                                    white-space: nowrap;
+                                    flex-shrink: 0;
+                                    box-shadow: 0 6px 16px ${corRaridade}55, inset 0 1px 0 rgba(255,255,255,0.3);
+                                    text-transform: uppercase;
+                                    letter-spacing: 1px;
+                                    border: 1px solid rgba(255,255,255,0.2);
+                                    backdrop-filter: blur(10px);
+                                    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                                ">
+                                    ${carta.raridade}
+                                </span>
+                            </div>
+
+                            <!-- TIPO DESTAQUE -->
+                            <div style="
+                                background: rgba(52, 152, 219, 0.15);
+                                border: 1px solid rgba(52, 152, 219, 0.3);
+                                border-radius: 8px;
+                                padding: 10px 12px;
+                                text-align: center;
+                            ">
+                                <span style="color: rgba(236, 240, 241, 0.6); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Tipo</span>
+                                <p style="color: #3498db; margin: 4px 0 0 0; font-weight: 600; font-size: 0.95rem;">⚡ ${carta.tipo}</p>
+                            </div>
+
+                            <!-- GRID METADADOS 2x2 -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <!-- Intensidade -->
+                                <div style="
+                                    background: linear-gradient(135deg, rgba(${hexToRgb(corIntensidade).join(',')}, 0.15), rgba(${hexToRgb(corIntensidade).join(',')}, 0.05));
+                                    border: 1px solid rgba(${hexToRgb(corIntensidade).join(',')}, 0.3);
+                                    border-radius: 8px;
+                                    padding: 10px 12px;
+                                    text-align: center;
+                                ">
+                                    <span style="color: rgba(236, 240, 241, 0.6); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.4px;">Intensidade</span>
+                                    <p style="color: ${corIntensidade}; margin: 4px 0 0 0; font-weight: 700; font-size: 1.1rem;">🔥 ${carta.intensidade}</p>
+                                </div>
+
+                                <!-- Peso Sorteio -->
+                                <div style="
+                                    background: linear-gradient(135deg, rgba(126, 211, 33, 0.15), rgba(126, 211, 33, 0.05));
+                                    border: 1px solid rgba(126, 211, 33, 0.3);
+                                    border-radius: 8px;
+                                    padding: 10px 12px;
+                                    text-align: center;
+                                ">
+                                    <span style="color: rgba(236, 240, 241, 0.6); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.4px;">Peso</span>
+                                    <p style="color: #7ED321; margin: 4px 0 0 0; font-weight: 700; font-size: 1.1rem;">⚙️ ${carta.pesoSorteio}</p>
+                                </div>
+
+                                <!-- Deck -->
+                                <div style="
+                                    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.05));
+                                    border: 1px solid rgba(212, 175, 55, 0.3);
+                                    border-radius: 8px;
+                                    padding: 10px 12px;
+                                    text-align: center;
+                                ">
+                                    <span style="color: rgba(236, 240, 241, 0.6); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.4px;">Deck</span>
+                                    <p style="color: #d4af37; margin: 4px 0 0 0; font-weight: 600; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">🗂️ ${obterNomeDeck(carta.deck)}</p>
+                                </div>
+
+                                <!-- Cooldown ou Status -->
+                                <div style="
+                                    background: linear-gradient(135deg, rgba(${carta.cooldown > 0 ? '230,126,34' : '52,211,153'}, 0.15), rgba(${carta.cooldown > 0 ? '230,126,34' : '52,211,153'}, 0.05));
+                                    border: 1px solid rgba(${carta.cooldown > 0 ? '230,126,34' : '52,211,153'}, 0.3);
+                                    border-radius: 8px;
+                                    padding: 10px 12px;
+                                    text-align: center;
+                                ">
+                                    <span style="color: rgba(236, 240, 241, 0.6); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.4px;">Status</span>
+                                    <p style="color: ${carta.cooldown > 0 ? '#e67e22' : '#1abc9c'}; margin: 4px 0 0 0; font-weight: 600; font-size: 0.9rem;">
+                                        ${carta.cooldown > 0 ? '⏱️ CD:' + carta.cooldown : (carta.ativa ? '✅ Ativa' : '⏸️ Inativa')}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- TAGS -->
+                            ${carta.tags && carta.tags.length > 0 ? `
+                                <div style="
+                                    padding-top: 10px;
+                                    border-top: 1px solid rgba(212, 175, 55, 0.15);
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    gap: 6px;
+                                ">
+                                    ${carta.tags.map(tag => `
+                                        <span style="
+                                            background: linear-gradient(135deg, rgba(52, 152, 219, 0.3), rgba(52, 152, 219, 0.1));
+                                            color: #3498db;
+                                            padding: 6px 12px;
+                                            border-radius: 8px;
+                                            font-size: 0.75rem;
+                                            font-weight: 600;
+                                            text-transform: lowercase;
+                                            border: 1px solid rgba(52, 152, 219, 0.4);
+                                            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+                                            display: inline-block;
+                                            white-space: nowrap;
+                                            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+                                        ">#${tag}</span>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <!-- FOOTER ELEGANTE -->
+                        <div style="
+                            padding: 0 18px 14px;
+                            border-top: 1px solid rgba(212, 175, 55, 0.15);
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            padding-top: 12px;
+                        ">
+                            <span style="
+                                color: rgba(236, 240, 241, 0.5);
+                                font-size: 0.75rem;
+                                text-transform: uppercase;
+                                letter-spacing: 0.5px;
+                                font-weight: 600;
+                            ">
+                                ${carta.ativa ? '✓ ATIVA' : '✗ INATIVA'}
+                            </span>
+                            <span style="
+                                font-size: 1.2rem;
+                                opacity: 0.7;
+                                transition: all 0.3s ease;
+                            ">
+                                📌
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Obter cor baseada em raridade
+         */
+        /**
+         * Obter cor baseada em raridade
+         */
+        function obterCorRaridade(raridade) {
+            const cores = {
+                'Comum': '#95A5A6',
+                'Raro': '#3498DB',
+                'Épico': '#9B59B6',
+                'Lendário': '#F39C12',
+                'Mítico': '#E74C3C',
+                'Celestial': '#FFD700'
+            };
+            return cores[raridade] || '#95A5A6';
+        }
+
+        /**
+         * Obter cor baseada em intensidade
+         */
+        function obterCorIntensidade(intensidade) {
+            if (intensidade <= 2) return '#3498DB';      // Azul - Baixa
+            if (intensidade <= 4) return '#2ECC71';      // Verde - Moderada
+            if (intensidade <= 6) return '#F39C12';      // Laranja - Média
+            if (intensidade <= 8) return '#E74C3C';      // Vermelho - Alta
+            return '#8B0000';                             // Vermelho Escuro - Muito Alta
+        }
+
+        /**
+         * Obter nome completo do deck
+         */
+        function obterNomeDeck(deckId) {
+            const deck = DECKS_DISPONIVEIS.find(d => d.id === deckId);
+            return deck ? deck.nome : deckId;
+        }
+
+        /**
+         * Salvar carta
+         */
+        function salvarCartaCardflux(carta) {
+            inicializarCardfluxEstrutura();
+            
+            const indice = armazenar.cardflux.findIndex(c => c.id === carta.id);
+            
+            if (indice >= 0) {
+                armazenar.cardflux[indice] = { ...armazenar.cardflux[indice], ...carta };
+            } else {
+                armazenar.cardflux.push(carta);
+            }
+            
+            // Salvar no localStorage
+            localStorage.setItem('redungeon_cardflux', JSON.stringify(armazenar.cardflux));
+            renderizarGridCardflux();
+        }
+
+        /**
+         * Deletar carta
+         */
+        function deletarCartaCardflux(cartaId) {
+            inicializarCardfluxEstrutura();
+            
+            if (confirm('⚠️ Tem certeza que deseja deletar esta carta?')) {
+                armazenar.cardflux = armazenar.cardflux.filter(c => c.id !== cartaId);
+                localStorage.setItem('redungeon_cardflux', JSON.stringify(armazenar.cardflux));
+                renderizarGridCardflux();
+            }
+        }
+
+        /**
+         * Filtrar Cardflux inteligentemente
+         */
+        function filtrarCardfluxInteligente(termoBusca) {
+            inicializarCardfluxEstrutura();
+            
+            const termo = termoBusca.toLowerCase().trim();
+            const autocompleteDiv = document.getElementById('autocompleteCardflux');
+            
+            if (termo === '') {
+                renderizarGridCardflux();
+                if (autocompleteDiv) autocompleteDiv.style.display = 'none';
+                return;
+            }
+            
+            // Gerar autocomplete
+            if (termo.length < 20 && autocompleteDiv) {
+                const todasAsOpcoes = new Set();
+                
+                if (armazenar.cardflux) {
+                    armazenar.cardflux.forEach(card => {
+                        if (card.nome) todasAsOpcoes.add(card.nome);
+                        if (card.raridade) todasAsOpcoes.add(card.raridade);
+                        if (card.tipo) todasAsOpcoes.add(card.tipo);
+                        if (card.tags) card.tags.forEach(tag => todasAsOpcoes.add(tag));
+                    });
+                }
+                
+                const sugestoes = Array.from(todasAsOpcoes)
+                    .filter(opt => opt.toLowerCase().includes(termo))
+                    .sort()
+                    .slice(0, 8);
+                
+                if (sugestoes.length > 0 && sugestoes.length < 15) {
+                    autocompleteDiv.innerHTML = sugestoes.map(sug => 
+                        `<div style="padding: 10px; cursor: pointer; border-bottom: 1px solid rgba(212, 175, 55, 0.2); color: #ecf0f1; transition: background 0.2s;" onmouseover="this.style.background='rgba(212, 175, 55, 0.2)'" onmouseout="this.style.background=''" onclick="document.getElementById('filtroCardfluxInput').value = '${sug}'; filtrarCardfluxInteligente('${sug}'); document.getElementById('autocompleteCardflux').style.display = 'none';">${sug}</div>`
+                    ).join('');
+                    autocompleteDiv.style.display = 'block';
+                } else {
+                    autocompleteDiv.style.display = 'none';
+                }
+            }
+            
+            renderizarGridCardflux(termoBusca);
+        }
+
+        /**
+         * Abrir modal para criar/editar carta
+         */
+        function abrirModalCardfluxUnificado(cartaId = null) {
+            inicializarCardfluxEstrutura();
+
+            // Garantir que o modal existe antes de tentar usar
+            const modal = document.getElementById('modalCardfluxEditor');
+            const form = document.getElementById('formCardfluxEditor');
+            
+            if (!modal || !form) {
+                console.error('❌ Modal ou formulário não encontrados!');
+                return;
+            }
+            
+            // Mostrar/esconder botão de deletar
+            const btnDeletar = document.getElementById('btnDeletarCardflux');
+            if (btnDeletar) {
+                btnDeletar.style.display = cartaId ? 'block' : 'none';
+            }
+
+            let carta = null;
+            if (cartaId) {
+                carta = armazenar.cardflux.find(c => c.id === cartaId);
+                if (!carta) {
+                    alert('❌ Carta não encontrada!');
+                    return;
+                }
+                
+                // Preenc her campos com dados da carta existente - com verificação
+                const campos = {
+                    'cardfluxNome': carta.nome || '',
+                    'cardfluxTipo': carta.tipo || 'Flash Event',
+                    'cardfluxIntensidade': carta.intensidade || 5,
+                    'cardfluxRaridade': carta.raridade || 'Comum',
+                    'cardfluxDeck': carta.deck || 'jornada',
+                    'cardfluxPeso': carta.pesoSorteio || 1,
+                    'cardfluxCooldown': carta.cooldown || 0,
+                    'cardfluxTags': (carta.tags || []).join(', '),
+                    'cardfluxDescricao': carta.descricao || '',
+                    'cardfluxContexto': carta.contexto || '',
+                    'cardfluxTestes': carta.testes || '',
+                    'cardfluxSucessos': carta.sucessos || '',
+                    'cardfluxFalhas': carta.falhas || '',
+                    'cardfluxRecompensas': carta.recompensas || '',
+                    'cardfluxConsequencias': carta.consequencias || '',
+                    'cardfluxGanchos': carta.ganchos || '',
+                    'cardfluxImagemUrl': carta.imagemUrl || ''
+                };
+                
+                for (const [id, valor] of Object.entries(campos)) {
+                    const elemento = document.getElementById(id);
+                    if (elemento) {
+                        if (elemento.type === 'checkbox') {
+                            elemento.checked = carta.ativa !== false;
+                        } else {
+                            elemento.value = valor;
+                        }
+                    }
+                }
+                
+                // Armazenar ID da carta em edição
+                form.dataset.cartaId = cartaId;
+            } else {
+                // Limpar formulário para nova carta
+                form.reset();
+                form.dataset.cartaId = '';
+            }
+
+            // Atualizar preview imediatamente
+            setTimeout(() => {
+                if (typeof atualizarPreviewCardflux === 'function') {
+                    atualizarPreviewCardflux();
+                }
+            }, 100);
+
+            // Abrir modal
+            try {
+                bootstrap.Modal.getOrCreateInstance(modal).show();
+            } catch (e) {
+                console.error('❌ Erro ao abrir modal:', e);
+            }
+        }
+
+        /**
+         * Preview de imagem em tempo real
+         */
+        function atualizarPreviewImagemCardflux() {
+            const url = document.getElementById('cardfluxImagemUrl').value.trim();
+            const previewContainer = document.getElementById('cardfluxImagemPreview');
+            const previewImg = document.getElementById('cardfluxImagemPreviewImg');
+            
+            if (url) {
+                previewImg.src = url;
+                previewImg.onload = () => previewContainer.style.display = 'block';
+                previewImg.onerror = () => {
+                    previewContainer.style.display = 'none';
+                    console.warn('❌ Não foi possível carregar a imagem da URL:', url);
+                };
+            } else {
+                previewContainer.style.display = 'none';
+            }
+        }
+
+        // Adicionar listener para atualização em tempo real
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputImagem = document.getElementById('cardfluxImagemUrl');
+            if (inputImagem) {
+                inputImagem.addEventListener('input', atualizarPreviewImagemCardflux);
+            }
+        });
+
+        /**
+         * Atualizar preview do card em tempo real
+         */
+        function atualizarPreviewCardflux() {
+            const nome = document.getElementById('cardfluxNome')?.value || 'Sem nome';
+            const tipo = document.getElementById('cardfluxTipo')?.value || 'Flash Event';
+            const intensidade = document.getElementById('cardfluxIntensidade')?.value || '5';
+            const raridade = document.getElementById('cardfluxRaridade')?.value || 'Comum';
+            const deck = document.getElementById('cardfluxDeck')?.value || 'jornada';
+            const peso = document.getElementById('cardfluxPeso')?.value || '1';
+            const cd = document.getElementById('cardfluxCooldown')?.value || '0';
+            const ativa = document.getElementById('cardfluxAtiva')?.checked;
+            const imagemUrl = document.getElementById('cardfluxImagemUrl')?.value;
+            const tags = document.getElementById('cardfluxTags')?.value || '';
+
+            // Atualizar nome
+            const nomeEl = document.getElementById('cardfluxPreviewNome');
+            if (nomeEl) {
+                nomeEl.textContent = nome;
+                nomeEl.style.maxHeight = '60px';
+                nomeEl.style.overflow = 'hidden';
+            }
+
+            // Atualizar tipo
+            const tipoEl = document.getElementById('cardfluxPreviewTipo');
+            if (tipoEl) {
+                tipoEl.textContent = tipo.includes('Flash') ? '⚡ Flash' : '🎭 Scene';
+            }
+
+            // Atualizar intensidade com cor
+            const intensidadeEl = document.getElementById('cardfluxPreviewIntensidade');
+            if (intensidadeEl) {
+                intensidadeEl.textContent = `🔥 ${intensidade}`;
+                const intNum = parseInt(intensidade);
+                if (intNum <= 3) {
+                    intensidadeEl.style.color = '#27ae60';
+                } else if (intNum <= 6) {
+                    intensidadeEl.style.color = '#f39c12';
+                } else if (intNum <= 8) {
+                    intensidadeEl.style.color = '#e74c3c';
+                } else {
+                    intensidadeEl.style.color = '#c0392b';
+                }
+            }
+
+            // Atualizar raridade com badge premium
+            const raridadeEl = document.getElementById('cardfluxPreviewRaridade');
+            if (raridadeEl) {
+                raridadeEl.textContent = raridade;
+                const cores = {
+                    'Comum': '#95A5A6',
+                    'Raro': '#3498DB',
+                    'Épico': '#9B59B6',
+                    'Lendário': '#F39C12',
+                    'Mítico': '#E74C3C',
+                    'Celestial': '#FFD700'
+                };
+                const corBase = cores[raridade] || '#95A5A6';
+                raridadeEl.style.background = `linear-gradient(135deg, ${corBase}dd, ${corBase})`;
+                raridadeEl.style.boxShadow = `0 6px 16px ${corBase}55, inset 0 1px 0 rgba(255,255,255,0.3)`;
+                raridadeEl.style.border = '1px solid rgba(255,255,255,0.2)';
+                raridadeEl.style.backdropFilter = 'blur(10px)';
+                raridadeEl.style.textShadow = '0 2px 4px rgba(0,0,0,0.3)';
+                raridadeEl.style.padding = '8px 14px';
+                raridadeEl.style.borderRadius = '10px';
+                raridadeEl.style.letterSpacing = '1px';
+                raridadeEl.style.fontWeight = '800';
+            }
+
+            // Atualizar deck
+            const deckEl = document.getElementById('cardfluxPreviewDeck');
+            if (deckEl) {
+                const deckMap = {
+                    'jornada': '🛣️ Jornada',
+                    'floresta': '🌲 Floresta',
+                    'tundra': '❄️ Tundra',
+                    'deserto': '🏜️ Deserto',
+                    'montanha': '⛰️ Montanha',
+                    'pantano': '🪱 Pântano',
+                    'costa': '🏖️ Costa',
+                    'maraberto': '🌊 Mar Aberto',
+                    'subterraneo': '⛓️ Subterrâneo',
+                    'vulcanico': '🌋 Vulcânico',
+                    'espiritual': '✨ Espiritual',
+                    'celestial': '⭐ Celestial',
+                    'sombrio': '🌑 Sombrio',
+                    'guerra': '⚔️ Guerra',
+                    'cerco': '🏰 Cerco',
+                    'perseguicao': '🏃 Perseguição',
+                    'boss': '👹 Boss',
+                    'cidade': '🏘️ Cidade',
+                    'dungeon': '🗝️ Dungeon',
+                    'presagios': '🔮 Presságios',
+                    'social': '🤝 Social'
+                };
+                deckEl.textContent = deckMap[deck] || 'Desconhecido';
+            }
+
+            // Atualizar peso e CD
+            const pesoEl = document.getElementById('cardfluxPreviewPeso');
+            if (pesoEl) pesoEl.textContent = peso;
+
+            const cdEl = document.getElementById('cardfluxPreviewCD');
+            if (cdEl) cdEl.textContent = cd > 0 ? `⏱️ ${cd}` : 'Nenhum';
+
+            // Atualizar status
+            const statusEl = document.getElementById('cardfluxPreviewStatus');
+            if (statusEl) {
+                statusEl.textContent = ativa ? '✅ ATIVA' : '⏸️ INATIVA';
+                if (ativa) {
+                    statusEl.style.background = 'linear-gradient(135deg, #7ED321dd, #7ED321)';
+                    statusEl.style.boxShadow = '0 6px 16px rgba(126, 211, 33, 0.33), inset 0 1px 0 rgba(255,255,255,0.3)';
+                } else {
+                    statusEl.style.background = 'linear-gradient(135deg, #E74C3Cdd, #E74C3C)';
+                    statusEl.style.boxShadow = '0 6px 16px rgba(231, 76, 60, 0.33), inset 0 1px 0 rgba(255,255,255,0.3)';
+                }
+                statusEl.style.color = 'white';
+                statusEl.style.padding = '6px 12px';
+                statusEl.style.borderRadius = '10px';
+                statusEl.style.fontWeight = '700';
+                statusEl.style.border = '1px solid rgba(255,255,255,0.2)';
+                statusEl.style.display = 'inline-block';
+                statusEl.style.textShadow = '0 2px 4px rgba(0,0,0,0.3)';
+            }
+
+            // Atualizar imagem
+            const imagemEl = document.getElementById('cardfluxPreviewImagem');
+            if (imagemEl && imagemUrl) {
+                imagemEl.innerHTML = `<img src="${imagemUrl}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML = '🂡'">`;
+                imagemEl.style.backgroundColor = 'transparent';
+            } else if (imagemEl) {
+                imagemEl.innerHTML = '🂡';
+                imagemEl.style.backgroundColor = 'rgba(212, 175, 55, 0.1)';
+            }
+
+            // Atualizar tags
+            const tagsEl = document.getElementById('cardfluxPreviewTags');
+            if (tagsEl) {
+                if (tags.trim()) {
+                    const tagList = tags.split(',').map(t => t.trim()).filter(t => t);
+                    tagsEl.innerHTML = tagList.map(tag => `<span style="
+                        background: linear-gradient(135deg, rgba(52, 152, 219, 0.3), rgba(52, 152, 219, 0.1));
+                        color: #3498db;
+                        padding: 6px 12px;
+                        border-radius: 8px;
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        border: 1px solid rgba(52, 152, 219, 0.4);
+                        box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+                        display: inline-block;
+                        white-space: nowrap;
+                        text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+                    ">#${tag}</span>`).join('');
+                } else {
+                    tagsEl.innerHTML = '';
+                }
+            }
+        }
+
+
+        /**
+         * Salvar carta do formulário
+         */
+        function salvarCartaCardfluxEditor() {
+            const form = document.getElementById('formCardfluxEditor');
+            const cartaId = form.dataset.cartaId || null;
+
+            // Criar objeto carta com dados do formulário
+            const carta = {
+                id: cartaId || gerarIdCarta(),
+                nome: document.getElementById('cardfluxNome').value.trim(),
+                tipo: document.getElementById('cardfluxTipo').value,
+                intensidade: parseInt(document.getElementById('cardfluxIntensidade').value) || 5,
+                raridade: document.getElementById('cardfluxRaridade').value,
+                deck: document.getElementById('cardfluxDeck').value,
+                pesoSorteio: parseFloat(document.getElementById('cardfluxPeso').value) || 1,
+                cooldown: parseInt(document.getElementById('cardfluxCooldown').value) || 0,
+                ativa: document.getElementById('cardfluxAtiva').checked,
+                tags: document.getElementById('cardfluxTags').value.split(',').map(t => t.trim()).filter(t => t),
+                descricao: document.getElementById('cardfluxDescricao').value,
+                contexto: document.getElementById('cardfluxContexto').value,
+                testes: document.getElementById('cardfluxTestes').value,
+                sucessos: document.getElementById('cardfluxSucessos').value,
+                falhas: document.getElementById('cardfluxFalhas').value,
+                recompensas: document.getElementById('cardfluxRecompensas').value,
+                consequencias: document.getElementById('cardfluxConsequencias').value,
+                ganchos: document.getElementById('cardfluxGanchos').value,
+                imagemUrl: document.getElementById('cardfluxImagemUrl').value.trim(),
+                dataCriacao: cartaId ? (armazenar.cardflux.find(c => c.id === cartaId)?.dataCriacao || new Date().toISOString()) : new Date().toISOString()
+            };
+
+            // Validar campos obrigatórios
+            if (!carta.nome) {
+                alert('⚠️ Nome da carta é obrigatório!');
+                return;
+            }
+
+            // Salvar carta
+            salvarCartaCardflux(carta);
+            
+            // Fechar modal
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('modalCardfluxEditor')).hide();
+            
+            alert('✅ Carta salva com sucesso!');
+        }
+
+        /**
+         * Deletar carta no editor
+         */
+        function deletarCartaCardfluxEditor() {
+            const form = document.getElementById('formCardfluxEditor');
+            const cartaId = form.dataset.cartaId;
+            
+            if (!cartaId) return;
+            
+            deletarCartaCardflux(cartaId);
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('modalCardfluxEditor')).hide();
+        }
+
+        // ============================================
+        // SISTEMA DE EXECUÇÃO / MODO JOGO
+        // ============================================
+
+        // Estado da execução
+        const cardfluxExecucao = {
+            // Configuração de Sessão
+            deckAtivo: 'todos',
+            decksSelecionados: [],
+            distanciaBase: 4,
+            ritmo: 0,  // -1 (Cauteloso), 0 (Normal), +1 (Apressado)
+            modificadorSorte: 0,
+            intensidadeMinima: 1,
+            
+            // Estado do Sorteio
+            cartasOrdenadas: [],
+            cartaSorteada: null,
+            cartasUsadas: [],  // Rastreiam cartas usadas recentemente
+            cartasDescartadas: [],  // Cartas descartadas até reembaralho
+            
+            // Gerenciamento
+            cooldowns: {},
+            historico: [],
+            totalCartasPlanejadas: 0,
+            cartasCompradas: 0,
+            
+            // Configurações avançadas
+            evitarRepeticion: true,
+            penalidade_reuso: 0.5  // Reduz peso em 50% se usada recentemente
+        };
+
+        /**
+         * Abrir modal de execução
+         */
+        function abrirModalCardfluxExecucao() {
+            inicializarCardfluxEstrutura();
+            
+            if (!armazenar.cardflux || armazenar.cardflux.length === 0) {
+                alert('⚠️ Nenhuma carta criada ainda! Crie cartas para iniciar o Cardflux.');
+                return;
+            }
+
+            // Limpar histórico e sorteios
+            cardfluxExecucao.historico = [];
+            cardfluxExecucao.cartaSorteada = null;
+            cardfluxExecucao.cartasCompradas = 0;
+            cardfluxExecucao.cartasUsadas = [];
+            cardfluxExecucao.cartasDescartadas = [];
+            
+            document.getElementById('cartaSorteadaContainer').innerHTML = `
+                <div style="text-align: center; color: rgba(236, 240, 241, 0.6);">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">🂡</div>
+                    <p style="font-weight: 500;">Nenhuma carta sorteada ainda...</p>
+                </div>
+            `;
+            document.getElementById('cardfluxHistorico').innerHTML = '<span style="color: rgba(236, 240, 241, 0.5);">Nenhuma carta sorteada ainda...</span>';
+            document.getElementById('cartaExibidaContainer').style.display = 'none';
+
+            // Calcular total inicial
+            calcularTotalCartas();
+            
+            // Atualizar deck ordenado
+            atualizarDeckExecucao();
+            
+            // Abrir modal
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('modalCardfluxExecucao')).show();
+        }
+
+        /**
+         * Calcular total de cartas baseado na fórmula
+         * Total = Distância Base + Modificador Ritmo + Modificador Sorte
+         */
+        function calcularTotalCartas() {
+            const distancia = parseInt(document.getElementById('cardfluxDistancia').value) || 4;
+            const ritmo = parseInt(document.getElementById('cardfluxRitmo').value) || 0;
+            const sorte = parseInt(document.getElementById('cardfluxExecucaoSorte').value) || 0;
+            
+            const total = Math.max(1, distancia + ritmo + sorte);
+            
+            cardfluxExecucao.distanciaBase = distancia;
+            cardfluxExecucao.ritmo = ritmo;
+            cardfluxExecucao.modificadorSorte = sorte;
+            cardfluxExecucao.totalCartasPlanejadas = total;
+            
+            // Atualizar display
+            document.getElementById('cardfluxTotalValor').textContent = total;
+            document.getElementById('cardfluxTotalPlano').textContent = total;
+            
+            // Atualizar aviso se já começou a comprar
+            const compradas = cardfluxExecucao.cartasCompradas || 0;
+            const elemento = document.getElementById('cardfluxCartasCompradas');
+            if (elemento) elemento.textContent = compradas;
+        }
+
+        /**
+         * Atualizar deck baseado em seleção
+         * Filtro: Ativas, Intensidade Mínima, Sem Cooldown, Deck Selecionado
+         */
+        function atualizarDeckExecucao() {
+            const deckSelecionado = document.getElementById('cardfluxExecucaoDeck').value;
+            const intensidadeMin = parseInt(document.getElementById('cardfluxExecucaoIntensidade').value) || 1;
+
+            let cartasValidas = armazenar.cardflux.filter(c => {
+                // Critério 1: Carta deve estar ativa
+                if (!c.ativa) return false;
+                
+                // Critério 2: Intensidade mínima
+                if (c.intensidade < intensidadeMin) return false;
+                
+                // Critério 3: Sem cooldown ativo
+                if (cardfluxExecucao.cooldowns[c.id] && cardfluxExecucao.cooldowns[c.id] > 0) return false;
+                
+                // Critério 4: Deck selecionado
+                if (deckSelecionado !== 'todos' && c.deck !== deckSelecionado) return false;
+                
+                // Critério 5: Não está descartada
+                if (cardfluxExecucao.cartasDescartadas.includes(c.id)) return false;
+                
+                return true;
+            });
+
+            // Armazenar cartas válidas
+            cardfluxExecucao.cartasOrdenadas = cartasValidas;
+            cardfluxExecucao.deckAtivo = deckSelecionado;
+        }
+
+        /**
+         * Sortear carta usando sistema ponderado com ANTI-REPETIÇÃO
+         * Sistema inteligente que reduz chance de cartas usadas recentemente
+         */
+        function sortearCartaCardflux() {
+            atualizarDeckExecucao();
+
+            if (cardfluxExecucao.cartasOrdenadas.length === 0) {
+                alert('⚠️ Nenhuma carta disponível! Todos os decks podem estar em cooldown.');
+                return;
+            }
+
+            // Verificar se atingiu o total de cartas planejadas
+            if (cardfluxExecucao.cartasCompradas >= cardfluxExecucao.totalCartasPlanejadas) {
+                alert(`✅ Meta atingida! Você comprou ${cardfluxExecucao.cartasCompradas} de ${cardfluxExecucao.totalCartasPlanejadas} cartas. Clique em 🔄 Reembaralhar para uma nova sessão.`);
+                return;
+            }
+
+            // Aplicar penalidade de repetição se ativada
+            let cartas = cardfluxExecucao.cartasOrdenadas.map(c => ({
+                ...c,
+                pesoFinal: c.pesoSorteio || 1
+            }));
+
+            // Se evitar repetição está ativo, reduzir peso de cartas usadas recentemente
+            if (cardfluxExecucao.evitarRepeticion) {
+                cartas = cartas.map(c => {
+                    if (cardfluxExecucao.cartasUsadas.includes(c.id)) {
+                        return {
+                            ...c,
+                            pesoFinal: (c.pesoSorteio || 1) * cardfluxExecucao.penalidade_reuso
+                        };
+                    }
+                    return c;
+                });
+            }
+
+            // Calcular peso total
+            let pesoTotal = 0;
+            cartas.forEach(c => pesoTotal += c.pesoFinal);
+
+            // Sortear baseado em pesos
+            let random = Math.random() * pesoTotal;
+            let cumulative = 0;
+            let cartaSorteada = cartas[0];
+
+            for (let carta of cartas) {
+                cumulative += carta.pesoFinal;
+                if (random <= cumulative) {
+                    cartaSorteada = carta;
+                    break;
+                }
+            }
+
+            cardfluxExecucao.cartaSorteada = cartaSorteada;
+
+            // Adicionar à lista de cartas usadas (para rastrear repetições)
+            if (!cardfluxExecucao.cartasUsadas.includes(cartaSorteada.id)) {
+                cardfluxExecucao.cartasUsadas.push(cartaSorteada.id);
+            }
+
+            // Aplicar cooldown se houver
+            if (cartaSorteada.cooldown > 0) {
+                cardfluxExecucao.cooldowns[cartaSorteada.id] = cartaSorteada.cooldown;
+            }
+
+            // Incrementar contador de cartas compradas
+            cardfluxExecucao.cartasCompradas++;
+
+            // Atualizar display
+            document.getElementById('cardfluxCartasCompradas').textContent = cardfluxExecucao.cartasCompradas;
+
+            // Atualizar histórico
+            cardfluxExecucao.historico.push({
+                carta: cartaSorteada.nome,
+                raridade: cartaSorteada.raridade,
+                deck: cartaSorteada.deck,
+                timestamp: new Date().toLocaleTimeString(),
+                numero: cardfluxExecucao.cartasCompradas
+            });
+
+            // Exibir carta sorteada
+            exibirCartaSorteada(cartaSorteada);
+            atualizarHistoricoExecucao();
+            decrementarCooldowns();
+        }
+
+        /**
+         * Exibir carta ampliada COM BOTÕES DE AÇÃO
+         */
+        function exibirCartaSorteada(carta) {
+            const container = document.getElementById('cartaSorteadaContainer');
+            const exibidaContainer = document.getElementById('cartaExibidaContainer');
+            
+            // Exibição PRINCIPAL com imagem em destaque
+            container.innerHTML = `
+                <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px;">
+                    ${carta.imagemUrl ? `
+                        <div style="
+                            width: 100%;
+                            max-height: 280px;
+                            border-radius: 12px;
+                            overflow: hidden;
+                            border: 3px solid rgba(212, 175, 55, 0.4);
+                            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+                        ">
+                            <img src="${carta.imagemUrl}" alt="${carta.nome}" style="
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                                display: block;
+                            " onerror="this.parentElement.style.display='none';">
+                        </div>
+                    ` : `<div style="font-size: 3.5rem; margin-bottom: 10px;">🂡</div>`}
+                    
+                    <div style="width: 100%; text-align: center;">
+                        <h3 style="color: #d4af37; margin: 10px 0; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">${carta.nome}</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px;">
+                            <div style="background: rgba(212, 175, 55, 0.2); padding: 10px; border-radius: 6px;">
+                                <span style="color: rgba(236, 240, 241, 0.7); font-size: 0.8rem;">Tipo</span>
+                                <p style="color: #7ED321; margin: 5px 0 0 0; font-weight: 600; font-size: 0.95rem;">${carta.tipo}</p>
+                            </div>
+                            <div style="background: rgba(212, 175, 55, 0.2); padding: 10px; border-radius: 6px;">
+                                <span style="color: rgba(236, 240, 241, 0.7); font-size: 0.8rem;">Intensidade</span>
+                                <p style="color: ${obterCorIntensidade(carta.intensidade)}; margin: 5px 0 0 0; font-weight: 600; font-size: 0.95rem;">${carta.intensidade}/10</p>
+                            </div>
+                            <div style="background: rgba(212, 175, 55, 0.2); padding: 10px; border-radius: 6px;">
+                                <span style="color: rgba(236, 240, 241, 0.7); font-size: 0.8rem;">Deck</span>
+                                <p style="color: #3498db; margin: 5px 0 0 0; font-weight: 600; font-size: 0.95rem;">${obterNomeDeck(carta.deck)}</p>
+                            </div>
+                        </div>
+                        <div style="margin-top: 12px;">
+                            <span style="display: inline-block; background: ${obterCorRaridade(carta.raridade)}; color: white; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 0.85rem;">${carta.raridade}</span>
+                            ${carta.cooldown > 0 ? `<span style="display: inline-block; margin-left: 8px; background: rgba(230, 126, 34, 0.3); color: #e67e22; border: 1px solid rgba(230, 126, 34, 0.5); padding: 4px 10px; border-radius: 4px; font-size: 0.8rem;">⏱️ CD: ${carta.cooldown}</span>` : ''}
+                        </div>
+                    </div>
+                    
+                    <!-- Botões de Ação Pós-Uso -->
+                    <div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(212, 175, 55, 0.2);">
+                        <button onclick="descartarCartaAtual()" style="background: rgba(230, 126, 34, 0.2); color: #e67e22; border: 1px solid rgba(230, 126, 34, 0.4); padding: 10px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.25s;" onmouseover="this.style.background='rgba(230, 126, 34, 0.4)'" onmouseout="this.style.background='rgba(230, 126, 34, 0.2)'">
+                            🗑️ Descartar
+                        </button>
+                        <button onclick="retornarCartaAoDeck()" style="background: rgba(52, 211, 153, 0.2); color: #1abc9c; border: 1px solid rgba(52, 211, 153, 0.4); padding: 10px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.25s;" onmouseover="this.style.background='rgba(52, 211, 153, 0.4)'" onmouseout="this.style.background='rgba(52, 211, 153, 0.2)'">
+                            ↩️ Retornar
+                        </button>
+                        <button onclick="sortearCartaCardflux()" style="background: rgba(126, 211, 33, 0.2); color: #7ED321; border: 1px solid rgba(126, 211, 33, 0.4); padding: 10px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.25s;" onmouseover="this.style.background='rgba(126, 211, 33, 0.4)'" onmouseout="this.style.background='rgba(126, 211, 33, 0.2)'">
+                            🎲 Próxima
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Exibição AMPLIADA de detalhes em painel expandido
+            exibidaContainer.style.display = 'block';
+            exibidaContainer.innerHTML = `
+                <div style="display: grid; grid-template-columns: ${carta.imagemUrl ? '300px 1fr' : '1fr'}; gap: 25px; align-items: start;">
+                    ${carta.imagemUrl ? `
+                        <div style="
+                            width: 300px;
+                            height: 350px;
+                            border-radius: 8px;
+                            overflow: hidden;
+                            border: 2px solid rgba(212, 175, 55, 0.3);
+                        ">
+                            <img src="${carta.imagemUrl}" alt="${carta.nome}" style="
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                            " onerror="this.parentElement.style.display='none';">
+                        </div>
+                    ` : ''}
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <h5 style="color: #d4af37; margin-bottom: 10px; font-size: 1rem;">📖 Descrição</h5>
+                            <p style="color: #ecf0f1; line-height: 1.6; margin: 0; white-space: pre-wrap; word-wrap: break-word;">${carta.descricao || '(Sem descrição)'}</p>
+                            
+                            ${carta.contexto ? `
+                                <h5 style="color: #3498db; margin: 15px 0 10px; font-size: 1rem;">🎭 Contexto</h5>
+                                <p style="color: #ecf0f1; line-height: 1.6; margin: 0; white-space: pre-wrap; word-wrap: break-word;">${carta.contexto}</p>
+                            ` : ''}
+                            
+                            ${carta.testes ? `
+                                <h5 style="color: #9B59B6; margin: 15px 0 10px; font-size: 1rem;">🎲 Testes</h5>
+                                <p style="color: #ecf0f1; line-height: 1.6; margin: 0; white-space: pre-wrap; word-wrap: break-word;">${carta.testes}</p>
+                            ` : ''}
+                        </div>
+                        
+                        <div>
+                            ${carta.sucessos ? `
+                                <div style="background: rgba(126, 211, 33, 0.15); padding: 12px; border-radius: 8px; border-left: 3px solid #7ED321; margin-bottom: 15px;">
+                                    <h5 style="color: #7ED321; margin: 0 0 8px; font-size: 0.95rem;">✅ Resultado de Sucesso</h5>
+                                    <p style="color: #ecf0f1; line-height: 1.6; margin: 0; white-space: pre-wrap; word-wrap: break-word; font-size: 0.9rem;">${carta.sucessos}</p>
+                                </div>
+                            ` : ''}
+                            
+                            ${carta.falhas ? `
+                                <div style="background: rgba(231, 76, 60, 0.15); padding: 12px; border-radius: 8px; border-left: 3px solid #E74C3C; margin-bottom: 15px;">
+                                    <h5 style="color: #E74C3C; margin: 0 0 8px; font-size: 0.95rem;">❌ Resultado de Falha</h5>
+                                    <p style="color: #ecf0f1; line-height: 1.6; margin: 0; white-space: pre-wrap; word-wrap: break-word; font-size: 0.9rem;">${carta.falhas}</p>
+                                </div>
+                            ` : ''}
+                            
+                            ${carta.recompensas ? `
+                                <div style="background: rgba(240, 200, 80, 0.15); padding: 12px; border-radius: 8px; border-left: 3px solid #F0C850;">
+                                    <h5 style="color: #F0C850; margin: 0 0 8px; font-size: 0.95rem;">🎁 Recompensas</h5>
+                                    <p style="color: #ecf0f1; line-height: 1.6; margin: 0; white-space: pre-wrap; word-wrap: break-word; font-size: 0.9rem;">${carta.recompensas}</p>
+                                </div>
+                            ` : ''}
+                            
+                            ${carta.consequencias ? `
+                                <div style="background: rgba(231, 76, 60, 0.1); padding: 12px; border-radius: 8px; border-left: 3px solid #E74C3C;">
+                                    <h5 style="color: #E74C3C; margin: 0 0 8px; font-size: 0.95rem;">⚠️ Consequências</h5>
+                                    <p style="color: #ecf0f1; line-height: 1.6; margin: 0; white-space: pre-wrap; word-wrap: break-word; font-size: 0.9rem;">${carta.consequencias}</p>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Atualizar histórico de execução - Exibir número de cartas compradas
+         */
+        function atualizarHistoricoExecucao() {
+            const container = document.getElementById('cardfluxHistorico');
+            
+            if (cardfluxExecucao.historico.length === 0) {
+                container.innerHTML = '<span style="color: rgba(236, 240, 241, 0.5);">Nenhuma carta sorteada ainda...</span>';
+                return;
+            }
+
+            container.innerHTML = cardfluxExecucao.historico.map((item, idx) => `
+                <div style="
+                    background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
+                    padding: 12px;
+                    border-radius: 8px;
+                    margin-bottom: 10px;
+                    border-left: 4px solid ${obterCorRaridade(item.raridade)};
+                    border-top: 1px solid rgba(${item.raridade === 'Lendária' ? '255,215,0' : item.raridade === 'Épica' ? '155,89,182' : item.raridade === 'Rara' ? '52,152,219' : item.raridade === 'Incomum' ? '52,211,153' : '149,165,166'}, 0.2);
+                    transition: all 0.25s;
+                    cursor: pointer;
+                \" onmouseover=\"this.style.background='linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.3))'; this.style.transform='translateX(4px)';\" onmouseout=\"this.style.background='linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2))'; this.style.transform='translateX(0)';\">
+                    <div style=\"font-weight: 700; color: ${obterCorRaridade(item.raridade)}; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;\">
+                        <span style=\"display: inline-block; background: ${obterCorRaridade(item.raridade)}; color: white; width: 24px; height: 24px; border-radius: 50%; text-align: center; line-height: 24px; font-size: 0.75rem; font-weight: 700;\">${item.numero}</span>
+                        ${item.carta}
+                    </div>
+                    <div style=\"font-size: 0.8rem; color: rgba(236, 240, 241, 0.6); margin-top: 6px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;\">
+                        <div>✨ ${item.raridade}</div>
+                        <div>🗂️ ${item.deck}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Scroll para última carta
+            container.scrollTop = container.scrollHeight;
+        }
+
+        /**
+         * Decrementar cooldowns
+         */
+        function decrementarCooldowns() {
+            Object.keys(cardfluxExecucao.cooldowns).forEach(cartaId => {
+                if (cardfluxExecucao.cooldowns[cartaId] > 0) {
+                    cardfluxExecucao.cooldowns[cartaId]--;
+                }
+            });
+        }
+
+        /**
+         * Limpar todos os cooldowns
+         */
+        /**
+         * Limpar cooldowns - Reset completo de disponibilidade
+         */
+        function limparCooldownsCardflux() {
+            cardfluxExecucao.cooldowns = {};
+            alert('✅ Todos os cooldowns foram zerados!');
+            atualizarDeckExecucao();
+        }
+
+        /**
+         * Reembaralhar deck - Reset completo da sessão
+         * Reseta: Histórico, Descartadas, Usadas, Cooldowns
+         */
+        function reembaralharDeckCardflux() {
+            // Reset completo
+            cardfluxExecucao.cartasDescartadas = [];
+            cardfluxExecucao.cartasUsadas = [];
+            cardfluxExecucao.cooldowns = {};
+            cardfluxExecucao.historico = [];
+            cardfluxExecucao.cartasCompradas = 0;
+            
+            // Atualizar displays
+            document.getElementById('cardfluxCartasCompradas').textContent = '0';
+            atualizarHistoricoExecucao();
+            document.getElementById('cartaSorteadaContainer').innerHTML = `
+                <div style="text-align: center; color: rgba(236, 240, 241, 0.6);">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">🔄</div>
+                    <p style="font-weight: 500;">Deck reembaralhado! Pronto para nova sessão...</p>
+                </div>
+            `;
+            
+            // Recalcular total
+            calcularTotalCartas();
+            
+            alert('🔄 Deck completamente reembaralhado! Nova sessão iniciada.');
+        }
+
+        /**
+         * Descartar carta atual (sai do pool até reembaralhar)
+         */
+        function descartarCartaAtual() {
+            if (!cardfluxExecucao.cartaSorteada) {
+                alert('⚠️ Nenhuma carta para descartar.');
+                return;
+            }
+            
+            cardfluxExecucao.cartasDescartadas.push(cardfluxExecucao.cartaSorteada.id);
+            alert(`✅ Carta "${cardfluxExecucao.cartaSorteada.nome}" descartada até reembaralho.`);
+            
+            // Limpar exibição
+            document.getElementById('cartaSorteadaContainer').innerHTML = `
+                <div style="text-align: center; color: rgba(236, 240, 241, 0.6);">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">🗑️</div>
+                    <p>Carta descartada com sucesso</p>
+                </div>
+            `;
+        }
+
+        /**
+         * Retornar carta imediatamente ao deck
+         */
+        function retornarCartaAoDeck() {
+            if (!cardfluxExecucao.cartaSorteada) {
+                alert('⚠️ Nenhuma carta para retornar.');
+                return;
+            }
+            
+            // Remover do cooldown e descartadas
+            delete cardfluxExecucao.cooldowns[cardfluxExecucao.cartaSorteada.id];
+            const idx = cardfluxExecucao.cartasDescartadas.indexOf(cardfluxExecucao.cartaSorteada.id);
+            if (idx >= 0) cardfluxExecucao.cartasDescartadas.splice(idx, 1);
+            
+            alert(`✅ Carta "${cardfluxExecucao.cartaSorteada.nome}" retornou ao deck imediatamente.`);
+            
+            // Limpar exibição
+            document.getElementById('cartaSorteadaContainer').innerHTML = `
+                <div style="text-align: center; color: rgba(236, 240, 241, 0.6);">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">↩️</div>
+                    <p>Carta retornou ao deck</p>
+                </div>
+            `;
+        }
+
+        /**
+         * Inicializar grid ao carregar a página
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            inicializarCardfluxEstrutura();
+            renderizarGridCardflux();
+        });
+
+        // Se a página já está carregada
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                inicializarCardfluxEstrutura();
+                renderizarGridCardflux();
+            });
+        } else {
+            inicializarCardfluxEstrutura();
+            setTimeout(() => renderizarGridCardflux(), 100);
+        }
     </script>
 </body>
 </html>

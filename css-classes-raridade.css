@@ -30,10 +30,10 @@
     --rarity-epico-border: #9c27b0;
     --rarity-epico-glow: rgba(156, 39, 176, 0.6);
     
-    /* Lendário - Dourado */
-    --rarity-lendario-bg: rgba(255, 193, 7, 0.15);
-    --rarity-lendario-border: #ffc107;
-    --rarity-lendario-glow: rgba(255, 193, 7, 0.8);
+    /* Lendário - Laranja */
+    --rarity-lendario-bg: rgba(243, 156, 18, 0.15);
+    --rarity-lendario-border: #F39C12;
+    --rarity-lendario-glow: rgba(243, 156, 18, 0.8);
     
     /* Mítica - Vermelho */
     --rarity-mitica-bg: rgba(244, 67, 54, 0.15);
