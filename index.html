@@ -53138,12 +53138,18 @@ ${arteGerada.justificativa}`;
 
             let cartas = armazenar.cardflux || [];
 
-            // Aplicar filtro se fornecido
+            // Aplicar filtro se fornecido - agora com mais campos
             if (filtro && filtro.trim()) {
                 const termoFiltro = filtro.toLowerCase();
                 cartas = cartas.filter(c => 
                     c.nome.toLowerCase().includes(termoFiltro) ||
-                    (c.tags && c.tags.some(t => t.toLowerCase().includes(termoFiltro)))
+                    c.tipo.toLowerCase().includes(termoFiltro) ||
+                    c.raridade.toLowerCase().includes(termoFiltro) ||
+                    c.deck.toLowerCase().includes(termoFiltro) ||
+                    (c.descricao && c.descricao.toLowerCase().includes(termoFiltro)) ||
+                    (c.contexto && c.contexto.toLowerCase().includes(termoFiltro)) ||
+                    (c.tags && c.tags.some(t => t.toLowerCase().includes(termoFiltro))) ||
+                    (c.intensidade && c.intensidade.toString().includes(termoFiltro))
                 );
             }
 
@@ -53468,16 +53474,24 @@ ${arteGerada.justificativa}`;
                 return;
             }
             
-            // Gerar autocomplete
+            // Gerar autocomplete com mais campos
             if (termo.length < 20 && autocompleteDiv) {
                 const todasAsOpcoes = new Set();
                 
                 if (armazenar.cardflux) {
                     armazenar.cardflux.forEach(card => {
+                        // Nome da carta
                         if (card.nome) todasAsOpcoes.add(card.nome);
+                        // Raridade
                         if (card.raridade) todasAsOpcoes.add(card.raridade);
+                        // Tipo de evento
                         if (card.tipo) todasAsOpcoes.add(card.tipo);
+                        // Deck
+                        if (card.deck) todasAsOpcoes.add(card.deck);
+                        // Tags/Etiquetas
                         if (card.tags) card.tags.forEach(tag => todasAsOpcoes.add(tag));
+                        // Intensidade como texto
+                        if (card.intensidade) todasAsOpcoes.add('Intensidade ' + card.intensidade);
                     });
                 }
                 
