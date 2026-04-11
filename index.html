@@ -10422,7 +10422,7 @@
                     </div>
 
                     <!-- Grid de Cards Cardflux -->
-                    <div id="gridCardflux" class="origem-cards-grid">
+                    <div id="gridCardflux" class="origem-cards-grid" oncontextmenu="mostrarMenuContextoCardflux(event)">
                         <div class="origem-empty-state section-cardflux" style="grid-column: 1 / -1;">
                             <div class="origem-empty-state-icon">🂡</div>
                             <p class="origem-empty-state-text">Carregando itens...</p>
@@ -53571,6 +53571,111 @@ ${arteGerada.justificativa}`;
             }
             
             renderizarGridCardflux(termoBusca);
+        }
+
+        /**
+         * Menu de contexto (clique direito) na aba Cardflux
+         */
+        function mostrarMenuContextoCardflux(event) {
+            event.preventDefault();
+            
+            // Remover menu anterior se existir
+            const menuAnterior = document.getElementById('menuContextoCardflux');
+            if (menuAnterior) {
+                menuAnterior.remove();
+            }
+            
+            // Criar menu
+            const menu = document.createElement('div');
+            menu.id = 'menuContextoCardflux';
+            menu.style.cssText = `
+                position: fixed;
+                top: ${event.clientY}px;
+                left: ${event.clientX}px;
+                background: linear-gradient(135deg, rgba(15, 15, 20, 0.98), rgba(22, 33, 62, 0.98));
+                border: 2px solid rgba(212, 175, 55, 0.4);
+                border-radius: 12px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.2);
+                z-index: 100000;
+                min-width: 250px;
+                padding: 8px 0;
+                backdrop-filter: blur(10px);
+            `;
+            
+            // Opção 1: Criar Nova Carta
+            const opcao1 = document.createElement('div');
+            opcao1.style.cssText = `
+                padding: 12px 20px;
+                color: #7ED321;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                transition: all 0.2s;
+                border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+                font-weight: 600;
+            `;
+            opcao1.innerHTML = '➕ Criar Nova Carta';
+            opcao1.onmouseover = function() {
+                this.style.background = 'rgba(126, 211, 33, 0.15)';
+                this.style.paddingLeft = '24px';
+            };
+            opcao1.onmouseout = function() {
+                this.style.background = 'transparent';
+                this.style.paddingLeft = '20px';
+            };
+            opcao1.onclick = function() {
+                menu.remove();
+                abrirModalCardfluxUnificado();
+                const modalElement = document.getElementById('modalCardfluxEditor');
+                if (modalElement) {
+                    const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+                    modal.show();
+                }
+            };
+            menu.appendChild(opcao1);
+            
+            // Opção 2: Iniciar Execução
+            const opcao2 = document.createElement('div');
+            opcao2.style.cssText = `
+                padding: 12px 20px;
+                color: #3498db;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                transition: all 0.2s;
+                font-weight: 600;
+            `;
+            opcao2.innerHTML = '🎲 Iniciar Execução';
+            opcao2.onmouseover = function() {
+                this.style.background = 'rgba(52, 152, 219, 0.15)';
+                this.style.paddingLeft = '24px';
+            };
+            opcao2.onmouseout = function() {
+                this.style.background = 'transparent';
+                this.style.paddingLeft = '20px';
+            };
+            opcao2.onclick = function() {
+                menu.remove();
+                abrirModalCardfluxExecucao();
+            };
+            menu.appendChild(opcao2);
+            
+            document.body.appendChild(menu);
+            
+            // Fechar menu ao clicar em outro lugar
+            setTimeout(() => {
+                document.addEventListener('click', fecharMenuContextoCardflux);
+            }, 100);
+        }
+        
+        function fecharMenuContextoCardflux() {
+            const menu = document.getElementById('menuContextoCardflux');
+            if (menu) {
+                menu.remove();
+                document.removeEventListener('click', fecharMenuContextoCardflux);
+            }
         }
 
         /**
