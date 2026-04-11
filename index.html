@@ -53577,8 +53577,37 @@ ${arteGerada.justificativa}`;
                 // Armazenar ID da carta em edição
                 form.dataset.cartaId = cartaId;
             } else {
-                // Limpar formulário para nova carta
+                // Limpar formulário para nova carta - resetar TODOS os campos
                 form.reset();
+                
+                // Resetar manualmente cada campo para garantir limpeza completa
+                const camposReset = {
+                    'cardfluxNome': '',
+                    'cardfluxTipo': '',
+                    'cardfluxIntensidade': '5',
+                    'cardfluxRaridade': 'Comum',
+                    'cardfluxDeck': 'jornada',
+                    'cardfluxPeso': '1',
+                    'cardfluxCooldown': '0',
+                    'cardfluxTags': '',
+                    'cardfluxDescricao': '',
+                    'cardfluxContexto': '',
+                    'cardfluxTestes': '',
+                    'cardfluxSucessos': '',
+                    'cardfluxFalhas': '',
+                    'cardfluxRecompensas': '',
+                    'cardfluxConsequencias': '',
+                    'cardfluxGanchos': '',
+                    'cardfluxImagemUrl': ''
+                };
+                
+                for (const [id, valor] of Object.entries(camposReset)) {
+                    const elemento = document.getElementById(id);
+                    if (elemento) {
+                        elemento.value = valor;
+                    }
+                }
+                
                 form.dataset.cartaId = '';
             }
 
