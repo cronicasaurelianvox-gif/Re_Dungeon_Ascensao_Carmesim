@@ -15911,10 +15911,21 @@
                             <div>
                                 <label style="color: #7ED321; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">🛣️ Distância Base</label>
                                 <select id="cardfluxDistancia" onchange="calcularTotalCartas()" style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(126, 211, 33, 0.4); color: #7ED321; border-radius: 8px; padding: 10px; font-weight: 600; width: 100%; cursor: pointer;">
-                                    <option value="1">🏠 Curta (1)</option>
-                                    <option value="2">📍 Média (2)</option>
-                                    <option value="4" selected>📍 Longa (4)</option>
-                                    <option value="6">🗺️ Muito Longa (6)</option>
+                                    <option value="1">👣 Poucos Passos (1)</option>
+                                    <option value="3">📏 Trecho Curto (3)</option>
+                                    <option value="5">📍 Curta Distância (5)</option>
+                                    <option value="7">🪧 Distância Próxima (7)</option>
+                                    <option value="9" selected>🧭 Distância Comum (9)</option>
+                                    <option value="11">🛤️ Distância Moderada (11)</option>
+                                    <option value="13">🛣️ Distância Longa (13)</option>
+                                    <option value="15">🌄 Longa Distância (15)</option>
+                                    <option value="17">🌲 Distância Remota (17)</option>
+                                    <option value="19">🏔️ Distância Extensa (19)</option>
+                                    <option value="21">🌌 Distância Muito Extensa (21)</option>
+                                    <option value="23">🧱 Distância Continental (23)</option>
+                                    <option value="25">👑 Distância Lendária (25)</option>
+                                    <option value="27">🔥 Distância Mítica (27)</option>
+                                    <option value="29">🌠 Distância Incalculável (29)</option>
                                 </select>
                             </div>
 
@@ -15922,20 +15933,34 @@
                             <div>
                                 <label style="color: #7ED321; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">⏱️ Ritmo da Viagem</label>
                                 <select id="cardfluxRitmo" onchange="calcularTotalCartas()" style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(126, 211, 33, 0.4); color: #7ED321; border-radius: 8px; padding: 10px; font-weight: 600; width: 100%; cursor: pointer;">
-                                    <option value="-1">🐢 Cauteloso (-1)</option>
-                                    <option value="0" selected>🚶 Normal (0)</option>
-                                    <option value="1">🏃 Apressado (+1)</option>
-                                    <option value="2">🏇 Corrida (+2)</option>
+                                    <option value="11">🐌 Peregrinação (+11)</option>
+                                    <option value="9">🐢 Extremamente Cauteloso (+9)</option>
+                                    <option value="7">🛡️ Marcha Vigilante (+7)</option>
+                                    <option value="5">🚶 Cauteloso (+5)</option>
+                                    <option value="3">⚖️ Passo de Estrada (+3)</option>
+                                    <option value="1">🧭 Rota Conhecida (+1)</option>
+                                    <option value="0" selected>🚶‍♂️ Normal (0)</option>
+                                    <option value="-1">🏃 Apressado (-1)</option>
+                                    <option value="-3">🏇 Corrida (-3)</option>
+                                    <option value="-5">💨 Carroagem (-5)</option>
+                                    <option value="-7">🪽 Voando (-7)</option>
+                                    <option value="-9">🔥 Teleporte (-9)</option>
                                 </select>
                             </div>
                         </div>
 
                         <!-- Row 2: Sorte, Intensidade, Total -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                             <!-- Modificador Sorte -->
                             <div>
                                 <label style="color: #7ED321; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">🍀 Modificador Sorte</label>
                                 <input type="number" id="cardfluxExecucaoSorte" min="-5" max="5" value="0" step="1" onchange="calcularTotalCartas()" style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(126, 211, 33, 0.4); color: #7ED321; border-radius: 8px; padding: 10px; font-weight: 600; width: 100%; text-align: center;">
+                            </div>
+
+                            <!-- Ação (Acelerador/Desacelerador de Fluxo) -->
+                            <div>
+                                <label style="color: #F0C850; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">⚡ Ação</label>
+                                <input type="number" id="cardfluxExecucaoAcao" min="-10" max="10" value="0" step="1" onchange="calcularTotalCartas()" style="background: rgba(240,200,80,0.15); border: 1.5px solid rgba(240,200,80,0.4); color: #F0C850; border-radius: 8px; padding: 10px; font-weight: 600; width: 100%; text-align: center;" placeholder="Acelera (+) ou atrasa (-)">
                             </div>
 
                             <!-- Intensidade Mínima -->
@@ -15961,6 +15986,17 @@
                             <button type="button" class="btn" onclick="reembaralharDeckCardflux()" style="background: rgba(126, 211, 33, 0.2); color: #7ED321; border: 1px solid rgba(126, 211, 33, 0.4); border-radius: 8px; padding: 10px 16px; font-weight: 600; flex: 1; transition: all 0.25s;" onmouseover="this.style.background='rgba(126, 211, 33, 0.4)'; this.style.boxShadow='0 0 12px rgba(126, 211, 33, 0.3)';" onmouseout="this.style.background='rgba(126, 211, 33, 0.2)'; this.style.boxShadow='';">
                                 🔄 Reembaralhar
                             </button>
+                        </div>
+
+                        <!-- Help Text para Ação -->
+                        <div style="background: rgba(240,200,80,0.08); border-left: 3px solid rgba(240,200,80,0.4); padding: 12px; border-radius: 6px; margin-top: 12px; font-size: 0.8rem; color: rgba(240,200,80,0.9);">
+                            <strong>💡 Campo Ação:</strong> Use para acelerar ou atrasar o fluxo de cartas. 
+                            <br/>
+                            <span style="color: rgba(240,200,80,0.7);">• <strong>+</strong> (valores positivos) = Mais cartas no plano (acelera)</span>
+                            <br/>
+                            <span style="color: rgba(240,200,80,0.7);">• <strong>-</strong> (valores negativos) = Menos cartas no plano (atrasa)</span>
+                            <br/>
+                            <span style="color: rgba(240,200,80,0.7);">O total final nunca será menor que 1.</span>
                         </div>
                     </div>
 
@@ -16090,6 +16126,17 @@
                                         <option value="Evento de Lore">📜 Evento de Lore</option>
                                         <option value="Pressão Temporal">⏰ Pressão Temporal</option>
                                         <option value="Evento Lendário">⭐ Evento Lendário</option>
+                                        <option value="Traição">💔 Traição</option>
+                                        <option value="Transformação">🦋 Transformação</option>
+                                        <option value="Cura / Redenção">✨ Cura / Redenção</option>
+                                        <option value="Aliança">🤝 Aliança</option>
+                                        <option value="Sacrifício">⚔️ Sacrifício</option>
+                                        <option value="Revelação">💡 Revelação</option>
+                                        <option value="Conflito Interno">⚡ Conflito Interno</option>
+                                        <option value="Jogo de Sorte">🎰 Jogo de Sorte</option>
+                                        <option value="Maldição">🌑 Maldição</option>
+                                        <option value="Bênção">☀️ Bênção</option>
+                                        <option value="Apocalipse">🔥 Apocalipse</option>
                                     </select>
                                 </div>
                             </div>
@@ -53680,7 +53727,58 @@ ${arteGerada.justificativa}`;
             // Atualizar tipo
             const tipoEl = document.getElementById('cardfluxPreviewTipo');
             if (tipoEl) {
-                tipoEl.textContent = tipo.includes('Flash') ? '⚡ Flash' : '🎭 Scene';
+                // Mapa de tipos com emojis
+                const tipoMap = {
+                    'Emboscada': '🗡️ Emboscada',
+                    'Obstáculo': '🚧 Obstáculo',
+                    'Descoberta': '💎 Descoberta',
+                    'Social': '🤝 Social',
+                    'Catástrofe': '💥 Catástrofe',
+                    'Presságio': '⚠️ Presságio',
+                    'Boss': '👹 Boss',
+                    'Mistério': '🔍 Mistério',
+                    'Perseguição': '🏃 Perseguição',
+                    'Sobrevivência': '🌪️ Sobrevivência',
+                    'Exploração': '🗺️ Exploração',
+                    'Interação': '💬 Interação',
+                    'Encontro': '👥 Encontro',
+                    'Evento Ambiental': '🌍 Evento Ambiental',
+                    'Evento Sobrenatural': '👻 Evento Sobrenatural',
+                    'Evento de Guerra': '⚔️ Evento de Guerra',
+                    'Evento Político': '👑 Evento Político',
+                    'Oportunidade': '✨ Oportunidade',
+                    'Recompensa': '🎁 Recompensa',
+                    'Dilema Moral': '⚖️ Dilema Moral',
+                    'Investigação': '🔎 Investigação',
+                    'Armadilha': '🪤 Armadilha',
+                    'Comércio': '💰 Comércio',
+                    'Ruína': '🏚️ Ruína',
+                    'Ritual': '🕯️ Ritual',
+                    'Corrupção': '🌑 Corrupção',
+                    'Provação': '🔥 Provação',
+                    'Caçada': '🎯 Caçada',
+                    'Escolta': '🛡️ Escolta',
+                    'Defesa': '🏰 Defesa',
+                    'Invasão': '⚔️ Invasão',
+                    'Fuga': '💨 Fuga',
+                    'Puzzle / Enigma': '🧩 Puzzle / Enigma',
+                    'Descanso / Acampamento': '🏕️ Descanso / Acampamento',
+                    'Evento de Lore': '📜 Evento de Lore',
+                    'Pressão Temporal': '⏰ Pressão Temporal',
+                    'Evento Lendário': '⭐ Evento Lendário',
+                    'Traição': '💔 Traição',
+                    'Transformação': '🦋 Transformação',
+                    'Cura / Redenção': '✨ Cura / Redenção',
+                    'Aliança': '🤝 Aliança',
+                    'Sacrifício': '⚔️ Sacrifício',
+                    'Revelação': '💡 Revelação',
+                    'Conflito Interno': '⚡ Conflito Interno',
+                    'Jogo de Sorte': '🎰 Jogo de Sorte',
+                    'Maldição': '🌑 Maldição',
+                    'Bênção': '☀️ Bênção',
+                    'Apocalipse': '🔥 Apocalipse'
+                };
+                tipoEl.textContent = tipoMap[tipo] || `📌 ${tipo}`;
             }
 
             // Atualizar intensidade com cor
@@ -53878,13 +53976,14 @@ ${arteGerada.justificativa}`;
         // ============================================
 
         // Estado da execução
-        const cardfluxExecucao = {
+        window.cardfluxExecucao = {
             // Configuração de Sessão
             deckAtivo: 'todos',
             decksSelecionados: [],
             distanciaBase: 4,
             ritmo: 0,  // -1 (Cauteloso), 0 (Normal), +1 (Apressado)
             modificadorSorte: 0,
+            acao: 0,  // +/- valor para acelerar/atrasar fluxo de cartas
             intensidadeMinima: 1,
             
             // Estado do Sorteio
@@ -53921,6 +54020,11 @@ ${arteGerada.justificativa}`;
             cardfluxExecucao.cartasCompradas = 0;
             cardfluxExecucao.cartasUsadas = [];
             cardfluxExecucao.cartasDescartadas = [];
+            cardfluxExecucao.acao = 0;  // Resetar ação
+            
+            // Resetar campos no form
+            document.getElementById('cardfluxExecucaoSorte').value = 0;
+            document.getElementById('cardfluxExecucaoAcao').value = 0;
             
             document.getElementById('cartaSorteadaContainer').innerHTML = `
                 <div style="text-align: center; color: rgba(236, 240, 241, 0.6);">
@@ -53949,12 +54053,14 @@ ${arteGerada.justificativa}`;
             const distancia = parseInt(document.getElementById('cardfluxDistancia').value) || 4;
             const ritmo = parseInt(document.getElementById('cardfluxRitmo').value) || 0;
             const sorte = parseInt(document.getElementById('cardfluxExecucaoSorte').value) || 0;
+            const acao = parseInt(document.getElementById('cardfluxExecucaoAcao').value) || 0;
             
-            const total = Math.max(1, distancia + ritmo + sorte);
+            const total = Math.max(1, distancia + ritmo + sorte + acao);
             
             cardfluxExecucao.distanciaBase = distancia;
             cardfluxExecucao.ritmo = ritmo;
             cardfluxExecucao.modificadorSorte = sorte;
+            cardfluxExecucao.acao = acao;
             cardfluxExecucao.totalCartasPlanejadas = total;
             
             // Atualizar display
