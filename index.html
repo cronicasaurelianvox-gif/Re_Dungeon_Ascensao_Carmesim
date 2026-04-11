@@ -53001,34 +53001,7 @@ ${arteGerada.justificativa}`;
             
             // Garantir que existe ao menos estrutura básica
             if (armazenar.cardflux.length === 0) {
-                console.log('📇 Inicializando estrutura Cardflux...');
-                
-                // Criar carta de exemplo para demonstração
-                const cartaExemplo = {
-                    id: gerarIdCarta(),
-                    nome: 'Assalto à Caravana',
-                    tipo: 'Flash Event',
-                    intensidade: 7,
-                    deck: 'jornada',
-                    raridade: 'Rara',
-                    tags: ['encontro', 'combate', 'inimigos'],
-                    descricao: 'A jornada é interrompida por um grupo de banditos que atacam a caravana.',
-                    contexto: 'Enquanto viajam pela estrada, os personagens ouvem gritos e cascos de cavalos galopando.',
-                    testes: 'Percepção para notar emboscada, Atletismo para se defender, Inteligência para estratégia de combate.',
-                    sucessos: 'Os personagens repelem o ataque e podem capturar ou desabilitara os banditos.',
-                    falhas: 'Perdem suprimentos valiosos ou sofrem ferimentos significativos.',
-                    recompensas: 'Ouro dos banditos, possível artefato raro, confiança de aliados comerciantes.',
-                    consequencias: 'Banditos podem procurar vingança, reputação melhorada em cidades.',
-                    ganchos: 'Descobrir quem contratou os banditos, levar informações a um feudo afetado.',
-                    cooldown: 3,
-                    pesoSorteio: 1.5,
-                    ativa: true,
-                    dataCriacao: new Date().toISOString()
-                };
-
-                armazenar.cardflux.push(cartaExemplo);
-                localStorage.setItem('redungeon_cardflux', JSON.stringify(armazenar.cardflux));
-                console.log('✅ Carta de exemplo criada! Você pode começar a editar e criar mais cartas.');
+                console.log('📇 Estrutura Cardflux pronta. Comece criando suas cartas!');
             }
         }
 
