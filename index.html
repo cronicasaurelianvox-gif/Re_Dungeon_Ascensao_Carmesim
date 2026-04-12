@@ -1949,7 +1949,7 @@
             }
         }
 
-        /* ===== ESTILOS ESPECÍFICOS PARA ABAS DE TIPOS (NPCs, MOBs, BOSS) ===== */
+        /* ===== ESTILOS ESPECÍFICOS PARA ABAS DE CATEGORIAS (NPCs, MOBs) - Nova Classificação ===== */
         .npc-tipo-aba-btn {
             background: rgba(212, 175, 55, 0.15) !important;
             color: #d4af37 !important;
@@ -2002,33 +2002,7 @@
             box-shadow: 0 4px 12px rgba(220, 20, 60, 0.2) !important;
         }
 
-        .boss-tipo-aba-btn {
-            background: rgba(147, 112, 219, 0.15) !important;
-            color: #9370DB !important;
-            border: 2px solid rgba(147, 112, 219, 0.4) !important;
-            border-radius: 4px !important;
-            padding: 10px 20px !important;
-            font-size: 1.1rem !important;
-            font-weight: 600 !important;
-            transition: all 0.3s ease !important;
-            margin: 0 4px !important;
-            height: auto !important;
-        }
-
-        .boss-tipo-aba-btn:hover:not(.active) {
-            background: rgba(147, 112, 219, 0.25) !important;
-            border-color: rgba(147, 112, 219, 0.6) !important;
-            transform: translateY(-2px);
-        }
-
-        .boss-tipo-aba-btn.active {
-            background: rgba(147, 112, 219, 0.25) !important;
-            color: #da70d6 !important;
-            border-color: rgba(147, 112, 219, 0.8) !important;
-            box-shadow: 0 4px 12px rgba(147, 112, 219, 0.2) !important;
-        }
-
-        /* ===== ALINHAR ABAS NPCs/MOBs/BOSS À ESQUERDA ===== */
+        /* ===== ALINHAR ABAS NPCs/MOBs À ESQUERDA ===== */
         #npcsTabContent {
             margin-top: 0;
         }
@@ -2046,7 +2020,7 @@
             margin-right: 8px;
         }
 
-        /* ===== CORES DE FUNDO DAS ABAS DE TIPOS (NPCs, MOBs, BOSS) ===== */
+        /* ===== CORES DE FUNDO DAS ABAS DE CATEGORIAS (NPCs, MOBs) ===== */
         .npcs-mob-boss-tab-content {
             background: rgba(212, 175, 55, 0.05) !important;
             transition: background-color 0.4s ease !important;
@@ -2065,10 +2039,6 @@
 
         .npcs-mob-boss-tab-content.mob-bg-active {
             background: rgba(220, 20, 60, 0.05) !important;
-        }
-
-        .npcs-mob-boss-tab-content.boss-bg-active {
-            background: rgba(147, 112, 219, 0.05) !important;
         }
 
         .nav-link:hover::before {
@@ -7763,8 +7733,8 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            background: linear-gradient(135deg, var(--badge-color, #D4AF37) 0%, rgba(212, 175, 55, 0.7) 100%);
-            color: #1a1a2e;
+            background-color: var(--badge-color, #D4AF37) !important;
+            color: var(--badge-texto, #1a1a2e) !important;
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 0.8rem;
@@ -10555,7 +10525,7 @@
                                 type="text" 
                                 id="filtroNPCsInput" 
                                 class="form-control" 
-                                placeholder="Digite para filtrar por nome, tipo (NPC, MOB, BOSS), raça, classe, status (vivo, morto), etc..."
+                                placeholder="Digite para filtrar por nome, categoria (NPC, MOB), tipo (Neutro, Hostil, Comuns, Elites, etc), raça, classe, status (vivo, morto), etc..."
                                 oninput="filtrarNPCsInteligente(this.value)"
                                 style="max-width: 100%; padding: 12px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; font-size: 1rem; position: relative; z-index: 10001;"
                                 autocomplete="off"
@@ -10564,7 +10534,7 @@
                         </div>
                     </div>
 
-                    <!-- ABAS DE TIPOS (NPCs, MOBs, BOSS) -->
+                    <!-- ABAS DE CATEGORIAS (NPCs e MOBs) - Nova Classificação -->
                     <div class="mb-4" style="margin-bottom: 0 !important;">
                         <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 0;">
                             <li class="nav-item" role="presentation">
@@ -10577,15 +10547,10 @@
                                     👹 MOBs
                                 </button>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link boss-tipo-aba-btn" id="boss-tipo-tab" data-bs-toggle="tab" data-bs-target="#boss-tipo-content" type="button" role="tab">
-                                    👑 BOSS
-                                </button>
-                            </li>
                         </ul>
 
                         <div class="tab-content npcs-mob-boss-tab-content" style="padding: 20px 20px 20px 20px; border-radius: 0; border: none; border-top: none; margin-top: -2px;" id="npcsTabContent">
-                            <!-- ABA: NPCs -->
+                            <!-- ABA: NPCs (Categoria NPC) -->
                             <div class="tab-pane fade show active" id="npc-tipo-content" role="tabpanel">
                                 <div id="listNPCsType" class="row" oncontextmenu="mostrarMenuContextoNPCs(event)">
                                     <div class="col-12">
@@ -10596,23 +10561,12 @@
                                 </div>
                             </div>
 
-                            <!-- ABA: MOBs -->
+                            <!-- ABA: MOBs (Categoria MOB) -->
                             <div class="tab-pane fade" id="mob-tipo-content" role="tabpanel">
                                 <div id="listMOBsType" class="row">
                                     <div class="col-12">
                                         <div class="no-data">
                                             <p>Nenhum MOB adicionado ainda. Clique no botão acima para começar!</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- ABA: BOSS -->
-                            <div class="tab-pane fade" id="boss-tipo-content" role="tabpanel">
-                                <div id="listBOSSType" class="row">
-                                    <div class="col-12">
-                                        <div class="no-data">
-                                            <p>Nenhum BOSS adicionado ainda. Clique no botão acima para começar!</p>
                                         </div>
                                     </div>
                                 </div>
@@ -14419,15 +14373,26 @@
                                         <!-- DADOS PESSOAIS (EXPANDIDO) -->
                                         <div style="flex: 0 0 auto; padding-right: 30px;">
                                             <div style="display: grid; gap: 10px;">
+                                                <!-- Categoria (NPC ou MOB) -->
                                                 <div>
-                                                    <label style="font-size: 0.75rem; color: #999; font-weight: bold;">Tipo</label>
+                                                    <label style="font-size: 0.75rem; color: #d4af37; font-weight: bold; text-transform: uppercase;">📊 Categoria</label>
                                                     <div style="display: flex; gap: 4px;">
-                                                        <button type="button" id="npcTipoNPC" class="btn btn-sm npc-tipo-btn" onclick="selecionarTipoNPC('NPC')" style="background: #FFD700; border: 2px solid #FFD700; color: #111; padding: 6px; flex: 1; font-size: 0.75rem; font-weight: bold; border-radius: 2px;">NPC</button>
-                                                        <button type="button" id="npcTipoMOB" class="btn btn-sm npc-tipo-btn" onclick="selecionarTipoNPC('MOB')" style="background: #222; border: 2px solid #DC143C; color: #DC143C; padding: 6px; flex: 1; font-size: 0.75rem; font-weight: bold; border-radius: 2px;">MOB</button>
-                                                        <button type="button" id="npcTipoBOSS" class="btn btn-sm npc-tipo-btn" onclick="selecionarTipoNPC('BOSS')" style="background: #222; border: 2px solid #9370DB; color: #9370DB; padding: 6px; flex: 1; font-size: 0.75rem; font-weight: bold; border-radius: 2px;">BOSS</button>
+                                                        <button type="button" id="npcCategoriaNPC" class="btn btn-sm npc-categoria-btn" onclick="selecionarCategoriaNPC('NPC')" style="background: #FFD700; border: 2px solid #FFD700; color: #111; padding: 6px; flex: 1; font-size: 0.75rem; font-weight: bold; border-radius: 2px;">NPC</button>
+                                                        <button type="button" id="npcCategoriaMOB" class="btn btn-sm npc-categoria-btn" onclick="selecionarCategoriaNPC('MOB')" style="background: #222; border: 2px solid #DC143C; color: #DC143C; padding: 6px; flex: 1; font-size: 0.75rem; font-weight: bold; border-radius: 2px;">MOB</button>
                                                     </div>
-                                                    <input type="hidden" id="npcTipoSelected" value="NPC">
+                                                    <input type="hidden" id="npcCategoriaSelected" value="NPC">
                                                 </div>
+
+                                                <!-- Tipo (dependente da categoria) -->
+                                                <div>
+                                                    <label style="font-size: 0.75rem; color: #d4af37; font-weight: bold; text-transform: uppercase;">⚔️ Tipo</label>
+                                                    <select class="form-control form-control-sm" id="npcTipoSelected" style="background: #222; border: 1px solid #d4af37; color: #d4af37; padding: 6px; font-size: 0.8rem; font-weight: bold;">
+                                                        <option value="Neutro">Neutro</option>
+                                                        <option value="Hostil">Hostil</option>
+                                                        <option value="Chefes">Chefes</option>
+                                                    </select>
+                                                </div>
+                                                
                                                 <div>
                                                     <label style="font-size: 0.75rem; color: #999; font-weight: bold;">Idade</label>
                                                     <input type="number" id="npcIdade" class="form-control form-control-sm" placeholder="17" min="1" style="background: #222; border: 1px solid #444; color: #ccc; padding: 4px; font-size: 0.8rem;">
@@ -15539,18 +15504,35 @@
     <!-- MODAL: SELECIONAR NPC PARA DUPLICAR -->
     <div class="modal fade" id="modalSelecionarNPCDuplicar" tabindex="-1" role="dialog" aria-modal="true">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content bg-dark border border-info">
-                <div class="modal-header border-info">
-                    <h5 class="modal-title text-info">📋 Selecionar NPC para Duplicar</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            <div class="modal-content" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border: 2px solid #d4af37; border-radius: 12px; box-shadow: 0 8px 32px rgba(212, 175, 55, 0.3);">
+                <div class="modal-header" style="background: linear-gradient(135deg, #d4af37 0%, #f0c850 100%); border: none; border-radius: 10px 10px 0 0;">
+                    <h5 class="modal-title" style="color: #000; font-weight: bold; font-size: 1.2rem;">📋 Selecionar NPC para Duplicar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" style="filter: brightness(0);"></button>
                 </div>
-                <div class="modal-body">
-                    <div id="listaNPCsDuplicar" style="max-height: 400px; overflow-y: auto;">
+                
+                <!-- FILTRO INTELIGENTE -->
+                <div style="padding: 15px; background: rgba(212, 175, 55, 0.05); border-bottom: 1px solid rgba(212, 175, 55, 0.2);">
+                    <input type="text" id="filtroNPCDuplicar" placeholder="🔍 Filtrar por nome, categoria, tipo, raça, classe..." style="
+                        width: 100%;
+                        padding: 10px 15px;
+                        background: rgba(0, 0, 0, 0.5);
+                        border: 2px solid rgba(212, 175, 55, 0.4);
+                        color: #d4af37;
+                        border-radius: 8px;
+                        font-size: 0.9rem;
+                        transition: all 0.3s ease;
+                        font-weight: 600;
+                    " oninput="filtrarNPCsDuplicar(this.value);" onmouseover="this.style.borderColor='rgba(212, 175, 55, 0.7)'; this.style.boxShadow='0 0 15px rgba(212, 175, 55, 0.2)';" onmouseout="this.style.borderColor='rgba(212, 175, 55, 0.4)'; this.style.boxShadow='none';" />
+                </div>
+                
+                <div class="modal-body" style="max-height: 500px; overflow-y: auto; padding: 15px;">
+                    <div id="listaNPCsDuplicar" style="display: grid; gap: 10px;">
                         <!-- Será preenchido dinamicamente -->
                     </div>
                 </div>
-                <div class="modal-footer border-info">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">❌ Cancelar</button>
+                
+                <div class="modal-footer" style="background: rgba(212, 175, 55, 0.05); border-top: 1px solid rgba(212, 175, 55, 0.2); border-radius: 0 0 10px 10px;">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">❌ Cancelar</button>
                 </div>
             </div>
         </div>
@@ -18465,6 +18447,13 @@
                 document.getElementById('npcOrigemBotao').textContent = 'Selecionar Origem ▼';
                 document.getElementById('npcOrigemBotao').removeAttribute('data-origem-id');
                 
+                // ✅ NOVO: RESET DE CATEGORIA E TIPO (novos campos)
+                selecionarCategoriaNPC('NPC');  // Selecionar categoria padrão
+                atualizarOpcoesTipoNPC('NPC'); // Atualizar opções de tipo para NPC
+                document.getElementById('npcTipoSelected').value = 'Neutro'; // Tipo padrão
+                console.log('✅ Categoria e Tipo resetados para novo NPC');
+                
+                
                 // 9️⃣ RESET DE INVENTÁRIO E HABILIDADES
                 npcInventarioItens = [];
                 document.getElementById('npcInventarioData').value = '[]';
@@ -20426,12 +20415,46 @@
             }, 50);
         }
 
-        // Migração: Garante que NPCs antigos têm a propriedade habilidades
+        // Migração: Garante que NPCs antigos têm todas as propriedades necessárias
+        // Inclui mapeamento automático de tipo antigo (NPC/MOB/BOSS) para nova estrutura (npcClasse + npcTipo)
         function migrarNPCAntigo(npc) {
+            // ✅ Inicializar habilidades se não existir
             if (!npc.habilidades) {
                 npc.habilidades = [];
                 console.log('🔄 NPC migrado - propriedade habilidades inicializada como array vazio');
             }
+
+            // ✅ MIGRAÇÃO AUTOMÁTICA: Mapear tipo antigo (NPC/MOB/BOSS) para nova estrutura
+            // Se não tem os novos campos, criar com base no campo "tipo" antigo
+            if (!npc.npcCategoria || !npc.npcTipo) {
+                const tipoAntigo = npc.tipo || 'NPC';
+                
+                console.log(`🔄 Migrando NPC "${npc.nome}" - tipo antigo: ${tipoAntigo}`);
+                
+                // Mapear tipo antigo para nova estrutura
+                switch(tipoAntigo.toUpperCase()) {
+                    case 'NPC':
+                        npc.npcCategoria = 'NPC';
+                        npc.npcTipo = 'Neutro';  // Padrão para NPCs
+                        break;
+                    case 'MOB':
+                        npc.npcCategoria = 'MOB';
+                        npc.npcTipo = 'Comuns';  // Padrão para MOBs
+                        break;
+                    case 'BOSS':
+                        // BOSSes podem ser NPCs ou MOBs - inferir a partir do contexto
+                        // Como não temos info, assumir MOB/Chefões
+                        npc.npcCategoria = 'MOB';
+                        npc.npcTipo = 'Chefões';
+                        break;
+                    default:
+                        npc.npcCategoria = 'NPC';
+                        npc.npcTipo = 'Neutro';
+                }
+                
+                console.log(`✅ NPC "${npc.nome}" migrado: categoria=${npc.npcCategoria}, tipo=${npc.npcTipo}`);
+            }
+
             return npc;
         }
 
@@ -22716,7 +22739,9 @@
             const novoNPC = {
                 id: window.npcEmEdicao !== null ? armazenar.npcs[window.npcEmEdicao]?.id : `npc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
                 nome,
-                tipo: document.getElementById('npcTipoSelected').value || 'NPC',
+                tipo: document.getElementById('npcCategoriaSelected').value || 'NPC',  // Campo antigo - mantido para compatibilidade
+                npcCategoria: document.getElementById('npcCategoriaSelected')?.value || 'NPC',  // NOVO: Categoria principal (NPC ou MOB)
+                npcTipo: document.getElementById('npcTipoSelected')?.value || 'Neutro',  // NOVO: Tipo dependente da categoria
                 raca,
                 racaID: racaID,
                 classe,
@@ -24688,6 +24713,15 @@
                         localStorage.setItem(metadadosAba.key, sanitizarParaSalvar(mesclados, metadadosAba.nome));
                         armazenar[idAba] = mesclados;
                         
+                        // ✅ Migração automática para NPCs
+                        if (idAba === 'npcs' && Array.isArray(armazenar.npcs)) {
+                            armazenar.npcs.forEach(npc => {
+                                if (npc && typeof migrarNPCAntigo === 'function') {
+                                    migrarNPCAntigo(npc);
+                                }
+                            });
+                        }
+                        
                         // Sincronizar variáveis globais para artes
                         if (idAba === 'artes') {
                             artes = resultado.mesclados;
@@ -24723,6 +24757,15 @@
                             const mesclados = limparDadosCorretos(resultado.mesclados, metadadosAba.nome);
                             localStorage.setItem(metadadosAba.key, sanitizarParaSalvar(mesclados, metadadosAba.nome));
                             armazenar[idAba] = mesclados;
+                            
+                            // ✅ Migração automática para NPCs
+                            if (idAba === 'npcs' && Array.isArray(armazenar.npcs)) {
+                                armazenar.npcs.forEach(npc => {
+                                    if (npc && typeof migrarNPCAntigo === 'function') {
+                                        migrarNPCAntigo(npc);
+                                    }
+                                });
+                            }
                             
                             // Sincronizar variáveis globais para artes
                             if (idAba === 'artes') {
@@ -28631,51 +28674,63 @@
             let npcsParaExibir = armazenar.npcs.filter(npc => {
                 // Preparar informações do NPC para comparação
                 const nome = (npc.nome || '').toLowerCase();
-                const tipo = (npc.tipo || 'NPC').toLowerCase();
+                const categoriaNPC = (npc.npcCategoria || npc.tipo || 'NPC').toLowerCase();
+                const tipoEspecifico = (npc.npcTipo || '').toLowerCase();
                 const raca = (npc.raca || '').toLowerCase();
                 const classe = (npc.classe || '').toLowerCase();
                 const status = (npc.status || 'vivo').toLowerCase();
                 
                 // Verificar se o termo aparece em qualquer campo
                 const correspondeNome = nome.includes(termo);
-                const correspondeTipo = tipo.includes(termo);
+                const correspondeCategoria = categoriaNPC.includes(termo);
+                const correspondeTipo = tipoEspecifico.includes(termo);
                 const correspondeRaca = raca.includes(termo);
-                const correspondeClasse = classe.includes(termo);
+                const correspondeClasse2 = classe.includes(termo);
                 const correspondeStatus = status.includes(termo);
                 
-                return correspondeNome || correspondeTipo || correspondeRaca || correspondeClasse || correspondeStatus;
+                return correspondeNome || correspondeCategoria || correspondeTipo || correspondeRaca || correspondeClasse2 || correspondeStatus;
             });
             
-            // Separar NPCs filtrados por tipo
-            const npcsFiltrados = npcsParaExibir.filter(npc => (npc.tipo || 'NPC') === 'NPC');
-            const mobsFiltrados = npcsParaExibir.filter(npc => npc.tipo === 'MOB');
-            const bossFiltrados = npcsParaExibir.filter(npc => npc.tipo === 'BOSS');
+            // ✅ NOVO: Separar NPCs filtrados por npcCategoria
+            const npcsFiltrados = npcsParaExibir.filter(npc => {
+                const categoria = npc.npcCategoria || (npc.tipo === 'BOSS' ? 'MOB' : npc.tipo) || 'NPC';
+                return categoria === 'NPC';
+            });
+            const mobsFiltrados = npcsParaExibir.filter(npc => {
+                const categoria = npc.npcCategoria || (npc.tipo === 'BOSS' ? 'MOB' : npc.tipo) || 'NPC';
+                return categoria === 'MOB';
+            });
             
             // Renderizar cada tipo com filtro
             renderizarNPCsPorTipo('NPC', npcsFiltrados, 'listNPCsType');
             renderizarNPCsPorTipo('MOB', mobsFiltrados, 'listMOBsType');
-            renderizarNPCsPorTipo('BOSS', bossFiltrados, 'listBOSSType');
+            
+            // Limpar aba de BOSS (compatibilidade)
+            const bossContainer = document.getElementById('listBOSSType');
+            if (bossContainer) {
+                bossContainer.innerHTML = `
+                    <div class="col-12">
+                        <div class="npc-empty-state">
+                            <div class="npc-empty-state-icon">👑</div>
+                            <div class="npc-empty-state-text">BOSSes agora são categorizados como MOBs/Chefões</div>
+                        </div>
+                    </div>
+                `;
+            }
             
             // MUDAR ABA automaticamente baseado nos resultados encontrados
-            if (npcsFiltrados.length > 0 && mobsFiltrados.length === 0 && bossFiltrados.length === 0) {
+            if (npcsFiltrados.length > 0 && mobsFiltrados.length === 0) {
                 // Só encontrou NPCs - mudar para aba NPCs
                 const tabNPC = document.getElementById('npc-tipo-tab');
                 if (tabNPC) {
                     const tab = new bootstrap.Tab(tabNPC);
                     tab.show();
                 }
-            } else if (mobsFiltrados.length > 0 && npcsFiltrados.length === 0 && bossFiltrados.length === 0) {
+            } else if (mobsFiltrados.length > 0 && npcsFiltrados.length === 0) {
                 // Só encontrou MOBs - mudar para aba MOBs
                 const tabMOB = document.getElementById('mob-tipo-tab');
                 if (tabMOB) {
                     const tab = new bootstrap.Tab(tabMOB);
-                    tab.show();
-                }
-            } else if (bossFiltrados.length > 0 && npcsFiltrados.length === 0 && mobsFiltrados.length === 0) {
-                // Só encontrou BOSS - mudar para aba BOSS
-                const tabBOSS = document.getElementById('boss-tipo-tab');
-                if (tabBOSS) {
-                    const tab = new bootstrap.Tab(tabBOSS);
                     tab.show();
                 }
             }
@@ -32516,7 +32571,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             listarMesa();
             listarOrigens();
             listarRegioes();
-            listarCenarios();
+            // listarCenarios(); // ⚠️ Container não existe - bloqueado
             renderizarGridUnificado();
             listarRacas();
             listarClasses();
@@ -36198,7 +36253,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             const modalElement = document.getElementById('modalNovoCenario');
             const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
             modal.hide();
-            listarCenarios();
+            // listarCenarios(); // ⚠️ Container não existe - bloqueado
             renderizarGridUnificado();
             alert('✅ Cenário salvo com sucesso!');
         }
@@ -36612,7 +36667,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             document.getElementById('formLocaisUnificado').reset();
             editandoLocalUnificado = null;
             bootstrap.Modal.getOrCreateInstance(document.getElementById('modalLocaisUnificado')).hide();
-            listarCenarios();
+            // listarCenarios(); // ⚠️ Container não existe - bloqueado
             renderizarGridUnificado();
             alert('✅ Cenário salvo com sucesso!');
         }
@@ -37310,7 +37365,7 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             if (confirm('⚠️ Deseja deletar este cenário?')) {
                 armazenar.cenarios = armazenar.cenarios.filter(c => c.id !== id);
                 localStorage.setItem('redungeon_cenarios', JSON.stringify(armazenar.cenarios));
-                listarCenarios();
+                // listarCenarios(); // ⚠️ Container não existe - bloqueado
                 renderizarGridUnificado();
                 alert('✅ Cenário deletado com sucesso!');
             }
@@ -37671,19 +37726,53 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             };
         }
 
-        // Selecionar Tipo de NPC (NPC, MOB ou BOSS)
-        function selecionarTipoNPC(tipo) {
-            document.getElementById('npcTipoSelected').value = tipo;
+        // ✅ NOVA FUNÇÃO: Selecionar Categoria de NPC (NPC ou MOB)
+        function selecionarCategoriaNPC(categoria) {
+            document.getElementById('npcCategoriaSelected').value = categoria;
             
             // Atualizar visual dos botões
-            document.getElementById('npcTipoNPC').style.background = tipo === 'NPC' ? '#FFD700' : '#222';
-            document.getElementById('npcTipoNPC').style.color = tipo === 'NPC' ? '#111' : '#FFD700';
+            document.getElementById('npcCategoriaNPC').style.background = categoria === 'NPC' ? '#FFD700' : '#222';
+            document.getElementById('npcCategoriaNPC').style.color = categoria === 'NPC' ? '#111' : '#FFD700';
             
-            document.getElementById('npcTipoMOB').style.background = tipo === 'MOB' ? '#DC143C' : '#222';
-            document.getElementById('npcTipoMOB').style.color = tipo === 'MOB' ? '#FFF' : '#DC143C';
+            document.getElementById('npcCategoriaMOB').style.background = categoria === 'MOB' ? '#DC143C' : '#222';
+            document.getElementById('npcCategoriaMOB').style.color = categoria === 'MOB' ? '#FFF' : '#DC143C';
             
-            document.getElementById('npcTipoBOSS').style.background = tipo === 'BOSS' ? '#9370DB' : '#222';
-            document.getElementById('npcTipoBOSS').style.color = tipo === 'BOSS' ? '#FFF' : '#9370DB';
+            // ✅ Atualizar opções de tipo dependendo da categoria selecionada
+            atualizarOpcoesTipoNPC(categoria);
+            
+            console.log(`✅ Categoria selecionada: ${categoria}`);
+        }
+
+        // ✅ NOVA FUNÇÃO: Atualizar opções de Tipo baseado na Categoria
+        function atualizarOpcoesTipoNPC(categoria) {
+            const selectTipo = document.getElementById('npcTipoSelected');
+            
+            // Limpar opções existentes
+            selectTipo.innerHTML = '';
+            
+            if (categoria === 'NPC') {
+                // NPCs têm os tipos: Neutro, Hostil, Chefes
+                selectTipo.innerHTML = `
+                    <option value="Neutro">Neutro</option>
+                    <option value="Hostil">Hostil</option>
+                    <option value="Chefes">Chefes</option>
+                `;
+            } else if (categoria === 'MOB') {
+                // MOBs têm os tipos: Comuns, Elites, Chefes, Chefões
+                selectTipo.innerHTML = `
+                    <option value="Comuns">Comuns</option>
+                    <option value="Elites">Elites</option>
+                    <option value="Chefes">Chefes</option>
+                    <option value="Chefões">Chefões</option>
+                `;
+            }
+            
+            // Definir primeira opção como selecionada
+            if (selectTipo.options.length > 0) {
+                selectTipo.value = selectTipo.options[0].value;
+            }
+            
+            console.log(`✅ Opções de tipo atualizadas para categoria: ${categoria}`);
         }
 
         // Obter cor do tipo de NPC
@@ -37724,9 +37813,13 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             // Preencher campos do formulário
             document.getElementById('npcNome').value = npc.nome || '';
             
-            // Carregar tipo do NPC
-            const tipoNPC = npc.tipo || 'NPC';
-            selecionarTipoNPC(tipoNPC);
+            // ✅ NOVO: Carregar categoria e tipo do NPC (com migração automática se não existir)
+            migrarNPCAntigo(npc);  // Garantir que npcCategoria e npcTipo foram atribuídos
+            const categoriaNPC = npc.npcCategoria || 'NPC';
+            const tipoNPC2Niveis = npc.npcTipo || 'Neutro';
+            selecionarCategoriaNPC(categoriaNPC);
+            document.getElementById('npcTipoSelected').value = tipoNPC2Niveis;
+            console.log(`✅ NPC carregado com categoria=${categoriaNPC}, tipo=${tipoNPC2Niveis}`);
             
             // IMPORTANTE: Usar os IDs salvos (racaID, classeID, origemID) se existirem, senão tentar recuperar dos nomes
             const racaParaSelecionar = npc.racaID || npc.raca || '';
@@ -37978,15 +38071,33 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
                 });
             }
 
-            // Separar NPCs por tipo
-            const npcs = armazenar.npcs.filter(npc => (npc.tipo || 'NPC') === 'NPC');
-            const mobs = armazenar.npcs.filter(npc => npc.tipo === 'MOB');
-            const boss = armazenar.npcs.filter(npc => npc.tipo === 'BOSS');
+            // ✅ NOVO: Separar NPCs por npcCategoria (NPC ou MOB)
+            // Usar npcCategoria se disponível, senão cair back para tipo antigo para compatibilidade
+            const npcs = armazenar.npcs.filter(npc => {
+                const categoria = npc.npcCategoria || (npc.tipo === 'BOSS' ? 'MOB' : npc.tipo) || 'NPC';
+                return categoria === 'NPC';
+            });
+            const mobs = armazenar.npcs.filter(npc => {
+                const categoria = npc.npcCategoria || (npc.tipo === 'BOSS' ? 'MOB' : npc.tipo) || 'NPC';
+                return categoria === 'MOB';
+            });
 
             // Carregar e renderizar cada tipo
             await renderizarNPCsPorTipo('NPC', npcs, 'listNPCsType');
             await renderizarNPCsPorTipo('MOB', mobs, 'listMOBsType');
-            await renderizarNPCsPorTipo('BOSS', boss, 'listBOSSType');
+            
+            // Manter compatibilidade: Se há containers para BOSS, preenchê-los com dados vazios
+            const bossContainer = document.getElementById('listBOSSType');
+            if (bossContainer) {
+                bossContainer.innerHTML = `
+                    <div class="col-12">
+                        <div class="npc-empty-state">
+                            <div class="npc-empty-state-icon">👑</div>
+                            <div class="npc-empty-state-text">BOSSes agora são categorizados como MOBs/Chefões</div>
+                        </div>
+                    </div>
+                `;
+            }
         }
 
         // Função para renderizar NPCs de um tipo específico
@@ -38047,13 +38158,16 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             npcsList.forEach((npc, indexLista) => {
                 const indexReal = armazenar.npcs.indexOf(npc);
                 
-                // Tipo de NPC - usar o tipo passado como parâmetro da função
+                // ✅ NOVO: Obter tipo de categoria principal e tipo específico
+                const categoriaNPC = npc.npcCategoria || 'NPC';
+                const tipoEspecifico = npc.npcTipo || 'Neutro';
+                
+                // Categoria de NPC - usar para ícone
                 const tipoIcon = {
                     'NPC': '👤',
-                    'MOB': '👹',
-                    'BOSS': '👑'
-                }[tipo] || '👤';
-                const tipoNPC = tipo;
+                    'MOB': '👹'
+                }[categoriaNPC] || '👤';
+                const tipoNPC = categoriaNPC;
 
                 // Status do NPC
                 const estaVivo = !npc.morto;
@@ -38082,22 +38196,39 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
                     `<img src="${imagemParaExibir}" alt="${npc.nome}" onerror="this.style.display='none'">` : 
                     `<div class="npc-card-image-placeholder">📸</div>`;
 
-                // Determinar cor da borda e dos textos baseado no tipo
+                // ✅ NOVO: Determinar cores baseado na CATEGORIA e TIPO
                 let corBorda = '';
                 let corTexto = '';
-                if (tipoNPC === 'NPC') {
-                    // Dourado para NPCs
-                    corBorda = '#D4AF37';
-                    corTexto = '#D4AF37';
-                } else if (tipoNPC === 'MOB') {
-                    // Vermelho para MOBs
-                    corBorda = '#FF4444';
-                    corTexto = '#FF6B6B';
-                } else if (tipoNPC === 'BOSS') {
-                    // Roxo/Magenta para BOSS
-                    corBorda = '#DA70D6';
-                    corTexto = '#DA70D6';
-                }
+                let corBadge = '';
+                let corBadgeTexto = '#FFF';
+                
+                // Cores por categoria
+                const coresPorCategoria = {
+                    'NPC': { borda: '#D4AF37', texto: '#D4AF37' },
+                    'MOB': { borda: '#FF4444', texto: '#FF6B6B' }
+                };
+                
+                // Cores por tipo específico (override)
+                const coresPorTipo = {
+                    // NPCs
+                    'Neutro': { badge: '#4CAF50', texto: '#FFF' },      // Verde
+                    'Hostil': { badge: '#FF9800', texto: '#FFF' },      // Laranja
+                    'Chefes': { badge: '#9C27B0', texto: '#FFF' },      // Roxo (para NPCs chefes)
+                    // MOBs
+                    'Comuns': { badge: '#2196F3', texto: '#FFF' },      // Azul
+                    'Elites': { badge: '#FF5722', texto: '#FFF' },      // Vermelho alaranjado
+                    'Chefões': { badge: '#FFD700', texto: '#000' }      // Ouro
+                };
+                
+                // Aplicar cores da categoria
+                const coresCategoria = coresPorCategoria[categoriaNPC] || coresPorCategoria['NPC'];
+                corBorda = coresCategoria.borda;
+                corTexto = coresCategoria.texto;
+                
+                // Aplicar cores do tipo (para badge)
+                const coresTipo = coresPorTipo[tipoEspecifico] || { badge: '#888', texto: '#FFF' };
+                corBadge = coresTipo.badge;
+                corBadgeTexto = coresTipo.texto;
 
                 html += `
                     <div class="npc-card-wrapper">
@@ -38110,9 +38241,9 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
                                 
                                 <!-- OVERLAY COM BADGES -->
                                 <div class="npc-card-overlay">
-                                    <div class="npc-card-type-badge" style="--badge-color: ${corBorda};">
-                                        <span class="badge-icon">${tipoIcon}</span>
-                                        <span class="badge-text">${tipoNPC}</span>
+                                    <!-- ✅ NOVO: Exibir tipo específico com cor personalizada -->
+                                    <div class="npc-card-type-badge" style="--badge-color: ${corBadge}; --badge-texto: ${corBadgeTexto};">
+                                        <span class="badge-text" style="text-transform: uppercase; font-weight: bold;">${tipoEspecifico}</span>
                                     </div>
                                     <div class="npc-card-status-badge ${classeStatus}">
                                         <span>${npc.morto ? '⚰️' : 'ﮩ٨ـ'} ${textoStatus}</span>
@@ -38319,6 +38450,13 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             console.log('   Classe:', classeParaSelecionar);
             console.log('   Origem:', origemParaSelecionar);
             console.log('   NPC completo:', npc);
+
+            // ✅ NOVO: Carregar e exibir categoria e tipo do NPC
+            const categoriaNPC = npc.npcCategoria || 'NPC';
+            const tipoNPC = npc.npcTipo || 'Neutro';
+            selecionarCategoriaNPC(categoriaNPC);
+            document.getElementById('npcTipoSelected').value = tipoNPC;
+            console.log(`✅ Categoria=${categoriaNPC}, Tipo=${tipoNPC}`);
 
             // Preencher campos do formulário
             document.getElementById('npcNome').value = npc.nome || '';
@@ -43955,7 +44093,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 listarOrigens();
                 listarCardflux();
                 listarRegioes();
-                listarCenarios();
+                // listarCenarios(); // ⚠️ Container não existe - bloqueado
                 listarRacas();
                 listarClasses();
                 listarAptidoes();
@@ -44226,7 +44364,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                             listarOrigens();
                             listarCardflux();
                             listarRegioes();
-                            listarCenarios();
+                            // listarCenarios(); // ⚠️ Container não existe - bloqueado
                             listarRacas();
                             listarClasses();
                             listarAptidoes();
@@ -44696,23 +44834,114 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             }
 
             const listaSeletor = document.getElementById('listaNPCsDuplicar');
-            let html = '<div style="display: grid; grid-template-columns: 1fr; gap: 10px;">';
+            let html = '';
 
             armazenar.npcs.forEach((npc, index) => {
                 const statusMorto = npc.morto ? '⚰️ (Morto)' : '✨ (Vivo)';
+                const categoriaNPC = npc.npcCategoria || 'NPC';
+                const tipoNPC = npc.npcTipo || 'Neutro';
+                const corBorda = categoriaNPC === 'NPC' ? '#D4AF37' : '#FF4444';
+                
+                // Cores por tipo
+                const coresPorTipo = {
+                    'Neutro': '#4CAF50',
+                    'Hostil': '#FF9800',
+                    'Chefes': '#9C27B0',
+                    'Comuns': '#2196F3',
+                    'Elites': '#FF5722',
+                    'Chefões': '#FFD700'
+                };
+                const corTipo = coresPorTipo[tipoNPC] || '#888';
+                
                 html += `
-                    <button type="button" class="btn btn-outline-light" style="text-align: left; padding: 10px; border: 1px solid #d4af37;" onclick="selecionarNPCParaDuplicar(${index})">
-                        <strong style="color: #d4af37;">${npc.nome}</strong> <br>
-                        <small style="color: #95a5a6;">Classe: ${npc.classe} | Raça: ${npc.raca} ${statusMorto}</small>
-                    </button>
+                    <div class="npc-duplicate-card-premium" onclick="selecionarNPCParaDuplicar(${index})" style="
+                        background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(22, 33, 62, 0.9) 100%);
+                        border: 2px solid ${corBorda};
+                        border-radius: 10px;
+                        padding: 15px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    " onmouseover="this.style.boxShadow='0 8px 25px ${corBorda}'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 4px 15px rgba(0, 0, 0, 0.3)'; this.style.transform='translateY(0)';">
+                        <div style="flex: 1;">
+                            <h6 style="color: ${corBorda}; margin: 0 0 8px 0; font-weight: bold; font-size: 1.1rem;">
+                                ${npc.nome}
+                            </h6>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+                                <span style="
+                                    background: ${corTipo};
+                                    color: ${tipoNPC === 'Chefões' ? '#000' : '#FFF'};
+                                    padding: 4px 10px;
+                                    border-radius: 12px;
+                                    font-size: 0.75rem;
+                                    font-weight: bold;
+                                ">${tipoNPC}</span>
+                                <span style="
+                                    background: rgba(212, 175, 55, 0.2);
+                                    color: #d4af37;
+                                    padding: 4px 10px;
+                                    border-radius: 12px;
+                                    font-size: 0.75rem;
+                                    font-weight: bold;
+                                ">${categoriaNPC}</span>
+                            </div>
+                            <small style="color: #95a5a6; display: block; line-height: 1.5;">
+                                👥 Raça: <strong style="color: #d4af37;">${npc.raca || 'N/A'}</strong> | 
+                                🛡️ Classe: <strong style="color: #d4af37;">${npc.classe || 'N/A'}</strong> | 
+                                ${statusMorto}
+                            </small>
+                        </div>
+                        <div style="text-align: right; margin-left: 15px;">
+                            <div style="font-size: 2rem;">📋</div>
+                            <small style="color: #7f8c8d; display: block;">Duplicar</small>
+                        </div>
+                    </div>
                 `;
             });
 
-            html += '</div>';
             listaSeletor.innerHTML = html;
 
             const modalDuplicar = new bootstrap.Modal(document.getElementById('modalSelecionarNPCDuplicar'));
             modalDuplicar.show();
+        }
+
+        // ✅ NOVO: Função de filtro inteligente para duplicação
+        function filtrarNPCsDuplicar(termo) {
+            const listaSeletor = document.getElementById('listaNPCsDuplicar');
+            const cards = listaSeletor.querySelectorAll('.npc-duplicate-card-premium');
+            
+            termo = termo.toLowerCase().trim();
+            
+            let encontrados = 0;
+            cards.forEach(card => {
+                const texto = card.textContent.toLowerCase();
+                const deveMostrar = texto.includes(termo);
+                
+                card.style.display = deveMostrar ? 'flex' : 'none';
+                if (deveMostrar) encontrados++;
+            });
+            
+            // Mostrar mensagem se nenhum encontrado
+            if (encontrados === 0 && termo) {
+                if (!document.getElementById('mensagemSemResultado')) {
+                    const msg = document.createElement('div');
+                    msg.id = 'mensagemSemResultado';
+                    msg.style.cssText = `
+                        grid-column: 1 / -1;
+                        text-align: center;
+                        padding: 30px;
+                        color: #95a5a6;
+                        font-size: 1.1rem;
+                    `;
+                    msg.innerHTML = `🔍 Nenhum NPC encontrado para: <strong>"${termo}"</strong>`;
+                    listaSeletor.appendChild(msg);
+                }
+            } else if (document.getElementById('mensagemSemResultado')) {
+                document.getElementById('mensagemSemResultado').remove();
+            }
         }
 
         // Variável global para armazenar o índice do NPC selecionado para duplicar
