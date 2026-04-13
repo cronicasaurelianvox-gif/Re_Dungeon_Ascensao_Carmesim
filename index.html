@@ -16017,18 +16017,24 @@
                             </div>
                         </div>
 
-                        <!-- Row 2: Sorte, Intensidade, Total -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <!-- Row 2: Sorte, Atraso, Acelerar, Intensidade, Total -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                             <!-- Modificador Sorte -->
                             <div>
-                                <label style="color: #7ED321; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">🍀 Modificador Sorte</label>
+                                <label style="color: #7ED321; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">🍀 Sorte</label>
                                 <input type="number" id="cardfluxExecucaoSorte" min="-5" max="5" value="0" step="1" onchange="calcularTotalCartas()" style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(126, 211, 33, 0.4); color: #7ED321; border-radius: 8px; padding: 10px; font-weight: 600; width: 100%; text-align: center;">
                             </div>
 
-                            <!-- Ação (Acelerador/Desacelerador de Fluxo) -->
+                            <!-- Atraso (Vermelho - aumenta cartas) -->
                             <div>
-                                <label style="color: #F0C850; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">⚡ Ação</label>
-                                <input type="number" id="cardfluxExecucaoAcao" min="-10" max="10" value="0" step="1" onchange="calcularTotalCartas()" style="background: rgba(240,200,80,0.15); border: 1.5px solid rgba(240,200,80,0.4); color: #F0C850; border-radius: 8px; padding: 10px; font-weight: 600; width: 100%; text-align: center;" placeholder="Acelera (+) ou atrasa (-)">
+                                <label style="color: #E74C3C; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">🐢 Atraso</label>
+                                <input type="number" id="cardfluxExecucaoAtraso" min="0" max="10" value="0" step="1" onchange="calcularTotalCartas()" style="background: rgba(231, 76, 60, 0.15); border: 1.5px solid rgba(231, 76, 60, 0.4); color: #E74C3C; border-radius: 8px; padding: 10px; font-weight: 600; width: 100%; text-align: center;" placeholder="Aumenta cartas">
+                            </div>
+
+                            <!-- Acelerar (Verde - reduz cartas) -->
+                            <div>
+                                <label style="color: #27AE60; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">⚡ Acelerar</label>
+                                <input type="number" id="cardfluxExecucaoAcelerar" min="0" max="10" value="0" step="1" onchange="calcularTotalCartas()" style="background: rgba(39, 174, 96, 0.15); border: 1.5px solid rgba(39, 174, 96, 0.4); color: #27AE60; border-radius: 8px; padding: 10px; font-weight: 600; width: 100%; text-align: center;" placeholder="Reduz cartas">
                             </div>
 
                             <!-- Intensidade Mínima -->
@@ -16039,7 +16045,7 @@
 
                             <!-- Total de Cartas -->
                             <div>
-                                <label style="color: #7ED321; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">🎰 Total de Cartas</label>
+                                <label style="color: #7ED321; font-weight: 700; margin-bottom: 8px; display: block; font-size: 0.9rem;">🎰 Total</label>
                                 <div id="cardfluxTotalDisplay" style="background: rgba(0,0,0,0.6); border: 1.5px solid rgba(126, 211, 33, 0.4); color: #7ED321; border-radius: 8px; padding: 10px; font-weight: 600; width: 100%; text-align: center; display: flex; align-items: center; justify-content: space-between;">
                                     <span id="cardfluxTotalValor">4</span>
                                     <small style="color: rgba(126, 211, 33, 0.7); font-size: 0.8rem;">(<span id="cardfluxCartasCompradas">0</span>/<span id="cardfluxTotalPlano">4</span>)</small>
@@ -16056,15 +16062,15 @@
                             </button>
                         </div>
 
-                        <!-- Help Text para Ação -->
-                        <div style="background: rgba(240,200,80,0.08); border-left: 3px solid rgba(240,200,80,0.4); padding: 12px; border-radius: 6px; margin-top: 12px; font-size: 0.8rem; color: rgba(240,200,80,0.9);">
-                            <strong>💡 Campo Ação:</strong> Use para acelerar ou atrasar o fluxo de cartas. 
+                        <!-- Help Text para Atraso e Acelerar -->
+                        <div style="background: rgba(126,211,33,0.08); border-left: 3px solid rgba(126,211,33,0.4); padding: 12px; border-radius: 6px; margin-top: 12px; font-size: 0.8rem; color: rgba(126,211,33,0.9);">
+                            <strong>💡 Campos Atraso e Acelerar:</strong>
                             <br/>
-                            <span style="color: rgba(240,200,80,0.7);">• <strong>+</strong> (valores positivos) = Mais cartas no plano (acelera)</span>
+                            <span style="color: #E74C3C; font-weight: 600;">🐢 Atraso (Vermelho):</span> <span style="color: rgba(126,211,33,0.8);">Aumenta o contador total de cartas</span>
                             <br/>
-                            <span style="color: rgba(240,200,80,0.7);">• <strong>-</strong> (valores negativos) = Menos cartas no plano (atrasa)</span>
+                            <span style="color: #27AE60; font-weight: 600;">⚡ Acelerar (Verde):</span> <span style="color: rgba(126,211,33,0.8);">Reduz o contador total de cartas</span>
                             <br/>
-                            <span style="color: rgba(240,200,80,0.7);">O total final nunca será menor que 1.</span>
+                            <span style="color: rgba(126,211,33,0.7);">O total final nunca será menor que 1.</span>
                         </div>
                     </div>
 
@@ -55189,11 +55195,13 @@ ${arteGerada.justificativa}`;
             cardfluxExecucao.cartasCompradas = 0;
             cardfluxExecucao.cartasUsadas = [];
             cardfluxExecucao.cartasDescartadas = [];
-            cardfluxExecucao.acao = 0;  // Resetar ação
+            cardfluxExecucao.atraso = 0;  // Resetar atraso
+            cardfluxExecucao.acelerar = 0;  // Resetar acelerar
             
             // Resetar campos no form
             document.getElementById('cardfluxExecucaoSorte').value = 0;
-            document.getElementById('cardfluxExecucaoAcao').value = 0;
+            document.getElementById('cardfluxExecucaoAtraso').value = 0;
+            document.getElementById('cardfluxExecucaoAcelerar').value = 0;
             
             document.getElementById('cartaSorteadaContainer').innerHTML = `
                 <div style="text-align: center; color: rgba(236, 240, 241, 0.6);">
@@ -55222,14 +55230,17 @@ ${arteGerada.justificativa}`;
             const distancia = parseInt(document.getElementById('cardfluxDistancia').value) || 4;
             const ritmo = parseInt(document.getElementById('cardfluxRitmo').value) || 0;
             const sorte = parseInt(document.getElementById('cardfluxExecucaoSorte').value) || 0;
-            const acao = parseInt(document.getElementById('cardfluxExecucaoAcao').value) || 0;
+            const atraso = parseInt(document.getElementById('cardfluxExecucaoAtraso').value) || 0;
+            const acelerar = parseInt(document.getElementById('cardfluxExecucaoAcelerar').value) || 0;
             
-            const total = Math.max(1, distancia + ritmo + sorte + acao);
+            // Cálculo: Distância + Ritmo + Sorte + Atraso - Acelerar (nunca menor que 1)
+            const total = Math.max(1, distancia + ritmo + sorte + atraso - acelerar);
             
             cardfluxExecucao.distanciaBase = distancia;
             cardfluxExecucao.ritmo = ritmo;
             cardfluxExecucao.modificadorSorte = sorte;
-            cardfluxExecucao.acao = acao;
+            cardfluxExecucao.atraso = atraso;
+            cardfluxExecucao.acelerar = acelerar;
             cardfluxExecucao.totalCartasPlanejadas = total;
             
             // Atualizar display
