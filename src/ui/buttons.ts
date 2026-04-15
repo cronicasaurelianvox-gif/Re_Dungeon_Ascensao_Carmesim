@@ -41,6 +41,7 @@ async function collectAndSaveAllData() {
             `Entidades salvas:\n` +
             `📅 Mesa: ${result.data.Mesa?.length || 0}\n` +
             `🌍 Origens: ${result.data.origens?.length || 0}\n` +
+            `🂡 CardFlux: ${result.data.cardflux?.length || 0}\n` +
             `🗺️ Regiões: ${result.data.regioes?.length || 0}\n` +
             `🏞️ Cenários: ${result.data.cenarios?.length || 0}\n` +
             `👥 Raças: ${result.data.racas?.length || 0}\n` +

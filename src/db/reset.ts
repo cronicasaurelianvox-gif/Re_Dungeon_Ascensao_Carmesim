@@ -14,6 +14,7 @@ export async function resetData() {
     const entities = [
       'Mesa',
       'origens',
+      'cardflux',
       'regioes',
       'cenarios',
       'racas',

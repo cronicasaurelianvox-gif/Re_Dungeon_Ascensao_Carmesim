@@ -44,7 +44,7 @@ export async function syncData() {
 
     // Por enquanto, apenas fazer sync local entre abas
     const stores = DataStore.getStores?.() || [
-      'Mesa', 'origens', 'regioes', 'cenarios', 'racas', 'classes', 'aptidoes', 'npcs', 'criaturas',
+      'Mesa', 'origens', 'cardflux', 'regioes', 'cenarios', 'racas', 'classes', 'aptidoes', 'npcs', 'criaturas',
       'materiais', 'receitas', 'itens', 'condicoes', 'regras'
     ];
 
@@ -63,6 +63,7 @@ export async function syncData() {
           `Dados atualizados:\n` +
           `📅 Mesa: ${exportResult.data.Mesa?.length || 0}\n` +
           `🌍 Origens: ${exportResult.data.origens?.length || 0}\n` +
+          `🂡 CardFlux: ${exportResult.data.cardflux?.length || 0}\n` +
           `🗺️ Regiões: ${exportResult.data.regioes?.length || 0}\n` +
           `🏞️ Cenários: ${exportResult.data.cenarios?.length || 0}\n` +
           `👥 Raças: ${exportResult.data.racas?.length || 0}\n` +
