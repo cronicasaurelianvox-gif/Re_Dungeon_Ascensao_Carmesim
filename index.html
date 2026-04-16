@@ -25212,7 +25212,7 @@
         }
 
         // ===== SISTEMA DE ORDENAÇÃO DE RAÇAS =====
-        let ordenacaoRaridadeAscendente = true; // true = celestial para comum, false = comum para celestial
+        let ordenacaoRaridadeAscendente = false; // false = Celestial para Comum (raro→comum), true = Comum para Celestial (comum→raro)
 
         function alternarOrdenacaoRaridade() {
             ordenacaoRaridadeAscendente = !ordenacaoRaridadeAscendente;
@@ -25221,14 +25221,14 @@
             const seta = document.getElementById('setaOrdenacao');
             const btn = document.getElementById('btnOrdenarRaridade');
             
-            if (ordenacaoRaridadeAscendente) {
+            if (!ordenacaoRaridadeAscendente) {
                 seta.textContent = '↓';
                 seta.style.transform = 'rotate(0deg)';
-                btn.title = 'Ordenado: Celestial → Comum';
+                btn.title = 'Ordenado: Celestial → Comum (Raro→Comum)';
             } else {
                 seta.textContent = '↑';
                 seta.style.transform = 'rotate(180deg)';
-                btn.title = 'Ordenado: Comum → Celestial';
+                btn.title = 'Ordenado: Comum → Celestial (Comum→Raro)';
             }
             
             // Renderizar novamente com nova ordem
