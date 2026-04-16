@@ -25391,17 +25391,21 @@
                     'celestial': 0,
                     'mitica': 1,
                     'lendario': 2,
-                    'epica': 3,
+                    'epico': 3,
                     'raro': 4,
                     'comum': 5
                 };
                 racasParaExibir.sort((a, b) => {
-                    const ordemA = ordemRaridade[a.raridade] !== undefined ? ordemRaridade[a.raridade] : 5;
-                    const ordemB = ordemRaridade[b.raridade] !== undefined ? ordemRaridade[b.raridade] : 5;
+                    // Normalizar raridade para minúscula
+                    const rarA = (a.raridade || 'comum').toLowerCase();
+                    const rarB = (b.raridade || 'comum').toLowerCase();
+                    
+                    const ordemA = ordemRaridade[rarA] !== undefined ? ordemRaridade[rarA] : 5;
+                    const ordemB = ordemRaridade[rarB] !== undefined ? ordemRaridade[rarB] : 5;
                     
                     // Aplicar ordem ascendente ou descendente
-                    if (ordenacaoRaridadeAscendente) {
-                        return ordemA - ordemB; // Celestial → Comum
+                    if (!ordenacaoRaridadeAscendente) {
+                        return ordemA - ordemB; // Celestial → Comum (padrão)
                     } else {
                         return ordemB - ordemA; // Comum → Celestial
                     }
