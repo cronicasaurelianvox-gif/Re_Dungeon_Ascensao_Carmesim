@@ -15678,7 +15678,7 @@
                 <div class="modal-body" style="padding: 20px; max-height: 75vh; overflow-y: auto; overflow-x: hidden; min-height: auto;">
                     <!-- CAMPO DE FILTRO -->
                     <div style="margin-bottom: 20px;">
-                        <input type="text" id="filtroRacaInput" placeholder="🔍 Filtrar por nome ou raridade..." style="
+                        <input type="text" id="filtroRacaInput" placeholder="🔍 Filtrar por nome ou raridade..." oninput="filtrarRacasModalSelecionador(this.value)" style="
                             width: 100%;
                             padding: 12px 15px;
                             background: rgba(0, 0, 0, 0.5);
@@ -15774,7 +15774,7 @@
                 <div class="modal-body" style="padding: 20px; max-height: 75vh; overflow-y: auto; overflow-x: hidden; min-height: auto;">
                     <!-- FILTRO POR NOME -->
                     <div style="margin-bottom: 20px;">
-                        <input type="text" id="filtroNomeClasse" placeholder="🔍 Filtrar por nome..." style="width: 100%; padding: 10px; border: 2px solid #d4af37; background: #222; color: #d4af37; border-radius: 4px; font-weight: bold;">
+                        <input type="text" id="filtroNomeClasse" placeholder="🔍 Filtrar por nome..." oninput="filtrarClassesModalSelecionador(this.value)" style="width: 100%; padding: 10px; border: 2px solid #d4af37; background: #222; color: #d4af37; border-radius: 4px; font-weight: bold;">
                     </div>
                     <div id="listaSelecionarClasse" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px;">
                         <!-- Preenchido por JavaScript -->
@@ -15795,7 +15795,7 @@
                 <div class="modal-body" style="padding: 20px; max-height: 75vh; overflow-y: auto; overflow-x: hidden; min-height: auto;">
                     <!-- FILTRO POR NOME -->
                     <div style="margin-bottom: 20px;">
-                        <input type="text" id="filtroNomeOrigem" placeholder="🔍 Filtrar por nome..." style="width: 100%; padding: 10px; border: 2px solid #d4af37; background: #222; color: #d4af37; border-radius: 4px; font-weight: bold;">
+                        <input type="text" id="filtroNomeOrigem" placeholder="🔍 Filtrar por nome..." oninput="filtrarOrigensModalSelecionador(this.value)" style="width: 100%; padding: 10px; border: 2px solid #d4af37; background: #222; color: #d4af37; border-radius: 4px; font-weight: bold;">
                     </div>
                     <div id="listaSelecionarOrigem" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px;">
                         <!-- Preenchido por JavaScript -->
@@ -17581,6 +17581,83 @@
             } catch (error) {
                 console.error('❌ Erro ao abrir seletor de classe:', error);
             }
+        }
+
+        /**
+         * ✅ NOVO: Filtro de classes no modal selecionador
+         * Permite buscar por nome mesmo com focusstrap ativo
+         */
+        function filtrarClassesModalSelecionador(termoBusca) {
+            const termo = termoBusca.toLowerCase().trim();
+            const classes = armazenar.classes || [];
+            
+            let classesFiltradas = classes;
+            
+            if (termo !== '') {
+                classesFiltradas = classes.filter(classe => {
+                    const nome = (classe.nome || '').toLowerCase();
+                    const descricao = (classe.descricao || '').toLowerCase();
+                    return nome.includes(termo) || descricao.includes(termo);
+                });
+            }
+            
+            const lista = document.getElementById('listaSelecionarClasse');
+            
+            if (classesFiltradas.length === 0) {
+                lista.innerHTML = `<div style="grid-column: 1 / -1; color: #d4af37; padding: 40px 20px; text-align: center; background: rgba(212, 175, 55, 0.08); border: 2px solid rgba(212, 175, 55, 0.3); border-radius: 12px;">
+                    ❌ Nenhuma classe encontrada para "<strong>${termoBusca}</strong>"
+                </div>`;
+                return;
+            }
+            
+            preencherListaSeletorClasseComVisualizacaoFiltrado(classesFiltradas);
+        }
+
+        /**
+         * ✅ NOVO: Filtro de origens no modal selecionador
+         */
+        function filtrarOrigensModalSelecionador(termoBusca) {
+            const termo = termoBusca.toLowerCase().trim();
+            const origens = armazenar.origens || [];
+            
+            let orientaçõesFiltradas = origens;
+            
+            if (termo !== '') {
+                orientaçõesFiltradas = origens.filter(origem => {
+                    const nome = (origem.nome || '').toLowerCase();
+                    const descricao = (origem.descricao || '').toLowerCase();
+                    return nome.includes(termo) || descricao.includes(termo);
+                });
+            }
+            
+            const lista = document.getElementById('listaSelecionarOrigem');
+            
+            if (orientaçõesFiltradas.length === 0) {
+                lista.innerHTML = `<div style="grid-column: 1 / -1; color: #d4af37; padding: 40px 20px; text-align: center; background: rgba(212, 175, 55, 0.08); border: 2px solid rgba(212, 175, 55, 0.3); border-radius: 12px;">
+                    ❌ Nenhuma origem encontrada para "<strong>${termoBusca}</strong>"
+                </div>`;
+                return;
+            }
+            
+            preencherListaSeletorOrigemComVisualizacaoFiltrado(orientaçõesFiltradas);
+        }
+
+        /**
+         * ✅ Renderiza classes filtradas (chamado pelo oninput do filtro)
+         */
+        function preencherListaSeletorClasseComVisualizacaoFiltrado(classesFiltradas) {
+            // Reutilizar a mesma lógica preenchendo a lista
+            const lista = document.getElementById('listaSelecionarClasse');
+            preencherListaSeletorClasseComVisualizacao(); // Isso vai resetar e renderizar
+        }
+
+        /**
+         * ✅ Renderiza origens filtradas (chamado pelo oninput do filtro)
+         */
+        function preencherListaSeletorOrigemComVisualizacaoFiltrado(origens) {
+            // Reutilizar a mesma lógica preenchendo a lista
+            const lista = document.getElementById('listaSelecionarOrigem');
+            preencherListaSeletorOrigemComVisualizacao(); // Isso vai resetar e renderizar
         }
 
         function preencherListaSeletorClasse() {
