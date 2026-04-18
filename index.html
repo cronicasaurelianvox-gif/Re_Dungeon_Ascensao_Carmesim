@@ -14731,6 +14731,7 @@
                                     <div style="display: flex; gap: 10px;">
                                         <button type="button" class="btn btn-sm" onclick="abrirModalAplicarBaseRaca(event)" style="background: #3498db; border: none; color: white; font-weight: bold; padding: 6px 12px; font-size: 0.85rem; border-radius: 3px;" title="Copiar características e habilidades base da raça selecionada">📋 Aplicar Base</button>
                                         <button type="button" class="btn btn-sm" onclick="npcArtPicker_abrirModal()" style="background: #9b59b6; border: none; color: white; font-weight: bold; padding: 6px 12px; font-size: 0.85rem; border-radius: 3px;" title="Adicionar ARTs existentes do banco de dados">⭐ Adicionar ART</button>
+                                        <button type="button" class="btn btn-sm" onclick="abrirModalHabilidadesClasse()" style="background: #2ecc71; border: none; color: white; font-weight: bold; padding: 6px 12px; font-size: 0.85rem; border-radius: 3px;" title="Adicionar habilidades da classe selecionada">📚 Classe</button>
                                         <button type="button" class="btn btn-sm" onclick="mostrarMenuHabilidadesNPC(event)" style="background: #d4af37; border: none; color: #111; font-weight: bold; padding: 6px 12px; font-size: 0.85rem; border-radius: 3px;">⚙️ Gerenciar</button>
                                     </div>
                                 </div>
@@ -57040,6 +57041,253 @@ ${arteGerada.justificativa}`;
                     <p>Carta retornou ao deck</p>
                 </div>
             `;
+        }
+
+        /**
+         * ===========================
+         * MODAL DE HABILIDADES DA CLASSE
+         * ===========================
+         */
+        
+        let habilidadesClasseSelecionadas = [];
+
+        function abrirModalHabilidadesClasse() {
+            // Verificar se uma classe foi selecionada
+            const classeBotao = document.getElementById('npcClasseBotao');
+            const classeID = classeBotao?.getAttribute('data-classe-id');
+            const classeNome = classeBotao?.textContent.replace(' ▼', '').trim();
+            
+            if (!classeID || !classeNome || classeNome === 'Selecionar Classe') {
+                alert('⚠️ Selecione uma classe primeiro na aba Características!');
+                return;
+            }
+
+            // Encontrar a classe no banco de dados (por ID ou nome)
+            let classe = armazenar.classes.find(c => c.id === classeID || c.nome === classeID);
+            if (!classe) {
+                classe = armazenar.classes.find(c => c.nome === classeNome);
+            }
+            
+            if (!classe || !classe.habilidades || classe.habilidades.length === 0) {
+                alert(`⚠️ A classe "${classeNome}" não possui habilidades registradas.`);
+                return;
+            }
+
+            // Resetar seleções
+            habilidadesClasseSelecionadas = [];
+
+            // Criar modal dinâmico
+            const container = document.getElementById('containerModaisDinamicos') || (() => {
+                const div = document.createElement('div');
+                div.id = 'containerModaisDinamicos';
+                document.body.appendChild(div);
+                return div;
+            })();
+
+            const modalId = 'modalHabilidadesClasse_' + Date.now();
+            
+            const html = `
+            <div class="modal fade" id="${modalId}" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content" style="background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%); border: 2px solid #d4af37;">
+                        <div class="modal-header" style="border-bottom: 2px solid #d4af37;">
+                            <h5 class="modal-title" style="color: #d4af37; font-weight: bold;">📚 Habilidades da Classe: <span style="color: #4CAF50;">${classe.nome}</span></h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        
+                        <div class="modal-body" style="padding: 20px;">
+                            <!-- FILTRO -->
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="filtroHabilidadesClasse_${modalId}" placeholder="🔍 Filtrar por nome..." style="background: #111; color: #fff; border: 1px solid #d4af37; padding: 10px; border-radius: 3px;" oninput="filtrarHabilidadesClasse(this.value, '${modalId}')">
+                            </div>
+                            
+                            <!-- GRID DE HABILIDADES -->
+                            <div id="gridHabilidadesClasse_${modalId}" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-height: 400px; overflow-y: auto; padding: 10px;">
+                                <!-- Carregando... -->
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer" style="border-top: 2px solid #d4af37;">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background: #555; border: none;">Cancelar</button>
+                            <button type="button" class="btn btn-success" onclick="confirmarSelecaoHabilidadesClasse('${modalId}')" style="background: #4CAF50; border: none; font-weight: bold;">✓ Adicionar ${habilidadesClasseSelecionadas.length}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+
+            container.innerHTML += html;
+
+            // Renderizar habilidades
+            renderizarGridHabilidadesClasse(classe.habilidades, modalId);
+
+            // Mostrar modal
+            const modal = new bootstrap.Modal(document.getElementById(modalId));
+            modal.show();
+        }
+
+        function renderizarGridHabilidadesClasse(habilidades, modalId) {
+            const container = document.getElementById(`gridHabilidadesClasse_${modalId}`);
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            habilidades.forEach((hab, idx) => {
+                const isSelected = habilidadesClasseSelecionadas.some(h => h.nome === hab.nome);
+                const cardId = `card_hab_${modalId}_${idx}`;
+
+                const card = document.createElement('div');
+                card.id = cardId;
+                card.style.cssText = `
+                    background: linear-gradient(135deg, ${isSelected ? '#2ecc71' : '#1a1a1a'} 0%, ${isSelected ? '#27ae60' : '#2a2a2a'} 100%);
+                    border: 2px solid ${isSelected ? '#4CAF50' : '#d4af37'};
+                    border-radius: 8px;
+                    padding: 12px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    position: relative;
+                `;
+
+                if (isSelected) {
+                    card.style.boxShadow = '0 0 15px rgba(46, 204, 113, 0.6), inset 0 0 10px rgba(76, 175, 80, 0.3)';
+                }
+
+                card.onmouseover = function() {
+                    this.style.transform = 'translateY(-3px)';
+                    this.style.boxShadow = `0 0 20px ${isSelected ? 'rgba(46, 204, 113, 0.8)' : 'rgba(212, 175, 55, 0.6)'}, inset 0 0 10px rgba(212, 175, 55, 0.1)`;
+                };
+
+                card.onmouseout = function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = isSelected ? '0 0 15px rgba(46, 204, 113, 0.6), inset 0 0 10px rgba(76, 175, 80, 0.3)' : 'none';
+                };
+
+                card.onclick = function() {
+                    toggleSelecaoHabilidadeClasse(hab, cardId, modalId);
+                };
+
+                // Conteúdo da carta
+                let html = `<div style="position: relative; height: 100%;">`;
+                
+                // Checkbox indicator
+                html += `<div style="position: absolute; top: 5px; right: 5px; width: 20px; height: 20px; border: 2px solid ${isSelected ? '#4CAF50' : '#d4af37'}; border-radius: 3px; display: flex; align-items: center; justify-content: center; background: ${isSelected ? '#4CAF50' : 'transparent'};">
+                    ${isSelected ? '✓' : ''}
+                </div>`;
+
+                // Nome
+                html += `<h6 style="color: #d4af37; margin: 0 0 8px 0; font-weight: bold; font-size: 0.95rem; word-break: break-word;">${hab.nome}</h6>`;
+
+                // Atributos em grid compacto
+                if (hab.custo || hab.efeito || hab.recarga || hab.duracao || hab.alcance || hab.alvos || hab.nivel) {
+                    html += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 0.75rem; margin-bottom: 8px;">`;
+                    
+                    if (hab.custo) html += `<div style="color: #ffb300;">💎 ${hab.custo}</div>`;
+                    if (hab.efeito) html += `<div style="color: #4CAF50;">⚡ ${hab.efeito}</div>`;
+                    if (hab.recarga) html += `<div style="color: #9b59b6;">🔄 ${hab.recarga}</div>`;
+                    if (hab.duracao) html += `<div style="color: #3498db;">⏱️ ${hab.duracao}</div>`;
+                    if (hab.alcance) html += `<div style="color: #e74c3c;">📍 ${hab.alcance}</div>`;
+                    if (hab.alvos) html += `<div style="color: #f39c12;">🎯 ${hab.alvos}</div>`;
+                    if (hab.nivel) html += `<div style="color: #1abc9c;">📊 Nv${hab.nivel}</div>`;
+                    
+                    html += `</div>`;
+                }
+
+                // Descrição (truncada)
+                if (hab.descricao) {
+                    const desc = hab.descricao.substring(0, 60).replace(/<[^>]*>/g, '');
+                    html += `<p style="color: #ccc; font-size: 0.85rem; margin: 0; line-height: 1.3;">${desc}${hab.descricao.length > 60 ? '...' : ''}</p>`;
+                }
+
+                html += `</div>`;
+                card.innerHTML = html;
+                container.appendChild(card);
+            });
+        }
+
+        function filtrarHabilidadesClasse(termo, modalId) {
+            const classeBotao = document.getElementById('npcClasseBotao');
+            const classeID = classeBotao?.getAttribute('data-classe-id');
+            const classeNome = classeBotao?.textContent.replace(' ▼', '').trim();
+            
+            let classe = armazenar.classes.find(c => c.id === classeID || c.nome === classeID);
+            if (!classe) {
+                classe = armazenar.classes.find(c => c.nome === classeNome);
+            }
+            
+            if (!classe || !classe.habilidades) return;
+
+            const habilidadesFiltradas = classe.habilidades.filter(h => 
+                h.nome.toLowerCase().includes(termo.toLowerCase())
+            );
+
+            renderizarGridHabilidadesClasse(habilidadesFiltradas, modalId);
+        }
+
+        function toggleSelecaoHabilidadeClasse(habilidade, cardId, modalId) {
+            const idx = habilidadesClasseSelecionadas.findIndex(h => h.nome === habilidade.nome);
+            
+            if (idx >= 0) {
+                habilidadesClasseSelecionadas.splice(idx, 1);
+            } else {
+                habilidadesClasseSelecionadas.push(habilidade);
+            }
+
+            // Atualizar botão
+            const btnConfirmar = document.querySelector(`#${modalId} .modal-footer .btn-success`);
+            if (btnConfirmar) {
+                btnConfirmar.textContent = `✓ Adicionar ${habilidadesClasseSelecionadas.length}`;
+            }
+
+            // Renderizar novamente
+            const classeBotao = document.getElementById('npcClasseBotao');
+            const classeID = classeBotao?.getAttribute('data-classe-id');
+            const classeNome = classeBotao?.textContent.replace(' ▼', '').trim();
+            
+            let classe = armazenar.classes.find(c => c.id === classeID || c.nome === classeID);
+            if (!classe) {
+                classe = armazenar.classes.find(c => c.nome === classeNome);
+            }
+            const filtro = document.getElementById(`filtroHabilidadesClasse_${modalId}`)?.value || '';
+            
+            if (classe && classe.habilidades) {
+                const habilidadesFiltradas = classe.habilidades.filter(h => 
+                    h.nome.toLowerCase().includes(filtro.toLowerCase())
+                );
+                renderizarGridHabilidadesClasse(habilidadesFiltradas, modalId);
+            }
+        }
+
+        function confirmarSelecaoHabilidadesClasse(modalId) {
+            if (habilidadesClasseSelecionadas.length === 0) {
+                alert('⚠️ Selecione pelo menos uma habilidade!');
+                return;
+            }
+
+            // Obter habilidades atuais do NPC
+            let habilidadesNPC = JSON.parse(document.getElementById('npcHabilidadesData')?.value || '[]');
+
+            // Adicionar as habilidades selecionadas
+            habilidadesClasseSelecionadas.forEach(hab => {
+                // Verificar se já não existe
+                if (!habilidadesNPC.find(h => h.nome === hab.nome)) {
+                    // Criar cópia da habilidade com ID único
+                    const novaHab = JSON.parse(JSON.stringify(hab));
+                    novaHab.id = 'hab_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                    novaHab.ganha = false; // Padrão: não ganha
+                    habilidadesNPC.push(novaHab);
+                }
+            });
+
+            // Salvar
+            document.getElementById('npcHabilidadesData').value = JSON.stringify(habilidadesNPC);
+            renderizarHabilidadesNPC();
+
+            // Fechar modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+            if (modal) modal.hide();
+
+            // Mensagem de sucesso
+            alert(`✅ ${habilidadesClasseSelecionadas.length} habilidade(s) adicionada(s) ao NPC!`);
         }
 
         /**
