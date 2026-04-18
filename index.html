@@ -10567,7 +10567,7 @@
                                 type="text" 
                                 id="filtroNPCsInput" 
                                 class="form-control" 
-                                placeholder="Digite para filtrar por nome, categoria (NPC, MOB), tipo (Neutro, Hostil, Comuns, Elites, etc), raça, classe, status (vivo, morto), etc..."
+                                placeholder="Digite para filtrar por nome, categoria (NPC, MOB), tipo (Aliados, Neutro, Hostil, Chefes, Vilões, Comuns, Elites, etc), raça, classe, status (vivo, morto), etc..."
                                 oninput="filtrarNPCsInteligente(this.value)"
                                 style="max-width: 100%; padding: 12px; background: rgba(30, 50, 80, 0.6); color: #ecf0f1; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; font-size: 1rem; position: relative; z-index: 10001;"
                                 autocomplete="off"
@@ -14428,9 +14428,11 @@
                                                 <div>
                                                     <label style="font-size: 0.75rem; color: #d4af37; font-weight: bold; text-transform: uppercase;">⚔️ Tipo</label>
                                                     <select class="form-control form-control-sm" id="npcTipoSelected" style="background: #222; border: 1px solid #d4af37; color: #d4af37; padding: 6px; font-size: 0.8rem; font-weight: bold;">
+                                                        <option value="Aliados">Aliados</option>
                                                         <option value="Neutro">Neutro</option>
                                                         <option value="Hostil">Hostil</option>
                                                         <option value="Chefes">Chefes</option>
+                                                        <option value="Vilões">Vilões</option>
                                                     </select>
                                                 </div>
                                                 
@@ -38141,11 +38143,13 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             selectTipo.innerHTML = '';
             
             if (categoria === 'NPC') {
-                // NPCs têm os tipos: Neutro, Hostil, Chefes
+                // NPCs têm os tipos: Aliados, Neutro, Hostil, Chefes, Vilões
                 selectTipo.innerHTML = `
+                    <option value="Aliados">Aliados</option>
                     <option value="Neutro">Neutro</option>
                     <option value="Hostil">Hostil</option>
                     <option value="Chefes">Chefes</option>
+                    <option value="Vilões">Vilões</option>
                 `;
             } else if (categoria === 'MOB') {
                 // MOBs têm os tipos: Comuns, Elites, Chefes, Chefões
@@ -38601,12 +38605,14 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
                 // Cores por tipo específico (override)
                 const coresPorTipo = {
                     // NPCs
-                    'Neutro': { badge: '#4CAF50', texto: '#FFF' },      // Verde
-                    'Hostil': { badge: '#FF9800', texto: '#FFF' },      // Laranja
-                    'Chefes': { badge: '#9C27B0', texto: '#FFF' },      // Roxo (para NPCs chefes)
+                    'Aliados': { badge: '#4CAF50', texto: '#FFF' },     // Verde (aliados)
+                    'Neutro': { badge: '#2196F3', texto: '#FFF' },      // Azul (neutro)
+                    'Hostil': { badge: '#FF5722', texto: '#FFF' },      // Vermelho alaranjado (hostil)
+                    'Chefes': { badge: '#9C27B0', texto: '#FFF' },      // Roxo (chefes)
+                    'Vilões': { badge: '#DC143C', texto: '#FFF' },      // Crimson (vilões)
                     // MOBs
-                    'Comuns': { badge: '#2196F3', texto: '#FFF' },      // Azul
-                    'Elites': { badge: '#FF5722', texto: '#FFF' },      // Vermelho alaranjado
+                    'Comuns': { badge: '#00D4FF', texto: '#000' },      // Cyan claro
+                    'Elites': { badge: '#FF9800', texto: '#FFF' },      // Laranja
                     'Chefões': { badge: '#FFD700', texto: '#000' }      // Ouro
                 };
                 
@@ -45234,11 +45240,13 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 
                 // Cores por tipo
                 const coresPorTipo = {
-                    'Neutro': '#4CAF50',
-                    'Hostil': '#FF9800',
+                    'Aliados': '#4CAF50',
+                    'Neutro': '#2196F3',
+                    'Hostil': '#FF5722',
                     'Chefes': '#9C27B0',
-                    'Comuns': '#2196F3',
-                    'Elites': '#FF5722',
+                    'Vilões': '#DC143C',
+                    'Comuns': '#00D4FF',
+                    'Elites': '#FF9800',
                     'Chefões': '#FFD700'
                 };
                 const corTipo = coresPorTipo[tipoNPC] || '#888';
