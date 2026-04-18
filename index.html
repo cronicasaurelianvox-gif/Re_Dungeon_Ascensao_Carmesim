@@ -38291,6 +38291,11 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             document.getElementById('npcClasseDisplay').textContent = npc.classe || 'Nenhuma classe selecionada';
             document.getElementById('npcOrigemDisplay').textContent = npc.origem || 'Nenhuma origem selecionada';
             
+            // ✅ CORRIGIDO: Também atualizar o texto dos botões (não apenas data-attributes)
+            document.getElementById('npcRacaBotao').textContent = (npc.raca || 'Selecionar Raça') + ' ▼';
+            document.getElementById('npcClasseBotao').textContent = (npc.classe || 'Selecionar Classe') + ' ▼';
+            document.getElementById('npcOrigemBotao').textContent = (npc.origem || 'Selecionar Origem') + ' ▼';
+            
             // Armazenar os IDs nos atributos dos botões para uso em salvarNPC()
             document.getElementById('npcRacaBotao').setAttribute('data-raca-id', npc.racaID || npc.raca || '');
             document.getElementById('npcClasseBotao').setAttribute('data-classe-id', npc.classeID || npc.classe || '');
