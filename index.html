@@ -10206,6 +10206,17 @@
             console.log('✅ Proteção contra dados corrompidos ativada');
         })();
     </script>
+
+    <!-- 🤖 MÓDULO CARDFLUX IA - [REMOVIDO 17/04/2026] -->
+    <!-- REMOVIDO: cardflux-ia.js (sistema de geração automática) -->
+    <!-- REMOVIDO: cardflux-ia-inteligencia-v3.js -->
+    <!-- REMOVIDO: cardflux-ia-anticopia-v4.js -->
+    <!-- REMOVIDO: cardflux-ia-v5-nuclear.js -->
+    <!-- REMOVIDO: cardflux-ia-v2-enhancements.js -->
+    <!-- REMOVIDO: cardflux-hibrido.js -->
+    <!-- REMOVIDO: cardflux-ia-demo.js -->
+    <!-- Backup disponível em: src/modules/cardflux_ia_antigo_backup.js -->
+
 </head>
 <body>
 
@@ -10221,6 +10232,7 @@
 
                 <!-- Conteúdo do Header -->
                 <div class="hero-content">
+
                     <!-- Lado Esquerdo: Logo + Título -->
                     <div class="hero-branding">
                         <img src="https://i.imgur.com/aVfMgAq.png" alt="ReDungeon Logo" class="hero-logo">
@@ -16360,17 +16372,26 @@
                             <!-- ABA 1: NARRATIVA -->
                             <div class="tab-pane fade show active" id="cardfluxConteudo" role="tabpanel">
                                 <div style="margin-bottom: 12px;">
-                                    <label style="color: #d4af37; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">📜 Descrição Geral</label>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                        <label style="color: #d4af37; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">📜 Descrição Geral</label>
+                                        <button type="button" class="btn btn-sm btn-info" onclick="melhorarCampoIA('descricao')" title="Melhorar com IA" style="padding: 2px 8px; font-size: 0.75rem;">✨ Melhorar</button>
+                                    </div>
                                     <textarea id="cardfluxDescricao" rows="2" placeholder="Descreva o evento principal de forma concisa e envolvente..." style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.25); color: #ecf0f1; border-radius: 6px; padding: 10px; font-size: 0.8rem; width: 100%; resize: vertical; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(212,175,55,0.5)'; this.style.boxShadow='0 0 8px rgba(212,175,55,0.1)';" onblur="this.style.borderColor='rgba(212,175,55,0.25)'; this.style.boxShadow='none';"></textarea>
                                 </div>
 
                                 <div style="margin-bottom: 12px;">
-                                    <label style="color: #3498db; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">🎭 Como Apresentar</label>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                        <label style="color: #3498db; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">🎭 Como Apresentar</label>
+                                        <button type="button" class="btn btn-sm btn-info" onclick="melhorarCampoIA('contexto')" title="Melhorar com IA" style="padding: 2px 8px; font-size: 0.75rem;">✨ Melhorar</button>
+                                    </div>
                                     <textarea id="cardfluxContexto" rows="2" placeholder="Contexto, atmosfera e como os jogadores descobrem/recebem a missão..." style="background: rgba(52,152,219,0.08); border: 1px solid rgba(52,152,219,0.25); color: #ecf0f1; border-radius: 6px; padding: 10px; font-size: 0.8rem; width: 100%; resize: vertical; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(52,152,219,0.5)'; this.style.boxShadow='0 0 8px rgba(52,152,219,0.1)';" onblur="this.style.borderColor='rgba(52,152,219,0.25)'; this.style.boxShadow='none';"></textarea>
                                 </div>
 
                                 <div>
-                                    <label style="color: #f39c12; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">⚔️ Mecânicas & Desafios</label>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                        <label style="color: #f39c12; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">⚔️ Mecânicas & Desafios</label>
+                                        <button type="button" class="btn btn-sm btn-info" onclick="melhorarCampoIA('ganchos')" title="Melhorar com IA" style="padding: 2px 8px; font-size: 0.75rem;">✨ Melhorar</button>
+                                    </div>
                                     <textarea id="cardfluxTestes" rows="2" placeholder="Testes necessários, dificuldades, combates, puzzles, ou obstáculos..." style="background: rgba(243,156,18,0.08); border: 1px solid rgba(243,156,18,0.25); color: #ecf0f1; border-radius: 6px; padding: 10px; font-size: 0.8rem; width: 100%; resize: vertical; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(243,156,18,0.5)'; this.style.boxShadow='0 0 8px rgba(243,156,18,0.1)';" onblur="this.style.borderColor='rgba(243,156,18,0.25)'; this.style.boxShadow='none';"></textarea>
                                 </div>
                             </div>
@@ -16583,6 +16604,8 @@
                     <button type="button" class="btn btn-sm" data-bs-dismiss="modal" style="background: rgba(100,110,120,0.6); color: #fff; border: none; border-radius: 5px; padding: 6px 14px; font-weight: 600; font-size: 0.8rem; transition: all 0.2s; cursor: pointer;" onmouseover="this.style.background='rgba(100,110,120,0.8)'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='rgba(100,110,120,0.6)'; this.style.transform='translateY(0)';">Cancelar</button>
                     
                     <button type="button" class="btn btn-sm" onclick="deletarCartaCardfluxEditor()" style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.4), rgba(192, 57, 43, 0.4)); color: #ff9999; border: 1px solid rgba(231,76,60,0.4); border-radius: 5px; padding: 6px 12px; font-weight: 600; font-size: 0.8rem; transition: all 0.2s; cursor: pointer; display: none; margin-left: auto;" id="btnDeletarCardflux" onmouseover="this.style.background='linear-gradient(135deg, rgba(231, 76, 60, 0.6), rgba(192, 57, 43, 0.6))'; this.style.transform='translateY(-1px)'; this.style.color='#fff';" onmouseout="this.style.background='linear-gradient(135deg, rgba(231, 76, 60, 0.4), rgba(192, 57, 43, 0.4))'; this.style.transform='translateY(0)'; this.style.color='#ff9999';">🗑️ Deletar</button>
+                    
+                    <button type="button" class="btn btn-sm" onclick="melhorarCartaCompletaIA()" style="background: linear-gradient(135deg, rgba(100, 150, 200, 0.6), rgba(52, 152, 219, 0.6)); color: #fff; border: 1px solid rgba(52,152,219,0.5); border-radius: 5px; padding: 8px 16px; font-weight: 600; font-size: 0.8rem; transition: all 0.2s; cursor: pointer;" onmouseover="this.style.background='linear-gradient(135deg, rgba(52, 152, 219, 0.8), rgba(100, 150, 200, 0.8))'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(52,152,219,0.4)';" onmouseout="this.style.background='linear-gradient(135deg, rgba(100, 150, 200, 0.6), rgba(52, 152, 219, 0.6))'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">🧠 Melhorar com IA</button>
                     
                     <button type="button" class="btn btn-sm" onclick="salvarCartaCardfluxEditor()" style="background: linear-gradient(135deg, #d4af37, #f0c850); color: #1a1a2e; border: none; border-radius: 5px; padding: 8px 22px; font-weight: 700; font-size: 0.85rem; transition: all 0.25s; box-shadow: 0 4px 12px rgba(212,175,55,0.3); cursor: pointer;" onmouseover="this.style.background='linear-gradient(135deg, #f0c850, #d4af37)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(212,175,55,0.5)';" onmouseout="this.style.background='linear-gradient(135deg, #d4af37, #f0c850)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(212,175,55,0.3)';">💾 Salvar</button>
                 </div>
@@ -18032,9 +18055,35 @@
             const rectBotao = botao.getBoundingClientRect();
             const rectMenu = menu.getBoundingClientRect();
 
-            menu.style.position = 'fixed';
-            menu.style.top = (rectBotao.top + rectBotao.height / 2 - rectMenu.height / 2) + 'px';
-            menu.style.left = (rectBotao.right + 10) + 'px';
+            let topFinal = rectBotao.top + rectBotao.height / 2 - rectMenu.height / 2;
+            let leftFinal = rectBotao.right + 10;
+
+            // Encontra o modal pai
+            const modal = botao.closest('.modal-dialog') || botao.closest('.modal-content');
+            if (modal) {
+                const rectModal = modal.getBoundingClientRect();
+                
+                // Verifica se está saindo à direita do modal
+                if (leftFinal + rectMenu.width > rectModal.right) {
+                    leftFinal = rectBotao.left - rectMenu.width - 10;
+                }
+                
+                // Verifica se está saindo à esquerda do modal
+                if (leftFinal < rectModal.left) {
+                    leftFinal = rectBotao.right + 10;
+                }
+                
+                // Limita verticamente se necessário
+                if (topFinal + rectMenu.height > rectModal.bottom) {
+                    topFinal = rectModal.bottom - rectMenu.height - 5;
+                }
+                if (topFinal < rectModal.top) {
+                    topFinal = rectModal.top + 5;
+                }
+            }
+
+            menu.style.top = topFinal + 'px';
+            menu.style.left = leftFinal + 'px';
 
             // Fecha o menu ao clicar fora
             document.addEventListener('click', function fecharMenu(e) {
@@ -18216,14 +18265,40 @@
             const rectBotao = botao.getBoundingClientRect();
             const rectMenu = menu.getBoundingClientRect();
 
-            menu.style.position = 'fixed';
-            menu.style.top = (rectBotao.top + rectBotao.height / 2 - rectMenu.height / 2) + 'px';
-            menu.style.left = (rectBotao.right + 10) + 'px';
+            let topFinal = rectBotao.top + rectBotao.height / 2 - rectMenu.height / 2;
+            let leftFinal = rectBotao.right + 10;
 
             // Ajusta se o menu sair da tela à direita
             if (rectBotao.right + rectMenu.width + 10 > window.innerWidth) {
-                menu.style.left = (rectBotao.left - rectMenu.width - 10) + 'px';
+                leftFinal = rectBotao.left - rectMenu.width - 10;
             }
+
+            // Encontra o modal pai
+            const modal = botao.closest('.modal-dialog') || botao.closest('.modal-content');
+            if (modal) {
+                const rectModal = modal.getBoundingClientRect();
+                
+                // Verifica se está saindo à direita do modal
+                if (leftFinal + rectMenu.width > rectModal.right) {
+                    leftFinal = rectBotao.left - rectMenu.width - 10;
+                }
+                
+                // Verifica se está saindo à esquerda do modal
+                if (leftFinal < rectModal.left) {
+                    leftFinal = rectBotao.right + 10;
+                }
+                
+                // Limita verticamente se necessário
+                if (topFinal + rectMenu.height > rectModal.bottom) {
+                    topFinal = rectModal.bottom - rectMenu.height - 5;
+                }
+                if (topFinal < rectModal.top) {
+                    topFinal = rectModal.top + 5;
+                }
+            }
+
+            menu.style.top = topFinal + 'px';
+            menu.style.left = leftFinal + 'px';
 
             // Fecha o menu ao clicar fora
             document.addEventListener('click', function fecharMenu(e) {
@@ -19879,14 +19954,41 @@
             const rectBotao = botao.getBoundingClientRect();
             const rectMenu = menu.getBoundingClientRect();
 
-            menu.style.position = 'fixed';
-            menu.style.top = rectBotao.top + rectBotao.height / 2 - rectMenu.height / 2 + 'px';
-            menu.style.left = rectBotao.right + 10 + 'px';
+            // Encontra o modal pai
+            const modal = botao.closest('.modal-dialog') || botao.closest('.modal-content');
+            let topFinal = rectBotao.top + rectBotao.height / 2 - rectMenu.height / 2;
+            let leftFinal = rectBotao.right + 10;
 
             // Ajusta se o menu sair da tela à direita
             if (rectBotao.right + rectMenu.width + 10 > window.innerWidth) {
-                menu.style.left = rectBotao.left - rectMenu.width - 10 + 'px';
+                leftFinal = rectBotao.left - rectMenu.width - 10;
             }
+
+            // Se estiver dentro de um modal, limita o menu aos limites do modal
+            if (modal) {
+                const rectModal = modal.getBoundingClientRect();
+                
+                // Verifica se está saindo à direita do modal
+                if (leftFinal + rectMenu.width > rectModal.right) {
+                    leftFinal = rectBotao.left - rectMenu.width - 10;
+                }
+                
+                // Verifica se está saindo à esquerda do modal
+                if (leftFinal < rectModal.left) {
+                    leftFinal = rectBotao.right + 10;
+                }
+                
+                // Limita verticamente se necessário
+                if (topFinal + rectMenu.height > rectModal.bottom) {
+                    topFinal = rectModal.bottom - rectMenu.height - 5;
+                }
+                if (topFinal < rectModal.top) {
+                    topFinal = rectModal.top + 5;
+                }
+            }
+
+            menu.style.top = topFinal + 'px';
+            menu.style.left = leftFinal + 'px';
 
             // Fecha o menu ao clicar fora
             document.addEventListener('click', function fecharMenu(e) {
@@ -20045,6 +20147,30 @@
 
             if (top + rectMenu.height > window.innerHeight) {
                 top = rectBotao.top - rectMenu.height - 5;
+            }
+
+            // Encontra o modal pai
+            const modal = botao.closest('.modal-dialog') || botao.closest('.modal-content');
+            if (modal) {
+                const rectModal = modal.getBoundingClientRect();
+                
+                // Verifica se está saindo à direita do modal
+                if (left + rectMenu.width > rectModal.right) {
+                    left = rectBotao.left - rectMenu.width;
+                }
+                
+                // Verifica se está saindo à esquerda do modal
+                if (left < rectModal.left) {
+                    left = rectBotao.right;
+                }
+                
+                // Limita verticamente se necessário
+                if (top + rectMenu.height > rectModal.bottom) {
+                    top = rectBotao.top - rectMenu.height - 5;
+                }
+                if (top < rectModal.top) {
+                    top = rectBotao.bottom + 5;
+                }
             }
 
             menu.style.top = top + "px";
@@ -21736,17 +21862,43 @@
                 return;
             }
 
-            // Cria modal temporário
+            // Variável para rastrear aptidões selecionadas
+            let aptidoesSelecionadas = new Set();
+
+            // Cria modal temporário COM FOCUSTRAP DESABILIDADO
             let html = `
-                <div class="modal fade" id="modalCriarAptidaoNPC" tabindex="-1" role="dialog" aria-modal="true" style="z-index: 100001 !important;">
-                    <div class="modal-dialog modal-lg" style="z-index: 100001 !important; max-width: 900px;">
+                <div class="modal fade" id="modalCriarAptidaoNPC" tabindex="-1" role="dialog" aria-modal="true" data-bs-backdrop="static" data-bs-keyboard="false" style="z-index: 100001 !important;">
+                    <div class="modal-dialog modal-lg" style="z-index: 100001 !important; max-width: 1000px;">
                         <div class="modal-content" style="background: linear-gradient(135deg, rgba(20, 20, 35, 0.98) 0%, rgba(15, 15, 30, 0.99) 100%); border: 2px solid rgba(212, 175, 55, 0.4); border-radius: 12px; box-shadow: 0 0 30px rgba(212, 175, 55, 0.2), 0 8px 32px rgba(0, 0, 0, 0.8);">
                             <div class="modal-header" style="background: linear-gradient(90deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.08) 100%); border-bottom: 2px solid rgba(212, 175, 55, 0.3); padding: 20px;">
-                                <h5 class="modal-title" style="color: #d4af37; font-size: 1.4rem; font-weight: 800; letter-spacing: 1px; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);">⚔️ Selecionar Aptidão</h5>
+                                <h5 class="modal-title" style="color: #d4af37; font-size: 1.4rem; font-weight: 800; letter-spacing: 1px; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);">⚔️ Selecionar Aptidão(ões)</h5>
                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="filter: brightness(1.2);"></button>
                             </div>
-                            <div class="modal-body" style="max-height: 65vh; overflow-y: auto; padding: 25px;">
-                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
+                            <div class="modal-body" style="max-height: 70vh; overflow-y: auto; padding: 20px;">
+                                <!-- FILTRO DE BUSCA -->
+                                <div style="margin-bottom: 20px;">
+                                    <input type="text" id="filtroAptidaoInput" placeholder="🔍 Filtrar aptidões por nome..." style="
+                                        width: 100%;
+                                        padding: 12px 15px;
+                                        background: linear-gradient(135deg, rgba(30, 30, 50, 0.8) 0%, rgba(20, 20, 40, 0.9) 100%);
+                                        border: 2px solid rgba(212, 175, 55, 0.4);
+                                        border-radius: 8px;
+                                        color: #d4af37;
+                                        font-weight: 600;
+                                        font-size: 0.95rem;
+                                        transition: all 0.3s;
+                                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+                                    "
+                                    onfocus="this.style.borderColor='rgba(212, 175, 55, 0.8)'; this.style.boxShadow='0 0 15px rgba(212, 175, 55, 0.3)';"
+                                    onblur="this.style.borderColor='rgba(212, 175, 55, 0.4)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.5)';"
+                                    />
+                                </div>
+                                
+                                <div style="background: rgba(0, 255, 255, 0.1); border-left: 4px solid #00ffff; padding: 12px 15px; margin-bottom: 20px; border-radius: 6px; color: rgba(236, 240, 241, 0.9); font-size: 0.9rem;">
+                                    💡 <strong>Dica:</strong> Clique para selecionar/desselecionar. Selecione várias e clique em "Adicionar Selecionadas"!
+                                </div>
+                                
+                                <div id="containerAptidoes" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
             `;
 
             aptidoesDisponiveis.forEach(nome => {
@@ -21754,14 +21906,19 @@
                     <div class="aptidaoItem" data-aptidao="${nome}" style="
                         background: linear-gradient(135deg, rgba(30, 30, 50, 0.8) 0%, rgba(20, 20, 40, 0.9) 100%);
                         border: 2px solid rgba(212, 175, 55, 0.4);
-                        border-radius: 10px;
-                        padding: 15px;
+                        border-radius: 8px;
+                        padding: 12px;
                         cursor: pointer;
                         transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
                         text-align: center;
                         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
                         position: relative;
                         overflow: hidden;
+                        user-select: none;
+                        min-height: 70px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
                     ">
                         <div style="
                             position: absolute;
@@ -21774,7 +21931,29 @@
                             opacity: 0;
                             transition: opacity 0.3s;
                         " class="glow-effect"></div>
-                        <div style="color: #d4af37; font-weight: 800; margin-bottom: 8px; font-size: 1rem; letter-spacing: 0.5px; position: relative; z-index: 1; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);">⚡ ${nome}</div>
+                        <div style="color: #d4af37; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.5px; position: relative; z-index: 1; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);">⚡ ${nome}</div>
+                        <div class="checkbox-indicator" style="
+                            position: absolute;
+                            top: 6px;
+                            right: 6px;
+                            width: 18px;
+                            height: 18px;
+                            border: 2px solid rgba(212, 175, 55, 0.6);
+                            border-radius: 3px;
+                            background: transparent;
+                            transition: all 0.2s;
+                            display: none;
+                        ">
+                            <span style="
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                color: #00ff00;
+                                font-weight: bold;
+                                font-size: 12px;
+                            ">✓</span>
+                        </div>
                     </div>
                 `;
             });
@@ -21783,7 +21962,9 @@
                                 </div>
                             </div>
                             <div class="modal-footer" style="background: linear-gradient(90deg, rgba(212, 175, 55, 0.08) 0%, transparent 50%, rgba(212, 175, 55, 0.08) 100%); border-top: 1px solid rgba(212, 175, 55, 0.2); padding: 15px 25px;">
+                                <span id="aptidoesSelecionadasCount" style="color: #00ffff; font-weight: bold; margin-right: 15px;">0 selecionadas</span>
                                 <button type="button" class="btn" style="background: linear-gradient(135deg, rgba(200, 100, 100, 0.3), rgba(200, 100, 100, 0.1)); border: 1px solid rgba(255, 100, 100, 0.4); color: #ff8080; font-weight: 600; padding: 8px 20px; border-radius: 6px; transition: all 0.3s;" data-bs-dismiss="modal" onmouseover="this.style.background='linear-gradient(135deg, rgba(200, 100, 100, 0.5), rgba(200, 100, 100, 0.3))'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='linear-gradient(135deg, rgba(200, 100, 100, 0.3), rgba(200, 100, 100, 0.1))'; this.style.transform='translateY(0)';">❌ Cancelar</button>
+                                <button type="button" id="btnAdicionarSelecionadas" class="btn" style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.4), rgba(212, 175, 55, 0.2)); border: 1px solid rgba(212, 175, 55, 0.6); color: #d4af37; font-weight: 600; padding: 8px 20px; border-radius: 6px; transition: all 0.3s; cursor: not-allowed; opacity: 0.5;" disabled onmouseover="if(!this.disabled) { this.style.background='linear-gradient(135deg, rgba(212, 175, 55, 0.6), rgba(212, 175, 55, 0.4))'; this.style.transform='translateY(-2px)'; }" onmouseout="if(!this.disabled) { this.style.background='linear-gradient(135deg, rgba(212, 175, 55, 0.4), rgba(212, 175, 55, 0.2))'; this.style.transform='translateY(0)'; }">✅ Adicionar Selecionadas</button>
                             </div>
                         </div>
                     </div>
@@ -21822,46 +22003,146 @@
                 console.error('❌ Elemento modalCriarAptidaoNPC não encontrado');
                 return;
             }
-            const novoModal = new bootstrap.Modal(modalElement);
+            
+            // 🔥 WORKAROUND FOCUSTRAP: Desabilitar FocusTrap para evitar "Maximum call stack size exceeded"
+            const novoModal = new bootstrap.Modal(modalElement, {
+                backdrop: 'static',
+                keyboard: false
+            });
+            
+            // Desabilitar focustrap manualmente se existir
+            try {
+                if (novoModal._focustrap) {
+                    novoModal._focustrap.deactivate();
+                }
+            } catch (e) {
+                console.warn('⚠️ Focustrap não encontrado ou já desativado:', e.message);
+            }
+            
             novoModal.show();
             safeOpenModal('modalCriarAptidaoNPC');
 
+            // 🔥 NOVO WORKAROUND: Desabilitar FocusTrap após modal aparecer
+            modalElement.addEventListener('shown.bs.modal', function() {
+                console.log('✅ Modal mostrado, desativando FocusTrap...');
+                try {
+                    if (novoModal._focustrap) {
+                        novoModal._focustrap.deactivate();
+                        console.log('✅ FocusTrap desativado com sucesso');
+                    }
+                } catch (e) {
+                    console.warn('⚠️ Erro ao desativar FocusTrap:', e.message);
+                }
+            }, { once: true });
+
+            // Função para atualizar contador e botão
+            const atualizarInterfaceSelecao = () => {
+                const countSpan = document.getElementById('aptidoesSelecionadasCount');
+                const btnAdicionar = document.getElementById('btnAdicionarSelecionadas');
+                const count = aptidoesSelecionadas.size;
+                
+                if (countSpan) countSpan.textContent = `${count} selecionada${count !== 1 ? 's' : ''}`;
+                
+                if (btnAdicionar) {
+                    if (count > 0) {
+                        btnAdicionar.disabled = false;
+                        btnAdicionar.style.cursor = 'pointer';
+                        btnAdicionar.style.opacity = '1';
+                        btnAdicionar.textContent = `✅ Adicionar ${count} Aptidão${count !== 1 ? 's' : ''}`;
+                    } else {
+                        btnAdicionar.disabled = true;
+                        btnAdicionar.style.cursor = 'not-allowed';
+                        btnAdicionar.style.opacity = '0.5';
+                        btnAdicionar.textContent = '✅ Adicionar Selecionadas';
+                    }
+                }
+            };
+
+            // Função para filtrar aptidões
+            const filtrarAptidoes = (termoBusca) => {
+                const termo = termoBusca.toLowerCase().trim();
+                document.querySelectorAll('.aptidaoItem').forEach(item => {
+                    const nomAptidao = item.getAttribute('data-aptidao').toLowerCase();
+                    if (nomAptidao.includes(termo)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            };
+
             // Adiciona event listeners aos itens de aptidão
             setTimeout(() => {
+                // Event listener para o filtro
+                const filtroInput = document.getElementById('filtroAptidaoInput');
+                if (filtroInput) {
+                    filtroInput.addEventListener('input', function() {
+                        filtrarAptidoes(this.value);
+                    });
+                    // Focus no input ao abrir modal
+                    filtroInput.focus();
+                }
+
                 document.querySelectorAll('.aptidaoItem').forEach(item => {
                     const nomAptidao = item.getAttribute('data-aptidao');
                     const glowEffect = item.querySelector('.glow-effect');
+                    const checkboxIndicator = item.querySelector('.checkbox-indicator');
                     
                     item.addEventListener('mouseover', function() {
-                        this.style.background = 'linear-gradient(135deg, rgba(50, 50, 80, 0.9) 0%, rgba(40, 40, 70, 1) 100%)';
-                        this.style.borderColor = 'rgba(212, 175, 55, 0.7)';
-                        this.style.transform = 'translateY(-4px)';
+                        if (!aptidoesSelecionadas.has(nomAptidao)) {
+                            this.style.background = 'linear-gradient(135deg, rgba(50, 50, 80, 0.9) 0%, rgba(40, 40, 70, 1) 100%)';
+                            this.style.borderColor = 'rgba(212, 175, 55, 0.7)';
+                        }
+                        this.style.transform = 'translateY(-3px)';
                         this.style.boxShadow = '0 8px 24px rgba(212, 175, 55, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)';
                         if (glowEffect) glowEffect.style.opacity = '1';
                     });
                     
                     item.addEventListener('mouseout', function() {
-                        this.style.background = 'linear-gradient(135deg, rgba(30, 30, 50, 0.8) 0%, rgba(20, 20, 40, 0.9) 100%)';
-                        this.style.borderColor = 'rgba(212, 175, 55, 0.4)';
+                        if (aptidoesSelecionadas.has(nomAptidao)) {
+                            this.style.background = 'linear-gradient(135deg, rgba(100, 200, 200, 0.3) 0%, rgba(80, 180, 180, 0.2) 100%)';
+                            this.style.borderColor = 'rgba(0, 255, 255, 0.6)';
+                        } else {
+                            this.style.background = 'linear-gradient(135deg, rgba(30, 30, 50, 0.8) 0%, rgba(20, 20, 40, 0.9) 100%)';
+                            this.style.borderColor = 'rgba(212, 175, 55, 0.4)';
+                        }
                         this.style.transform = 'translateY(0)';
                         this.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05)';
                         if (glowEffect) glowEffect.style.opacity = '0';
                     });
                     
-                    item.addEventListener('click', function() {
-                        // Efeito de clique
-                        this.style.transform = 'scale(0.95)';
-                        setTimeout(() => {
-                            this.style.transform = 'translateY(0)';
-                        }, 100);
+                    item.addEventListener('click', function(e) {
+                        // Toggle seleção
+                        if (aptidoesSelecionadas.has(nomAptidao)) {
+                            aptidoesSelecionadas.delete(nomAptidao);
+                            this.style.background = 'linear-gradient(135deg, rgba(30, 30, 50, 0.8) 0%, rgba(20, 20, 40, 0.9) 100%)';
+                            this.style.borderColor = 'rgba(212, 175, 55, 0.4)';
+                            if (checkboxIndicator) checkboxIndicator.style.display = 'none';
+                        } else {
+                            aptidoesSelecionadas.add(nomAptidao);
+                            this.style.background = 'linear-gradient(135deg, rgba(100, 200, 200, 0.3) 0%, rgba(80, 180, 180, 0.2) 100%)';
+                            this.style.borderColor = 'rgba(0, 255, 255, 0.6)';
+                            if (checkboxIndicator) checkboxIndicator.style.display = 'block';
+                        }
                         
-                        adicionarAptidaoNPC(nomAptidao);
+                        atualizarInterfaceSelecao();
+                    });
+                });
+
+                // Event listener do botão de adicionar selecionadas
+                const btnAdicionar = document.getElementById('btnAdicionarSelecionadas');
+                if (btnAdicionar) {
+                    btnAdicionar.addEventListener('click', function() {
+                        aptidoesSelecionadas.forEach(nomAptidao => {
+                            adicionarAptidaoNPC(nomAptidao);
+                        });
+                        
                         setTimeout(() => {
                             let m = bootstrap.Modal.getInstance(document.getElementById('modalCriarAptidaoNPC'));
                             if(m) m.hide();
                         }, 100);
                     });
-                });
+                }
             }, 100);
 
             // Remove modal e container quando fecha
@@ -55142,6 +55423,9 @@ ${arteGerada.justificativa}`;
                 btnDeletar.style.display = cartaId ? 'block' : 'none';
             }
 
+            // ⚠️ NÃO RESETAR SE HÁ DADOS GERADOS PELA IA SENDO PREENCHIDOS
+            const possuiDadosGerados = form.dataset.cartaGerada || (document.getElementById('cardfluxNome')?.value?.trim().length > 0 && !cartaId);
+
             let carta = null;
             if (cartaId) {
                 carta = armazenar.cardflux.find(c => c.id === cartaId);
@@ -55191,7 +55475,8 @@ ${arteGerada.justificativa}`;
                 } else {
                     setTimeout(() => limparFormularioChain(), 100);
                 }
-            } else {
+            } else if (!possuiDadosGerados) {
+                // SÓ RESETAR SE NÃO HÁ DADOS DA IA SENDO PREENCHIDOS
                 // Limpar formulário para nova carta - resetar TODOS os campos
                 form.reset();
                 
@@ -55226,6 +55511,10 @@ ${arteGerada.justificativa}`;
                 form.dataset.cartaId = '';
                 
                 // 🔗 LIMPAR CHAIN
+                setTimeout(() => limparFormularioChain(), 100);
+            } else {
+                // HÁ DADOS GERADOS - NÃO RESETAR, MAS LIMPAR CHAIN PARA PERMITIR EDIÇÃO
+                form.dataset.cartaId = '';
                 setTimeout(() => limparFormularioChain(), 100);
             }
 
@@ -55572,6 +55861,154 @@ ${arteGerada.justificativa}`;
             
             deletarCartaCardflux(cartaId);
             bootstrap.Modal.getOrCreateInstance(document.getElementById('modalCardfluxEditor')).hide();
+        }
+
+        // ============================================
+        // SISTEMA HÍBRIDO - MELHORIA COM IA
+        // ============================================
+
+        /**
+         * Melhora a carta completa com IA (NARRATIVA APENAS)
+         * Chama IA para enriquecer descricao, contexto e ganchos
+         */
+        async function melhorarCartaCompletaIA() {
+            console.log('🧠 Iniciando melhoria completa com IA...');
+            
+            try {
+                // 1. Coletar dados do formulário
+                const form = document.getElementById('formCardfluxEditor');
+                if (!form) {
+                    alert('⚠️ Formulário não encontrado');
+                    return;
+                }
+                
+                const dados = {
+                    descricao: document.getElementById('cardfluxDescricao')?.value || '',
+                    contexto: document.getElementById('cardfluxContexto')?.value || '',
+                    ganchos: document.getElementById('cardfluxGanchos')?.value || '',
+                    tipo: document.getElementById('cardfluxTipo')?.value || 'Evento',
+                    raridade: document.getElementById('cardfluxRaridade')?.value || 'Comum',
+                    tema: document.getElementById('cardfluxTema')?.value || 'Geral',
+                    testes: document.getElementById('cardfluxTestes')?.value || 'Diversos',
+                    recompensas: document.getElementById('cardfluxRecompensas')?.value || 'Variável'
+                };
+                
+                console.log('📊 Dados coletados:', dados);
+                
+                // 2. Mostrar feedback
+                const btnMelhorar = event?.target;
+                if (btnMelhorar) {
+                    btnMelhorar.disabled = true;
+                    btnMelhorar.innerHTML = '⏳ Melhorando...';
+                }
+                
+                // 3. Chamar IA
+                if (!window.CardFluxHibrido || !window.CardFluxHibrido.melhorarTextoCartaIA) {
+                    throw new Error('CardFlux Híbrido não está carregado');
+                }
+                
+                const melhorias = await window.CardFluxHibrido.melhorarTextoCartaIA(dados);
+                
+                // 4. Aplicar melhorias ao formulário
+                if (melhorias.descricao) {
+                    document.getElementById('cardfluxDescricao').value = melhorias.descricao;
+                }
+                if (melhorias.contexto) {
+                    document.getElementById('cardfluxContexto').value = melhorias.contexto;
+                }
+                if (melhorias.ganchos) {
+                    document.getElementById('cardfluxGanchos').value = melhorias.ganchos;
+                }
+                
+                // 5. Atualizar preview
+                atualizarPreviewCardflux();
+                
+                // 6. Feedback visual
+                if (btnMelhorar) {
+                    btnMelhorar.innerHTML = '✅ Melhorado!';
+                    setTimeout(() => {
+                        btnMelhorar.disabled = false;
+                        btnMelhorar.innerHTML = '🧠 Melhorar Texto com IA';
+                    }, 2000);
+                }
+                
+                alert('✅ Texto melhorado com sucesso! 🎉');
+                
+            } catch (erro) {
+                console.error('❌ Erro ao melhorar:', erro);
+                alert(`❌ Erro: ${erro.message}`);
+                
+                const btnMelhorar = event?.target;
+                if (btnMelhorar) {
+                    btnMelhorar.disabled = false;
+                    btnMelhorar.innerHTML = '🧠 Melhorar Texto com IA';
+                }
+            }
+        }
+
+        /**
+         * Melhora um campo específico com IA
+         * @param {string} campo - Nome do campo: 'descricao', 'contexto' ou 'ganchos'
+         */
+        async function melhorarCampoIA(campo) {
+            console.log(`🧠 Melhorando campo: ${campo}`);
+            
+            try {
+                // 1. Obter valor atual do campo
+                const elementoId = `cardflux${campo.charAt(0).toUpperCase() + campo.slice(1)}`;
+                const elemento = document.getElementById(elementoId);
+                
+                if (!elemento) {
+                    alert(`⚠️ Campo ${campo} não encontrado`);
+                    return;
+                }
+                
+                const textoAtual = elemento.value;
+                
+                // 2. Coletar contexto
+                const contextoMelhoramento = {
+                    descricao: document.getElementById('cardfluxDescricao')?.value || '',
+                    contexto: document.getElementById('cardfluxContexto')?.value || '',
+                    ganchos: document.getElementById('cardfluxGanchos')?.value || '',
+                    tipo: document.getElementById('cardfluxTipo')?.value || 'Evento',
+                    raridade: document.getElementById('cardfluxRaridade')?.value || 'Comum',
+                    tema: document.getElementById('cardfluxTema')?.value || 'Geral',
+                    testes: document.getElementById('cardfluxTestes')?.value || 'Diversos',
+                    recompensas: document.getElementById('cardfluxRecompensas')?.value || 'Variável'
+                };
+                
+                // 3. Mostrar feedback
+                elemento.placeholder = '⏳ Melhorando...';
+                elemento.disabled = true;
+                
+                // 4. Chamar IA
+                if (!window.CardFluxHibrido || !window.CardFluxHibrido.melhorarTextoCartaIA) {
+                    throw new Error('CardFlux Híbrido não está carregado');
+                }
+                
+                const melhorias = await window.CardFluxHibrido.melhorarTextoCartaIA(contextoMelhoramento);
+                
+                // 5. Aplicar melhoria ao campo específico
+                if (melhorias[campo]) {
+                    elemento.value = melhorias[campo];
+                }
+                
+                // 6. Atualizar preview
+                atualizarPreviewCardflux();
+                
+                // 7. Restaurar feedback
+                elemento.disabled = false;
+                elemento.placeholder = `Digite ${campo}...`;
+                
+            } catch (erro) {
+                console.error('❌ Erro ao melhorar campo:', erro);
+                alert(`❌ Erro: ${erro.message}`);
+                
+                const elemento = document.getElementById(elementoId);
+                if (elemento) {
+                    elemento.disabled = false;
+                }
+            }
         }
 
         // ============================================
