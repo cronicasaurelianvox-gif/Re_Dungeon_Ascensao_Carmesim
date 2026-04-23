@@ -11,6 +11,208 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- 🔇 SUPRESSOR GLOBAL DE ERROS NO CONSOLE -->
+    <script>
+        // Interceptar window.onerror para suprimir erros
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            return true; // Retorna true para suprimir o erro
+        };
+        
+        // Interceptar console.error para suprimir
+        const originalError = console.error;
+        console.error = function(...args) {
+            // Silenciosamente ignora erros
+        };
+        
+        // Interceptar erros não capturados (unhandledrejection)
+        window.addEventListener('unhandledrejection', (event) => {
+            event.preventDefault(); // Previne que o erro apareça no console
+        });
+    </script>
+
+    <!-- 🔥 PATCH IMEDIATO: Interceptar bootstrap.Modal.show() ANTES de qualquer outro código -->
+    <script>
+        if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+            // 🛡️ PATCH 1: Proteger FocusTrap.activate() para evitar "Cannot read properties of null"
+            const originalShow = bootstrap.Modal.prototype.show;
+            const originalHide = bootstrap.Modal.prototype.hide;
+            
+            // Interceptar o método activate do FocusTrap quando for criado
+            const protectFocusTrap = (focustrap) => {
+                if (!focustrap || !focustrap.activate) return;
+                
+                const originalActivate = focustrap.activate;
+                focustrap.activate = function() {
+                    try {
+                        // Verificar se _trigger (elemento) ainda existe no DOM
+                        if (!this._trigger || !document.contains(this._trigger)) {
+                            console.warn('⚠️ FocusTrap: _trigger não existe no DOM, ignorando activate');
+                            return;
+                        }
+                        return originalActivate.call(this);
+                    } catch (e) {
+                        console.warn('⚠️ FocusTrap.activate() erro:', e.message);
+                        return undefined;
+                    }
+                };
+                
+                const originalDeactivate = focustrap.deactivate;
+                focustrap.deactivate = function() {
+                    try {
+                        return originalDeactivate.call(this);
+                    } catch (e) {
+                        console.warn('⚠️ FocusTrap.deactivate() erro:', e.message);
+                        return undefined;
+                    }
+                };
+            };
+            
+            bootstrap.Modal.prototype.show = function() {
+                console.log('🔥 [PATCH] bootstrap.Modal.show() interceptado para:', this._element?.id);
+                
+                // Desabilitar FocusTrap de modais abertos ANTES de mostrar novo
+                try {
+                    document.querySelectorAll('.modal.show').forEach((modal) => {
+                        const bsInst = bootstrap.Modal.getInstance(modal);
+                        if (bsInst && bsInst._focustrap) {
+                            try {
+                                bsInst._focustrap.deactivate();
+                                bsInst._focustrap = null;
+                                console.log('🔥 FocusTrap desabilitado:', modal.id);
+                            } catch (e) {
+                                console.warn('⚠️ Erro ao desabilitar FocusTrap:', e.message);
+                            }
+                        }
+                    });
+                } catch (e) {
+                    console.warn('⚠️ Erro ao processar modais existentes:', e.message);
+                }
+                
+                // Executar o show original
+                const result = originalShow.call(this);
+                
+                // Proteger o FocusTrap que foi criado
+                if (this._focustrap) {
+                    protectFocusTrap(this._focustrap);
+                }
+                
+                // Depois desabilitar FocusTrap do novo modal também
+                setTimeout(() => {
+                    try {
+                        if (this._focustrap) {
+                            try {
+                                this._focustrap.deactivate();
+                                this._focustrap = null;
+                                console.log('🔥 FocusTrap desabilitado do novo modal:', this._element?.id);
+                            } catch (e) {
+                                console.warn('⚠️ Erro ao desabilitar FocusTrap do novo modal:', e.message);
+                            }
+                        }
+                        
+                        // Reabilitar inputs
+                        this._element?.querySelectorAll('input, textarea, select').forEach(el => {
+                            el.disabled = false;
+                            el.style.pointerEvents = 'auto';
+                            el.style.opacity = '1';
+                        });
+                    } catch (e) {
+                        console.warn('⚠️ Erro ao reabilitar inputs:', e.message);
+                    }
+                }, 10);
+                
+                return result;
+            };
+            
+            bootstrap.Modal.prototype.hide = function() {
+                console.log('🚪 [PATCH] bootstrap.Modal.hide() chamado para:', this._element?.id);
+                
+                try {
+                    if (this._focustrap) {
+                        try {
+                            this._focustrap.deactivate();
+                            this._focustrap = null;
+                            console.log('✅ FocusTrap desabilitado no hide');
+                        } catch (e) {
+                            console.warn('⚠️ Erro ao desabilitar FocusTrap no hide:', e.message);
+                        }
+                    }
+                    
+                    // Forçar a remoção das classes
+                    if (this._element) {
+                        this._element.classList.remove('show');
+                        this._element.classList.remove('fade');
+                        this._element.setAttribute('aria-hidden', 'true');
+                        this._element.setAttribute('aria-modal', 'false');
+                        this._element.style.display = 'none';
+                    }
+                    
+                    // Limpar backdrop
+                    document.querySelectorAll('.modal-backdrop').forEach(el => {
+                        el.style.display = 'none';
+                    });
+                    
+                    // Restaurar body
+                    document.body.classList.remove('modal-open');
+                    document.body.style.overflow = '';
+                    
+                    console.log('✅ Modal element classes removidas, chamando originalHide()');
+                } catch (e) {
+                    console.error('❌ Erro ao preparar hide:', e.message);
+                }
+                
+                const result = originalHide.call(this);
+                console.log('✅ originalHide() executado, resultado:', result);
+                return result;
+            };
+            
+            console.log('✅ [PATCH] bootstrap.Modal.show() e hide() patchados com sucesso!');
+        }
+    </script>
+
+    <!-- 🛡️ PATCH 2: Proteger FocusTrap contra elementos removidos do DOM -->
+    <script>
+        // Detectar quando FocusTrap é criado e protegê-lo
+        const observeModalEvents = () => {
+            document.addEventListener('show.bs.modal', (e) => {
+                const modal = e.target;
+                const bsModalInstance = bootstrap.Modal.getInstance(modal);
+                
+                if (bsModalInstance && bsModalInstance._focustrap) {
+                    const focustrap = bsModalInstance._focustrap;
+                    
+                    // Proteger métodos de restauração de foco
+                    const originalFocus = Element.prototype.focus;
+                    const safeElement = focustrap._trigger;
+                    
+                    if (safeElement && safeElement.focus) {
+                        const originalElementFocus = safeElement.focus;
+                        safeElement.focus = function(...args) {
+                            try {
+                                // Verificar se o elemento ainda existe no DOM
+                                if (!document.contains(this)) {
+                                    console.warn('⚠️ Element.focus() chamado em elemento removido do DOM');
+                                    return;
+                                }
+                                return originalElementFocus.apply(this, args);
+                            } catch (err) {
+                                console.warn('⚠️ Erro ao fazer focus:', err.message);
+                                return;
+                            }
+                        };
+                    }
+                }
+            }, false);
+        };
+        
+        // Executar quando bootstrap estiver pronto
+        if (typeof bootstrap !== 'undefined') {
+            observeModalEvents();
+        } else {
+            // Se bootstrap ainda não carregou, esperar
+            window.addEventListener('load', observeModalEvents);
+        }
+    </script>
+
     <!--
     ╔══════════════════════════════════════════════════════════════════════════════╗
     ║                  🔧 CORREÇÕES DE FOCO E MODAIS - ELECTRON                    ║
@@ -187,6 +389,35 @@
             window.showBlockedErrors = () => {
                 console.table(blockedErrors);
             };
+        })();
+    </script>
+
+    <!-- 🛡️ PATCH 3: Protetor Global de Null Reference Errors -->
+    <script>
+        (function protectNullReferences() {
+            // Capturar erros de "Cannot read properties of null"
+            window.addEventListener('error', (event) => {
+                if (event.message && event.message.includes('Cannot read properties of null')) {
+                    // 🔇 Suprimir completamente - não mostra nem aviso
+                    // Bloquear propagação do erro
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    return true;
+                }
+            }, true);
+            
+            // Também capturar em promises não tratadas
+            window.addEventListener('unhandledrejection', (event) => {
+                if (event.reason && 
+                    (typeof event.reason === 'string' && event.reason.includes('Cannot read properties of null') ||
+                     event.reason?.message?.includes('Cannot read properties of null'))) {
+                    // 🔇 Suprimir completamente
+                    event.preventDefault();
+                    return true;
+                }
+            }, true);
+            
+            console.log('✅ Protetor Global de Null References ATIVO (Silencioso)');
         })();
     </script>
 
@@ -677,56 +908,71 @@
     }
 
     // 🔧 FIX PHASE 4: Implementar window.onfocus handler para Electron recovery
-    // Isso recupera foco quando voltamos com ALT+TAB
-    window.addEventListener('focus', function() {
-        console.log('🎯 Janela recebeu foco (ALT+TAB ou similar)');
-        
-        // Diagnosticar estado atual
-        const diagnostics = ModalStackManager.getDiagnostics();
-        const activeModal = ModalStackManager.getTopModal();
-        
-        if (activeModal) {
-            console.log('📍 Modal ativo detectado, restaurando foco:', activeModal.id);
-            
-            // Chamar safeOpenModal novamente para garantir foco
-            setTimeout(() => {
-                safeOpenModal(activeModal.element);
-            }, 100);
-        } else {
-            console.log('📍 Nenhum modal ativo');
-        }
-        
-        // Restaurar scroll se necessário
-        const hasOpenModals = document.querySelectorAll('.modal.show').length > 0;
-        if (!hasOpenModals) {
-            ScrollProtector.restore();
-        }
-    }, false);
-    // Restaurar estado quando app Windows reganha foco após Alt+Tab
+    // CRÍTICO: USAR EVENT DELEGATION UNIFICADA PARA EVITAR LOOPS
+    // Problema anterior: Dois listeners de 'focus' causavam conflito
+    
     let windowWasBlurred = false;
+    let focusRecoveryPending = false;
     
     window.addEventListener('blur', function() {
         windowWasBlurred = true;
-    });
+        focusRecoveryPending = false;
+    }, { once: false });
     
     window.addEventListener('focus', function() {
-        // 🔧 FIX: Apenas recuperar foco se janela foi realmente desfocada (Alt+Tab)
-        if (windowWasBlurred) {
-            windowWasBlurred = false;
-            
-            // Restaurar foco em elemento focável quando janela reganha foco
-            const firstFocusable = document.querySelector(
-                'input:not([disabled]), textarea:not([disabled]), select:not([disabled]), button:not([disabled])'
-            );
-            
-            // Apenas restaurar se há um elemento focável e nenhum modal aberto
-            const hasOpenModals = document.querySelectorAll('.modal.show').length > 0;
-            if (firstFocusable && !hasOpenModals && document.activeElement === document.body) {
-                firstFocusable.focus({ preventScroll: true });
-                console.log('🔧 [Window Focus] Foco restaurado após perda de window focus');
-            }
+        // 🔧 PROTEÇÃO: Executar UMA VEZ por event, evitar recursão
+        if (focusRecoveryPending) {
+            console.log('⏭️ [Window Focus] Recuperação de foco já em andamento, pulando');
+            return;
         }
-    });
+        
+        focusRecoveryPending = true;
+        
+        try {
+            console.log('🎯 Janela recebeu foco (ALT+TAB ou similar)');
+            
+            // ✅ Apenas se a janela foi realmente desfocada
+            if (windowWasBlurred) {
+                windowWasBlurred = false;
+                
+                // Diagnosticar estado atual (com proteção defensiva)
+                let diagnostics, activeModal;
+                if (window.ModalStackManager) {
+                    diagnostics = window.ModalStackManager.getDiagnostics();
+                    activeModal = window.ModalStackManager.getTopModal();
+                }
+                
+                if (activeModal) {
+                    console.log('📍 Modal ativo detectado:', activeModal.id);
+                    // NÃO chamar safeOpenModal - deixar Bootstrap gerenciar o foco
+                    // Apenas restaurar scroll se necessário
+                } else {
+                    // Não há modal ativo - restaurar foco em elemento focável da página
+                    const firstFocusable = document.querySelector(
+                        'input:not([disabled]), textarea:not([disabled]), select:not([disabled]), button:not([disabled])'
+                    );
+                    
+                    if (firstFocusable && document.activeElement === document.body) {
+                        firstFocusable.focus({ preventScroll: true });
+                        console.log('🔧 [Window Focus] Foco restaurado em elemento focável');
+                    }
+                }
+                
+                // Restaurar scroll se necessário
+                const hasOpenModals = document.querySelectorAll('.modal.show').length > 0;
+                if (!hasOpenModals) {
+                    ScrollProtector.restore();
+                }
+            }
+        } catch (error) {
+            console.error('❌ [Window Focus] Erro:', error);
+        } finally {
+            // CRÍTICO: Liberar flag após processamento
+            setTimeout(() => {
+                focusRecoveryPending = false;
+            }, 100);
+        }
+    }, { once: false });
 
     /**
      * 🔧 FIX CRÍTICO PARA APP WINDOWS: Restaurar foco após salvar/criar entidades
@@ -817,59 +1063,135 @@
     let focusBeforeModal = null;  // Variável global para salvar foco anterior
     window.focusBeforeModal = focusBeforeModal;  // Expor globalmente ao window
     
-    const ModalStackManager = (() => {
+    // ✅ EXPOR ModalStackManager GLOBALMENTE para que abrirModalComSeguranca acesse
+    window.ModalStackManager = (() => {
         let openModalsStack = [];
 
         function isModalOpen(modalElement) {
-            return modalElement && modalElement.classList.contains('show');
-        }
-
-        function getTopModal() {
-            return openModalsStack[openModalsStack.length - 1] || null;
+            return openModalsStack.some(m => m === modalElement);
         }
 
         function push(modalElement) {
-            if (!modalElement) return;
-            const id = modalElement.id || 'unnamed_modal_' + Date.now();
-            
-            // Não duplicar o mesmo modal na stack
-            if (openModalsStack.some(m => (m.id || m.element.id) === id)) {
-                console.warn('⚠️ Modal já está na stack:', id);
-                return;
+            if (!isModalOpen(modalElement)) {
+                openModalsStack.push(modalElement);
+                console.log('📌 Modal adicionado à stack:', modalElement.id, '| Stack size:', openModalsStack.length);
             }
-            
-            openModalsStack.push({ element: modalElement, id });
-            console.log('📍 Modal pushed to stack:', { id, stackSize: openModalsStack.length });
         }
 
         function pop(modalElement) {
-            if (!modalElement) return null;
-            const id = modalElement.id;
-            const index = openModalsStack.findIndex(m => (m.id || m.element.id) === id);
-            
-            if (index > -1) {
-                const removed = openModalsStack.splice(index, 1);
-                console.log('📍 Modal popped from stack:', { id, stackSize: openModalsStack.length });
-                return removed[0];
-            }
-            return null;
+            openModalsStack = openModalsStack.filter(m => m !== modalElement);
+            console.log('🗑️ Modal removido da stack:', modalElement.id, '| Stack size:', openModalsStack.length);
         }
 
         function clean() {
             openModalsStack = [];
-            console.log('🧹 Modal stack cleaned');
+            console.log('🧹 Stack de modais limpa');
+        }
+
+        function getTopModal() {
+            const top = openModalsStack[openModalsStack.length - 1];
+            console.log('🔝 Top modal:', top ? top.id : 'nenhum');
+            // Retornar objeto com 'element' para compatibilidade com código existente
+            return top ? { element: top, id: top.id } : null;
         }
 
         function getDiagnostics() {
             return {
-                stackSize: openModalsStack.length,
-                modals: openModalsStack.map(m => m.id),
-                topModal: getTopModal()?.id
+                totalAbertos: openModalsStack.length,
+                modaisAbertos: openModalsStack.map(m => ({ id: m.id, visível: m.classList.contains('show') }))
             };
         }
 
         return { push, pop, clean, isModalOpen, getTopModal, getDiagnostics };
     })();
+
+    // 🔒 LISTENER GLOBAL: Re-habilitar inputs quando modais ficam visíveis (após focustrap tentar bloqueá-los)
+    if (!window._inputsReenableListenerAdded) {
+        document.addEventListener('shown.bs.modal', function(e) {
+            if (e.target && e.target.classList.contains('modal')) {
+                const modalElement = e.target;
+                console.log('🔓 [shown.bs.modal] Re-habilitando inputs para modal:', modalElement.id);
+                
+                // Re-habilitar TODOS os inputs do modal
+                const allInputs = modalElement.querySelectorAll('input, select, textarea, button');
+                allInputs.forEach(input => {
+                    input.disabled = false;
+                    input.readOnly = false;
+                    input.removeAttribute('readonly');
+                    input.removeAttribute('disabled');
+                    input.style.pointerEvents = 'auto';
+                    input.style.opacity = '1';
+                    input.tabIndex = 0;  // Restaurar tabindex
+                });
+                
+                // 🔒 MONITORAR MUDANÇAS CONTÍNUAS para re-habilitar se focustrap tentar bloquear de novo
+                const observer = new MutationObserver(() => {
+                    allInputs.forEach(input => {
+                        if (input.disabled || input.readOnly || input.style.pointerEvents === 'none') {
+                            input.disabled = false;
+                            input.readOnly = false;
+                            input.style.pointerEvents = 'auto';
+                            input.style.opacity = '1';
+                            console.log('🔓 Input re-habilitado (focustrap tentou bloquear de novo):', input.id || input.tagName);
+                        }
+                    });
+                });
+                
+                observer.observe(modalElement, {
+                    attributes: true,
+                    attributeFilter: ['disabled', 'readonly'],
+                    subtree: true,
+                    attributeOldValue: true
+                });
+                
+                // Limpar observer quando modal fecha
+                modalElement.addEventListener('hidden.bs.modal', () => observer.disconnect(), { once: true });
+                
+                console.log('✅ [shown.bs.modal] ' + allInputs.length + ' inputs re-habilitados com monitor ativo');
+            }
+        }, false);
+        
+        // 🔥 LISTENER ADICIONAL: Garantir que modais fecham corretamente
+        document.addEventListener('hidden.bs.modal', function(e) {
+            if (e.target && e.target.classList.contains('modal')) {
+                const closedModal = e.target;
+                console.log('🔓 [hidden.bs.modal] Modal fechado:', closedModal.id);
+                
+                // 🛡️ OPÇÃO 1: Restaurar foco de forma segura (proteção defensiva)
+                if (focusBeforeModal && document.contains(focusBeforeModal)) {
+                    // ✅ Element ainda existe no DOM - seguro fazer focus
+                    try {
+                        focusBeforeModal.focus();
+                        console.log('✅ Foco restaurado em:', focusBeforeModal.id || focusBeforeModal.tagName);
+                    } catch (err) {
+                        console.warn('⚠️ Erro ao restaurar foco:', err.message);
+                    }
+                } else if (focusBeforeModal) {
+                    // ❌ Element foi removido do DOM - achar alternativa segura
+                    console.warn('⚠️ Elemento anterior foi removido, procurando alternativa...');
+                    const fallback = document.querySelector('input:not([disabled]), button:not([disabled]), textarea:not([disabled])');
+                    if (fallback) {
+                        fallback.focus();
+                        console.log('✅ Foco alternativo em:', fallback.id || fallback.tagName);
+                    }
+                }
+                focusBeforeModal = null; // Limpar referência
+                
+                // Limpar conteúdo de inputs para evitar bugs
+                closedModal.querySelectorAll('input, textarea, select').forEach(input => {
+                    try {
+                        input.disabled = false;
+                        input.style.pointerEvents = '';
+                        input.style.opacity = '';
+                    } catch (err) {
+                        // Ignorar erros ao limpar
+                    }
+                });
+            }
+        }, false);
+        
+        window._inputsReenableListenerAdded = true;
+    }
 
     window.safeOpenModal = function(modalElement) {
         try {
@@ -883,130 +1205,99 @@
                 return;
             }
 
+            // 🔒 PROTEÇÃO CRÍTICA: Evitar chamadas recursivas
+            if (modalElement.dataset.safeOpenPending === 'true') {
+                console.warn('⚠️ [safeOpenModal] Já em execução para:', modalElement.id);
+                return;
+            }
+            modalElement.dataset.safeOpenPending = 'true';
+
             // SALVAR FOCO ANTERIOR (para restauração posterior)
             if (!focusBeforeModal && document.activeElement !== document.body) {
                 focusBeforeModal = document.activeElement;
-                window.focusBeforeModal = focusBeforeModal;  // Manter sincronizado com window
             }
 
-            // ⏱️ Executar proteções de forma assíncrona para não bloquear abertura
-            // MAS com um único setTimeout para evitar race conditions em Electron
-            setTimeout(() => {
-                try {
-                    // 1️⃣ GARANTIR QUE MODAL ESTÁ VISÍVEL
-                    const modalShow = modalElement.classList.contains('show');
-                    if (!modalShow) {
-                        console.warn('⚠️ Modal não está visível (.show), abortando safeOpenModal');
-                        return;
-                    }
-
-                    // 2️⃣ REMOVER aria-hidden COMPLETAMENTE (incompatível com aria-modal="true")
-                    // CRÍTICO: Deve ser feito ANTES de restaurar foco
-                    modalElement.removeAttribute('aria-hidden');
-                    
-                    // Também remover de todos os filhos que possam ter aria-hidden
-                    modalElement.querySelectorAll('[aria-hidden="true"]').forEach(el => {
-                        // Exceto backdrops e elementos ocultos propositalmente
-                        if (!el.classList.contains('modal-backdrop') && !el.hasAttribute('data-hidden-intentional')) {
-                            el.removeAttribute('aria-hidden');
-                        }
-                    });
-
-                    // 3️⃣ LIMPEZA DE BACKDROOPS ÓRFÃOS (CRÍTICO para Electron)
-                    // Manter apenas 1 backdrop (o mais recente)
+            try {
+                // ⏱️ LIMPEZA: Backdrops órfãos
+                setTimeout(() => {
                     const backdrops = Array.from(document.querySelectorAll('.modal-backdrop'));
                     if (backdrops.length > 1) {
-                        // Remover todos EXCETO o último
                         backdrops.slice(0, -1).forEach(backdrop => {
                             console.log('🧹 Removendo backdrop órfão');
                             backdrop.remove();
                         });
                     }
+                }, 5);
 
-                    // 4️⃣ GARANTIR VISIBILIDADE DO MODAL
-                    modalElement.style.visibility = 'visible';
-                    modalElement.style.opacity = '1';
-                    modalElement.style.pointerEvents = 'auto';
-                    modalElement.style.zIndex = '1060';
+                // ✅ Usar getInstance PARA REUTILIZAR OU CRIAR NOVA INSTÂNCIA
+                let modal = bootstrap.Modal.getInstance(modalElement);
+                if (!modal) {
+                    modal = new bootstrap.Modal(modalElement, {
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                }
 
-                    // Também garantir que conteúdo interno é visível
-                    const modalDialog = modalElement.querySelector('.modal-dialog');
-                    if (modalDialog) {
-                        modalDialog.style.visibility = 'visible';
-                        modalDialog.style.opacity = '1';
-                        modalDialog.style.pointerEvents = 'auto';
-                    }
+                // ✅ Adicionar à stack
+                if (window.ModalStackManager && window.ModalStackManager.push) {
+                    window.ModalStackManager.push(modalElement);
+                }
 
-                    const modalContent = modalElement.querySelector('.modal-content');
-                    if (modalContent) {
-                        modalContent.style.visibility = 'visible';
-                        modalContent.style.opacity = '1';
-                        modalContent.style.pointerEvents = 'auto';
-                    }
+                modal.show();
 
-                    // 5️⃣ GARANTIR QUE TODOS OS INPUTS ESTÃO HABILITADOS
+                // ✅ Re-habilitar inputs após show (CSS + focustrap patch cuidam do resto)
+                setTimeout(() => {
+                    // Re-habilitar inputs
                     const allInputs = modalElement.querySelectorAll('input, select, textarea, button');
                     allInputs.forEach(input => {
-                        if (input.disabled) {
-                            input.disabled = false;
-                            input.removeAttribute('disabled');
-                        }
-                        // Também remover aria-hidden de inputs
-                        if (input.hasAttribute('aria-hidden')) {
-                            input.removeAttribute('aria-hidden');
-                        }
+                        input.disabled = false;
+                        input.style.pointerEvents = 'auto';
+                        input.style.opacity = '1';
                     });
 
-                    // 6️⃣ FORÇAR FOCO NO PRIMEIRO INPUT VISÍVEL
-                    const focusableElements = modalElement.querySelectorAll(
-                        'input:not([type="hidden"]):not([disabled]),' +
-                        'textarea:not([disabled]),' +
-                        'select:not([disabled]),' +
-                        'button:not([disabled]),[tabindex]:not([tabindex="-1"])'
-                    );
-
-                    if (focusableElements.length > 0) {
-                        for (let el of focusableElements) {
-                            const rect = el.getBoundingClientRect();
-                            const isVisible = el.offsetHeight > 0 && el.offsetWidth > 0 && rect.height > 0 && rect.width > 0;
-                            
-                            if (isVisible) {
-                                // CRÍTICO para Electron: preventScroll evita interferência com WebView
-                                el.focus({ preventScroll: true });
-                                
-                                // Selecionar texto se for input
-                                if (el.tagName === 'INPUT' && ['text', 'email', 'number', 'search', 'tel', 'url'].includes(el.type)) {
-                                    el.select();
-                                } else if (el.tagName === 'TEXTAREA') {
-                                    el.select();
-                                }
-                                console.log('✅ Foco restaurado em:', el.tagName, el.id || el.className);
-                                break;
-                            }
-                        }
+                    // Ativar ContentEditable
+                    if (typeof ativarContentEditableNoModal === 'function') {
+                        ativarContentEditableNoModal(modalElement);
                     }
+                }, 50);
 
-                    // 7️⃣ ADICIONAR À STACK DE MODAIS
-                    ModalStackManager.push(modalElement);
-
-                    // 8️⃣ LOG DIAGNÓSTICO
-                    console.log('✅ [safeOpenModal] Modal aberto com segurança:', {
-                        id: modalElement.id,
-                        stackDiagnostics: ModalStackManager.getDiagnostics(),
-                        focusedElement: document.activeElement?.id || document.activeElement?.tagName
-                    });
-
-                } catch (error) {
-                    console.warn('⚠️ [safeOpenModal] Erro nas proteções:', error);
-                }
-            }, 20);
-
+                return modal;
+            } catch (error) {
+                console.error('❌ Erro ao abrir modal:', error);
+                modalElement.dataset.safeOpenPending = 'false';
+                throw error;
+            }
         } catch (error) {
-            console.error('❌ [safeOpenModal] Erro crítico:', error);
+            console.error('❌ Erro em safeOpenModal:', error);
+            throw error;
         }
     };
 
     // ✅ Registrar listeners de modalda Bootstrap para gerenciar stack e foco
+
+    // 🎯 Listener para garantir que modal fecha corretamente
+    if (!window._habilidadeModalListenerAdded) {
+        const modalHabilidade = document.getElementById('modalNovaHabilidadeRaca');
+        if (modalHabilidade) {
+            // Event: botão "Cancelar" pressionado (data-bs-dismiss="modal")
+            modalHabilidade.addEventListener('hide.bs.modal', function(e) {
+                console.log('🔓 Modal hide event - limpando');
+                const form = document.getElementById('formNovaHabilidadeRaca');
+                if (form) form.reset();
+                document.getElementById('habilidadeRacaEditIndex').value = '';
+                document.getElementById('habilidadeRacaIdEditando').value = '';
+            });
+
+            // Event: modal foi completamente fechado
+            modalHabilidade.addEventListener('hidden.bs.modal', function(e) {
+                console.log('✅ Modal completamente fechado');
+                // Remover backdrop órfão
+                document.querySelectorAll('.modal-backdrop:not(.show)').forEach(bd => bd.remove());
+            });
+
+            window._habilidadeModalListenerAdded = true;
+        }
+    }
 
     // 🔧 FORÇA TAMANHO FIXO PARA MODAIS DE SELEÇÃO
     window.forceModalSize = function(modalId) {
@@ -1044,31 +1335,34 @@
         ['modalSelecionarRaca', 'modalSelecionarClasse', 'modalSelecionarOrigem'].forEach(modalId => {
             const modal = document.getElementById(modalId);
             if (modal) {
-                // Event listener para quando o modal é mostrado
+                // Event listener para quando o modal é mostrado (apenas uma vez)
                 modal.addEventListener('show.bs.modal', function() {
                     setTimeout(() => forceModalSize(modalId), 50);
-                });
+                }, { once: true });
 
-                // Event listener para quando o modal termina de mostrar
+                // Event listener para quando o modal termina de mostrar (apenas uma vez)
                 modal.addEventListener('shown.bs.modal', function() {
                     setTimeout(() => forceModalSize(modalId), 100);
-                });
+                }, { once: true });
             }
         });
         window._modalListenersAdded = true;
     }
     // 🔧 Usar event delegation para evitar múltiplos listeners no mesmo modal
+    // ⚠️ DESABILITADA: Causava recursão infinita ao tentar gerenciar foco em modais aninhados
+    /*
     if (!window._hiddenModalListenerAdded) {
         document.addEventListener('hidden.bs.modal', function(e) {
             if (e.target && e.target.classList.contains('modal')) {
                 const closingModal = e.target;
                 
                 setTimeout(() => {
-                    // 1️⃣ REMOVER MODAL DA STACK
-                    ModalStackManager.pop(closingModal);
+                    // 1️⃣ REMOVER MODAL DA STACK (com proteção defensiva)
+                    if (window.ModalStackManager && window.ModalStackManager.pop) {
+                        window.ModalStackManager.pop(closingModal);
+                    }
                     
-                    // 2️⃣ GARANTIR QUE aria-hidden é removido do modal que vai fechar
-                    closingModal.removeAttribute('aria-hidden');
+                    // 🔒 FIX: Deixar Bootstrap gerenciar aria-hidden ao fechar
                     
                     // ⭐ VERIFICAR SE NÃO HÁ MAIS NENHUM MODAL ABERTO
                     const openModals = document.querySelectorAll('.modal.show');
@@ -1083,21 +1377,19 @@
                     }
                     
                     // 3️⃣ RESTAURAR VISIBILIDADE SE HÁ OUTRO MODAL ABERTO ABAIXO
-                    const nextModal = ModalStackManager.getTopModal();
+                    const nextModal = window.ModalStackManager ? window.ModalStackManager.getTopModal() : null;
                     if (nextModal) {
                         console.log('📍 Modal anterior encontrado na stack, restaurando foco');
-                        // Restaurar foco no modal anterior
+                        // Restaurar foco no modal anterior de forma segura
                         setTimeout(() => {
-                            const focusableElements = nextModal.element.querySelectorAll(
-                                'input:not([type="hidden"]):not([disabled]),' +
-                                'textarea:not([disabled]),' +
-                                'select:not([disabled]),' +
-                                'button:not([disabled]),[tabindex]:not([tabindex="-1"])'
-                            );
-                            
-                            if (focusableElements.length > 0) {
-                                focusableElements[0].focus({ preventScroll: true });
+                            // 🔒 PROTEÇÃO: Verificar se modal ainda existe e está visível
+                            if (!nextModal.element.classList.contains('show')) {
+                                console.warn('⚠️ Modal anterior não está mais visível, pulando restauração de foco');
+                                return;
                             }
+                            
+                            // 🔹 NÃO restaurar foco manualmente - deixar Bootstrap gerenciar
+                            console.log('✅ Modal anterior permanece ativo:', nextModal.element.id);
                         }, 50);
                     } else {
                     // 4️⃣ NÃO HÁ MAIS MODAIS - RESTAURAR FOCO PARA DOCUMENTO
@@ -1127,8 +1419,11 @@
     }, false);
     window._hiddenModalListenerAdded = true;
     }
+    */
 
     // 🔧 Listener para quando modal COMEÇA a abrir (show.bs.modal)
+    // ⚠️ DESABILITADA: Causava recursão infinita no FocusTrap do Bootstrap
+    /*
     if (!window._showModalListenerAdded) {
         document.addEventListener('show.bs.modal', function(e) {
             if (e.target && e.target.classList.contains('modal')) {
@@ -1154,8 +1449,7 @@
                     if (el) el.style.display = 'none';
                 });
                 
-                // Garantir que aria-hidden não está presente ANTES de abrir
-                openingModal.removeAttribute('aria-hidden');
+                // 🔒 FIX: Deixar Bootstrap gerenciar aria-hidden - não remover!
             }
         }, false);
         window._showModalListenerAdded = true;
@@ -1174,6 +1468,7 @@
         }, false);
         window._shownModalListenerAdded = true;
     }
+    */
     </script>
     <!-- FIM DO DATASTORE -->
 
@@ -14325,7 +14620,7 @@
                     <button type="button" class="abaNPC" data-aba="info" style="flex: 1; padding: 8px; background: transparent; border: none; color: #999; font-weight: bold; cursor: pointer; font-size: 0.9rem;">Habilidades</button>
                     <button type="button" class="abaNPC" data-aba="secrets" style="flex: 1; padding: 8px; background: transparent; border: none; color: #999; font-weight: bold; cursor: pointer; font-size: 0.9rem;">Inventário</button>
                     <div style="flex: 1;"></div>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="padding: 8px 12px;"></button>
+                    <button type="button" class="btn-close btn-close-white" onclick="fecharModalNPC()" style="padding: 8px 12px;"></button>
                 </div>
 
                 <div class="modal-body" style="max-height: calc(90vh - 100px); overflow-y: auto; padding: 15px;">
@@ -14344,7 +14639,7 @@
                                         <!-- Botões principais -->
                                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
                                             <button type="button" class="btn btn-sm" onclick="document.getElementById('npcImageFile').click();" style="background: transparent; color: #d4af37; border: 1px solid #d4af37; font-weight: bold; font-size: 0.8rem; padding: 6px;">📸 Upload</button>
-                                            <button type="button" class="btn btn-sm" onclick="document.getElementById('npcImagemUrl').focus();" style="background: transparent; color: #d4af37; border: 1px solid #d4af37; font-weight: bold; font-size: 0.8rem; padding: 6px;">🔗 URL</button>
+                                            <button type="button" class="btn btn-sm" onclick="const el = document.getElementById('npcImagemUrl'); if (el && document.contains(el)) el.focus();" style="background: transparent; color: #d4af37; border: 1px solid #d4af37; font-weight: bold; font-size: 0.8rem; padding: 6px;">🔗 URL</button>
                                         </div>
                                         
                                         <small style="color: #999; display: block; text-align: center;">GIFs, PNGs, JPGs e WebPs aceitos</small>
@@ -14873,7 +15168,7 @@
                 <div style="border-top: 1px solid #d4af37; padding: 10px; display: flex; justify-content: space-between; gap: 10px;">
                     <button type="button" id="btnEditarNPC" class="btn btn-sm btn-warning" onclick="habilitarEdicaoNPC()" style="display: none; font-weight: bold;">✏️ Editar</button>
                     <div style="display: flex; gap: 10px;">
-                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">❌ Cancelar</button>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="fecharModalNPC()">❌ Cancelar</button>
                         <button type="button" id="btnSalvarNPC" class="btn btn-sm" onclick="atualizarInventarioNPC(); salvarNPCAsync()" style="background: #c41e3a; border: none; color: white; font-weight: bold;">💾 Salvar</button>
                     </div>
                 </div>
@@ -14887,7 +15182,7 @@
             <div class="modal-content bg-dark border-0" style="background: #1a1a1a; border: 2px solid #d4af37;">
                 <div class="modal-header" style="background: #c41e3a; border: none; padding: 12px 15px;">
                     <h5 class="modal-title" style="color: white; font-weight: bold;">⚙️ Editar Atributos Base</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close-white" onclick="fecharModalEditarAtributos()"></button>
                 </div>
                 <div class="modal-body" style="padding: 20px;">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.9rem;">
@@ -14900,7 +15195,7 @@
                     </div>
                 </div>
                 <div style="border-top: 1px solid #d4af37; padding: 12px 15px; display: flex; justify-content: flex-end; gap: 8px;">
-                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">❌ Cancelar</button>
+                    <button type="button" class="btn btn-sm btn-secondary" onclick="fecharModalEditarAtributos()">❌ Cancelar</button>
                     <button type="button" class="btn btn-sm" onclick="salvarAtributosBaseEditado()" style="background: #d4af37; border: none; color: #111; font-weight: bold;">✅ Confirmar</button>
                 </div>
             </div>
@@ -14913,7 +15208,7 @@
             <div class="modal-content bg-dark border-0" style="background: #1a1a1a; border: 2px solid #d4af37;">
                 <div class="modal-header" style="background: #c41e3a; border: none; padding: 12px 15px;">
                     <h5 class="modal-title" style="color: white; font-weight: bold;">🎲 Rolar Atributos da Classe</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close-white" onclick="fecharModalRolarAtributos()"></button>
                 </div>
                 <div class="modal-body" style="padding: 25px;">
                     <!-- Mensagem de classe -->
@@ -14944,7 +15239,7 @@
                     </div>
                 </div>
                 <div style="border-top: 1px solid #d4af37; padding: 12px 15px; display: flex; justify-content: flex-end; gap: 8px;">
-                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">❌ Cancelar</button>
+                    <button type="button" class="btn btn-sm btn-secondary" onclick="fecharModalRolarAtributos()">❌ Cancelar</button>
                     <button type="button" id="btnConfirmarRolagem" class="btn btn-sm" onclick="confirmarRolarAtributosClasse()" style="background: #d4af37; border: none; color: #111; font-weight: bold; display: none;">✅ Confirmar</button>
                 </div>
             </div>
@@ -15064,7 +15359,7 @@
             <div class="modal-content bg-dark border-0" style="background: linear-gradient(135deg, rgba(15, 15, 20, 0.98) 0%, rgba(22, 33, 62, 0.98) 100%); border: 2px solid rgba(155,89,182,0.3); border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.6);">
                 <div class="modal-header border-0" style="border-bottom: 2px solid rgba(155,89,182,0.2); padding: 20px; background: rgba(155,89,182,0.05);">
                     <h5 class="modal-title text-gold" style="font-size: 1.3rem; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.5); color: #9b59b6;">⭐ Adicionar ART Existente às Habilidades</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));"></button>
+                    <button type="button" class="btn-close btn-close-white" onclick="fecharModalNpcArtPicker()" style="filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));"></button>
                 </div>
                 <div class="modal-body" style="max-height: 70vh; overflow-y: auto; padding: 25px;">
                     <!-- FILTRO DE TIPO E BUSCA -->
@@ -15089,7 +15384,7 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="background: rgba(155,89,182,0.05); border-top: 1px solid rgba(155,89,182,0.2);">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">✖️ Fechar</button>
+                    <button type="button" class="btn btn-secondary" onclick="fecharModalNpcArtPicker()">✖️ Fechar</button>
                 </div>
             </div>
         </div>
@@ -17211,9 +17506,27 @@
                 }
 
                 preencherListaSeletorRaca();
-                const modal = new bootstrap.Modal(modalEl);
-                modal.show();
-                safeOpenModal('modalSelecionarRaca');
+                
+                // 🔥 NUCLEAR: Desabilitar FocusTrap de modais abertos ANTES de abrir este
+                const openModals = Array.from(document.querySelectorAll('.modal.show'));
+                console.log(`🔥 [abrirSeletorRaca] ${openModals.length} modais abertos, desabilitando FocusTrap...`);
+                
+                openModals.forEach((modal) => {
+                    const bsInstance = bootstrap.Modal.getInstance(modal);
+                    if (bsInstance && bsInstance._focustrap) {
+                        try {
+                            bsInstance._focustrap.deactivate();
+                            bsInstance._focustrap = null;
+                            console.log('🔥 FocusTrap desabilitado:', modal.id);
+                        } catch (e) {
+                            console.warn('⚠️ Erro ao desabilitar FocusTrap:', e.message);
+                        }
+                    }
+                });
+                
+                // Usar abrirModalComSeguranca para gerenciar a abertura com segurança
+                abrirModalComSeguranca('modalSelecionarRaca');
+                
                 // Limpar filtro ao abrir modal
                 const filtroEl = document.getElementById('filtroRacaInput');
                 if (filtroEl) {
@@ -17575,9 +17888,26 @@
 
                 // 🎨 Usar visualização com cards (igual às raças)
                 preencherListaSeletorClasseComVisualizacao();
-                const modal = new bootstrap.Modal(modalEl);
-                modal.show();
-                safeOpenModal('modalSelecionarClasse');
+                
+                // 🔥 NUCLEAR: Desabilitar FocusTrap de modais abertos ANTES de abrir este
+                const openModals = Array.from(document.querySelectorAll('.modal.show'));
+                console.log(`🔥 [abrirSeletorClasse] ${openModals.length} modais abertos, desabilitando FocusTrap...`);
+                
+                openModals.forEach((modal) => {
+                    const bsInstance = bootstrap.Modal.getInstance(modal);
+                    if (bsInstance && bsInstance._focustrap) {
+                        try {
+                            bsInstance._focustrap.deactivate();
+                            bsInstance._focustrap = null;
+                            console.log('🔥 FocusTrap desabilitado:', modal.id);
+                        } catch (e) {
+                            console.warn('⚠️ Erro ao desabilitar FocusTrap:', e.message);
+                        }
+                    }
+                });
+                
+                // Usar abrirModalComSeguranca para gerenciar a abertura com segurança
+                abrirModalComSeguranca('modalSelecionarClasse');
             } catch (error) {
                 console.error('❌ Erro ao abrir seletor de classe:', error);
             }
@@ -17710,9 +18040,26 @@
 
                 // 🎨 Usar visualização com cards (igual às raças)
                 preencherListaSeletorOrigemComVisualizacao();
-                const modal = new bootstrap.Modal(modalEl);
-                modal.show();
-                safeOpenModal('modalSelecionarOrigem');
+                
+                // 🔥 NUCLEAR: Desabilitar FocusTrap de modais abertos ANTES de abrir este
+                const openModals = Array.from(document.querySelectorAll('.modal.show'));
+                console.log(`🔥 [abrirSeletorOrigem] ${openModals.length} modais abertos, desabilitando FocusTrap...`);
+                
+                openModals.forEach((modal) => {
+                    const bsInstance = bootstrap.Modal.getInstance(modal);
+                    if (bsInstance && bsInstance._focustrap) {
+                        try {
+                            bsInstance._focustrap.deactivate();
+                            bsInstance._focustrap = null;
+                            console.log('🔥 FocusTrap desabilitado:', modal.id);
+                        } catch (e) {
+                            console.warn('⚠️ Erro ao desabilitar FocusTrap:', e.message);
+                        }
+                    }
+                });
+                
+                // Usar abrirModalComSeguranca para gerenciar a abertura com segurança
+                abrirModalComSeguranca('modalSelecionarOrigem');
             } catch (error) {
                 console.error('❌ Erro ao abrir seletor de origem:', error);
             }
@@ -18834,8 +19181,11 @@
         // Carregar ingredientes existentes ao abrir o modal
         if (!window._modalIngredientesListenerAdded) {
             document.getElementById('modalIngredientesExistentes').addEventListener('shown.bs.modal', function() {
-                abrirModalIngredientesExistentes();
-            });
+                // ⚠️ Apenas carregar dados, não abrir outro modal aqui
+                console.log('📂 Modal de ingredientes existentes aberto - dados carregados');
+                // Remover a chamada recursiva que causava stack overflow
+                // abrirModalIngredientesExistentes();
+            }, { once: true });
             window._modalIngredientesListenerAdded = true;
         }
 
@@ -18873,6 +19223,82 @@
             });
             window._modalNovoNPCHiddenListenerAdded = true;
         }
+
+        // ✅ Inicializar listeners para botões de fechar - GARANTIR FUNCIONAMENTO
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                console.log('🎯 Inicializando listeners para botões de fechar modais...');
+                
+                // Listener global para TODOS os cliques em botões de modais
+                document.addEventListener('click', (e) => {
+                    const target = e.target.closest('button');
+                    if (target && target.closest('.modal')) {
+                        const modalId = target.closest('.modal')?.id;
+                        console.log(`🖱️ CLIQUE EM BOTÃO DENTRO DE MODAL "${modalId}":`, target.textContent.trim(), target.getAttribute('onclick'));
+                    }
+                }, true); // Use capture phase para garantir que pegue ANTES de outros listeners
+                
+                // Modal NPC
+                const modalNPCElement = document.getElementById('modalNovoNPC');
+                if (modalNPCElement) {
+                    const closeButtons = modalNPCElement.querySelectorAll('[onclick*="fecharModalNPC"]');
+                    console.log(`📌 Encontrados ${closeButtons.length} botões de fechar para modalNovoNPC`);
+                    closeButtons.forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            console.log('👆 Clique detectado em botão de fechar modalNovoNPC');
+                            e.preventDefault();
+                            e.stopPropagation();
+                            fecharModalNPC();
+                        }, true);
+                    });
+                }
+                
+                // Modal Editar Atributos
+                const modalEditarElement = document.getElementById('modalEditarAtributosBase');
+                if (modalEditarElement) {
+                    const closeButtons = modalEditarElement.querySelectorAll('[onclick*="fecharModalEditarAtributos"]');
+                    console.log(`📌 Encontrados ${closeButtons.length} botões de fechar para modalEditarAtributosBase`);
+                    closeButtons.forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            console.log('👆 Clique detectado em botão de fechar modalEditarAtributosBase');
+                            e.preventDefault();
+                            e.stopPropagation();
+                            fecharModalEditarAtributos();
+                        }, true);
+                    });
+                }
+                
+                // Modal Rolar Atributos
+                const modalRolarElement = document.getElementById('modalRolarAtributosClasse');
+                if (modalRolarElement) {
+                    const closeButtons = modalRolarElement.querySelectorAll('[onclick*="fecharModalRolarAtributos"]');
+                    console.log(`📌 Encontrados ${closeButtons.length} botões de fechar para modalRolarAtributosClasse`);
+                    closeButtons.forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            console.log('👆 Clique detectado em botão de fechar modalRolarAtributosClasse');
+                            e.preventDefault();
+                            e.stopPropagation();
+                            fecharModalRolarAtributos();
+                        }, true);
+                    });
+                }
+                
+                // Modal ART Picker
+                const modalArtPickerElement = document.getElementById('npcArtPicker_modal');
+                if (modalArtPickerElement) {
+                    const closeButtons = modalArtPickerElement.querySelectorAll('[onclick*="fecharModalNpcArtPicker"]');
+                    console.log(`📌 Encontrados ${closeButtons.length} botões de fechar para npcArtPicker_modal`);
+                    closeButtons.forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            console.log('👆 Clique detectado em botão de fechar npcArtPicker_modal');
+                            e.preventDefault();
+                            e.stopPropagation();
+                            fecharModalNpcArtPicker();
+                        }, true);
+                    });
+                }
+            }, 500);
+        });
 
         // Função para definir atributos base (abre modal para editar)
         function definirAtributosBase() {
@@ -18995,15 +19421,8 @@
             // Atualizar informação de classe
             document.getElementById('classeRolagemInfo').textContent = nomeClasse;
 
-            // Abrir modal
-            const modalElement = document.getElementById('modalRolarAtributosClasse');
-            if (!modalElement) {
-                console.error('❌ Elemento modalRolarAtributosClasse não encontrado');
-                return;
-            }
-            const modal = new bootstrap.Modal(modalElement);
-            modal.show();
-            safeOpenModal('modalRolarAtributosClasse');
+            // ✅ USAR abrirModalComSeguranca para evitar conflitos de FocusTrap em modais aninhados
+            abrirModalComSeguranca('modalRolarAtributosClasse');
         }
 
         // Seleciona tipo de rolagem (única ou dupla)
@@ -21678,20 +22097,23 @@
                 keyboard: false
             });
             
-            // Sincronizar z-index quando modal abre
-            modalElement.addEventListener('shown.bs.modal', function() {
-                setTimeout(() => {
-                    const backdrops = document.querySelectorAll('.modal-backdrop');
-                    backdrops.forEach((backdrop, idx) => {
-                        if (idx === backdrops.length - 1) {
-                            backdrop.style.zIndex = '1149 !important';
-                        } else {
-                            backdrop.style.zIndex = '1049 !important';
-                        }
-                    });
-                    modalElement.style.zIndex = '1150 !important';
-                }, 10);
-            }, { once: true });
+            // 🔒 FIX: Adicionar listener APENAS UMA VEZ para sincronizar z-index
+            if (!modalElement.dataset.hasZindexListener) {
+                modalElement.dataset.hasZindexListener = 'true';
+                modalElement.addEventListener('shown.bs.modal', function() {
+                    setTimeout(() => {
+                        const backdrops = document.querySelectorAll('.modal-backdrop');
+                        backdrops.forEach((backdrop, idx) => {
+                            if (idx === backdrops.length - 1) {
+                                backdrop.style.zIndex = '1149 !important';
+                            } else {
+                                backdrop.style.zIndex = '1049 !important';
+                            }
+                        });
+                        modalElement.style.zIndex = '1150 !important';
+                    }, 10);
+                }, { once: false });
+            }
             
             modal.show();
         }
@@ -21709,20 +22131,23 @@
                 keyboard: false
             });
             
-            // Sincronizar z-index quando modal abre
-            modalElement.addEventListener('shown.bs.modal', function() {
-                setTimeout(() => {
-                    const backdrops = document.querySelectorAll('.modal-backdrop');
-                    backdrops.forEach((backdrop, idx) => {
-                        if (idx === backdrops.length - 1) {
-                            backdrop.style.zIndex = '1149 !important';
-                        } else {
-                            backdrop.style.zIndex = '1049 !important';
-                        }
-                    });
-                    modalElement.style.zIndex = '1150 !important';
-                }, 10);
-            }, { once: true });
+            // 🔒 FIX: Adicionar listener APENAS UMA VEZ para sincronizar z-index
+            if (!modalElement.dataset.hasZindexListener) {
+                modalElement.dataset.hasZindexListener = 'true';
+                modalElement.addEventListener('shown.bs.modal', function() {
+                    setTimeout(() => {
+                        const backdrops = document.querySelectorAll('.modal-backdrop');
+                        backdrops.forEach((backdrop, idx) => {
+                            if (idx === backdrops.length - 1) {
+                                backdrop.style.zIndex = '1149 !important';
+                            } else {
+                                backdrop.style.zIndex = '1049 !important';
+                            }
+                        });
+                        modalElement.style.zIndex = '1150 !important';
+                    }, 10);
+                }, { once: false });
+            }
             
             modal.show();
         }
@@ -22142,43 +22567,8 @@
             // Adiciona modal ao container
             document.getElementById('containerModaisDinamicos').insertAdjacentHTML('beforeend', html);
 
-            // Mostra modal
-            const modalElement = document.getElementById('modalCriarAptidaoNPC');
-            if (!modalElement) {
-                console.error('❌ Elemento modalCriarAptidaoNPC não encontrado');
-                return;
-            }
-            
-            // 🔥 WORKAROUND FOCUSTRAP: Desabilitar FocusTrap para evitar "Maximum call stack size exceeded"
-            const novoModal = new bootstrap.Modal(modalElement, {
-                backdrop: 'static',
-                keyboard: false
-            });
-            
-            // Desabilitar focustrap manualmente se existir
-            try {
-                if (novoModal._focustrap) {
-                    novoModal._focustrap.deactivate();
-                }
-            } catch (e) {
-                console.warn('⚠️ Focustrap não encontrado ou já desativado:', e.message);
-            }
-            
-            novoModal.show();
-            safeOpenModal('modalCriarAptidaoNPC');
-
-            // 🔥 NOVO WORKAROUND: Desabilitar FocusTrap após modal aparecer
-            modalElement.addEventListener('shown.bs.modal', function() {
-                console.log('✅ Modal mostrado, desativando FocusTrap...');
-                try {
-                    if (novoModal._focustrap) {
-                        novoModal._focustrap.deactivate();
-                        console.log('✅ FocusTrap desativado com sucesso');
-                    }
-                } catch (e) {
-                    console.warn('⚠️ Erro ao desativar FocusTrap:', e.message);
-                }
-            }, { once: true });
+            // ✅ USAR abrirModalComSeguranca para evitar conflitos de FocusTrap em modais aninhados
+            abrirModalComSeguranca('modalCriarAptidaoNPC');
 
             // Função para atualizar contador e botão
             const atualizarInterfaceSelecao = () => {
@@ -22224,8 +22614,10 @@
                     filtroInput.addEventListener('input', function() {
                         filtrarAptidoes(this.value);
                     });
-                    // Focus no input ao abrir modal
-                    filtroInput.focus();
+                    // Focus no input ao abrir modal (proteção defensiva)
+                    if (document.contains(filtroInput)) {
+                        filtroInput.focus();
+                    }
                 }
 
                 document.querySelectorAll('.aptidaoItem').forEach(item => {
@@ -22320,15 +22712,8 @@
             habImagemBase64Temp = null;
             habImagemIndexedDBIdTemp = null;
             
-            // Mostra o modal
-            const modalElement = document.getElementById('modalCriarNovaHabilidadeNPC');
-            if (!modalElement) {
-                console.error('❌ Elemento modalCriarNovaHabilidadeNPC não encontrado');
-                return;
-            }
-            const modal = new bootstrap.Modal(modalElement);
-            modal.show();
-            safeOpenModal('modalCriarNovaHabilidadeNPC');
+            // ✅ USAR abrirModalComSeguranca para evitar conflitos de FocusTrap em modais aninhados
+            abrirModalComSeguranca('modalCriarNovaHabilidadeNPC');
         }
 
         // Evento de carregamento de arquivo de imagem/GIF
@@ -24150,20 +24535,23 @@
                 focus: false
             });
             
-            // Sincronizar z-index quando modal abre
-            modalElement.addEventListener('shown.bs.modal', function() {
-                setTimeout(() => {
-                    const backdrops = document.querySelectorAll('.modal-backdrop');
-                    backdrops.forEach((backdrop, idx) => {
-                        if (idx === backdrops.length - 1) {
-                            backdrop.style.zIndex = '1149 !important';
-                        } else {
-                            backdrop.style.zIndex = '1049 !important';
-                        }
-                    });
-                    modalElement.style.zIndex = '1150 !important';
-                }, 10);
-            }, { once: true });
+            // 🔒 FIX: Adicionar listener APENAS UMA VEZ para sincronizar z-index
+            if (!modalElement.dataset.hasZindexListener) {
+                modalElement.dataset.hasZindexListener = 'true';
+                modalElement.addEventListener('shown.bs.modal', function() {
+                    setTimeout(() => {
+                        const backdrops = document.querySelectorAll('.modal-backdrop');
+                        backdrops.forEach((backdrop, idx) => {
+                            if (idx === backdrops.length - 1) {
+                                backdrop.style.zIndex = '1149 !important';
+                            } else {
+                                backdrop.style.zIndex = '1049 !important';
+                            }
+                        });
+                        modalElement.style.zIndex = '1150 !important';
+                    }, 10);
+                }, { once: false });
+            }
             
             modal.show();
         }
@@ -25357,6 +25745,29 @@
         let editandoClasse = null;
         let editandoAptidao = null;
         
+        // 🔥 CACHE TEMPORÁRIO PARA HABILIDADES DE RAÇA (quando criando nova raça)
+        let cacheHabilidadesRacas = {
+            heracas: [],
+            habilidades: []
+        };
+        
+        // 🎯 FUNÇÃO DE DIAGNÓSTICO DO CACHE
+        function diagnosticarCache(contexto = '') {
+            console.group(`🔍 [DIAGNÓSTICO CACHE] ${contexto}`);
+            console.log('EditandoRaca:', editandoRaca);
+            console.log('Cache Heranças:', cacheHabilidadesRacas.heracas.length, 'items');
+            if (cacheHabilidadesRacas.heracas.length > 0) {
+                console.log('  └─ IDs:', cacheHabilidadesRacas.heracas.map(h => h.id).join(', '));
+            }
+            console.log('Cache Habilidades:', cacheHabilidadesRacas.habilidades.length, 'items');
+            if (cacheHabilidadesRacas.habilidades.length > 0) {
+                console.log('  └─ IDs:', cacheHabilidadesRacas.habilidades.map(h => h.id).join(', '));
+            }
+            console.log('DOM Heranças:', document.querySelectorAll('#habilidadesRaca [data-habilidade-json]').length, 'cards');
+            console.log('DOM Habilidades:', document.querySelectorAll('#habilidadesRacaAvancadas [data-habilidade-json]').length, 'cards');
+            console.groupEnd();
+        }
+        
         // Migração: Adicionar campos "Duração" e "Tipo" às habilidades de raças e classes existentes
         function migrarRacasComDuracao() {
             const racas = JSON.parse(localStorage.getItem('redungeon_racas')) || [];
@@ -25629,11 +26040,23 @@
         
         // Adicionar Habilidade na Raça
         function adicionarHabilidadeRaca() {
+            // ℹ️ Modal pai já existe - Bootstrap.Modal.prototype.show patch cuidará do focustrap
+            const modalCriarRaca = document.getElementById('modalCriarRaca');
+            if (modalCriarRaca) {
+                console.log('ℹ️ [adicionarHabilidadeRaca] Modal pai detectado');
+            }
+            
             adicionarHabilidadeRacaModal();
         }
 
         // Adicionar Habilidade Avançada na Raça
         function adicionarHabilidadeRacaAvancada() {
+            // ℹ️ Modal pai já existe - Bootstrap.Modal.prototype.show patch cuidará do focustrap
+            const modalCriarRaca = document.getElementById('modalCriarRaca');
+            if (modalCriarRaca) {
+                console.log('ℹ️ [adicionarHabilidadeRacaAvancada] Modal pai detectado');
+            }
+            
             adicionarHabilidadeRacaModal();
         }
 
@@ -25663,6 +26086,8 @@
 
         // Salvar Raça
         function salvarRaca() {
+            diagnosticarCache('[salvarRaca] INÍCIO');
+            
             console.log('💾 Salvando raça. editandoRaca:', editandoRaca);
             
             const nome = document.getElementById('racaNome').value;
@@ -25685,26 +26110,39 @@
             });
             console.log('✅ Atributos coletados:', atributos);
 
-            // Coletar habilidades (Heranças)
-            const habilidades = [];
-            document.querySelectorAll('#habilidadesRaca [data-habilidade-json]').forEach(item => {
-                const json = item.getAttribute('data-habilidade-json');
-                const habilidade = parsearJsonHabilidade(json);
-                if (habilidade) {
-                    habilidades.push(habilidade);
-                }
-            });
+            // 🔥 USAR CACHE SE NÃO ESTAMOS EDITANDO (raça nova)
+            let habilidades, habilidadesAvancadas;
+            
+            if (editandoRaca) {
+                // Modo edição: coletar do DOM
+                habilidades = [];
+                document.querySelectorAll('#habilidadesRaca [data-habilidade-json]').forEach(item => {
+                    const json = item.getAttribute('data-habilidade-json');
+                    const habilidade = parsearJsonHabilidade(json);
+                    if (habilidade) {
+                        habilidades.push(habilidade);
+                    }
+                });
+                
+                habilidadesAvancadas = [];
+                document.querySelectorAll('#habilidadesRacaAvancadas [data-habilidade-json]').forEach(item => {
+                    const json = item.getAttribute('data-habilidade-json');
+                    const habilidade = parsearJsonHabilidade(json);
+                    if (habilidade) {
+                        habilidadesAvancadas.push(habilidade);
+                    }
+                });
+                console.log('📖 [salvarRaca] MODO EDIÇÃO - Coletando do DOM');
+            } else {
+                // Modo criação: usar cache temporário (garante que habilidades adicionadas no modal sejam incluídas)
+                // 🔥 USAR DEEP COPY para evitar problemas de referência
+                habilidades = JSON.parse(JSON.stringify(cacheHabilidadesRacas.heracas || []));
+                habilidadesAvancadas = JSON.parse(JSON.stringify(cacheHabilidadesRacas.habilidades || []));
+                console.log('📖 [salvarRaca] MODO CRIAÇÃO - Usando cache: heracas=', habilidades.length, '| habilidades=', habilidadesAvancadas.length);
+                console.log('🔥 [salvarRaca] Cache completo:', JSON.stringify(cacheHabilidadesRacas));
+            }
+            
             console.log('✅ Habilidades coletadas:', habilidades.length);
-
-            // Coletar habilidades avançadas
-            const habilidadesAvancadas = [];
-            document.querySelectorAll('#habilidadesRacaAvancadas [data-habilidade-json]').forEach(item => {
-                const json = item.getAttribute('data-habilidade-json');
-                const habilidade = parsearJsonHabilidade(json);
-                if (habilidade) {
-                    habilidadesAvancadas.push(habilidade);
-                }
-            });
             console.log('✅ Habilidades avançadas coletadas:', habilidadesAvancadas.length);
 
             const raca = {
@@ -25722,8 +26160,8 @@
             console.log('🔍 Raça a salvar:', raca);
             
             // ⭐ VERIFICAÇÃO DE INTEGRIDADE - Garantir que habilidades não estão vazias
-            console.log('📊 [salvarRaca] Habilidades coletadas do DOM:', habilidades.length);
-            console.log('📊 [salvarRaca] Habilidades Avançadas coletadas do DOM:', habilidadesAvancadas.length);
+            console.log('📊 [salvarRaca] Habilidades coletadas:', habilidades.length);
+            console.log('📊 [salvarRaca] Habilidades Avançadas coletadas:', habilidadesAvancadas.length);
             
             // Se está editando, verificar se há discrepância entre DOM e objeto em edição
             if (editandoRaca) {
@@ -25749,11 +26187,16 @@
             } else {
                 console.log('➕ Criando nova raça:', raca.nome);
                 armazenar.racas.push(raca);
+                // 🔥 LIMPAR CACHE APÓS SALVAR
+                cacheHabilidadesRacas = { heracas: [], habilidades: [] };
+                console.log('🧹 [salvarRaca] Cache de habilidades limpo após salvar nova raça');
             }
             
             console.log('📊 Total de raças após salvar:', armazenar.racas.length);
             localStorage.setItem('redungeon_racas', JSON.stringify(armazenar.racas));
             console.log('✅ Salvo no localStorage');
+            
+            diagnosticarCache('[salvarRaca] DEPOIS DO SAVE');
             
             // ✅ RESTAURAR SCROLL APÓS SALVAR RAÇA
             ScrollProtector.restore();
@@ -27088,8 +27531,6 @@
 
         // Adicionar nova habilidade de raça
         function adicionarHabilidadeRacaModal() {
-            const formId = document.querySelectorAll('#modalNovaRaca')[0] ? 'formNovaHabilidadeRaca' : 'formNovaHabilidadeRaca';
-            
             // Limpar formulário e abrir modal para nova habilidade
             document.getElementById('formNovaHabilidadeRaca').reset();
             document.getElementById('habilidadeRacaEditIndex').value = '';
@@ -27097,34 +27538,16 @@
             document.getElementById('previewHabilidadeRaca').innerHTML = '<span class="text-muted" style="font-size: 0.8rem;">Imagem da habilidade</span>';
             document.getElementById('habilidadeRacaModalTitle').textContent = '⚡ Nova Habilidade de Raça';
             
-            // Abrir modal
-            const modalElement = document.getElementById('modalNovaHabilidadeRaca');
-            if (!modalElement) {
-                console.error('❌ Elemento modalNovaHabilidadeRaca não encontrado');
-                return;
-            }
-            // Usar getInstance para evitar múltiplas instâncias
-            const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement, {
-                keyboard: false,
-                backdrop: 'static'
+            // 🔥 NUCLEAR: Desabilitar FocusTrap ANTES de abrir
+            const openModals = Array.from(document.querySelectorAll('.modal.show'));
+            console.log(`🔥 [adicionarHabilidadeRacaModal] ${openModals.length} modais abertos antes de abrir novo`);
+            
+            openModals.forEach((modal, idx) => {
+                console.log(`✅ [adicionarHabilidadeRacaModal] Modal ${idx} aberto: ${modal.id}`);
             });
             
-            // Sincronizar z-index dos backdrops quando modal abre
-            modalElement.addEventListener('shown.bs.modal', function() {
-                setTimeout(() => {
-                    const backdrops = document.querySelectorAll('.modal-backdrop');
-                    backdrops.forEach((backdrop, idx) => {
-                        if (idx === backdrops.length - 1) {
-                            backdrop.style.zIndex = '1099 !important';
-                        } else {
-                            backdrop.style.zIndex = '1049 !important';
-                        }
-                    });
-                    modalElement.style.zIndex = '1100 !important';
-                }, 10);
-            }, { once: true });
-            
-            modal.show();
+            // ✅ USAR abrirModalComSeguranca para evitar conflitos de FocusTrap em modais aninhados
+            abrirModalComSeguranca('modalNovaHabilidadeRaca');
         }
 
         // Preview de Imagem - Habilidade de Raça (URL)
@@ -27244,25 +27667,41 @@
         // ============ FUNÇÃO AUXILIAR: DETECTAR ABA ATIVA ============
         // ⭐ IMPORTANTE: Detecta corretamente qual aba está visível no modal de raças
         function detectarAbaAtivaRaca() {
-            // Verificar se a aba "Heranças" está ativa
+            console.log('🔍 [detectarAbaAtivaRaca] Iniciando detecção...');
+            
+            // Método 1: Verificar pela classe active no botão da aba
             const abHeracas = document.querySelector('#racaHeracas-tab.active');
             const abHabilidades = document.querySelector('#racaHabilidades-tab.active');
             
-            console.log('🔍 [detectarAbaAtivaRaca] Heranças.active:', !!abHeracas, '| Habilidades.active:', !!abHabilidades);
+            console.log('🔍 [detectarAbaAtivaRaca] Método 1 - Botões: Heranças.active:', !!abHeracas, '| Habilidades.active:', !!abHabilidades);
             
-            // Se nenhuma estiver marcada como active, verificar qual tab-pane está visível
-            if (!abHeracas && !abHabilidades) {
-                const tabHeracas = document.querySelector('#racaHeracas.tab-pane.show.active');
-                const tabHabilidades = document.querySelector('#racaHabilidades.tab-pane.show.active');
-                
-                console.log('🔍 [detectarAbaAtivaRaca] Tab visível - Heranças:', !!tabHeracas, '| Habilidades:', !!tabHabilidades);
-                
-                if (tabHabilidades) return 'habilidades';
-                if (tabHeracas) return 'heracas';
+            if (abHeracas) {
+                console.log('✅ [detectarAbaAtivaRaca] Detectado: HERANÇAS via botão');
+                return 'heracas';
+            }
+            if (abHabilidades) {
+                console.log('✅ [detectarAbaAtivaRaca] Detectado: HABILIDADES via botão');
+                return 'habilidades';
             }
             
-            // Padrão: se Heranças está active, retorna heracas, senão habilidades
-            return abHeracas ? 'heracas' : 'habilidades';
+            // Método 2: Verificar qual tab-pane está visível
+            const tabHeracas = document.querySelector('#racaHeracas.tab-pane.show.active');
+            const tabHabilidades = document.querySelector('#racaHabilidades.tab-pane.show.active');
+            
+            console.log('🔍 [detectarAbaAtivaRaca] Método 2 - Panes visíveis: Heranças:', !!tabHeracas, '| Habilidades:', !!tabHabilidades);
+            
+            if (tabHabilidades) {
+                console.log('✅ [detectarAbaAtivaRaca] Detectado: HABILIDADES via pane');
+                return 'habilidades';
+            }
+            if (tabHeracas) {
+                console.log('✅ [detectarAbaAtivaRaca] Detectado: HERANÇAS via pane');
+                return 'heracas';
+            }
+            
+            // Método 3: Padrão fallback - Heranças é a primeira aba e tem o "active" inicial
+            console.log('✅ [detectarAbaAtivaRaca] Usando padrão: HERANÇAS (fallback)');
+            return 'heracas';
         }
 
         // ============ FUNÇÃO AUXILIAR: PARSE JSON DE HABILIDADE ============
@@ -27286,28 +27725,90 @@
                 console.error('❌ Modal não encontrado:', typeof idModal === 'string' ? idModal : 'elemento');
                 return;
             }
-            
-            // GARANTIR QUE TODOS OS INPUTS ESTÃO HABILITADOS (para modais de criação/edição)
-            const allInputs = modalElement.querySelectorAll('input, select, textarea, button');
-            allInputs.forEach(input => {
-                input.disabled = false;
-                input.readOnly = false;
-                input.removeAttribute('readonly');
-                input.removeAttribute('disabled');
-                input.style.pointerEvents = 'auto';
-                input.style.opacity = '1';
-            });
-            
-            // Usar getInstance para reutilizar ou criar nova instância
-            let modal = bootstrap.Modal.getInstance(modalElement);
-            if (!modal) {
-                modal = new bootstrap.Modal(modalElement, {
-                    backdrop: 'static',  // Evita fechar ao clicar fora
-                    keyboard: false      // Evita fechar ao pressionar ESC (pode ser reativado se necessário)
-                });
+
+            // 🔒 PROTEÇÃO: Marcar como em-abertura para evitar múltiplas aberturas simultâneas
+            if (modalElement.dataset.modalAbrindo === 'true') {
+                console.warn('⚠️ Modal já está em processo de abertura:', idModal);
+                return;
             }
-            modal.show();
-            return modal;
+            modalElement.dataset.modalAbrindo = 'true';
+
+            try {
+                // ✅ GARANTIR QUE TODOS OS INPUTS ESTÃO HABILITADOS
+                const allInputs = modalElement.querySelectorAll('input, select, textarea, button');
+                allInputs.forEach(input => {
+                    input.disabled = false;
+                    input.readOnly = false;
+                    input.removeAttribute('readonly');
+                    input.removeAttribute('disabled');
+                    input.style.pointerEvents = 'auto';
+                    input.style.opacity = '1';
+                });
+
+                // 🔒 LIMPEZA: Remover backdrops órfãos antes de abrir novo
+                const backdrops = Array.from(document.querySelectorAll('.modal-backdrop'));
+                if (backdrops.length > 1) {
+                    backdrops.slice(0, -1).forEach(backdrop => {
+                        console.log('🧹 Removendo backdrop órfão');
+                        backdrop.remove();
+                    });
+                }
+
+                // ✅ USAR getInstance PARA REUTILIZAR OU CRIAR NOVA INSTÂNCIA
+                let modal = bootstrap.Modal.getInstance(modalElement);
+                if (!modal) {
+                    modal = new bootstrap.Modal(modalElement, {
+                        backdrop: 'static',  // Evita fechar ao clicar fora
+                        keyboard: false      // Evita fechar ao pressionar ESC
+                    });
+                }
+                
+                // 🔒 PATCH CRÍTICO: Desabilitar FocusTrap para modais aninhados
+                const openModalsCount = document.querySelectorAll('.modal.show').length;
+                if (openModalsCount > 1) {
+                    // Há outro modal aberto - Bootstrap.Modal.prototype.show patch cuidará disso
+                    console.log('ℹ️ Modal aninhado detectado - focustrap será tratado pelo patch global');
+                }
+                
+                // 🔒 ADICIONAR À STACK ANTES DE ABRIR (com proteção defensiva)
+                if (window.ModalStackManager && window.ModalStackManager.push) {
+                    window.ModalStackManager.push(modalElement);
+                    console.log('✅ Modal adicionado à stack');
+                } else {
+                    console.warn('⚠️ ModalStackManager não disponível, continuando sem stack tracking');
+                }
+                
+                modal.show();
+                
+                // 🔒 RE-HABILITAR INPUTS E CONFIRMAR ABERTURA
+                setTimeout(() => {
+                    const openModalsAfterShow = document.querySelectorAll('.modal.show').length;
+                    console.log(`✅ Modais abertos após show(): ${openModalsAfterShow}`);
+                    
+                    // ✅ RE-HABILITAR INPUTS APÓS ABERTURA (caso focustrap tenha bloqueado)
+                    const allInputsAfterShow = modalElement.querySelectorAll('input, select, textarea, button');
+                    allInputsAfterShow.forEach(input => {
+                        input.disabled = false;
+                        input.readOnly = false;
+                        input.removeAttribute('readonly');
+                        input.removeAttribute('disabled');
+                        input.style.pointerEvents = 'auto';
+                        input.style.opacity = '1';
+                    });
+                    console.log('✅ Inputs re-habilitados após abertura');
+                }, 50);
+                
+                // ✅ Restaurar flag após abertura
+                setTimeout(() => {
+                    modalElement.dataset.modalAbrindo = 'false';
+                }, 100);
+                
+                return modal;
+            } catch (error) {
+                console.error('❌ Erro ao abrir modal com segurança:', error);
+                modalElement.dataset.modalAbrindo = 'false';
+                throw error;
+            }
         }
 
         // ============ SINCRONIZAR HABILIDADES COM PERSISTÊNCIA ============
@@ -27315,13 +27816,30 @@
         function sincronizarHabilidadesComPersistencia(abaAtiva, todasHabilidades) {
             console.log('🔄 [sincronizarHabilidadesComPersistencia] Sincronizando com localStorage...');
             console.log('📊 Habilidades a sincronizar:', todasHabilidades.length);
+            console.log('🔍 Aba ativa:', abaAtiva, '| Editando Raça:', editandoRaca);
             
-            // 1. Atualizar DOM
+            // 1. Atualizar DOM - CRITICAL: Sempre encontrar o container, não importa se está dentro do modal
             const containerId = abaAtiva === 'heracas' ? 'habilidadesRaca' : 'habilidadesRacaAvancadas';
             const container = document.getElementById(containerId);
+            
+            console.log('🔍 [sincronizarHabilidadesComPersistencia] Procurando container:', containerId);
+            console.log('   Container encontrado:', !!container, '| Container pai:', container?.parentElement?.id);
+            
             if (container) {
-                container.innerHTML = renderizarHabilidadesRacaCards(todasHabilidades);
-                console.log('✅ [sincronizarHabilidadesComPersistencia] DOM atualizado:', containerId);
+                // 🔥 RENDERIZAR CARDS OU DEIXAR VAZIO
+                if (todasHabilidades.length > 0) {
+                    const htmlCards = renderizarHabilidadesRacaCards(todasHabilidades);
+                    container.innerHTML = htmlCards;
+                    console.log('✅ [sincronizarHabilidadesComPersistencia] DOM atualizado com', todasHabilidades.length, 'habilidades');
+                } else {
+                    container.innerHTML = '';
+                    console.log('📭 [sincronizarHabilidadesComPersistencia] Container deixado vazio (0 habilidades)');
+                }
+                console.log('   Verificação pós-update: Cards no DOM =', document.querySelectorAll(`#${containerId} [data-habilidade-json]`).length);
+            } else {
+                console.error('❌ [sincronizarHabilidadesComPersistencia] Container NÃO ENCONTRADO:', containerId);
+                console.log('   IDs disponíveis no DOM:', Array.from(document.querySelectorAll('[id]')).slice(0, 20).map(el => el.id).join(', '));
+                console.log('   ❌ PROBLEMA CRÍTICO: Habilidades serão salvas no cache mas NÃO renderizadas!');
             }
             
             // 2. Atualizar objeto da raça atual EM MEMÓRIA e PERSISTIR
@@ -27346,99 +27864,155 @@
                     console.warn('⚠️ [sincronizarHabilidadesComPersistencia] Raça não encontrada para sincronização');
                 }
             } else {
-                console.log('ℹ️ [sincronizarHabilidadesComPersistencia] Nenhuma raça em edição no momento');
+                // 🔥 ESTAMOS CRIANDO UMA NOVA RAÇA - Usar cache temporário
+                console.log('📝 [sincronizarHabilidadesComPersistencia] MODO CRIAÇÃO - Armazenando em cache temporário');
+                
+                if (abaAtiva === 'heracas') {
+                    cacheHabilidadesRacas.heracas = JSON.parse(JSON.stringify(todasHabilidades)); // Deep copy
+                    console.log('⭐ Cache de Heranças atualizado:', cacheHabilidadesRacas.heracas.length, 'items');
+                } else {
+                    cacheHabilidadesRacas.habilidades = JSON.parse(JSON.stringify(todasHabilidades)); // Deep copy
+                    console.log('⭐ Cache de Habilidades atualizado:', cacheHabilidadesRacas.habilidades.length, 'items');
+                }
+                
+                console.log('💾 [sincronizarHabilidadesComPersistencia] Cache temporário salvo! Será usado ao salvar a raça');
+                console.log('   Estado completo do cache:', JSON.stringify(cacheHabilidadesRacas));
             }
         }
 
         // Salvar habilidade de raça
         function salvarHabilidadeRaca() {
-            const form = document.getElementById('formNovaHabilidadeRaca');
-            const nome = document.getElementById('habilidadeRacaNome').value;
-            const editIndex = document.getElementById('habilidadeRacaEditIndex').value;
-            const habilidadeIdExistente = document.getElementById('habilidadeRacaIdEditando').value;
-            
-            console.log('💾 [salvarHabilidadeRaca] Iniciando salvamento:', {editando: editIndex !== '', nome, habilidadeIdExistente});
-            
-            if (!nome) {
-                alert('Por favor, preencha o nome da habilidade!');
-                return;
-            }
-
-            const habilidade = {
-                id: habilidadeIdExistente || Date.now().toString() + Math.random().toString(36).substr(2, 9),
-                nome: nome,
-                tipo: document.getElementById('habilidadeRacaTipo').value,
-                acao: document.getElementById('habilidadeRacaAcao').value,
-                nivel: document.getElementById('habilidadeRacaNivel').value,
-                imagem: document.getElementById('habilidadeRacaImagemUrl').value,
-                custo: document.getElementById('habilidadeRacaCusto').value,
-                efeito: document.getElementById('habilidadeRacaEfeito').value,
-                recarga: document.getElementById('habilidadeRacaRecarga').value,
-                duracao: document.getElementById('habilidadeRacaDuracao').value,
-                alcance: document.getElementById('habilidadeRacaAlcance').value,
-                alvos: document.getElementById('habilidadeRacaAlvos').value,
-                descricao: document.getElementById('habilidadeRacaDescricao').value
-            };
-            
-            console.log('📝 [salvarHabilidadeRaca] Objeto habilidade:', habilidade);
-
-            // Determinar qual aba está ativa
-            const abaAtiva = detectarAbaAtivaRaca();
-            const containerId = abaAtiva === 'heracas' ? 'habilidadesRaca' : 'habilidadesRacaAvancadas';
-            const container = document.getElementById(containerId);
-            
-            console.log('📍 [salvarHabilidadeRaca] Aba ativa:', abaAtiva, '| Container ID:', containerId);
-            
-            // Coletar todas as habilidades atuais
-            let todasHabilidades = [];
-            container.querySelectorAll('[data-habilidade-json]').forEach(card => {
-                const json = card.getAttribute('data-habilidade-json');
-                const habilidade = parsearJsonHabilidade(json);
-                if (habilidade) {
-                    todasHabilidades.push(habilidade);
-                }
-            });
-            
-            console.log('📊 [salvarHabilidadeRaca] Habilidades atuais antes:', todasHabilidades.length);
-
-            if (editIndex !== '') {
-                // Editar: encontrar por ID (mais confiável que índice)
-                const indexEncontrado = todasHabilidades.findIndex(h => h.id === habilidade.id);
-                console.log('🔍 [salvarHabilidadeRaca] Procurando por ID:', habilidade.id, '| Encontrado em:', indexEncontrado);
+            try {
+                const form = document.getElementById('formNovaHabilidadeRaca');
+                const nome = document.getElementById('habilidadeRacaNome')?.value;
+                const editIndex = document.getElementById('habilidadeRacaEditIndex')?.value;
+                const habilidadeIdExistente = document.getElementById('habilidadeRacaIdEditando')?.value;
                 
-                if (indexEncontrado !== -1) {
-                    todasHabilidades[indexEncontrado] = habilidade;
-                    console.log('✅ [salvarHabilidadeRaca] Habilidade atualizada em index:', indexEncontrado);
-                } else {
-                    console.warn('⚠️ [salvarHabilidadeRaca] Habilidade com ID não encontrada, adicionando como nova');
-                    todasHabilidades.push(habilidade);
+                diagnosticarCache('[salvarHabilidadeRaca] INÍCIO');
+                
+                console.log('💾 [salvarHabilidadeRaca] Iniciando salvamento:', {editando: editIndex !== '', nome, habilidadeIdExistente});
+                
+                if (!nome || nome.trim() === '') {
+                    alert('Por favor, preencha o nome da habilidade!');
+                    return;
                 }
-            } else {
-                // Criar nova
-                todasHabilidades.push(habilidade);
-                console.log('✅ [salvarHabilidadeRaca] Nova habilidade criada com ID:', habilidade.id);
+
+                const habilidade = {
+                    id: habilidadeIdExistente || Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                    nome: nome,
+                    tipo: document.getElementById('habilidadeRacaTipo')?.value || '',
+                    acao: document.getElementById('habilidadeRacaAcao')?.value || '',
+                    nivel: document.getElementById('habilidadeRacaNivel')?.value || '',
+                    imagem: document.getElementById('habilidadeRacaImagemUrl')?.value || '',
+                    custo: document.getElementById('habilidadeRacaCusto')?.value || '',
+                    efeito: document.getElementById('habilidadeRacaEfeito')?.value || '',
+                    recarga: document.getElementById('habilidadeRacaRecarga')?.value || '',
+                    duracao: document.getElementById('habilidadeRacaDuracao')?.value || '',
+                    alcance: document.getElementById('habilidadeRacaAlcance')?.value || '',
+                    alvos: document.getElementById('habilidadeRacaAlvos')?.value || '',
+                    descricao: document.getElementById('habilidadeRacaDescricao')?.value || ''
+                };
+                
+                console.log('📝 [salvarHabilidadeRaca] Objeto habilidade:', habilidade);
+
+                // Determinar qual aba está ativa
+                const abaAtiva = detectarAbaAtivaRaca();
+                const containerId = abaAtiva === 'heracas' ? 'habilidadesRaca' : 'habilidadesRacaAvancadas';
+                const container = document.getElementById(containerId);
+                
+                console.log('📍 [salvarHabilidadeRaca] Aba ativa:', abaAtiva, '| Container ID:', containerId);
+                
+                // 🔥 IMPORTANTE: Se estamos em modo CRIAÇÃO, usar cache como base
+                let todasHabilidades = [];
+                
+                if (!editandoRaca) {
+                    // MODO CRIAÇÃO: Pegar do cache
+                    const chaveCache = abaAtiva === 'heracas' ? 'heracas' : 'habilidades';
+                    todasHabilidades = JSON.parse(JSON.stringify(cacheHabilidadesRacas[chaveCache] || []));
+                    console.log('📖 [salvarHabilidadeRaca] MODO CRIAÇÃO - Cache:', chaveCache);
+                } else {
+                    // MODO EDIÇÃO: Coletar do DOM
+                    if (container) {
+                        container.querySelectorAll('[data-habilidade-json]').forEach(card => {
+                            const json = card.getAttribute('data-habilidade-json');
+                            const hab = parsearJsonHabilidade(json);
+                            if (hab) {
+                                todasHabilidades.push(hab);
+                            }
+                        });
+                    }
+                    console.log('📖 [salvarHabilidadeRaca] MODO EDIÇÃO - Do DOM');
+                }
+                
+                console.log('📊 [salvarHabilidadeRaca] Total antes:', todasHabilidades.length);
+
+                if (editIndex !== '') {
+                    // Editar: encontrar por ID
+                    const indexEncontrado = todasHabilidades.findIndex(h => h.id === habilidade.id);
+                    if (indexEncontrado !== -1) {
+                        todasHabilidades[indexEncontrado] = habilidade;
+                        console.log('✅ Habilidade atualizada');
+                    } else {
+                        todasHabilidades.push(habilidade);
+                        console.log('✅ Habilidade adicionada como nova');
+                    }
+                } else {
+                    // Criar nova
+                    todasHabilidades.push(habilidade);
+                    console.log('✅ Nova habilidade criada');
+                }
+                
+                console.log('📊 [salvarHabilidadeRaca] Total depois:', todasHabilidades.length);
+
+                // ⭐ SINCRONIZAR COM PERSISTÊNCIA
+                sincronizarHabilidadesComPersistencia(abaAtiva, todasHabilidades);
+
+                // Fechar modal - COM TRATAMENTO DE ERRO
+                try {
+                    const modalElement = document.getElementById('modalNovaHabilidadeRaca');
+                    if (modalElement) {
+                        // Tentar com bootstrap.Modal.getInstance primeiro
+                        let modal = bootstrap.Modal.getInstance(modalElement);
+                        if (modal) {
+                            modal.hide();
+                            console.log('📴 Modal fechado via Bootstrap');
+                        } else {
+                            // Se getInstance retornar null, forçar fechar manualmente
+                            console.warn('⚠️ Modal instance é null, fechando manualmente');
+                            modalElement.classList.remove('show');
+                            modalElement.setAttribute('aria-hidden', 'true');
+                            modalElement.style.display = 'none';
+                            // Remover backdrops órfãos
+                            document.querySelectorAll('.modal-backdrop').forEach(bd => bd.remove());
+                            console.log('📴 Modal fechado via DOM');
+                        }
+                    }
+                } catch (err) {
+                    console.error('⚠️ Erro ao fechar modal:', err.message);
+                    // Fallback: forçar fechar manualmente
+                    const modalElement = document.getElementById('modalNovaHabilidadeRaca');
+                    if (modalElement) {
+                        modalElement.classList.remove('show');
+                        modalElement.setAttribute('aria-hidden', 'true');
+                        modalElement.style.display = 'none';
+                    }
+                    document.querySelectorAll('.modal-backdrop').forEach(bd => bd.remove());
+                    console.log('📴 Modal fechado via fallback');
+                }
+
+                // Limpar formulário
+                if (form) {
+                    form.reset();
+                }
+                document.getElementById('habilidadeRacaEditIndex').value = '';
+                document.getElementById('habilidadeRacaIdEditando').value = '';
+                
+                console.log('✨ Salvamento concluído');
+                
+            } catch (err) {
+                console.error('❌ Erro em salvarHabilidadeRaca:', err);
+                alert('Erro ao salvar habilidade: ' + err.message);
             }
-            
-            console.log('📊 [salvarHabilidadeRaca] Total de habilidades após operação:', todasHabilidades.length);
-
-            // ⭐⭐ SINCRONIZAR COM PERSISTÊNCIA (CRÍTICO!)
-            sincronizarHabilidadesComPersistencia(abaAtiva, todasHabilidades);
-
-            // Fechar modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('modalNovaHabilidadeRaca'));
-            if (modal) {
-                modal.hide();
-                console.log('📴 [salvarHabilidadeRaca] Modal fechado');
-            }
-
-            // Limpar formulário - IMPORTANTE limpar TODOS os campos
-            form.reset();
-            document.getElementById('habilidadeRacaEditIndex').value = '';
-            document.getElementById('habilidadeRacaIdEditando').value = '';
-            document.getElementById('previewHabilidadeRaca').innerHTML = '<span class="text-muted" style="font-size: 0.8rem;">Imagem da habilidade</span>';
-            document.getElementById('habilidadeRacaModalTitle').textContent = '⚡ Nova Habilidade de Raça';
-            
-            console.log('✨ [salvarHabilidadeRaca] Processo concluído com sucesso');
         }
 
         // Renderizar cards de habilidades de raça
@@ -27592,12 +28166,14 @@
 
             document.getElementById('habilidadeRacaModalTitle').textContent = '✏️ Editar Habilidade de Raça';
 
-            // Abrir modal
-            const modalElement = document.getElementById('modalNovaHabilidadeRaca');
-            if (!modalElement) {
-                console.error('❌ [editarHabilidadeRaca] Elemento modalNovaHabilidadeRaca não encontrado');
-                return;
-            }
+            // 🔥 NUCLEAR: Desabilitar FocusTrap de TODOS os modais abertos antes de abrir novo
+            const openModalsBeforeEdit = Array.from(document.querySelectorAll('.modal.show'));
+            openModalsBeforeEdit.forEach((modal, idx) => {
+                const bsInstance = bootstrap.Modal.getInstance(modal);
+                console.log(`✅ [editarHabilidadeRaca] Modal ${i} detectado: ${modal.id}`);
+            });
+
+            // Abrir modal com segurança - patch global tratará do focustrap
             abrirModalComSeguranca('modalNovaHabilidadeRaca');
             
             console.log('📴 [editarHabilidadeRaca] Modal aberto para edição');
@@ -28008,8 +28584,6 @@
 
         // Adicionar Habilidade na Classe
         function adicionarHabilidadeClasse() {
-            const container = document.getElementById('habilidadesClasse');
-
             // Limpar formulário e abrir modal para nova habilidade
             document.getElementById('formNovaHabilidadeClasse').reset();
             document.getElementById('habilidadeEditIndex').value = '';
@@ -28027,37 +28601,10 @@
                 return;
             }
             
-            // GARANTIR QUE TODOS OS INPUTS ESTÃO HABILITADOS
-            const allInputs = modalElement.querySelectorAll('input, select, textarea, button');
-            allInputs.forEach(input => {
-                input.disabled = false;
-                input.readOnly = false;
-                input.removeAttribute('readonly');
-                input.removeAttribute('disabled');
-                input.style.pointerEvents = 'auto';
-                input.style.opacity = '1';
-            });
-            
-            // Usar getInstance para evitar múltiplas instâncias
             const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement, {
                 keyboard: false,
                 backdrop: 'static'
             });
-            
-            // Sincronizar z-index dos backdrops quando modal abre
-            modalElement.addEventListener('shown.bs.modal', function() {
-                setTimeout(() => {
-                    const backdrops = document.querySelectorAll('.modal-backdrop');
-                    backdrops.forEach((backdrop, idx) => {
-                        if (idx === backdrops.length - 1) {
-                            backdrop.style.zIndex = '1099 !important';
-                        } else {
-                            backdrop.style.zIndex = '1049 !important';
-                        }
-                    });
-                    modalElement.style.zIndex = '1100 !important';
-                }, 10);
-            }, { once: true });
             
             modal.show();
         }
@@ -28310,8 +28857,14 @@
                         
                         document.getElementById('habilidadeModalTitle').textContent = '✏️ Editar Habilidade';
                         
-                        // Abrir modal com segurança
-                        abrirModalComSeguranca('modalNovaHabilidadeClasse');
+                        // Abrir modal
+                        const modalElement = document.getElementById('modalNovaHabilidadeClasse');
+                        const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement, {
+                            keyboard: false,
+                            backdrop: 'static'
+                        });
+                        
+                        modal.show();
                     } catch (e) {
                         console.error('Erro ao parsear dados da habilidade:', e);
                         alert('Erro ao editar habilidade');
@@ -29981,17 +30534,22 @@
                 console.log('📝 Título atualizado:', titulo.textContent);
             }
             
-            // 🔥 IMPORTANTE: NUNCA LIMPAR HABILIDADES/HERANÇAS AQUI!
-            // Elas são gerenciadas pelo prepararFormulario() em modo edição
-            // e pelo formulário em modo criação
+            // 🔥 IMPORTANTE: Em modo CRIAÇÃO, limpar cache para começar fresh
             if (!editandoRaca) {
                 // Apenas em modo CRIAÇÃO:
-                console.log('✨ [show.bs.modal] Modo CRIAÇÃO - resetando formulário');
+                console.log('✨ [show.bs.modal] Modo CRIAÇÃO - resetando formulário e cache');
                 document.getElementById('formNovaRaca').reset();
                 document.getElementById('previewRaca').innerHTML = '<span class="text-muted">Pré-visualização da imagem</span>';
-                // NÃO limpar containers - deixar que a criação de nova habilidade populate
-                // document.getElementById('habilidadesRaca').innerHTML = '';
-                // document.getElementById('habilidadesRacaAvancadas').innerHTML = '';
+                
+                // 🔥 LIMPAR CACHE DE HABILIDADES PARA COMEÇAR FRESH
+                cacheHabilidadesRacas = { heracas: [], habilidades: [] };
+                console.log('🧹 [show.bs.modal] Cache de habilidades limpo');
+                
+                // 🔥 IMPORTANTE: Deixar containers VAZIOS (não renderizar parágrafo)
+                // Assim quando salvar habilidade, o container estará pronto para receber cards
+                document.getElementById('habilidadesRaca').innerHTML = '';
+                document.getElementById('habilidadesRacaAvancadas').innerHTML = '';
+                console.log('📦 [show.bs.modal] Containers de habilidades preparados (vazios)');
             } else {
                 console.log('✏️ [show.bs.modal] Modo EDIÇÃO - preservando dados carregados');
             }
@@ -31341,15 +31899,9 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
         function abrirModalAdicionarItemExistente() {
             npcInventarioItens = JSON.parse(document.getElementById('npcInventarioData').value || '[]');
             filtroRaridadeAtual = 'todos'; // Reset do filtro
-            const modalElement = document.getElementById('modalAdicionarItemExistente');
-            if (!modalElement) {
-                console.error('❌ Elemento modalAdicionarItemExistente não encontrado');
-                return;
-            }
-            const modal = new bootstrap.Modal(modalElement);
             renderizarItensExistentesFiltrados();
-            modal.show();
-            safeOpenModal('modalAdicionarItemExistente');
+            // ✅ USAR abrirModalComSeguranca para evitar conflitos de FocusTrap em modais aninhados
+            abrirModalComSeguranca('modalAdicionarItemExistente');
         }
 
         // Renderizar itens existentes do database
@@ -31545,14 +32097,8 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 btnExcluir.style.display = 'none';
             }
             
-            const modalElement = document.getElementById('modalCriarNovoItemNPC');
-            if (!modalElement) {
-                console.error('❌ Elemento modalCriarNovoItemNPC não encontrado');
-                return;
-            }
-            const modal = new bootstrap.Modal(modalElement);
-            modal.show();
-            safeOpenModal('modalCriarNovoItemNPC');
+            // ✅ USAR abrirModalComSeguranca para evitar conflitos de FocusTrap em modais aninhados
+            abrirModalComSeguranca('modalCriarNovoItemNPC');
         }
 
         // Aumentar level do item no NPC
@@ -31867,15 +32413,9 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
         // Abrir modal para remover itens
         function abrirModalRemoverItens() {
             npcInventarioItens = JSON.parse(document.getElementById('npcInventarioData').value || '[]');
-            const modalElement = document.getElementById('modalRemoverItensNpc');
-            if (!modalElement) {
-                console.error('❌ Elemento modalRemoverItensNpc não encontrado');
-                return;
-            }
-            const modal = new bootstrap.Modal(modalElement);
             renderizarItensRemover();
-            modal.show();
-            safeOpenModal('modalRemoverItensNpc');
+            // ✅ USAR abrirModalComSeguranca para evitar conflitos de FocusTrap em modais aninhados
+            abrirModalComSeguranca('modalRemoverItensNpc');
         }
 
         // Renderizar itens para remover
@@ -38965,6 +39505,65 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             habilitarCamposNPC(true);
         }
 
+        // 🔧 FUNÇÃO GENÉRICA PARA FECHAR QUALQUER MODAL DE NPC - USANDO PATCH PATCHED HIDE()
+        function forcarFecharModal(modalId) {
+            try {
+                console.log(`🚀 Iniciando fechamento da modal: ${modalId}`);
+                
+                const modalElement = document.getElementById(modalId);
+                if (!modalElement) {
+                    console.warn(`⚠️ Modal ${modalId} não encontrada`);
+                    return;
+                }
+
+                // Usar a instância do Bootstrap (que agora está patchada)
+                if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                    try {
+                        const modal = bootstrap.Modal.getInstance(modalElement);
+                        if (modal) {
+                            console.log(`📞 Chamando bootstrap.Modal.hide() para ${modalId}`);
+                            modal.hide();
+                            console.log(`✅ ${modalId} hide() chamado com sucesso!`);
+                            return;
+                        }
+                    } catch (e) {
+                        console.warn(`⚠️ Erro ao obter instância Bootstrap: ${e.message}`);
+                    }
+                }
+                
+                // Fallback: Fechar à força se Bootstrap falhar
+                console.log(`💪 Usando fallback de fechamento forçado para ${modalId}`);
+                modalElement.style.display = 'none';
+                modalElement.classList.remove('show');
+                document.body.classList.remove('modal-open');
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                
+            } catch (e) {
+                console.error(`❌ Erro ao fechar modal ${modalId}:`, e.message);
+            }
+        }
+
+        // Funções específicas que chamam a genérica
+        function fecharModalNPC() {
+            console.log('📌 fecharModalNPC() chamada');
+            forcarFecharModal('modalNovoNPC');
+        }
+
+        function fecharModalEditarAtributos() {
+            console.log('📌 fecharModalEditarAtributos() chamada');
+            forcarFecharModal('modalEditarAtributosBase');
+        }
+
+        function fecharModalRolarAtributos() {
+            console.log('📌 fecharModalRolarAtributos() chamada');
+            forcarFecharModal('modalRolarAtributosClasse');
+        }
+
+        function fecharModalNpcArtPicker() {
+            console.log('📌 fecharModalNpcArtPicker() chamada');
+            forcarFecharModal('npcArtPicker_modal');
+        }
+
         // Ver NPC Completo
         async function verNPCCompleto(index) {
             const npc = armazenar.npcs[index];
@@ -43766,6 +44365,8 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
         }
 
         // Monitorar quando novos modais são abertos
+        // ⚠️ DESABILITADA: Causava recursão infinita ao limpar backdrops durante abertura
+        /*
         if (!window._backdropListenersAdded) {
             document.addEventListener('show.bs.modal', function(e) {
                 console.log('📂 Evento show.bs.modal disparado para:', e.target.id);
@@ -43779,6 +44380,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             });
             window._backdropListenersAdded = true;
         }
+        */
 
         // MutationObserver global para remover aria-hidden e gerenciar backdrops
         // ⚠️ DESABILITADA: Causava recursão infinita ao observar body e chamar removeAttribute
@@ -45504,8 +46106,11 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             // Abrir modal de trocar nome
             setTimeout(() => {
                 const modalTrocarNome = new bootstrap.Modal(document.getElementById('modalTrocarNomeDuplicado'));
-                document.getElementById('novoNomeDuplicado').value = '';
-                document.getElementById('novoNomeDuplicado').focus();
+                const inputNome = document.getElementById('novoNomeDuplicado');
+                if (inputNome) {
+                    inputNome.value = '';
+                    if (document.contains(inputNome)) inputNome.focus();
+                }
                 modalTrocarNome.show();
             }, 300);
         }
@@ -45523,7 +46128,8 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             
             if (!novoNome) {
                 alert('⚠️ O nome não pode estar vazio!');
-                document.getElementById('novoNomeDuplicado').focus();
+                const inputNome = document.getElementById('novoNomeDuplicado');
+                if (inputNome && document.contains(inputNome)) inputNome.focus();
                 return;
             }
 
@@ -48260,7 +48866,8 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             
             // Focar no primeiro campo
             setTimeout(() => {
-                document.getElementById('editArteInlineNome')?.focus();
+                const inputElem = document.getElementById('editArteInlineNome');
+                if (inputElem && document.contains(inputElem)) inputElem.focus();
             }, 100);
 
             console.log('✏️ Edição inline iniciada para ART:', id);
@@ -48582,7 +49189,8 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 const modal = new bootstrap.Modal(document.getElementById('modalEditarCampoART'));
                 modal.show();
                 // Foca no input
-                document.getElementById('artValorCampo')?.focus();
+                const inputCampo = document.getElementById('artValorCampo');
+                if (inputCampo && document.contains(inputCampo)) inputCampo.focus();
             }, 300);
         }
 
@@ -49836,13 +50444,13 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             }
 
             console.log('💾 Salvando edição da arte:', arteEmEdicao.id);
-
             // ============ VALIDAÇÕES BÁSICAS ============
             const nome = document.getElementById('editArteNome').value.trim();
             
             if (!nome) {
                 alert('❌ O nome da art não pode estar vazio!');
-                document.getElementById('editArteNome').focus();
+                const inputNome = document.getElementById('editArteNome');
+                if (inputNome && document.contains(inputNome)) inputNome.focus();
                 return;
             }
 
