@@ -423,11 +423,13 @@
 
     <script>
     /**
-     * 🧹 LIMPAR LOCALSTORAGE CORROMPIDO
-     * Remove dados inválidos que causam JSON.parse errors
+     * 🛡️ PROTEÇÃO INTELIGENTE CONTRA APAGAMENTO DE DADOS
+     * Valida dados SEM deletar automaticamente
+     * Agora com backup e confirmação do usuário
+     * FIX: 26/04/2026 - Prevenir apagamento automático de dados do usuário
      */
-    (function cleanupCorruptedStorage() {
-        const keysToClean = [
+    (function protectStorageData() {
+        const keysToCheck = [
             'redungeon_racas',
             'redungeon_classes',
             'redungeon_origens',
@@ -442,17 +444,89 @@
             'redungeon_regras'
         ];
         
-        keysToClean.forEach(key => {
+        const corruptedItems = [];
+        const recoveredItems = [];
+        
+        keysToCheck.forEach(key => {
             try {
                 const value = localStorage.getItem(key);
-                if (value && value.trim()) {
+                if (!value) return; // Não há dados, ok
+                
+                // ✅ Tentar parse
+                try {
                     JSON.parse(value);
+                    // Dados OK!
+                } catch (parseError) {
+                    // 🔧 FIX: Tentar recuperar com sanitização ANTES de deletar
+                    const sanitized = value.replace(/\0/g, '').trim();
+                    
+                    try {
+                        JSON.parse(sanitized);
+                        // Conseguiu recuperar! Salvar versão limpa
+                        localStorage.setItem(key, sanitized);
+                        recoveredItems.push(key);
+                        console.log(`✅ Dados recuperados em ${key} após sanitização`);
+                        return; // NÃO DELETAR
+                    } catch (sanitizeError) {
+                        // Realmente está corrompido
+                        corruptedItems.push(key);
+                        console.warn(`⚠️ Dados corrompidos detectados: ${key}`);
+                        
+                        // 🛡️ CRIAR BACKUP ANTES DE DELETAR
+                        try {
+                            localStorage.setItem(`backup-corrupted-${key}`, value);
+                            console.log(`💾 Backup criado: backup-corrupted-${key}`);
+                        } catch (backupError) {
+                            console.warn(`⚠️ Não foi possível fazer backup: ${backupError.message}`);
+                        }
+                    }
                 }
             } catch (e) {
-                console.warn(`🧹 Limpando localStorage corrompido: ${key}`);
-                localStorage.removeItem(key);
+                console.error(`❌ Erro ao validar ${key}:`, e.message);
             }
         });
+        
+        // 🛡️ FIX: Se houver itens corrompidos, AVISAR ANTES de deletar
+        if (corruptedItems.length > 0) {
+            console.warn(`⚠️ ${corruptedItems.length} item(s) corrompido(s) detectado(s)`);
+            
+            // Verificar se o usuário já aceitou deletar (flag para não repetir warning)
+            const userConfirmedDelete = sessionStorage.getItem('confirmed-delete-corrupted');
+            
+            if (!userConfirmedDelete) {
+                const confirmDelete = confirm(
+                    `⚠️ AVISO IMPORTANTE!\n\n` +
+                    `${corruptedItems.length} item(s) do seu banco de dados parecem estar corrompido(s):\n\n` +
+                    corruptedItems.map(k => `• ${k}`).join('\n') + '\n\n' +
+                    `Opções:\n` +
+                    `✅ OK → DELETAR dados corrompidos (não recomendado, pode perder informações)\n` +
+                    `❌ CANCELAR → MANTER dados como estão\n\n` +
+                    `Um backup foi criado em caso de erro. Você pode restaurá-lo no console.`
+                );
+                
+                if (confirmDelete) {
+                    // Usuário confirmou
+                    sessionStorage.setItem('confirmed-delete-corrupted', 'true');
+                    corruptedItems.forEach(key => {
+                        localStorage.removeItem(key);
+                        console.log(`🗑️ Deletado: ${key}`);
+                    });
+                } else {
+                    // Usuário cancelou - manter dados
+                    console.log('✅ Operação cancelada pelo usuário. Dados mantidos.');
+                }
+            } else {
+                // Usuário já confirmou nesta sessão
+                corruptedItems.forEach(key => {
+                    localStorage.removeItem(key);
+                    console.log(`🗑️ Deletado: ${key}`);
+                });
+            }
+        }
+        
+        if (recoveredItems.length > 0) {
+            console.log(`✅ ${recoveredItems.length} item(s) recuperado(s): ${recoveredItems.join(', ')}`);
+        }
     })();
     
     /**
@@ -900,6 +974,10 @@
             DataStore.init();
             // ✅ INICIAR MONITOR DE SCROLL
             ScrollProtector.startMonitor();
+            // ✅ INICIALIZAR LISTENERS DO MODAL DE GERAÇÃO MANUAL
+            setTimeout(() => {
+                inicializarListenersGeracaoManual();
+            }, 100);
         });
     } else {
         DataStore.init();
@@ -2942,6 +3020,27 @@
             border: 1.5px solid #d4af37 !important;
             background-color: rgba(0, 0, 0, 0.3) !important;
             border: 1px solid #d4af37 !important;
+        }
+
+        /* ===== ESTILOS PARA SLOTS DE HABILIDADES ===== */
+        .habilidade-slot {
+            background: rgba(0, 0, 0, 0.5) !important;
+            border: 1px solid rgba(255, 193, 7, 0.3) !important;
+            color: #ffffff !important;
+            border-radius: 4px;
+            padding: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .habilidade-slot:focus {
+            background: rgba(0, 0, 0, 0.6) !important;
+            border-color: rgba(255, 193, 7, 0.6) !important;
+            box-shadow: 0 0 8px rgba(255, 193, 7, 0.15);
+            outline: none;
+        }
+
+        .habilidade-slot::placeholder {
+            color: rgba(255, 255, 255, 0.4);
         }
 
         .skill-item input[type="text"]:focus,
@@ -10526,40 +10625,12 @@
         };
 
         // =============== PROTEÇÃO CONTRA DADOS CORROMPIDOS NO LOCALSTORAGE ===============
-        // Executar ANTES de qualquer outra coisa para evitar erros de parsing
+        // ✅ REMOVIDO: Validação duplicada (já feita em protectStorageData() no topo)
+        // Esta função agora apenas registra a proteção sem apagar dados automaticamente
         (function() {
-            const chavesRedungeon = [
-                'redungeon_Mesa',
-                'redungeon_origens',
-                'redungeon_cardflux',
-                'redungeon_regioes',
-                'redungeon_cenarios',
-                'redungeon_racas',
-                'redungeon_classes',
-                'redungeon_aptidoes',
-                'redungeon_npcs',
-                'redungeon_criaturas',
-                'redungeon_materiais',
-                'redungeon_receitas',
-                'redungeon_itens',
-                'redungeon_condicoes',
-                'redungeon_regras',
-                'artes'
-            ];
-            
-            // Validar e limpar dados corrompidos
-            chavesRedungeon.forEach(chave => {
-                try {
-                    const valor = localStorage.getItem(chave);
-                    if (valor) {
-                        JSON.parse(valor); // Testar se é JSON válido
-                    }
-                } catch (e) {
-                    console.warn(`🧹 Limpando dados corrompidos em ${chave}: ${e.message}`);
-                    localStorage.removeItem(chave);
-                }
-            });
-            console.log('✅ Proteção contra dados corrompidos ativada');
+            console.log('✅ Proteção contra dados corrompidos ativada (com confirmação do usuário)');
+            console.log('📌 Se houver dados corrompidos, será solicitada sua confirmação');
+            // Validação já é feita pela função protectStorageData() que roda antes
         })();
     </script>
 
@@ -13365,128 +13436,211 @@
         </div>
     </div>
 
-    <!-- MODAL ADICIONAR ITEM -->
+    <!-- MODAL ADICIONAR ITEM - REFATORADO -->
     <div class="modal fade" id="modalNovoItem" tabindex="-1" role="dialog" aria-modal="true">
-        <div class="modal-dialog modal-lg" style="max-width: 950px;">
-            <div class="modal-content bg-dark border-0" style="background: linear-gradient(135deg, rgba(15, 15, 20, 0.98) 0%, rgba(22, 33, 62, 0.98) 100%); border: 2px solid rgba(212,175,55,0.3); border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.6);">
-                <div class="modal-header border-0" style="border-bottom: 2px solid rgba(212,175,55,0.2); padding: 20px; background: rgba(212,175,55,0.05);">
-                    <h5 class="modal-title text-gold" style="font-size: 1.3rem; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.5);">✨ Criar / Editar Item</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));"></button>
+        <div class="modal-dialog modal-xl" style="max-width: 1200px; max-height: 90vh;">
+            <div class="modal-content bg-dark border-0" style="background: linear-gradient(135deg, rgba(15, 15, 20, 0.98) 0%, rgba(22, 33, 62, 0.98) 100%); border: 2px solid rgba(212,175,55,0.3); border-radius: 12px; box-shadow: 0 20px 80px rgba(0,0,0,0.8); display: flex; flex-direction: column; height: 100%;">
+                
+                <!-- HEADER -->
+                <div class="modal-header border-0" style="border-bottom: 2px solid rgba(212,175,55,0.2); padding: 20px 25px; background: rgba(212,175,55,0.05); flex-shrink: 0;">
+                    <div>
+                        <h5 class="modal-title text-gold" id="modalTituloItem" style="font-size: 1.4rem; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.5); margin: 0;">✨ Criar Item</h5>
+                        <p style="font-size: 0.85rem; color: #999; margin-top: 5px; margin-bottom: 0;">Configure seu item passo a passo</p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5)); opacity: 0.7; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'"></button>
                 </div>
-                <div class="modal-body" style="padding: 25px;">
-                    <form id="formNovoItem">
-                    <div class="row g-4">
-                        <!-- Coluna de Imagem -->
-                        <div class="col-md-5">
-                            <div style="background: linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(100,150,200,0.05) 100%); padding: 20px; border-radius: 12px; border: 2px solid rgba(212,175,55,0.2);">
-                                <div class="mb-3">
-                                    <label class="form-label" style="color: #d4af37; font-weight: 700; font-size: 0.95rem; margin-bottom: 10px;">📸 Imagem do Item</label>
-                                    <div class="input-group mb-3">
-                                        <input type="url" class="form-control" id="itemImagemUrl" placeholder="https://exemplo.com/imagem.jpg" onchange="previewImagemItem('itemImagemUrl', 'previewItem')" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff;">
-                                        <button class="btn" type="button" onclick="document.getElementById('itemImagemFile').click()" style="background: linear-gradient(135deg, #d4af37, #f0c850); color: #1a1a2e; font-weight: 700; border: none;">
-                                            📁 Arquivo
-                                        </button>
-                                        <input type="file" id="itemImagemFile" class="hidden-file-input" accept="image/*,.gif,.webp,.svg,.png,.jpg,.jpeg" onchange="previewItemFile(event, 'itemImagemUrl', 'previewItem')" style="display: none;">
+
+                <!-- INDICADOR DE PROGRESSO -->
+                <div style="padding: 12px 25px; background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(212,175,55,0.1); font-size: 0.8rem; color: #999; flex-shrink: 0;">
+                    <span style="color: #d4af37; font-weight: 600;">📦 Base</span> 
+                    <span style="color: #666; margin: 0 8px;">→</span>
+                    <span style="color: #d4af37; font-weight: 600;">📊 Atributos</span> 
+                    <span style="color: #666; margin: 0 8px;">→</span>
+                    <span style="color: #d4af37; font-weight: 600;">⚡ Habilidades</span> 
+                    <span style="color: #666; margin: 0 8px;">→</span>
+                    <span style="color: #999;">📖 História</span>
+                </div>
+
+                <!-- CORPO - Layout 2 Colunas -->
+                <div class="modal-body" style="padding: 20px 25px; overflow-y: auto; flex: 1; display: flex; gap: 20px;">
+                    <form id="formNovoItem" style="flex: 1; display: flex; flex-direction: column;">
+                    
+                        <!-- COLUNA ESQUERDA (70%) - Configuração -->
+                        <div style="flex: 0.7; display: flex; flex-direction: column; gap: 15px;">
+                            
+                            <!-- BLOCO 1: BASE DO ITEM -->
+                            <div style="background: linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(212,175,55,0.05) 100%); border: 2px solid rgba(212,175,55,0.3); border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.borderColor='rgba(212,175,55,0.6)'; this.style.background='linear-gradient(135deg, rgba(212,175,55,0.25) 0%, rgba(212,175,55,0.12) 100%)';" onmouseout="this.style.borderColor='rgba(212,175,55,0.3)'; this.style.background='linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(212,175,55,0.05) 100%)';">
+                                <h6 style="color: #d4af37; font-weight: 700; margin: 0 0 12px 0; font-size: 0.95rem;">📦 BASE DO ITEM</h6>
+                                
+                                <!-- Nome -->
+                                <div class="mb-2">
+                                    <label class="form-label" style="color: #ccc; font-weight: 600; font-size: 0.8rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;">Nome</label>
+                                    <input type="text" class="form-control" id="itemNome" placeholder="Ex: Espada Flaming" required style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px; font-size: 0.9rem; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(212,175,55,0.8)'; this.style.boxShadow='0 0 10px rgba(212,175,55,0.2)';" onblur="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.boxShadow='none';" oninput="atualizarPreviewItemModal(); atualizarPreviewVisualCardEditar()">
+                                </div>
+
+                                <!-- Qualidade e Tipo em linha -->
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                    <div>
+                                        <label class="form-label" style="color: #ccc; font-weight: 600; font-size: 0.8rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;">Qualidade</label>
+                                        <select class="form-control" id="itemQualidade" required style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px; font-size: 0.9rem; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(212,175,55,0.8)'; this.style.boxShadow='0 0 10px rgba(212,175,55,0.2)';" onblur="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.boxShadow='none';" onchange="atualizarSlotsHabilidades(); atualizarPreviewItemModal(); atualizarPreviewVisualCardEditar();">
+                                            <option value="" disabled selected>Selecione</option>
+                                            <option value="Comum">Comum</option>
+                                            <option value="Raro">Raro</option>
+                                            <option value="Épico">Épico</option>
+                                            <option value="Lendário">Lendário</option>
+                                            <option value="Mítico">Mítico</option>
+                                            <option value="Celestial">Celestial</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="form-label" style="color: #ccc; font-weight: 600; font-size: 0.8rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;">Tipo</label>
+                                        <select class="form-control" id="itemTipo" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px; font-size: 0.9rem; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(212,175,55,0.8)'; this.style.boxShadow='0 0 10px rgba(212,175,55,0.2)';" onblur="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.boxShadow='none';" onchange="atualizarPreviewItemModal(); atualizarPreviewVisualCardEditar();">
+                                            <option value="">Selecione (opcional)</option>
+                                            <option value="arma">⚔️ Arma</option>
+                                            <option value="armadura">🛡️ Armadura</option>
+                                            <option value="acessorio">✨ Acessório</option>
+                                            <option value="reliquia">🔮 Relíquia</option>
+                                            <option value="artefato">📿 Artefato</option>
+                                            <option value="Mobs">👹 Mobs</option>
+                                        </select>
                                     </div>
                                 </div>
-                                <div class="image-preview" id="previewItem" style="height: 380px; margin-bottom: 15px; background: rgba(0,0,0,0.4); border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 2px dashed rgba(212,175,55,0.3); overflow: hidden;">
-                                    <span class="text-muted" style="font-size: 0.85rem;">Pré-visualização da imagem</span>
+                            </div>
+
+                            <!-- BLOCO 2: ATRIBUTOS -->
+                            <div style="background: rgba(52,152,219,0.08); border: 2px solid rgba(52,152,219,0.2); border-radius: 10px; padding: 15px;">
+                                <h6 style="color: #3498db; font-weight: 700; margin: 0 0 12px 0; font-size: 0.95rem;">📊 ATRIBUTOS</h6>
+                                
+                                <!-- Nível -->
+                                <div class="mb-2">
+                                    <label class="form-label" style="color: #ccc; font-weight: 600; font-size: 0.8rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;">Nível</label>
+                                    <div class="input-group" style="height: 38px;">
+                                        <input type="number" class="form-control" id="itemLevel" placeholder="1" min="1" value="1" required style="background: rgba(0,0,0,0.5); border: 1px solid rgba(52,152,219,0.4); color: #fff; border-radius: 6px 0 0 6px; padding: 8px 10px; font-size: 0.9rem;" oninput="atualizarPreviewItemModal(); atualizarPreviewVisualCardEditar()">
+                                        <span class="input-group-text" style="background: rgba(52,152,219,0.15); border: 1px solid rgba(52,152,219,0.4); color: #3498db; font-weight: 700; padding: 8px 10px;">/</span>
+                                        <input type="number" class="form-control" id="itemLevelMax" placeholder="6" min="1" value="6" required style="background: rgba(0,0,0,0.5); border: 1px solid rgba(52,152,219,0.4); color: #fff; border-radius: 0; padding: 8px 10px; font-size: 0.9rem;" oninput="atualizarPreviewItemModal(); atualizarPreviewVisualCardEditar()">
+                                        <button class="btn" type="button" onclick="aumentarLevelItem(); atualizarPreviewItemModal(); atualizarPreviewVisualCardEditar();" style="background: linear-gradient(135deg, #3498db, #5dade2); color: #fff; border: none; border-radius: 0 6px 6px 0; font-weight: 700; padding: 8px 12px; transition: all 0.2s;" onmouseover="this.style.background='linear-gradient(135deg, #5dade2, #3498db)';" onmouseout="this.style.background='linear-gradient(135deg, #3498db, #5dade2)';">⬆️</button>
+                                    </div>
                                 </div>
-                                <button type="button" class="btn w-100 mb-3" id="btnDeletarItemModal" style="background: linear-gradient(135deg, rgba(220, 53, 69, 0.8), rgba(193, 34, 47, 0.9)); color: #fff; border: none; border-radius: 6px; font-weight: 700; transition: all 0.25s;" onmouseover="this.style.background='linear-gradient(135deg, rgba(220, 53, 69, 1), rgba(169, 20, 33, 1))'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='linear-gradient(135deg, rgba(220, 53, 69, 0.8), rgba(193, 34, 47, 0.9))'; this.style.transform='translateY(0)';">
-                                    🗑️ Excluir Item
-                                </button>
-                                <div class="d-grid gap-2">
-                                    <button type="button" class="btn btn-sm" onclick="alternarAbaModoItem('habilidade')" style="background: rgba(255, 193, 7, 0.2); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.4); border-radius: 6px; font-weight: 700; transition: all 0.25s;" onmouseover="this.style.background='rgba(255, 193, 7, 0.3)'; this.style.borderColor='rgba(255, 193, 7, 0.6)';" onmouseout="this.style.background='rgba(255, 193, 7, 0.2)'; this.style.borderColor='rgba(255, 193, 7, 0.4)';">
-                                        ⚡ Habilidade
+
+                                <!-- Roll e Extra -->
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                    <div>
+                                        <label class="form-label" style="color: #ccc; font-weight: 600; font-size: 0.8rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;">Roll</label>
+                                        <input type="text" class="form-control" id="itemAtaque" placeholder="Ex: 10-20" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(52,152,219,0.4); color: #fff; border-radius: 6px; padding: 8px 10px; font-size: 0.9rem; transition: all 0.2s;" oninput="atualizarPreviewItemModal(); atualizarPreviewVisualCardEditar()">
+                                    </div>
+                                    <div>
+                                        <label class="form-label" style="color: #ccc; font-weight: 600; font-size: 0.8rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;">Extra</label>
+                                        <input type="text" class="form-control" id="itemExtra" placeholder="Ex: +5 Int" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(52,152,219,0.4); color: #fff; border-radius: 6px; padding: 8px 10px; font-size: 0.9rem; transition: all 0.2s;" oninput="atualizarPreviewItemModal(); atualizarPreviewVisualCardEditar()">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- BLOCO 3: HABILIDADES (Condicional) -->
+                            <div id="blocoHabilidades" style="background: rgba(153,102,204,0.08); border: 2px solid rgba(153,102,204,0.2); border-radius: 10px; padding: 15px; display: none;">
+                                <h6 style="color: #9966cc; font-weight: 700; margin: 0 0 12px 0; font-size: 0.95rem;">⚡ HABILIDADES ESPECIAIS</h6>
+                                <small style="color: #888; display: block; margin-bottom: 10px;">Slots disponíveis conforme raridade</small>
+                                <div id="slotsHabilidades" style="display: flex; flex-direction: column; gap: 8px;"></div>
+                            </div>
+
+                            <!-- BLOCO 4: HISTÓRIA -->
+                            <div style="background: rgba(46,204,113,0.08); border: 2px solid rgba(46,204,113,0.2); border-radius: 10px; padding: 15px;">
+                                <h6 style="color: #2ecc71; font-weight: 700; margin: 0 0 10px 0; font-size: 0.95rem;">📖 HISTÓRIA / LORE</h6>
+                                <textarea class="form-control" id="itemMesa" rows="4" placeholder="Descreva a história, origem e lore do seu item..." style="background: rgba(0,0,0,0.5); border: 1px solid rgba(46,204,113,0.4); color: #fff; border-radius: 6px; resize: vertical; padding: 10px; font-size: 0.9rem; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(46,204,113,0.8)'; this.style.boxShadow='0 0 10px rgba(46,204,113,0.2)';" onblur="this.style.borderColor='rgba(46,204,113,0.4)'; this.style.boxShadow='none';"></textarea>
+                            </div>
+
+                            <!-- BLOCO 5: IMAGEM -->
+                            <div style="background: rgba(230,126,34,0.08); border: 2px solid rgba(230,126,34,0.2); border-radius: 10px; padding: 15px;">
+                                <h6 style="color: #e67e22; font-weight: 700; margin: 0 0 10px 0; font-size: 0.95rem;">🖼️ IMAGEM</h6>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                                    <input type="url" class="form-control" id="itemImagemUrl" placeholder="https://..." onchange="previewImagemItem('itemImagemUrl', 'previewItem')" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(230,126,34,0.4); color: #fff; border-radius: 6px; padding: 8px 10px; font-size: 0.9rem;">
+                                    <button class="btn" type="button" onclick="document.getElementById('itemImagemFile').click()" style="background: linear-gradient(135deg, #e67e22, #f39c12); color: #fff; border: none; border-radius: 6px; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background='linear-gradient(135deg, #f39c12, #e67e22)';" onmouseout="this.style.background='linear-gradient(135deg, #e67e22, #f39c12)';">
+                                        📁 Selecionar Imagem
                                     </button>
-                                    <button type="button" class="btn btn-sm" onclick="alternarAbaModoItem('Mesa')" style="background: rgba(52, 152, 219, 0.2); color: #3498db; border: 1px solid rgba(52, 152, 219, 0.4); border-radius: 6px; font-weight: 700; transition: all 0.25s;" onmouseover="this.style.background='rgba(52, 152, 219, 0.3)'; this.style.borderColor='rgba(52, 152, 219, 0.6)';" onmouseout="this.style.background='rgba(52, 152, 219, 0.2)'; this.style.borderColor='rgba(52, 152, 219, 0.4)';">
-                                        📖 História do Item
-                                    </button>
+                                    <input type="file" id="itemImagemFile" accept="image/*,.gif,.webp,.svg,.png,.jpg,.jpeg" onchange="previewItemFile(event, 'itemImagemUrl', 'previewItem')" style="display: none;">
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
+                    <!-- COLUNA DIREITA (30%) - Visual Card Preview -->
+                    <div style="flex: 0.3; display: flex; flex-direction: column; gap: 15px; position: sticky; top: 20px;">
+                        <!-- NOVO CARD VISUAL DE ITEM -->
+                        <div id="previewItemEditarModal" class="item-visual-card" style="background: linear-gradient(135deg, rgba(20, 20, 30, 0.9) 0%, rgba(15, 15, 25, 0.95) 100%); border-radius: 14px; overflow: hidden; backdrop-filter: blur(10px); display: flex; flex-direction: column; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); border: 2px solid rgba(212, 175, 55, 0.3);">
+                            
+                            <!-- IMAGEM DO ITEM -->
+                            <div class="item-visual-image-area" style="height: 180px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(52, 152, 219, 0.08)); display: flex; align-items: center; justify-content: center; border-bottom: 2px solid rgba(212, 175, 55, 0.2); position: relative; overflow: hidden;">
+                                <div class="item-visual-image-placeholder" id="itemVisualPlaceholderEditar" style="font-size: 4rem; opacity: 0.7;">🎁</div>
+                                <img id="itemVisualImageEditar" class="item-visual-image" style="display: none; width: 100%; height: 100%; object-fit: cover;" alt="Item Preview">
+                            </div>
+
+                            <!-- CONTEÚDO DO CARD -->
+                            <div class="item-visual-body" style="padding: 15px; flex: 1; display: flex; flex-direction: column;">
+                                
+                                <!-- NOME -->
+                                <h3 class="item-visual-title empty" id="previewNomeEditar" style="color: #f1f1f1; font-size: 1.1rem; font-weight: bold; margin: 0 0 12px 0;">— Nome não definido —</h3>
+
+                                <!-- TAGS (TIPO + QUALIDADE) -->
+                                <div class="item-visual-tags" style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+                                    <span class="item-visual-tag item-visual-tag-tipo" id="previewTipoTagEditar" style="background: rgba(52, 152, 219, 0.3); color: #3498db; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">Tipo</span>
+                                    <span class="item-visual-tag item-visual-tag-qualidade" id="previewQualidadeTagEditar" style="background: rgba(212, 175, 55, 0.3); color: #d4af37; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">Qualidade</span>
+                                </div>
+
+                                <!-- STATS (GRID 2X2) -->
+                                <div class="item-visual-stats" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: rgba(212, 175, 55, 0.05); padding: 10px; border-radius: 8px; margin-bottom: 12px; border: 1px solid rgba(212, 175, 55, 0.15);">
+                                    <div class="item-visual-stat" style="text-align: center; font-size: 0.75rem;">
+                                        <span class="item-visual-stat-label" style="color: #999; display: block; margin-bottom: 3px;">📊 Nível</span>
+                                        <span class="item-visual-stat-value" id="previewNivelEditar" style="color: #f1f1f1; font-weight: bold; font-size: 1rem;">-</span>
+                                    </div>
+                                    <div class="item-visual-stat" style="text-align: center; font-size: 0.75rem;">
+                                        <span class="item-visual-stat-label" style="color: #999; display: block; margin-bottom: 3px;">🎲 Roll</span>
+                                        <span class="item-visual-stat-value" id="previewRollEditar" style="color: #f1f1f1; font-weight: bold; font-size: 1rem;">-</span>
+                                    </div>
+                                    <div class="item-visual-stat" style="text-align: center; font-size: 0.75rem;">
+                                        <span class="item-visual-stat-label" style="color: #999; display: block; margin-bottom: 3px;">⚔️ Extra</span>
+                                        <span class="item-visual-stat-value" id="previewExtraEditar" style="color: #f1f1f1; font-weight: bold; font-size: 1rem;">-</span>
+                                    </div>
+                                    <div class="item-visual-stat" style="text-align: center; font-size: 0.75rem;">
+                                        <span class="item-visual-stat-label" style="color: #999; display: block; margin-bottom: 3px;">✨ Info</span>
+                                        <span class="item-visual-stat-value" id="previewInfoEditar" style="color: #f1f1f1; font-weight: bold; font-size: 1rem;">-</span>
+                                    </div>
+                                </div>
+
+                                <!-- HABILIDADES -->
+                                <div style="border-top: 1px solid rgba(212, 175, 55, 0.2); padding-top: 10px; flex: 1;">
+                                    <div style="color: #d4af37; font-weight: 700; font-size: 0.8rem; margin-bottom: 6px;">🔥 Habilidades</div>
+                                    <span id="previewHabilidadesEditar" style="color: #aaa; font-size: 0.75rem;">— nenhuma definida —</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Coluna de Dados -->
-                        <div class="col-md-7">
-                            <div class="mb-3">
-                                <label class="form-label" style="color: #d4af37; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px;">📝 Nome do Item</label>
-                                <input type="text" class="form-control" id="itemNome" placeholder="Ex: Espada Flaming" required style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px; transition: all 0.25s;" onfocus="this.style.borderColor='rgba(212,175,55,0.8)'; this.style.boxShadow='0 0 12px rgba(212,175,55,0.2)';" onblur="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.boxShadow='none';">
-                            </div>
+                        <!-- DELETE BUTTON (Hidden by default) -->
+                        <button type="button" class="btn w-100" id="btnDeletarItemModal" style="background: linear-gradient(135deg, rgba(220, 53, 69, 0.8), rgba(193, 34, 47, 0.9)); color: #fff; border: none; border-radius: 6px; font-weight: 700; padding: 10px; transition: all 0.2s; display: none;" onmouseover="this.style.background='linear-gradient(135deg, rgba(220, 53, 69, 1), rgba(169, 20, 33, 1))'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='linear-gradient(135deg, rgba(220, 53, 69, 0.8), rgba(193, 34, 47, 0.9))'; this.style.transform='translateY(0)';">
+                            🗑️ Excluir Item
+                        </button>
 
-                            <div class="row g-2">
-                                <div class="col-6">
-                                    <label class="form-label" style="color: #d4af37; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px;">✨ Qualidade</label>
-                                    <select class="form-control" id="itemQualidade" required style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px; transition: all 0.25s;" onfocus="this.style.borderColor='rgba(212,175,55,0.8)'; this.style.boxShadow='0 0 12px rgba(212,175,55,0.2)';" onblur="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.boxShadow='none';">
-                                        <option value="" disabled selected>Selecione a qualidade</option>
-                                        <option value="Comum">Comum</option>
-                                        <option value="Raro">Raro</option>
-                                        <option value="Épico">Épico</option>
-                                        <option value="Lendário">Lendário</option>
-                                        <option value="Mítico">Mítico</option>                                    
-                                        <option value="Celestial">Celestial</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-6">
-                                    <label class="form-label" style="color: #d4af37; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px;">🛡️ Tipo do Item</label>
-                                    <select class="form-control" id="itemTipo" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px; transition: all 0.25s;" onfocus="this.style.borderColor='rgba(212,175,55,0.8)'; this.style.boxShadow='0 0 12px rgba(212,175,55,0.2)';" onblur="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.boxShadow='none';">
-                                        <option value="">Selecione o tipo (opcional)</option>
-                                        <option value="arma">⚔️ Arma</option>
-                                        <option value="armadura">🛡️ Armadura</option>
-                                        <option value="acessorio">✨ Acessório</option>
-                                        <option value="reliquia">🔮 Relíquia</option>
-                                        <option value="artefato">📿 Artefato</option>
-                                        <option value="Mobs">👹 Mobs</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="mb-3 mt-3">
-                                <label class="form-label" style="color: #d4af37; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px;">📊 Nível</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="itemLevel" placeholder="Ex: 1" min="1" value="1" required style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px 0 0 6px;">
-                                    <span class="input-group-text" style="background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.4); color: #d4af37; font-weight: 700;">/</span>
-                                    <input type="number" class="form-control" id="itemLevelMax" placeholder="Ex: 6" min="1" value="6" required style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 0;">
-                                    <button class="btn" type="button" onclick="aumentarLevelItem()" style="background: linear-gradient(135deg, #d4af37, #f0c850); color: #1a1a2e; border: none; border-radius: 0 6px 6px 0; font-weight: 700; transition: all 0.25s;" onmouseover="this.style.background='linear-gradient(135deg, #f0c850, #d4af37)';" onmouseout="this.style.background='linear-gradient(135deg, #d4af37, #f0c850)';">
-                                        ⬆️
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="row g-2">
-                                <div class="col-6">
-                                    <label class="form-label" style="color: #d4af37; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px;">🎲 Roll</label>
-                                    <input type="text" class="form-control" id="itemAtaque" placeholder="Ex: 10-20" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px; transition: all 0.25s;" onfocus="this.style.borderColor='rgba(212,175,55,0.8)'; this.style.boxShadow='0 0 12px rgba(212,175,55,0.2)';" onblur="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.boxShadow='none';">
-                                </div>
-
-                                <div class="col-6">
-                                    <label class="form-label" style="color: #d4af37; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px;">✨ Extra</label>
-                                    <input type="text" class="form-control" id="itemExtra" placeholder="Ex: +5 de Inteligência" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; padding: 10px; transition: all 0.25s;" onfocus="this.style.borderColor='rgba(212,175,55,0.8)'; this.style.boxShadow='0 0 12px rgba(212,175,55,0.2)';" onblur="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.boxShadow='none';">
-                                </div>
-                            </div>
-
-                            <!-- Abas de Conteúdo -->
-                            <div class="card mt-3" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.2); border-radius: 10px;">
-                                <div class="card-header" style="background: rgba(212,175,55,0.08); border-bottom: 1px solid rgba(212,175,55,0.2); border-radius: 9px 9px 0 0;">
-                                    <div id="abaHabilidadeLabel" class="text-gold" style="cursor: pointer; display: none; font-weight: 700; padding: 5px 0; transition: all 0.25s;" onmouseover="this.style.color='#f0c850';" onmouseout="this.style.color='#d4af37';">
-                                        ⚡ Habilidade
-                                    </div>
-                                    <div id="abaMesaLabel" class="text-gold" style="cursor: pointer; font-weight: 700; padding: 5px 0; transition: all 0.25s;" onmouseover="this.style.color='#f0c850';" onmouseout="this.style.color='#d4af37';">
-                                        📖 História do Item
-                                    </div>
-                                </div>
-                                <div class="card-body" style="max-height: 280px; overflow-y: auto; padding: 15px;">
-                                    <textarea class="form-control" id="itemHabilidade" rows="4" placeholder="Descreva a habilidade do item..." style="display: none; background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; resize: vertical;" onfocus="this.style.borderColor='rgba(212,175,55,0.8)'; this.style.boxShadow='0 0 12px rgba(212,175,55,0.2)';" onblur="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.boxShadow='none';"></textarea>
-                                    <textarea class="form-control" id="itemMesa" rows="4" placeholder="Descreva a história/lore do item..." style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); color: #fff; border-radius: 6px; resize: vertical;" onfocus="this.style.borderColor='rgba(212,175,55,0.8)'; this.style.boxShadow='0 0 12px rgba(212,175,55,0.2)';" onblur="this.style.borderColor='rgba(212,175,55,0.4)'; this.style.boxShadow='none';"></textarea>
-                                </div>
-                            </div>
+                        <!-- 💡 INFORMAÇÕES ESSENCIAIS -->
+                        <div style="background: linear-gradient(135deg, rgba(46, 204, 113, 0.15) 0%, rgba(46, 204, 113, 0.05) 100%); border: 2px solid rgba(46, 204, 113, 0.3); border-radius: 10px; padding: 12px; font-size: 0.8rem;">
+                            <div style="color: #2ecc71; font-weight: 700; margin-bottom: 8px;">💡 Informações Essenciais</div>
+                            <ul style="margin: 0; padding-left: 16px; color: #999;">
+                                <li style="margin-bottom: 4px; font-size: 0.75rem;">📝 Nome é obrigatório</li>
+                                <li style="margin-bottom: 4px; font-size: 0.75rem;">✨ Qualidade define habilidades</li>
+                                <li style="margin-bottom: 4px; font-size: 0.75rem;">🎲 Preview atualiza em tempo real</li>
+                                <li style="margin-bottom: 4px; font-size: 0.75rem;">💾 Salve para armazenar dados</li>
+                                <li style="font-size: 0.75rem;">🖼️ Imagem é opcional</li>
+                            </ul>
                         </div>
                     </div>
-                    </form>
                 </div>
-                <div class="modal-footer border-0" style="border-top: 2px solid rgba(212,175,55,0.2); padding: 15px 20px; background: rgba(212,175,55,0.03);">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background: rgba(100,110,120,0.8); border: none; border-radius: 6px; padding: 8px 20px; font-weight: 600; transition: all 0.25s;" onmouseover="this.style.background='rgba(100,110,120,1)'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='rgba(100,110,120,0.8)'; this.style.transform='translateY(0)';">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="salvarItem()" style="background: linear-gradient(135deg, #d4af37, #f0c850); color: #1a1a2e; border: none; border-radius: 6px; padding: 8px 30px; font-weight: 700; transition: all 0.25s; box-shadow: 0 4px 12px rgba(212,175,55,0.3);" onmouseover="this.style.background='linear-gradient(135deg, #f0c850, #d4af37)'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 16px rgba(212,175,55,0.5)';" onmouseout="this.style.background='linear-gradient(135deg, #d4af37, #f0c850)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(212,175,55,0.3)';">Salvar Item</button>
+
+                <!-- FOOTER -->
+                <div class="modal-footer border-0" style="border-top: 2px solid rgba(212,175,55,0.2); padding: 15px 25px; background: rgba(212,175,55,0.03); gap: 10px; flex-shrink: 0;">
+                    <button type="button" class="btn" data-bs-dismiss="modal" style="background: rgba(100,110,120,0.8); color: #fff; border: none; border-radius: 6px; padding: 10px 25px; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background='rgba(100,110,120,1)'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='rgba(100,110,120,0.8)'; this.style.transform='translateY(0)';">
+                        ✕ Cancelar
+                    </button>
+                    <button type="button" class="btn" onclick="salvarItem()" style="background: linear-gradient(135deg, #d4af37, #f0c850); color: #1a1a2e; border: none; border-radius: 6px; padding: 10px 35px; font-weight: 700; transition: all 0.2s; box-shadow: 0 4px 12px rgba(212,175,55,0.3);" onmouseover="this.style.background='linear-gradient(135deg, #f0c850, #d4af37)'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 16px rgba(212,175,55,0.5)';" onmouseout="this.style.background='linear-gradient(135deg, #d4af37, #f0c850)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(212,175,55,0.3)';">
+                        ✓ Salvar Item
+                    </button>
                 </div>
             </div>
         </div>
@@ -15147,13 +15301,12 @@
                                         <button type="button" class="btn btn-sm" onclick="abrirModalCriarNovoItem()" style="background: #3498db; border: none; color: white; font-weight: bold; padding: 6px 12px; font-size: 0.85rem;">🆕 Criar Item</button>
                                         <button type="button" class="btn btn-sm" onclick="abrirModalRemoverItens()" style="background: #e74c3c; border: none; color: white; font-weight: bold; padding: 6px 12px; font-size: 0.85rem;">❌ Remover Item</button>
                                     </div>
-                                </div>
-
+                                        </div>
                                 <!-- LISTA DE ITENS DO INVENTÁRIO -->
-                                <div id="npcInventarioLista" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; max-width: 100%;">
+                                <div id="npcInventarioLista" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; max-width: 100%; margin-top: 15px;">
                                     <div style="grid-column: 1 / -1; text-align: center; color: #999; padding: 30px;">
                                         <p style="margin: 0; font-size: 0.9rem;">📭 Inventário vazio</p>
-                                        <small style="color: #666;">Adicione itens usando os botões acima</small>
+                                        <small style="color: #666;">Adicione itens usando os botões acima ou arraste cards</small>
                                     </div>
                                 </div>
 
@@ -15541,53 +15694,968 @@
         </div>
     </div>
 
+    <!-- ESTILOS DO MODAL DE GERAÇÃO MANUAL ASSISTIDA -->
+    <style>
+        /* ========== CARD AAA DE ITEM (AVANÇADO) ========== */
+        .item-card-aaa {
+            position: relative;
+            background: linear-gradient(135deg, rgba(20, 20, 30, 0.95) 0%, rgba(15, 15, 25, 0.95) 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 16px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            cursor: grab;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            min-width: 280px;
+        }
+
+        .item-card-aaa:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8);
+        }
+
+        .item-card-aaa.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+
+        /* ===== ANIMAÇÕES POR RARIDADE ===== */
+        
+        /* COMUM - Sem animação, visual limpo */
+        .item-card-aaa.quality-comum {
+            border-color: rgba(136, 136, 136, 0.4);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 15px rgba(136, 136, 136, 0.1);
+        }
+
+        /* RARO - Brilho azul leve pulsando */
+        .item-card-aaa.quality-raro {
+            border-color: rgba(52, 152, 219, 0.5);
+            animation: glowRaro 3s ease-in-out infinite;
+        }
+
+        @keyframes glowRaro {
+            0%, 100% { box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 15px rgba(52, 152, 219, 0.2); }
+            50% { box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(52, 152, 219, 0.35); }
+        }
+
+        /* ÉPICO - Aura roxa com movimento */
+        .item-card-aaa.quality-epico {
+            border-color: rgba(155, 89, 182, 0.5);
+            animation: glowEpico 3.5s ease-in-out infinite;
+        }
+
+        @keyframes glowEpico {
+            0%, 100% { 
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(155, 89, 182, 0.2);
+                border-color: rgba(155, 89, 182, 0.5);
+            }
+            50% { 
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 35px rgba(155, 89, 182, 0.4);
+                border-color: rgba(155, 89, 182, 0.7);
+            }
+        }
+
+        /* LENDÁRIO - Glow dourado pulsante com partículas */
+        .item-card-aaa.quality-lendario {
+            border-color: rgba(243, 156, 18, 0.6);
+            animation: glowLendario 2.5s ease-in-out infinite;
+        }
+
+        @keyframes glowLendario {
+            0%, 100% { 
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(243, 156, 18, 0.25), inset 0 0 20px rgba(243, 156, 18, 0.05);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 40px rgba(243, 156, 18, 0.45), inset 0 0 30px rgba(243, 156, 18, 0.1);
+                transform: scale(1.01);
+            }
+        }
+
+        /* MÍTICO - Aura vermelha com pulsação forte */
+        .item-card-aaa.quality-mitico {
+            border-color: rgba(231, 76, 60, 0.6);
+            animation: glowMitico 2s ease-in-out infinite;
+        }
+
+        @keyframes glowMitico {
+            0%, 100% { 
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(231, 76, 60, 0.25), inset 0 0 20px rgba(231, 76, 60, 0.08);
+                filter: blur(0px);
+            }
+            50% { 
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 50px rgba(231, 76, 60, 0.5), inset 0 0 30px rgba(231, 76, 60, 0.15);
+                filter: blur(0.5px);
+            }
+        }
+
+        /* CELESTIAL - Gradiente animado com efeito cósmico */
+        .item-card-aaa.quality-celestial {
+            border: 2px solid;
+            border-image: linear-gradient(135deg, #f1c40f, #e67e22, #f1c40f) 1;
+            animation: glowCelestial 2s ease-in-out infinite;
+            background: linear-gradient(135deg, rgba(20, 20, 30, 0.95) 0%, rgba(15, 15, 25, 0.95) 100%), 
+                        linear-gradient(45deg, rgba(241, 196, 15, 0.05) 0%, transparent 100%);
+        }
+
+        @keyframes glowCelestial {
+            0%, 100% { 
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(241, 196, 15, 0.3), inset 0 0 30px rgba(241, 196, 15, 0.1);
+                transform: scale(1);
+                filter: drop-shadow(0 0 10px rgba(241, 196, 15, 0.2));
+            }
+            50% { 
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 60px rgba(241, 196, 15, 0.6), inset 0 0 40px rgba(241, 196, 15, 0.2);
+                transform: scale(1.01);
+                filter: drop-shadow(0 0 20px rgba(241, 196, 15, 0.4));
+            }
+        }
+
+        /* ===== PARTÍCULAS PARA LENDÁRIO+ ===== */
+        .item-card-aaa.quality-lendario::before,
+        .item-card-aaa.quality-mitico::before,
+        .item-card-aaa.quality-celestial::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: floatingParticles 20s linear infinite;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        @keyframes floatingParticles {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(50px); }
+        }
+
+        /* ===== ELEMENTOS DENTRO DO CARD ===== */
+        .item-card-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .item-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .item-card-title {
+            color: #f1f1f1;
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            flex: 1;
+            line-height: 1.3;
+            margin: 0;
+        }
+
+        .item-card-rarity {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            backdrop-filter: blur(5px);
+            white-space: nowrap;
+        }
+
+        .item-card-rarity.quality-comum { background: rgba(136, 136, 136, 0.3); color: #aaa; border: 1px solid rgba(136, 136, 136, 0.5); }
+        .item-card-rarity.quality-raro { background: rgba(52, 152, 219, 0.3); color: #3498db; border: 1px solid rgba(52, 152, 219, 0.6); }
+        .item-card-rarity.quality-epico { background: rgba(155, 89, 182, 0.3); color: #9b59b6; border: 1px solid rgba(155, 89, 182, 0.6); }
+        .item-card-rarity.quality-lendario { background: rgba(243, 156, 18, 0.3); color: #f39c12; border: 1px solid rgba(243, 156, 18, 0.6); }
+        .item-card-rarity.quality-mitico { background: rgba(231, 76, 60, 0.3); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.6); }
+        .item-card-rarity.quality-celestial { background: rgba(241, 196, 15, 0.25); color: #f1c40f; border: 1px solid rgba(241, 196, 15, 0.7); animation: rarityGlow 2s ease-in-out infinite; }
+
+        @keyframes rarityGlow {
+            0%, 100% { text-shadow: 0 0 8px rgba(241, 196, 15, 0.3); }
+            50% { text-shadow: 0 0 15px rgba(241, 196, 15, 0.6); }
+        }
+
+        .item-card-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .item-card-stat {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 6px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .item-card-stat-label {
+            color: #d4af37;
+            font-weight: 700;
+            font-size: 0.7rem;
+            letter-spacing: 0.2px;
+            text-transform: uppercase;
+        }
+
+        .item-card-stat-value {
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .item-card-description {
+            color: #aaa;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            max-height: 50px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        /* ===== INVENTÁRIO DROP ZONE ===== */
+        .inventory-drop-zone {
+            min-height: 300px;
+            border: 2px dashed rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(212, 175, 55, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        .inventory-drop-zone.drag-over {
+            border-color: rgba(212, 175, 55, 0.8);
+            background: rgba(212, 175, 55, 0.1);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2) inset;
+        }
+
+        .inventory-item-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            padding: 10px;
+        }
+
+        #modalGeracaoManualAssistida .modal-dialog {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-height: 100vh;
+            margin: 0 auto !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        
+        .item-modal-container {
+            width: 95%;
+            max-width: 1100px;
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+        }
+        
+        .item-modal-content {
+            background: linear-gradient(135deg, rgba(10, 10, 15, 0.95) 0%, rgba(20, 20, 30, 0.95) 100%);
+            border: 2px solid rgba(212, 175, 55, 0.6);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            animation: slideInScale 0.4s ease-out;
+            overflow: hidden;
+            transform: translateY(10px);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        @keyframes slideInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.92) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(10px);
+            }
+        }
+        
+        .item-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.4);
+            padding: 25px 30px;
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%);
+        }
+        
+        .item-modal-title {
+            color: #d4af37;
+            margin: 0;
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+        }
+        
+        .item-modal-body {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 30px;
+            align-items: start;
+        }
+        
+        .item-form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .item-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .item-label {
+            color: #d4af37;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        
+        .item-input, .item-select {
+            background: rgba(0, 0, 0, 0.6) !important;
+            border: 2px solid rgba(212, 175, 55, 0.3) !important;
+            color: #fff !important;
+            padding: 14px 16px !important;
+            border-radius: 10px !important;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .item-input:hover, .item-select:hover {
+            border-color: rgba(212, 175, 55, 0.5) !important;
+            background: rgba(0, 0, 0, 0.7) !important;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+        
+        .item-input:focus, .item-select:focus {
+            border-color: rgba(212, 175, 55, 0.8) !important;
+            background: rgba(0, 0, 0, 0.5) !important;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4) !important;
+            outline: none !important;
+        }
+        
+        .item-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .item-preview-section {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        
+        /* ========== CARD VISUAL DE ITEM (PREMIUM) ========== */
+        .item-visual-card {
+            background: linear-gradient(135deg, rgba(20, 20, 30, 0.9) 0%, rgba(15, 15, 25, 0.95) 100%);
+            border-radius: 14px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            animation: cardSlideIn 0.5s ease-out;
+        }
+        
+        @keyframes cardSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .item-visual-card.quality-comum {
+            border-color: rgba(136, 136, 136, 0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(136, 136, 136, 0.1);
+        }
+        
+        .item-visual-card.quality-raro {
+            border-color: rgba(52, 152, 219, 0.6);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(52, 152, 219, 0.2);
+        }
+        
+        .item-visual-card.quality-epico {
+            border-color: rgba(155, 89, 182, 0.6);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(155, 89, 182, 0.2);
+        }
+        
+        .item-visual-card.quality-lendario {
+            border-color: rgba(243, 156, 18, 0.6);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(243, 156, 18, 0.2);
+        }
+        
+        .item-visual-card.quality-mitico {
+            border-color: rgba(231, 76, 60, 0.6);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(231, 76, 60, 0.2);
+        }
+        
+        .item-visual-card.quality-celestial {
+            border: 2px solid;
+            border-image: linear-gradient(135deg, #f1c40f, #e67e22, #f1c40f) 1;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(241, 196, 15, 0.3);
+            animation: cardSlideIn 0.5s ease-out, celestialCardPulse 2.5s ease-in-out infinite;
+        }
+        
+        @keyframes celestialCardPulse {
+            0%, 100% {
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(241, 196, 15, 0.2);
+            }
+            50% {
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 40px rgba(241, 196, 15, 0.4);
+            }
+        }
+        
+        /* ===== IMAGEM DO ITEM ===== */
+        .item-visual-image-area {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(0, 0, 0, 0.3) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+        }
+        
+        .item-visual-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+        }
+        
+        .item-visual-image-placeholder {
+            color: rgba(212, 175, 55, 0.4);
+            font-size: 3.5rem;
+            font-weight: 300;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(0, 0, 0, 0.2) 100%);
+        }
+        
+        /* ===== CONTENT DO CARD ===== */
+        .item-visual-body {
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        
+        .item-visual-title {
+            color: #f1f1f1;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            line-height: 1.3;
+            min-height: 30px;
+            margin: 0;
+        }
+        
+        .item-visual-title.empty {
+            color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* ===== TAGS (TIPO + QUALIDADE) ===== */
+        .item-visual-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            min-height: 28px;
+        }
+        
+        .item-visual-tag {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            backdrop-filter: blur(5px);
+            border: 1px solid;
+            transition: all 0.3s ease;
+        }
+        
+        .item-visual-tag-tipo {
+            background: rgba(100, 150, 200, 0.2);
+            border-color: rgba(100, 150, 200, 0.4);
+            color: #64c8ff;
+        }
+        
+        .item-visual-tag-qualidade {
+            font-weight: 800;
+            letter-spacing: 0.4px;
+        }
+        
+        .item-visual-tag-qualidade.quality-comum {
+            background: rgba(136, 136, 136, 0.2);
+            border-color: rgba(136, 136, 136, 0.5);
+            color: #aaa;
+        }
+        
+        .item-visual-tag-qualidade.quality-raro {
+            background: rgba(52, 152, 219, 0.2);
+            border-color: rgba(52, 152, 219, 0.6);
+            color: #3498db;
+        }
+        
+        .item-visual-tag-qualidade.quality-epico {
+            background: rgba(155, 89, 182, 0.2);
+            border-color: rgba(155, 89, 182, 0.6);
+            color: #9b59b6;
+        }
+        
+        .item-visual-tag-qualidade.quality-lendario {
+            background: rgba(243, 156, 18, 0.2);
+            border-color: rgba(243, 156, 18, 0.6);
+            color: #f39c12;
+        }
+        
+        .item-visual-tag-qualidade.quality-mitico {
+            background: rgba(231, 76, 60, 0.2);
+            border-color: rgba(231, 76, 60, 0.6);
+            color: #e74c3c;
+        }
+        
+        .item-visual-tag-qualidade.quality-celestial {
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.25) 0%, rgba(230, 126, 34, 0.15) 100%);
+            border-color: rgba(241, 196, 15, 0.7);
+            color: #f1c40f;
+            animation: tagCelestialGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes tagCelestialGlow {
+            0%, 100% { text-shadow: 0 0 8px rgba(241, 196, 15, 0.3); }
+            50% { text-shadow: 0 0 15px rgba(241, 196, 15, 0.6); }
+        }
+        
+        /* ===== STATS (NÍVEL, ROLL, EXTRAS) ===== */
+        .item-visual-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(212, 175, 55, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+        
+        .item-visual-stat {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .item-visual-stat-label {
+            font-size: 0.75rem;
+            color: #d4af37;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+        
+        .item-visual-stat-value {
+            font-size: 0.95rem;
+            color: #fff;
+            font-weight: 700;
+        }
+        
+        .item-visual-stat-value.empty {
+            color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* ===== ABILITIES (EXTRAS + HABILIDADES) ===== */
+        .item-visual-abilities {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-top: 8px;
+        }
+        
+        .item-visual-ability-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .item-visual-ability-label {
+            font-size: 0.8rem;
+            color: #d4af37;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+        
+        .item-visual-ability-value {
+            font-size: 0.88rem;
+            color: #ccc;
+            line-height: 1.4;
+            padding-left: 8px;
+            border-left: 2px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .item-visual-ability-value.empty {
+            color: rgba(255, 255, 255, 0.2);
+            font-style: italic;
+        }
+        
+        /* ===== DESCRIÇÃO (HISTÓRIA) ===== */
+        .item-visual-description {
+            padding-top: 10px;
+            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            font-size: 0.85rem;
+            color: #aaa;
+            line-height: 1.5;
+            max-height: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
+        .item-visual-description.empty {
+            color: rgba(255, 255, 255, 0.2);
+            font-style: italic;
+        }
+        
+        /* ===== PREVIEW ANTIGO (MANTÉM COMPATIBILIDADE) ===== */
+        .item-preview-card {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.02) 100%);
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            border-radius: 12px;
+            padding: 24px;
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            display: none;
+        }
+        
+        .item-preview-card.quality-comum { border-color: rgba(136, 136, 136, 0.6); box-shadow: 0 0 15px rgba(136, 136, 136, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+        .item-preview-card.quality-raro { border-color: rgba(52, 152, 219, 0.6); box-shadow: 0 0 15px rgba(52, 152, 219, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+        .item-preview-card.quality-epico { border-color: rgba(155, 89, 182, 0.6); box-shadow: 0 0 15px rgba(155, 89, 182, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+        .item-preview-card.quality-lendario { border-color: rgba(243, 156, 18, 0.6); box-shadow: 0 0 15px rgba(243, 156, 18, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+        .item-preview-card.quality-mitico { border-color: rgba(231, 76, 60, 0.6); box-shadow: 0 0 15px rgba(231, 76, 60, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+        .item-preview-card.quality-celestial { border-color: rgba(241, 196, 15, 0.6); box-shadow: 0 0 20px rgba(241, 196, 15, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05); animation: celestialGlow 2s ease-in-out infinite; }
+        
+        @keyframes celestialGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(241, 196, 15, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+            50% { box-shadow: 0 0 30px rgba(241, 196, 15, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+        }
+        
+        .item-preview-title {
+            color: #d4af37;
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .item-preview-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .item-preview-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #bbb;
+        }
+        
+        .item-preview-label {
+            color: #d4af37;
+            font-weight: 700;
+            flex: 1;
+        }
+        
+        .item-preview-value {
+            color: #fff;
+            font-weight: 600;
+            text-align: right;
+            flex: 1;
+        }
+        
+        .item-preview-value.empty {
+            color: #666;
+        }
+        
+        .item-tips-box {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.08) 0%, rgba(52, 152, 219, 0.02) 100%);
+            border: 2px solid rgba(52, 152, 219, 0.4);
+            border-radius: 12px;
+            padding: 18px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        
+        .item-tips-title {
+            color: #3498db;
+            margin: 0 0 10px 0;
+            font-size: 0.9rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        
+        .item-tips-content {
+            color: #aaa;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        
+        .item-modal-footer {
+            border-top: 2px solid rgba(212, 175, 55, 0.3);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.05) 100%);
+        }
+        
+        .item-btn-cancel {
+            background: rgba(100, 100, 100, 0.5) !important;
+            border: 1px solid rgba(100, 100, 100, 0.5) !important;
+            color: #ccc !important;
+            padding: 10px 24px !important;
+            border-radius: 8px !important;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .item-btn-cancel:hover {
+            background: rgba(100, 100, 100, 0.7) !important;
+            border-color: rgba(150, 150, 150, 0.7) !important;
+            color: #fff !important;
+        }
+        
+        .item-btn-next {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%) !important;
+            border: 2px solid rgba(39, 174, 96, 0.6) !important;
+            color: #fff !important;
+            padding: 11px 32px !important;
+            border-radius: 8px !important;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+            letter-spacing: 0.5px;
+        }
+        
+        .item-btn-next:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.5);
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%) !important;
+        }
+        
+        .item-btn-next:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        
+        .item-btn-next:disabled {
+            opacity: 0.5 !important;
+            cursor: not-allowed !important;
+            box-shadow: none;
+        }
+        
+        @media (max-width: 768px) {
+            .item-modal-body {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .item-modal-header {
+                padding: 20px;
+            }
+            
+            .item-modal-title {
+                font-size: 1.3rem;
+            }
+            
+            .item-modal-body {
+                padding: 20px;
+            }
+        }
+    </style>
+
     <!-- MODAL: GERAÇÃO MANUAL ASSISTIDA (Passo 1 - Informações Básicas) -->
-    <div class="modal fade" id="modalGeracaoManualAssistida" tabindex="-1" role="dialog" aria-modal="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content bg-dark border-0" style="background: linear-gradient(135deg, rgba(15, 15, 20, 0.98) 0%, rgba(25, 25, 35, 0.98) 100%); border: 2px solid rgba(212, 175, 55, 0.5);">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(212, 175, 55, 0.3); padding: 20px;">
-                    <h3 style="color: #d4af37; margin: 0; font-size: 1.4rem; font-weight: 700;">🛠️ Gerar Item (Manual Assistido)</h3>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" style="padding: 25px;">
-                    <form id="formGeracaoManualAssistida" style="display: flex; flex-direction: column; gap: 18px;">
-                        <div>
-                            <label style="color: #d4af37; font-weight: 700; display: block; margin-bottom: 8px; font-size: 0.95rem;">📝 Nome do Item</label>
-                            <input type="text" class="form-control" id="manualAssitidoNome" placeholder="Ex: Espada das Chamas Eternas" style="background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(212, 175, 55, 0.4); color: #fff; padding: 12px 15px; border-radius: 8px;" required>
+    <div class="modal fade" id="modalGeracaoManualAssistida" tabindex="-1" role="dialog" aria-labelledby="modalGeracaoManualAssistidaTitle" aria-hidden="true">
+        <div class="modal-dialog" style="display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0;">
+            <div class="item-modal-container">
+                <div class="item-modal-content">
+                    <!-- HEADER -->
+                    <div class="item-modal-header">
+                        <h3 class="item-modal-title" id="modalGeracaoManualAssistidaTitle">🛠️ Gerar Item (Manual Assistido)</h3>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" style="opacity: 0.7; transition: opacity 0.2s;"></button>
+                    </div>
+
+                    <!-- BODY -->
+                    <div class="item-modal-body">
+                        <!-- COLUNA 1: FORMULÁRIO -->
+                        <div class="item-form-section">
+                            <form id="formGeracaoManualAssistida" style="display: flex; flex-direction: column; gap: 20px;">
+                                <!-- Nome -->
+                                <div class="item-input-group">
+                                    <label class="item-label">📝 Nome do Item</label>
+                                    <input type="text" class="form-control item-input" id="manualAssitidoNome" placeholder="Ex: Espada das Chamas Eternas" required>
+                                </div>
+
+                                <!-- Tipo -->
+                                <div class="item-input-group">
+                                    <label class="item-label">🛡️ Tipo do Item</label>
+                                    <select class="form-control item-select" id="manualAssitidoTipo" onchange="atualizarPreviewGeracaoManual()" required>
+                                        <option value="">Selecione o tipo</option>
+                                        <option value="arma">⚔️ Arma</option>
+                                        <option value="armadura">🛡️ Armadura</option>
+                                        <option value="acessorio">✨ Acessório</option>
+                                        <option value="reliquia">🔮 Relíquia</option>
+                                        <option value="artefato">📿 Artefato</option>
+                                        <option value="Mobs">👹 Mobs</option>
+                                    </select>
+                                </div>
+
+                                <!-- Qualidade -->
+                                <div class="item-input-group">
+                                    <label class="item-label">✨ Qualidade</label>
+                                    <select class="form-control item-select" id="manualAssitidoQualidade" onchange="atualizarPreviewGeracaoManual()" required>
+                                        <option value="">Selecione a qualidade</option>
+                                        <option value="Comum">⚪ Comum</option>
+                                        <option value="Raro">🔵 Raro</option>
+                                        <option value="Épico">🟣 Épico</option>
+                                        <option value="Lendário">🟠 Lendário</option>
+                                        <option value="Mítico">🔴 Mítico</option>
+                                        <option value="Celestial">⭐ Celestial</option>
+                                    </select>
+                                </div>
+
+                                <!-- Nível -->
+                                <div class="item-input-group">
+                                    <label class="item-label">📊 Nível do Item</label>
+                                    <input type="number" class="form-control item-input" id="manualAssitidoNivel" placeholder="Ex: 5" min="1" max="25" value="1" onchange="atualizarPreviewGeracaoManual()" required>
+                                </div>
+                            </form>
                         </div>
-                        <div>
-                            <label style="color: #d4af37; font-weight: 700; display: block; margin-bottom: 8px; font-size: 0.95rem;">🛡️ Tipo do Item</label>
-                            <select class="form-control" id="manualAssitidoTipo" style="background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(212, 175, 55, 0.4); color: #fff; padding: 12px 15px; border-radius: 8px;" required>
-                                <option value="">Selecione o tipo</option>
-                                <option value="arma">⚔️ Arma</option>
-                                <option value="armadura">🛡️ Armadura</option>
-                                <option value="acessorio">✨ Acessório</option>
-                                <option value="reliquia">🔮 Relíquia</option>
-                                <option value="artefato">📿 Artefato</option>
-                                <option value="Mobs">👹 Mobs</option>
-                            </select>
+
+                        <!-- COLUNA 2: PREVIEW E DICAS -->
+                        <div class="item-preview-section">
+                            <!-- NOVO CARD VISUAL DE ITEM -->
+                            <div id="previewItemGeracaoManual" class="item-visual-card">
+                                <!-- IMAGEM DO ITEM -->
+                                <div class="item-visual-image-area">
+                                    <div class="item-visual-image-placeholder" id="itemVisualPlaceholder">🎁</div>
+                                    <img id="itemVisualImage" class="item-visual-image" style="display: none;" alt="Item Preview">
+                                </div>
+
+                                <!-- CONTEÚDO DO CARD -->
+                                <div class="item-visual-body">
+                                    <!-- NOME -->
+                                    <h3 class="item-visual-title empty" id="previewNome">— Nome não definido —</h3>
+
+                                    <!-- TAGS (TIPO + QUALIDADE) -->
+                                    <div class="item-visual-tags">
+                                        <span class="item-visual-tag item-visual-tag-tipo empty" id="previewTipoTag">Tipo</span>
+                                        <span class="item-visual-tag item-visual-tag-qualidade empty" id="previewQualidadeTag">Qualidade</span>
+                                    </div>
+
+                                    <!-- STATS -->
+                                    <div class="item-visual-stats">
+                                        <div class="item-visual-stat">
+                                            <span class="item-visual-stat-label">📊 Nível</span>
+                                            <span class="item-visual-stat-value empty" id="previewNivel">-</span>
+                                        </div>
+                                        <div class="item-visual-stat">
+                                            <span class="item-visual-stat-label">🎲 Roll</span>
+                                            <span class="item-visual-stat-value empty" id="previewRoll">-</span>
+                                        </div>
+                                        <div class="item-visual-stat">
+                                            <span class="item-visual-stat-label">⚔️ Bônus</span>
+                                            <span class="item-visual-stat-value empty" id="previewBonus">-</span>
+                                        </div>
+                                        <div class="item-visual-stat">
+                                            <span class="item-visual-stat-label">✨ Extras</span>
+                                            <span class="item-visual-stat-value empty" id="previewExtras">-</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- ABILITIES -->
+                                    <div class="item-visual-abilities">
+                                        <div class="item-visual-ability-group">
+                                            <span class="item-visual-ability-label">🔥 Habilidades</span>
+                                            <span class="item-visual-ability-value empty" id="previewHabilidades">— nenhuma definida —</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- DESCRIÇÃO/HISTÓRIA -->
+                                    <div class="item-visual-description empty" id="previewDescricao">— história não definida —</div>
+                                </div>
+                            </div>
+
+                            <!-- DICAS/INFORMAÇÕES -->
+                            <div class="item-tips-box">
+                                <h5 class="item-tips-title">💡 Informações Essenciais</h5>
+                                <div class="item-tips-content" id="textodicasGeracaoManual">Selecione qualidade e nível para ver informações</div>
+                            </div>
                         </div>
-                        <div>
-                            <label style="color: #d4af37; font-weight: 700; display: block; margin-bottom: 8px; font-size: 0.95rem;">✨ Qualidade</label>
-                            <select class="form-control" id="manualAssitidoQualidade" style="background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(212, 175, 55, 0.4); color: #fff; padding: 12px 15px; border-radius: 8px;" required>
-                                <option value="">Selecione a qualidade</option>
-                                <option value="Comum">⚪ Comum</option>
-                                <option value="Raro">🟡 Raro</option>
-                                <option value="Épico">🟣 Épico</option>
-                                <option value="Lendário">🟠 Lendário</option>
-                                <option value="Mítico">🔴 Mítico</option>
-                                <option value="Celestial">⭐ Celestial</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label style="color: #d4af37; font-weight: 700; display: block; margin-bottom: 8px; font-size: 0.95rem;">📊 Nível do Item</label>
-                            <input type="number" class="form-control" id="manualAssitidoNivel" placeholder="Ex: 5" min="1" max="100" value="1" style="background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(212, 175, 55, 0.4); color: #fff; padding: 12px 15px; border-radius: 8px;" required>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer" style="border-top: 1px solid rgba(212, 175, 55, 0.2); padding: 15px;">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">❌ Cancelar</button>
-                    <button type="button" class="btn btn-success" onclick="processarGeracaoManualAssistida()" style="background: linear-gradient(135deg, #27ae60 0%, #229954 100%); border: none; color: #fff; font-weight: bold;">✅ Próximo</button>
+                    </div>
+
+                    <!-- FOOTER -->
+                    <div class="item-modal-footer">
+                        <button type="button" class="btn item-btn-cancel" data-bs-dismiss="modal">❌ Cancelar</button>
+                        <button type="button" class="btn item-btn-next" id="btnProximoGeracaoManual" onclick="processarGeracaoManualAssistida()" disabled>✅ Próximo</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -23847,15 +24915,33 @@
             // ✅ RESTAURAR SCROLL APÓS SUCESSO DE SALVAMENTO
             ScrollProtector.restore();
 
-            // Fechar modal ANTES de limpar dados
+            // Fechar modal com fallback robusto
             try {
-                const modal = bootstrap.Modal.getInstance(document.getElementById('modalNovoNPC'));
-                if (modal) {
-                    modal.hide();
-                    console.log('🚪 Modal fechado');
+                const modalElement = document.getElementById('modalNovoNPC');
+                if (modalElement) {
+                    const modal = bootstrap.Modal.getInstance(modalElement);
+                    if (modal) {
+                        modal.hide();
+                        console.log('🚪 Modal fechado com bootstrap');
+                    } else {
+                        // Fallback: fechar manualmente com CSS
+                        modalElement.classList.remove('show');
+                        modalElement.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                        const backdrop = document.querySelector('.modal-backdrop');
+                        if (backdrop) backdrop.remove();
+                        console.log('🚪 Modal fechado com fallback CSS');
+                    }
                 }
             } catch (e) {
-                console.log('Erro ao fechar modal:', e);
+                console.error('Erro ao fechar modal:', e);
+                // Último recurso
+                const modalElement = document.getElementById('modalNovoNPC');
+                if (modalElement) {
+                    modalElement.classList.remove('show');
+                    modalElement.style.display = 'none';
+                    document.body.classList.remove('modal-open');
+                }
             }
 
             // Limpar variáveis de imagem IMEDIATAMENTE (antes do setTimeout)
@@ -25362,8 +26448,9 @@
                 const valor = localStorage.getItem(chave);
                 return valor ? JSON.parse(valor) : [];
             } catch (e) {
-                console.warn(`⚠️ Erro ao carregar ${chave}, resetando:`, e.message);
-                localStorage.removeItem(chave); // Remover dados corrompidos
+                console.warn(`⚠️ Erro ao carregar ${chave}:`, e.message);
+                // 🛡️ FIX: NÃO DELETAR AUTOMATICAMENTE - deixar para a função protectStorageData()
+                // localStorage.removeItem(chave); // ❌ REMOVIDO - Será tratado por protectStorageData()
                 return [];
             }
         }
@@ -40598,38 +41685,415 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             return '';
         }
 
-        // Salvar Item
-        async function salvarItem() {
-            const nome = document.getElementById('itemNome').value.trim();
-            const qualidade = document.getElementById('itemQualidade').value.trim();
-            const level = parseInt(document.getElementById('itemLevel').value) || 1;
-            const levelMax = parseInt(document.getElementById('itemLevelMax').value) || 6;
-            const ataque = document.getElementById('itemAtaque').value.trim();
-            const extra = document.getElementById('itemExtra').value.trim();
-            const habilidade = document.getElementById('itemHabilidade').value.trim();
-            const Mesa = document.getElementById('itemMesa').value.trim();
-            const tipo = document.getElementById('itemTipo').value.trim();
+        // =============== SISTEMA DE HABILIDADES DINÂMICAS ===============
 
-            if (!nome) {
-                alert('❌ Preencha o campo Nome');
-                return;
+        /**
+         * Obter quantidade máxima de slots de habilidades por raridade
+         */
+        function getMaxSlotsHabilidades(qualidade) {
+            const slots = {
+                'Comum': 0,
+                'Raro': 0,
+                'Épico': 1,
+                'Lendário': 1,
+                'Mítico': 2,
+                'Celestial': 3
+            };
+            return slots[qualidade] || 0;
+        }
+
+        /**
+         * Atualizar preview ao vivo do item no modal
+         */
+        function atualizarPreviewItemModal() {
+            const nome = document.getElementById('itemNome').value.trim() || '[Nome do Item]';
+            const qualidade = document.getElementById('itemQualidade').value || 'Comum';
+            const nivel = document.getElementById('itemLevel').value || '1';
+            const levelMax = document.getElementById('itemLevelMax').value || '6';
+            const tipo = document.getElementById('itemTipo').value || 'item';
+            const ataque = document.getElementById('itemAtaque').value.trim() || '-';
+            const extra = document.getElementById('itemExtra').value.trim() || '';
+            
+            // Mapeamento de cores por raridade
+            const coresRaridade = {
+                'Comum': '#a0a0a0',
+                'Raro': '#4169e1',
+                'Épico': '#9932cc',
+                'Lendário': '#ff8c00',
+                'Mítico': '#dc143c',
+                'Celestial': '#ffd700'
+            };
+            
+            // Mapeamento de ícones por tipo
+            const iconosTipo = {
+                'arma': '⚔️',
+                'armadura': '🛡️',
+                'acessorio': '✨',
+                'reliquia': '🔮',
+                'artefato': '📿',
+                'Mobs': '👹'
+            };
+            
+            const corRaridade = coresRaridade[qualidade] || '#a0a0a0';
+            const iconoTipo = iconosTipo[tipo] || '📦';
+            
+            // Criar HTML da preview (versão sem imagem)
+            const previewHTML = `
+                <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between; padding: 15px;">
+                    <div>
+                        <div style="font-size: 0.75rem; color: #999; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">
+                            ${iconoTipo} ${tipo.toUpperCase()}
+                        </div>
+                        <h5 style="color: ${corRaridade}; font-weight: 700; margin: 0; margin-bottom: 10px; text-shadow: 0 0 10px ${corRaridade}40;">
+                            ${nome}
+                        </h5>
+                        <div style="border-top: 1px solid rgba(255, 193, 7, 0.2); padding-top: 10px; margin-bottom: 10px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #999; margin-bottom: 8px;">
+                                <span>Raridade:</span>
+                                <span style="color: ${corRaridade}; font-weight: 700;">${qualidade}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #999; margin-bottom: 8px;">
+                                <span>Nível:</span>
+                                <span style="color: #ffc107;">${nivel}/${levelMax}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #999; margin-bottom: 8px;">
+                                <span>Roll:</span>
+                                <span style="color: #3498db;">${ataque}</span>
+                            </div>
+                            ${extra ? `<div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #999;">
+                                <span>Extra:</span>
+                                <span style="color: #2ecc71;">${extra}</span>
+                            </div>` : ''}
+                        </div>
+                    </div>
+                    <div style="color: #666; font-size: 0.75rem; text-align: center;">
+                        ✨ Preview em tempo real
+                    </div>
+                </div>
+            `;
+            
+            // Criar HTML para overlay (quando tem imagem)
+            const overlayHTML = `
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.9) 100%); padding: 15px; border-radius: 8px; color: white; z-index: 10;">
+                    <div style="font-size: 0.7rem; color: #999; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">
+                        ${iconoTipo} ${tipo.toUpperCase()}
+                    </div>
+                    <h6 style="color: ${corRaridade}; font-weight: 700; margin: 0; margin-bottom: 8px; font-size: 0.9rem; text-shadow: 0 0 8px ${corRaridade}60;">
+                        ${nome}
+                    </h6>
+                    <div style="font-size: 0.7rem; color: #999;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                            <span>Raridade:</span>
+                            <span style="color: ${corRaridade}; font-weight: 600;">${qualidade}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>${nivel}/${levelMax}</span>
+                            <span style="color: #3498db;">${ataque}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Atualizar card preview
+            const previewCard = document.getElementById('previewItem');
+            if (previewCard) {
+                const img = previewCard.querySelector('img');
+                if (img) {
+                    // Tem imagem: adicionar overlay
+                    const overlay = previewCard.querySelector('[data-preview-overlay]');
+                    if (overlay) overlay.remove();
+                    const div = document.createElement('div');
+                    div.setAttribute('data-preview-overlay', 'true');
+                    div.style.position = 'relative';
+                    div.style.width = '100%';
+                    div.style.height = '100%';
+                    div.innerHTML = overlayHTML;
+                    if (previewCard.style.position !== 'relative' && previewCard.style.position !== 'absolute') {
+                        previewCard.style.position = 'relative';
+                    }
+                    previewCard.appendChild(div);
+                } else {
+                    // Sem imagem: mostrar preview em texto
+                    previewCard.innerHTML = previewHTML;
+                }
             }
+        }
 
-            const novoItem = {
-                nome,
-                qualidade,
-                level,
-                levelMax,
-                ataque,
-                extra,
-                habilidade,
-                Mesa,
-                tipo,
-                imagem: '',
-                imagemIndexedDBId: null
+        /**
+         * ✨ Atualizar VISUAL CARD PREVIEW no modal de Editar Item
+         */
+        function atualizarPreviewVisualCardEditar() {
+            const nome = document.getElementById('itemNome').value.trim() || '— Nome não definido —';
+            const qualidade = document.getElementById('itemQualidade').value || 'Comum';
+            const nivel = document.getElementById('itemLevel').value || '1';
+            const levelMax = document.getElementById('itemLevelMax').value || '6';
+            const tipo = document.getElementById('itemTipo').value || '';
+            const ataque = document.getElementById('itemAtaque').value.trim() || '-';
+            const extra = document.getElementById('itemExtra').value.trim() || '-';
+
+            // Mapeamento de cores por raridade
+            const coresRaridade = {
+                'Comum': { cor: '#a0a0a0', rgba: 'rgba(160, 160, 160, 0.3)' },
+                'Raro': { cor: '#4169e1', rgba: 'rgba(65, 105, 225, 0.3)' },
+                'Épico': { cor: '#9932cc', rgba: 'rgba(153, 50, 204, 0.3)' },
+                'Lendário': { cor: '#ff8c00', rgba: 'rgba(255, 140, 0, 0.3)' },
+                'Mítico': { cor: '#dc143c', rgba: 'rgba(220, 20, 60, 0.3)' },
+                'Celestial': { cor: '#ffd700', rgba: 'rgba(255, 215, 0, 0.3)' }
             };
 
+            // Mapeamento de ícones por tipo
+            const iconosTipo = {
+                'arma': '⚔️',
+                'armadura': '🛡️',
+                'acessorio': '✨',
+                'reliquia': '🔮',
+                'artefato': '📿',
+                'Mobs': '👹'
+            };
+
+            const corData = coresRaridade[qualidade] || coresRaridade['Comum'];
+            const corRaridade = corData.cor;
+            const iconoTipo = iconosTipo[tipo] || '📦';
+            const nomeDisplay = nome === '' ? '— Nome não definido —' : nome;
+
+            // Atualizar NOME
+            const nomeEl = document.getElementById('previewNomeEditar');
+            if (nomeEl) {
+                nomeEl.textContent = nomeDisplay;
+                nomeEl.style.color = nome === '' ? '#888' : '#f1f1f1';
+                if (nome === '') {
+                    nomeEl.classList.add('empty');
+                } else {
+                    nomeEl.classList.remove('empty');
+                }
+            }
+
+            // Atualizar TIPO TAG
+            const tipoTagEl = document.getElementById('previewTipoTagEditar');
+            if (tipoTagEl) {
+                tipoTagEl.textContent = tipo ? `${iconoTipo} ${tipo.toUpperCase()}` : '📦 Tipo';
+            }
+
+            // Atualizar QUALIDADE TAG
+            const qualidadeTagEl = document.getElementById('previewQualidadeTagEditar');
+            if (qualidadeTagEl) {
+                qualidadeTagEl.textContent = `🔴 ${qualidade}`;
+                qualidadeTagEl.style.color = corRaridade;
+                qualidadeTagEl.style.background = corData.rgba;
+            }
+
+            // Atualizar STATS
+            const nivelEl = document.getElementById('previewNivelEditar');
+            if (nivelEl) nivelEl.textContent = `${nivel}/${levelMax}`;
+
+            const rollEl = document.getElementById('previewRollEditar');
+            if (rollEl) rollEl.textContent = ataque;
+
+            const extraEl = document.getElementById('previewExtraEditar');
+            if (extraEl) extraEl.textContent = extra;
+
+            const infoEl = document.getElementById('previewInfoEditar');
+            if (infoEl) infoEl.textContent = '✨';
+
+            // Atualizar CARD BORDER COLOR
+            const cardEl = document.getElementById('previewItemEditarModal');
+            if (cardEl) {
+                cardEl.style.borderColor = corRaridade;
+                // Aplicar glow effect
+                cardEl.style.boxShadow = `0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px ${corRaridade}40`;
+            }
+
+            // Atualizar imagem se existir
+            const imagemUrl = document.getElementById('itemImagemUrl').value;
+            const imagemEl = document.getElementById('itemVisualImageEditar');
+            const placeholderEl = document.getElementById('itemVisualPlaceholderEditar');
+            
+            if (imagemEl && placeholderEl) {
+                if (imagemUrl) {
+                    imagemEl.src = imagemUrl;
+                    imagemEl.style.display = 'block';
+                    placeholderEl.style.display = 'none';
+                } else {
+                    imagemEl.style.display = 'none';
+                    placeholderEl.style.display = 'block';
+                }
+            }
+        }
+
+        /**
+         * Atualizar UI de slots de habilidades quando qualidade muda
+         */
+        function atualizarSlotsHabilidades() {
+            const qualidade = document.getElementById('itemQualidade').value;
+            const maxSlots = getMaxSlotsHabilidades(qualidade);
+            const blocoHab = document.getElementById('blocoHabilidades');
+            const slotsDiv = document.getElementById('slotsHabilidades');
+            
+            // Se tem slots, mostrar bloco
+            if (maxSlots > 0) {
+                blocoHab.style.display = 'block';
+                
+                // Limpar e reconstruir slots
+                slotsDiv.innerHTML = '';
+                
+                for (let i = 0; i < maxSlots; i++) {
+                    const slotHTML = `
+                        <div class="habilidade-slot-container" style="padding: 12px; background: rgba(153,102,204,0.1); border: 1px solid rgba(153,102,204,0.3); border-radius: 6px; transition: all 0.2s;">
+                            <label class="form-label" style="color: #9966cc; font-weight: 600; font-size: 0.8rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">⚡ Habilidade ${i + 1}</label>
+                            
+                            <!-- Nome da Habilidade -->
+                            <input type="text" class="form-control habilidade-nome" data-slot="${i}" placeholder="Nome da habilidade (ex: Corte Devastador)..." style="background: rgba(0,0,0,0.5); border: 1px solid rgba(153,102,204,0.3); color: #fff; border-radius: 4px; font-size: 0.85rem; padding: 8px; margin-bottom: 8px; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(153,102,204,0.6)'; this.style.boxShadow='0 0 8px rgba(153,102,204,0.15)';" onblur="this.style.borderColor='rgba(153,102,204,0.3)'; this.style.boxShadow='none';">
+                            
+                            <!-- Descrição da Habilidade -->
+                            <textarea class="form-control habilidade-slot" data-slot="${i}" rows="3" placeholder="Descreva o efeito e mecânica da habilidade..." style="background: rgba(0,0,0,0.5); border: 1px solid rgba(153,102,204,0.3); color: #fff; border-radius: 4px; font-size: 0.85rem; padding: 8px; transition: all 0.2s;" onfocus="this.style.borderColor='rgba(153,102,204,0.6)'; this.style.boxShadow='0 0 8px rgba(153,102,204,0.15)';" onblur="this.style.borderColor='rgba(153,102,204,0.3)'; this.style.boxShadow='none';"></textarea>
+                        </div>
+                    `;
+                    slotsDiv.innerHTML += slotHTML;
+                }
+            } else {
+                // Se não tem slots, esconder bloco
+                blocoHab.style.display = 'none';
+            }
+        }
+
+        /**
+         * Adicionar novo slot de habilidade
+         */
+        function adicionarSlotHabilidade() {
+            const qualidade = document.getElementById('itemQualidade').value;
+            const maxSlots = getMaxSlotsHabilidades(qualidade);
+            const slotsDiv = document.getElementById('slotsHabilidades');
+            const slotsAtuais = slotsDiv.querySelectorAll('.habilidade-slot-container').length;
+            
+            if (slotsAtuais < maxSlots) {
+                const novoSlot = `
+                    <div class="habilidade-slot-container" style="padding: 12px; background: rgba(255,193,7,0.05); border: 1px solid rgba(255,193,7,0.2); border-radius: 6px; animation: slideIn 0.3s ease;">
+                        <label class="form-label" style="color: #ffc107; font-weight: 600; font-size: 0.85rem; margin-bottom: 8px;">⚡ Habilidade ${slotsAtuais + 1}</label>
+                        
+                        <!-- Nome da Habilidade -->
+                        <input type="text" class="form-control habilidade-nome" data-slot="${slotsAtuais}" placeholder="Nome da habilidade (ex: Corte Devastador)..." style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,193,7,0.3); color: #fff; border-radius: 4px; font-size: 0.9rem; margin-bottom: 8px; padding: 8px;" onfocus="this.style.borderColor='rgba(255,193,7,0.6)'; this.style.boxShadow='0 0 8px rgba(255,193,7,0.15)';" onblur="this.style.borderColor='rgba(255,193,7,0.3)'; this.style.boxShadow='none';">
+                        
+                        <!-- Descrição da Habilidade -->
+                        <textarea class="form-control habilidade-slot" data-slot="${slotsAtuais}" rows="3" placeholder="Descreva o efeito e mecânica da habilidade..." style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,193,7,0.3); color: #fff; border-radius: 4px; font-size: 0.9rem;" onfocus="this.style.borderColor='rgba(255,193,7,0.6)'; this.style.boxShadow='0 0 8px rgba(255,193,7,0.15)';" onblur="this.style.borderColor='rgba(255,193,7,0.3)'; this.style.boxShadow='none';"></textarea>
+                    </div>
+                `;
+                slotsDiv.innerHTML += novoSlot;
+                console.log(`➕ Habilidade ${slotsAtuais + 1} adicionada`);
+            } else {
+                alert(`⚠️ Limite de ${maxSlots} habilidades atingido para ${qualidade}`);
+            }
+        }
+
+        /**
+         * Obter todas as habilidades preenchidas
+         */
+        function obterHabilidadesPreenchidas() {
+            const containers = document.querySelectorAll('.habilidade-slot-container');
+            const habilidades = [];
+            
+            containers.forEach((container, index) => {
+                const nomeField = container.querySelector('.habilidade-nome');
+                const descricaoField = container.querySelector('.habilidade-slot');
+                
+                const nome = nomeField ? nomeField.value.trim() : '';
+                const descricao = descricaoField ? descricaoField.value.trim() : '';
+                
+                if (nome || descricao) {
+                    habilidades.push({
+                        slot: index,
+                        nome: nome,
+                        descricao: descricao
+                    });
+                }
+            });
+            
+            return habilidades;
+        }
+
+        /**
+         * Salvar habilidades no objeto do item
+         */
+        function salvarHabilidadesEmItem(item) {
+            const qualidade = document.getElementById('itemQualidade').value;
+            const maxSlots = getMaxSlotsHabilidades(qualidade);
+            
+            if (maxSlots > 0) {
+                // Coletar habilidades dos slots
+                const habilidades = obterHabilidadesPreenchidas();
+                item.habilidades = habilidades;
+                item.maxSlotsHabilidades = maxSlots;
+                console.log(`💾 Salvas ${habilidades.length} habilidades (máx ${maxSlots})`);
+            } else {
+                // Se não tem slots, não há campo de habilidade clássica no novo modal
+                item.habilidade = '';
+                item.habilidades = [];
+                item.maxSlotsHabilidades = 0;
+            }
+        }
+
+        // Listener para mudança de qualidade
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectQualidade = document.getElementById('itemQualidade');
+            if (selectQualidade) {
+                selectQualidade.addEventListener('change', atualizarSlotsHabilidades);
+                selectQualidade.addEventListener('change', atualizarPreviewItemModal);
+            }
+            
+            // Adicionar listeners para atualizar preview ao vivo
+            const camposPreview = ['itemNome', 'itemLevel', 'itemLevelMax', 'itemTipo', 'itemAtaque', 'itemExtra'];
+            camposPreview.forEach(campoId => {
+                const campo = document.getElementById(campoId);
+                if (campo) {
+                    campo.addEventListener('input', atualizarPreviewItemModal);
+                    campo.addEventListener('change', atualizarPreviewItemModal);
+                }
+            });
+        });
+
+        // Salvar Item
+        window.salvarItem = async function() {
             try {
+                console.log('🔷 [salvarItem] Iniciando salvamento...');
+                
+                const nome = document.getElementById('itemNome').value.trim();
+                const qualidade = document.getElementById('itemQualidade').value.trim();
+                const level = parseInt(document.getElementById('itemLevel').value) || 1;
+                const levelMax = parseInt(document.getElementById('itemLevelMax').value) || 6;
+                const ataque = document.getElementById('itemAtaque').value.trim();
+                const extra = document.getElementById('itemExtra').value.trim();
+                const Mesa = document.getElementById('itemMesa').value.trim();
+                const tipo = document.getElementById('itemTipo').value.trim();
+
+                console.log('🔷 [salvarItem] Campos extraídos:', { nome, qualidade });
+
+                if (!nome) {
+                    alert('❌ Preencha o campo Nome');
+                    return;
+                }
+
+                const novoItem = {
+                    nome,
+                    qualidade,
+                    level,
+                    levelMax,
+                    ataque,
+                    extra,
+                    Mesa,
+                    tipo,
+                    imagem: '',
+                    imagemIndexedDBId: null
+                };
+
+                // Adicionar habilidades dinâmicas (se existirem)
+                console.log('🔷 [salvarItem] Chamando salvarHabilidadesEmItem...');
+                if (typeof salvarHabilidadesEmItem === 'function') {
+                    salvarHabilidadesEmItem(novoItem);
+                    console.log('✅ [salvarItem] Habilidades salvas');
+                } else {
+                    console.warn('⚠️ [salvarItem] salvarHabilidadesEmItem não é função');
+                }
+
+                console.log('🔷 [salvarItem] Adicionando item ao array...');
                 // 1. Adicionar item ao array
                 armazenar.itens.push(novoItem);
                 const itemIndex = armazenar.itens.length - 1;
@@ -40638,7 +42102,8 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
                     nome,
                     qualidade,
                     temImagemBase64: itemImagemBase64Temp ? true : false,
-                    temImagemIndexedDB: itemImagemIndexedDBIdTemp ? true : false
+                    temImagemIndexedDB: itemImagemIndexedDBIdTemp ? true : false,
+                    maxSlotsHabilidades: novoItem.maxSlotsHabilidades
                 });
                 
                 // 2. Se houver imagem Base64 temporária (pequena < 200KB), salvar direto
@@ -40663,49 +42128,89 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
                 }
                 
                 // 5. Salvar no localStorage
+                console.log('🔷 [salvarItem] Salvando no localStorage...');
                 localStorage.setItem('redungeon_itens', JSON.stringify(armazenar.itens));
                 console.log('✅ Item salvo com sucesso! Total:', armazenar.itens.length);
                 
                 // ✅ RESTAURAR SCROLL APÓS SALVAR ITEM
-                ScrollProtector.restore();
+                if (typeof ScrollProtector !== 'undefined' && ScrollProtector.restore) {
+                    ScrollProtector.restore();
+                    console.log('✅ Scroll restaurado');
+                }
                 
+                // Limpar campos
+                console.log('🔷 [salvarItem] Limpando campos...');
+                document.getElementById('formNovoItem').reset();
+                document.getElementById('itemLevel').value = '1';
+                document.getElementById('itemLevelMax').value = '6';
+                document.getElementById('modalTituloItem').textContent = '✨ Criar Item';
+                const previewCard = document.getElementById('previewItemEditarModal');
+                if (previewCard) {
+                    previewCard.style.backgroundImage = 'none';
+                }
+                document.getElementById('itemImagemUrl').value = '';
+                
+                const itemImagemFile = document.getElementById('itemImagemFile');
+                if (itemImagemFile) {
+                    itemImagemFile.value = '';
+                }
+                
+                document.getElementById('blocoHabilidades').style.display = 'none';
+                
+                // Limpar variáveis temporárias de imagem
+                itemImagemBase64Temp = null;
+                itemImagemIndexedDBIdTemp = null;
+                window.itemImagemSelecionada = null;
+
+                console.log('🔷 [salvarItem] Atualizando lista de itens...');
+                if (typeof listarItens === 'function') {
+                    await listarItens();
+                    console.log('✅ Lista de items atualizada');
+                } else {
+                    console.warn('⚠️ listarItens não é função');
+                }
+                
+                // Fechar modal - garantir que fecha
+                console.log('🔷 [salvarItem] Fechando modal...');
+                const modalElement = document.getElementById('modalNovoItem');
+                if (modalElement) {
+                    // Tentar fechar com bootstrap
+                    const modal = bootstrap.Modal.getInstance(modalElement);
+                    if (modal) {
+                        modal.hide();
+                        console.log('✅ Modal fechado com bootstrap.Modal');
+                    } else {
+                        // Fallback: usar classe CSS
+                        modalElement.classList.remove('show');
+                        modalElement.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                        console.log('✅ Modal fechado com fallback CSS');
+                    }
+                } else {
+                    console.warn('⚠️ Elemento modalNovoItem não encontrado');
+                }
+                
+                // Mostrar alerta após fechar modal
+                setTimeout(() => {
+                    alert('✅ Item salvo com sucesso!');
+                    console.log('✅ [salvarItem] Processo concluído');
+                }, 500);
             } catch (erro) {
-                console.error('❌ Erro ao salvar item:', erro);
-                armazenar.itens.pop();
+                console.error('❌ ERRO CRÍTICO em salvarItem:', erro);
+                console.error('Stack:', erro.stack);
+                
+                try {
+                    armazenar.itens.pop();
+                } catch (e) {
+                    console.error('Erro ao remover item do array:', e);
+                }
                 
                 if (erro.name === 'QuotaExceededError') {
                     alert('❌ localStorage cheio!\n\nSolução:\n- Exporte seus dados\n- Limpe o cache do navegador\n- Importe os dados novamente');
                 } else {
                     alert('❌ Erro ao salvar item:\n\n' + erro.message);
                 }
-                return;
             }
-
-            // Limpar campos
-            document.getElementById('formNovoItem').reset();
-            document.getElementById('itemLevel').value = '1';
-            document.getElementById('itemLevelMax').value = '6';
-            document.getElementById('previewItem').innerHTML = '<span class="text-muted">Pré-visualização da imagem</span>';
-            document.getElementById('itemImagemUrl').value = '';
-            document.getElementById('itemImagemFile').value = ''; // Limpar input de arquivo
-            document.getElementById('itemHabilidade').style.display = 'none';
-            document.getElementById('itemMesa').style.display = 'block';
-            document.getElementById('abaHabilidadeLabel').style.display = 'none';
-            document.getElementById('abaMesaLabel').style.display = 'block';
-            
-            // Limpar variáveis temporárias de imagem
-            itemImagemBase64Temp = null;
-            itemImagemIndexedDBIdTemp = null;
-            window.itemImagemSelecionada = null;
-
-            // Fechar modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('modalNovoItem'));
-            if (modal) modal.hide();
-
-            console.log('📦 Item salvo com sucesso! Atualizando lista...');
-            await listarItens();
-            console.log('✅ Lista de items atualizada');
-            alert('✅ Item salvo com sucesso!');
         }
 
         // Aumentar Level do Item
@@ -40720,24 +42225,11 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             }
         }
 
-        // Alternar Aba de Modo Item
+        // Alternar Aba de Modo Item (DESCONTINUADO - Modal refatorado não usa mais isso)
         function alternarAbaModoItem(modo) {
-            const habilidadeArea = document.getElementById('itemHabilidade');
-            const MesaArea = document.getElementById('itemMesa');
-            const abaHabilidade = document.getElementById('abaHabilidadeLabel');
-            const abaMesa = document.getElementById('abaMesaLabel');
-
-            if (modo === 'habilidade') {
-                habilidadeArea.style.display = 'block';
-                MesaArea.style.display = 'none';
-                abaHabilidade.style.display = 'block';
-                abaMesa.style.display = 'none';
-            } else {
-                habilidadeArea.style.display = 'none';
-                MesaArea.style.display = 'block';
-                abaHabilidade.style.display = 'none';
-                abaMesa.style.display = 'block';
-            }
+            // No novo modal refatorado, as habilidades usam slots dinâmicos
+            // Esta função é mantida por compatibilidade com código legado
+            console.warn('⚠️ alternarAbaModoItem() é legado e não faz mais nada');
         }
 
         // Wrapper função para chamar editarItem (necessário para onclick)
@@ -40750,6 +42242,9 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             const item = armazenar.itens[index];
             if (!item) return;
 
+            // Atualizar título do modal para "Editar Item"
+            document.getElementById('modalTituloItem').textContent = '✏️ Editar Item';
+
             // Preencher os campos com os dados do item
             document.getElementById('itemNome').value = item.nome;
             document.getElementById('itemQualidade').value = item.qualidade;
@@ -40757,9 +42252,37 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             document.getElementById('itemLevelMax').value = item.levelMax;
             document.getElementById('itemAtaque').value = item.ataque || '';
             document.getElementById('itemExtra').value = item.extra || '';
-            document.getElementById('itemHabilidade').value = item.habilidade || '';
             document.getElementById('itemMesa').value = item.Mesa || '';
             document.getElementById('itemTipo').value = item.tipo || '';
+
+            // 🔷 Atualizar preview visual ao carregar item
+            atualizarPreviewItemModal();
+            
+            // ✨ Atualizar NOVO CARD VISUAL
+            atualizarPreviewVisualCardEditar();
+
+            // 🔷 Carregar habilidades dinâmicas do item
+            atualizarSlotsHabilidades();
+            if (item.habilidades && Array.isArray(item.habilidades) && item.habilidades.length > 0) {
+                // Populando slots com dados salvos
+                const slotsDiv = document.getElementById('slotsHabilidades');
+                const containers = slotsDiv.querySelectorAll('.habilidade-slot-container');
+                item.habilidades.forEach(hab => {
+                    if (containers[hab.slot]) {
+                        const container = containers[hab.slot];
+                        const nomeField = container.querySelector('.habilidade-nome');
+                        const descricaoField = container.querySelector('.habilidade-slot');
+                        
+                        if (nomeField) {
+                            nomeField.value = hab.nome || '';
+                        }
+                        if (descricaoField) {
+                            descricaoField.value = hab.descricao || '';
+                        }
+                    }
+                });
+                console.log(`✅ Carregadas ${item.habilidades.length} habilidades do item`);
+            }
 
             // Mostrar imagem (carregar do IndexedDB se necessário)
             let imagemParaEditar = null;
@@ -40783,7 +42306,12 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             }
             
             if (imagemParaEditar && typeof imagemParaEditar === 'string') {
-                document.getElementById('previewItem').innerHTML = `<img src="${imagemParaEditar}" alt="${item.nome}" style="width: 100%; height: 100%; object-fit: contain; padding: 20px;" onerror="this.parentElement.innerHTML=&quot;<span class=&quot;text-muted&quot;>Imagem inválida</span>&quot;;">`;
+                const previewCardImg = document.querySelector('#previewItemEditarModal .item-visual-card-image');
+                if (previewCardImg) {
+                    previewCardImg.style.backgroundImage = `url('${imagemParaEditar}')`;
+                    previewCardImg.style.backgroundSize = 'cover';
+                    previewCardImg.style.backgroundPosition = 'center';
+                }
                 document.getElementById('itemImagemUrl').value = imagemParaEditar.startsWith('data:') ? '' : imagemParaEditar;
             }
 
@@ -40796,112 +42324,120 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             };
 
             // Sobrescrever função salvar para atualizar em vez de criar novo
-            const btnSalvar = document.querySelector('#modalNovoItem .modal-footer .btn-primary');
-            const salvarOriginal = btnSalvar.onclick;
-            
-            btnSalvar.onclick = async function() {
-                const nome = document.getElementById('itemNome').value.trim();
-                const qualidade = document.getElementById('itemQualidade').value.trim();
-                const level = parseInt(document.getElementById('itemLevel').value) || 1;
-                const levelMax = parseInt(document.getElementById('itemLevelMax').value) || 6;
-                const ataque = document.getElementById('itemAtaque').value.trim();
-                const extra = document.getElementById('itemExtra').value.trim();
-                const habilidade = document.getElementById('itemHabilidade').value.trim();
-                const Mesa = document.getElementById('itemMesa').value.trim();
-                const tipo = document.getElementById('itemTipo').value.trim();
+            const btnSalvar = document.querySelector('#modalNovoItem .modal-footer button[onclick="salvarItem()"]');
+            if (btnSalvar) {
+                btnSalvar.onclick = async function() {
+                    const nome = document.getElementById('itemNome').value.trim();
+                    const qualidade = document.getElementById('itemQualidade').value.trim();
+                    const level = parseInt(document.getElementById('itemLevel').value) || 1;
+                    const levelMax = parseInt(document.getElementById('itemLevelMax').value) || 6;
+                    const ataque = document.getElementById('itemAtaque').value.trim();
+                    const extra = document.getElementById('itemExtra').value.trim();
+                    const Mesa = document.getElementById('itemMesa').value.trim();
+                    const tipo = document.getElementById('itemTipo').value.trim();
 
-                if (!nome || !qualidade) {
-                    alert('❌ Preencha os campos obrigatórios: Nome e Qualidade');
-                    return;
-                }
-
-                try {
-                    // 1. Preparar item com dados básicos
-                    armazenar.itens[index] = {
-                        nome,
-                        qualidade,
-                        level,
-                        levelMax,
-                        ataque,
-                        extra,
-                        habilidade,
-                        Mesa,
-                        tipo,
-                        imagem: item.imagem || '', // Manter anterior se não houver nova
-                        imagemIndexedDBId: item.imagemIndexedDBId || null // Manter anterior
-                    };
-                    
-                    console.log('💾 Atualizando item:', {
-                        nome,
-                        qualidade,
-                        temImagemBase64: itemImagemBase64Temp ? true : false,
-                        temImagemIndexedDB: itemImagemIndexedDBIdTemp ? true : false
-                    });
-                    
-                    // 2. Se houver nova imagem Base64 (pequena < 200KB)
-                    if (itemImagemBase64Temp) {
-                        console.log('📸 Atualizando imagem Base64 do item');
-                        armazenar.itens[index].imagem = itemImagemBase64Temp;
-                        armazenar.itens[index].imagemIndexedDBId = null;
-                        itemImagemBase64Temp = null;
+                    if (!nome || !qualidade) {
+                        alert('❌ Preencha os campos obrigatórios: Nome e Qualidade');
+                        return;
                     }
-                    
-                    // 3. Se houver novo ID do IndexedDB (imagem grande >= 200KB)
-                    if (itemImagemIndexedDBIdTemp) {
-                        console.log('📦 Atualizando imagem IndexedDB do item:', itemImagemIndexedDBIdTemp);
-                        armazenar.itens[index].imagemIndexedDBId = itemImagemIndexedDBIdTemp;
-                        armazenar.itens[index].imagem = '';
-                        itemImagemIndexedDBIdTemp = null;
+
+                    try {
+                        // 1. Preparar item com dados básicos
+                        const novoItem = {
+                            nome,
+                            qualidade,
+                            level,
+                            levelMax,
+                            ataque,
+                            extra,
+                            Mesa,
+                            tipo,
+                            imagem: item.imagem || '', // Manter anterior se não houver nova
+                            imagemIndexedDBId: item.imagemIndexedDBId || null // Manter anterior
+                        };
+                        
+                        // 🔷 Processar habilidades dinâmicas antes de salvar
+                        salvarHabilidadesEmItem(novoItem);
+                        
+                        armazenar.itens[index] = novoItem;
+                        
+                        console.log('💾 Atualizando item:', {
+                            nome,
+                            qualidade,
+                            temImagemBase64: itemImagemBase64Temp ? true : false,
+                            temImagemIndexedDB: itemImagemIndexedDBIdTemp ? true : false
+                        });
+                        
+                        // 2. Se houver nova imagem Base64 (pequena < 200KB)
+                        if (itemImagemBase64Temp) {
+                            console.log('📸 Atualizando imagem Base64 do item');
+                            armazenar.itens[index].imagem = itemImagemBase64Temp;
+                            armazenar.itens[index].imagemIndexedDBId = null;
+                            itemImagemBase64Temp = null;
+                        }
+                        
+                        // 3. Se houver novo ID do IndexedDB (imagem grande >= 200KB)
+                        if (itemImagemIndexedDBIdTemp) {
+                            console.log('📦 Atualizando imagem IndexedDB do item:', itemImagemIndexedDBIdTemp);
+                            armazenar.itens[index].imagemIndexedDBId = itemImagemIndexedDBIdTemp;
+                            armazenar.itens[index].imagem = '';
+                            itemImagemIndexedDBIdTemp = null;
+                        }
+                        
+                        // 4. Se houver URL manual (e nenhuma imagem nova selecionada)
+                        const urlInput = document.getElementById('itemImagemUrl').value.trim();
+                        if (urlInput && !itemImagemBase64Temp && !itemImagemIndexedDBIdTemp) {
+                            console.log('🌐 Usando URL manual da imagem');
+                            armazenar.itens[index].imagem = urlInput;
+                            armazenar.itens[index].imagemIndexedDBId = null;
+                        }
+                        
+                        localStorage.setItem('redungeon_itens', JSON.stringify(armazenar.itens));
+                        console.log('✅ Item atualizado com sucesso');
+                        
+                    } catch (erro) {
+                        console.error('❌ Erro ao atualizar item:', erro);
+                        
+                        if (erro.name === 'QuotaExceededError') {
+                            alert('❌ localStorage cheio!\n\nSolução:\n- Exporte seus dados\n- Limpe o cache do navegador\n- Importe os dados novamente');
+                        } else {
+                            alert('❌ Erro ao salvar item:\n\n' + erro.message);
+                        }
+                        return;
                     }
-                    
-                    // 4. Se houver URL manual (e nenhuma imagem nova selecionada)
-                    const urlInput = document.getElementById('itemImagemUrl').value.trim();
-                    if (urlInput && !itemImagemBase64Temp && !itemImagemIndexedDBIdTemp) {
-                        console.log('🌐 Usando URL manual da imagem');
-                        armazenar.itens[index].imagem = urlInput;
-                        armazenar.itens[index].imagemIndexedDBId = null;
+
+                    // Limpar campos
+                    document.getElementById('formNovoItem').reset();
+                    document.getElementById('itemLevel').value = '1';
+                    document.getElementById('itemLevelMax').value = '6';
+                    const previewCardSave = document.getElementById('previewItemEditarModal');
+                    if (previewCardSave) {
+                        previewCardSave.style.backgroundImage = 'none';
                     }
+                    document.getElementById('itemImagemUrl').value = '';
+                    document.getElementById('itemMesa').style.display = 'block';
                     
-                    localStorage.setItem('redungeon_itens', JSON.stringify(armazenar.itens));
-                    console.log('✅ Item atualizado com sucesso');
+                    // 🔷 Limpar slots de habilidades
+                    document.getElementById('blocoHabilidades').style.display = 'none';
+                    document.getElementById('slotsHabilidades').innerHTML = '';
+
+                    // Limpar variáveis temporárias de imagem
+                    itemImagemBase64Temp = null;
+                    itemImagemIndexedDBIdTemp = null;
+                    // Mostrar botão de deletar
+                    document.getElementById('btnDeletarItemModal').style.display = 'block';
+
+                    // ✅ Fechar modal com função robusta
+                    console.log('🔷 [editarItem] Fechando modal com forcarFecharModal...');
+                    forcarFecharModal('modalNovoItem');
                     
-                } catch (erro) {
-                    console.error('❌ Erro ao atualizar item:', erro);
+                    await listarItens();
                     
-                    if (erro.name === 'QuotaExceededError') {
-                        alert('❌ localStorage cheio!\n\nSolução:\n- Exporte seus dados\n- Limpe o cache do navegador\n- Importe os dados novamente');
-                    } else {
-                        alert('❌ Erro ao salvar item:\n\n' + erro.message);
-                    }
-                    return;
-                }
-
-                // Limpar campos
-                document.getElementById('formNovoItem').reset();
-                document.getElementById('itemLevel').value = '1';
-                document.getElementById('itemLevelMax').value = '6';
-                document.getElementById('previewItem').innerHTML = '<span class="text-muted">Pré-visualização da imagem</span>';
-                document.getElementById('itemImagemUrl').value = '';
-                document.getElementById('itemHabilidade').style.display = 'none';
-                document.getElementById('itemMesa').style.display = 'block';
-                document.getElementById('abaHabilidadeLabel').style.display = 'none';
-                document.getElementById('abaMesaLabel').style.display = 'block';
-
-                // Limpar variáveis temporárias de imagem
-                itemImagemBase64Temp = null;
-                itemImagemIndexedDBIdTemp = null;
-
-                // Restabelecer função original
-                btnSalvar.onclick = salvarItem;
-                document.getElementById('btnDeletarItemModal').style.display = 'block';
-
-                // Fechar modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('modalNovoItem'));
-                if (modal) modal.hide();
-
-                await listarItens();
-                alert('✅ Item atualizado com sucesso!');
-            };
+                    setTimeout(() => {
+                        alert('✅ Item atualizado com sucesso!');
+                    }, 500);
+                };
+            }
 
             // Limpar variáveis temporárias antes de abrir modal de edição
             itemImagemBase64Temp = null;
@@ -41406,48 +42942,271 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             return `${Mesa}\n\n${qualidadeDescricao[raridade] || qualidadeDescricao['Comum']}`;
         }
 
-        // Opção 2: Gerar Item Manual Assistido
-        function abrirGeracaoManualAssistida() {
-            // Fechar modal de opções
-            const modalOpcoes = bootstrap.Modal.getInstance(document.getElementById('modalOpcaoGerarItem'));
-            if (modalOpcoes) modalOpcoes.hide();
-            
-            // Abrir modal de geração manual
-            setTimeout(() => {
-                document.getElementById('formGeracaoManualAssistida').reset();
-                document.getElementById('manualAssitidoNivel').value = '1';
-                const modal = new bootstrap.Modal(document.getElementById('modalGeracaoManualAssistida'));
-                modal.show();
-            }, 300);
+        // Atualizar preview do item em tempo real
+        function atualizarPreviewGeracaoManual() {
+            const nome = document.getElementById('manualAssitidoNome').value.trim() || '';
+            const tipo = document.getElementById('manualAssitidoTipo').value || '';
+            const qualidade = document.getElementById('manualAssitidoQualidade').value || '';
+            const nivel = parseInt(document.getElementById('manualAssitidoNivel').value) || 1;
+
+            // ===== REFERÊNCIAS AO CARD VISUAL =====
+            const cardVisual = document.getElementById('previewItemGeracaoManual');
+            const nomeEl = document.getElementById('previewNome');
+            const tipoTagEl = document.getElementById('previewTipoTag');
+            const qualidadeTagEl = document.getElementById('previewQualidadeTag');
+            const nivelEl = document.getElementById('previewNivel');
+            const rollEl = document.getElementById('previewRoll');
+            const bonusEl = document.getElementById('previewBonus');
+            const extrasEl = document.getElementById('previewExtras');
+            const habilidadesEl = document.getElementById('previewHabilidades');
+            const descricaoEl = document.getElementById('previewDescricao');
+
+            // ===== MAPEAMENTO TIPO + QUALIDADE =====
+            const mapaTipo = {
+                'arma': '⚔️ Arma',
+                'armadura': '🛡️ Armadura',
+                'acessorio': '✨ Acessório',
+                'reliquia': '🔮 Relíquia',
+                'artefato': '📿 Artefato',
+                'Mobs': '👹 Mobs'
+            };
+
+            const coresQualidade = {
+                'Comum': '#888888',
+                'Raro': '#3498db',
+                'Épico': '#9b59b6',
+                'Lendário': '#f39c12',
+                'Mítico': '#e74c3c',
+                'Celestial': '#f1c40f'
+            };
+
+            const classesPorQualidade = {
+                'Comum': 'quality-comum',
+                'Raro': 'quality-raro',
+                'Épico': 'quality-epico',
+                'Lendário': 'quality-lendario',
+                'Mítico': 'quality-mitico',
+                'Celestial': 'quality-celestial'
+            };
+
+            // ===== ATUALIZAR NOME =====
+            if (nome && nome !== '') {
+                nomeEl.textContent = nome;
+                nomeEl.classList.remove('empty');
+            } else {
+                nomeEl.textContent = '— Nome não definido —';
+                nomeEl.classList.add('empty');
+            }
+
+            // ===== ATUALIZAR TAG TIPO =====
+            if (tipo && tipo !== '') {
+                tipoTagEl.textContent = mapaTipo[tipo] || tipo;
+                tipoTagEl.classList.remove('empty');
+            } else {
+                tipoTagEl.textContent = 'Tipo';
+                tipoTagEl.classList.add('empty');
+            }
+
+            // ===== ATUALIZAR TAG QUALIDADE =====
+            if (qualidade && qualidade !== '') {
+                qualidadeTagEl.textContent = qualidade;
+                qualidadeTagEl.style.color = coresQualidade[qualidade] || '#999';
+                qualidadeTagEl.classList.remove('empty', 'quality-comum', 'quality-raro', 'quality-epico', 'quality-lendario', 'quality-mitico', 'quality-celestial');
+                qualidadeTagEl.classList.add(classesPorQualidade[qualidade]);
+            } else {
+                qualidadeTagEl.textContent = 'Qualidade';
+                qualidadeTagEl.style.color = '#666';
+                qualidadeTagEl.classList.add('empty');
+            }
+
+            // ===== ATUALIZAR CLASSES DO CARD =====
+            Object.values(classesPorQualidade).forEach(cls => cardVisual.classList.remove(cls));
+            if (qualidade && qualidade !== '') {
+                cardVisual.classList.add(classesPorQualidade[qualidade]);
+            }
+
+            // ===== ATUALIZAR NÍVEL =====
+            nivelEl.textContent = nivel;
+            nivelEl.classList.remove('empty');
+
+            // ===== CALCULAR VALORES SE QUALIDADE ESTÁ DEFINIDA =====
+            if (qualidade && qualidade !== '') {
+                const regra = ItemBalanceSystem.getRegrasPorQualidade(qualidade);
+                if (regra) {
+                    // Validar e ajustar nível
+                    let nivelAjustado = nivel;
+                    if (nivel < regra.nivelMinimo) {
+                        nivelAjustado = regra.nivelMinimo;
+                    } else if (nivel > regra.nivelMaximo) {
+                        nivelAjustado = regra.nivelMaximo;
+                    }
+
+                    // Se nível foi ajustado, atualizar campo
+                    if (nivelAjustado !== nivel) {
+                        document.getElementById('manualAssitidoNivel').value = nivelAjustado;
+                        nivelEl.textContent = nivelAjustado;
+                    }
+
+                    // Calcular rolls e extras
+                    const rollInfo = ItemBalanceSystem.calcularRoll(nivelAjustado);
+                    const extraValor = ItemBalanceSystem.calcularExtraValor(nivelAjustado);
+
+                    // Atualizar ROLL
+                    rollEl.textContent = rollInfo.roll;
+                    rollEl.classList.remove('empty');
+
+                    // Atualizar BÔNUS
+                    bonusEl.textContent = '+' + rollInfo.bonus;
+                    bonusEl.classList.remove('empty');
+
+                    // Atualizar EXTRAS
+                    extrasEl.textContent = regra.extras > 0 ? `até ${regra.extras} (+${extraValor})` : '0';
+                    extrasEl.classList.remove('empty');
+
+                    // Atualizar HABILIDADES
+                    habilidadesEl.textContent = regra.habilidades > 0 ? `até ${regra.habilidades}` : '0';
+                    habilidadesEl.classList.remove('empty');
+
+                    // Atualizar DICAS
+                    const dicasTexto = `
+                        <div style="margin-bottom: 8px;"><strong>📌 Intervalo de Nível:</strong> ${regra.nivelMinimo} – ${regra.nivelMaximo}</div>
+                        <div style="margin-bottom: 8px;"><strong>🎲 Roll Calculado:</strong> ${rollInfo.roll} + ${rollInfo.bonus}</div>
+                        <div style="margin-bottom: 8px;"><strong>⭐ Máximo de Extras:</strong> ${regra.extras}</div>
+                        <div style="margin-bottom: 8px;"><strong>🔥 Máximo de Habilidades:</strong> ${regra.habilidades}</div>
+                        <div><strong>💡 Conceito:</strong> ${regra.conceito}</div>
+                    `;
+                    document.getElementById('textodicasGeracaoManual').innerHTML = dicasTexto;
+
+                    // Atualizar DESCRIÇÃO (usar conceito como placeholder)
+                    descricaoEl.textContent = regra.conceito;
+                    descricaoEl.classList.remove('empty');
+
+                    // Habilitar botão se todos os campos estão preenchidos
+                    const todosPreenchidos = nome !== '' && tipo !== '' && qualidade !== '';
+                    const btnProximo = document.getElementById('btnProximoGeracaoManual');
+                    if (todosPreenchidos) {
+                        btnProximo.disabled = false;
+                    } else {
+                        btnProximo.disabled = true;
+                    }
+                }
+            } else {
+                // Se qualidade não está definida, limpar valores
+                rollEl.textContent = '-';
+                rollEl.classList.add('empty');
+
+                bonusEl.textContent = '-';
+                bonusEl.classList.add('empty');
+
+                extrasEl.textContent = '-';
+                extrasEl.classList.add('empty');
+
+                habilidadesEl.textContent = '— nenhuma definida —';
+                habilidadesEl.classList.add('empty');
+
+                descricaoEl.textContent = '— história não definida —';
+                descricaoEl.classList.add('empty');
+
+                document.getElementById('textodicasGeracaoManual').innerHTML = 'Selecione qualidade e nível para ver informações';
+
+                // Desabilitar botão
+                const btnProximo = document.getElementById('btnProximoGeracaoManual');
+                btnProximo.disabled = true;
+            }
         }
 
-        // Processar geração manual assistida
+        // Abrir modal e inicializar preview (melhorado)
+        function abrirGeracaoManualAssistida() {
+            try {
+                // Fechar modal de opções
+                const modalOpcoes = bootstrap.Modal.getInstance(document.getElementById('modalOpcaoGerarItem'));
+                if (modalOpcoes) {
+                    modalOpcoes.hide();
+                }
+                
+                // Aguardar fechamento do modal anterior
+                setTimeout(() => {
+                    try {
+                        // Resetar formulário
+                        const form = document.getElementById('formGeracaoManualAssistida');
+                        if (form) form.reset();
+                        
+                        const nivelInput = document.getElementById('manualAssitidoNivel');
+                        if (nivelInput) nivelInput.value = '1';
+                        
+                        // Resetar todos os previews
+                        const previewIds = ['previewNome', 'previewTipo', 'previewQualidade', 'previewNivel', 'previewRoll', 'previewBonus', 'previewExtras', 'previewHabilidades'];
+                        previewIds.forEach(id => {
+                            const el = document.getElementById(id);
+                            if (el) {
+                                el.textContent = '-';
+                                el.classList.add('empty');
+                            }
+                        });
+                        
+                        // Resetar cor da qualidade
+                        const qualidadeEl = document.getElementById('previewQualidade');
+                        if (qualidadeEl) qualidadeEl.style.color = '#666';
+                        
+                        // Remover classes de qualidade do card
+                        const previewCard = document.getElementById('previewItemGeracaoManual');
+                        if (previewCard) {
+                            ['quality-comum', 'quality-raro', 'quality-epico', 'quality-lendario', 'quality-mitico', 'quality-celestial'].forEach(cls => {
+                                previewCard.classList.remove(cls);
+                            });
+                        }
+                        
+                        // Resetar dicas
+                        const dicasEl = document.getElementById('textodicasGeracaoManual');
+                        if (dicasEl) dicasEl.innerHTML = 'Selecione qualidade e nível para ver informações';
+                        
+                        // Desabilitar botão
+                        const btnProximo = document.getElementById('btnProximoGeracaoManual');
+                        if (btnProximo) btnProximo.disabled = true;
+                        
+                        // Abrir modal
+                        const modalEl = document.getElementById('modalGeracaoManualAssistida');
+                        if (modalEl) {
+                            const modal = new bootstrap.Modal(modalEl);
+                            modal.show();
+                            console.log('✅ Modal aberto com sucesso!');
+                        }
+                    } catch (erro) {
+                        console.error('❌ Erro ao preparar modal:', erro);
+                    }
+                }, 500);
+            } catch (erro) {
+                console.error('❌ Erro geral:', erro);
+            }
+        }
+
+        // Processar geração manual assistida (com validação inteligente)
         function processarGeracaoManualAssistida() {
             const nome = document.getElementById('manualAssitidoNome').value.trim();
             const tipo = document.getElementById('manualAssitidoTipo').value;
             const qualidade = document.getElementById('manualAssitidoQualidade').value;
             let nivel = parseInt(document.getElementById('manualAssitidoNivel').value) || 1;
 
+            // Validação básica
             if (!nome || !tipo || !qualidade) {
                 alert('❌ Preencha todos os campos obrigatórios!');
                 return;
             }
 
-            // Obter configuração de raridade
-            const configRaridade = tabelaRaridade[qualidade];
-            if (!configRaridade) {
+            // Validar nível usando ItemBalanceSystem
+            const validacaoNivel = ItemBalanceSystem.validarNivel(qualidade, nivel);
+            if (!validacaoNivel.valido) {
+                const novoNivel = validacaoNivel.nivelSugerido;
+                alert(`⚠️ ${validacaoNivel.mensagem}\n\nAjustando para nível ${novoNivel}...`);
+                nivel = novoNivel;
+                document.getElementById('manualAssitidoNivel').value = nivel;
+            }
+
+            // Obter regras da qualidade
+            const regra = ItemBalanceSystem.getRegrasPorQualidade(qualidade);
+            if (!regra) {
                 alert('❌ Qualidade inválida!');
                 return;
-            }
-
-            // Validar nível máximo da raridade
-            if (nivel > configRaridade.nivelMaximo) {
-                alert(`⚠️ Nível ${nivel} excede o máximo para ${qualidade} (máx: ${configRaridade.nivelMaximo})\n\nAjustando para nível ${configRaridade.nivelMaximo}...`);
-                nivel = configRaridade.nivelMaximo;
-            }
-
-            if (nivel < 1) {
-                nivel = 1;
             }
 
             // Obter valores do nível
@@ -41457,22 +43216,32 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
                 return;
             }
 
-            // Construir o ataque no formato "RollsdDado+AtK"
-            const ataque = valoresNivel.rolls + configRaridade.dadoBase + '+' + valoresNivel.atk;
+            // Calcular rolls e bônus usando ItemBalanceSystem
+            const rollInfo = ItemBalanceSystem.calcularRoll(nivel);
+            const extraValor = ItemBalanceSystem.calcularExtraValor(nivel);
+            const ataque = rollInfo.roll + '+' + rollInfo.bonus;
 
             // Armazenar valores globalmente para aplicar depois
             window.valoresGeradosManualAssistido = {
                 nome: nome,
                 tipo: tipo,
                 ataque: ataque,
-                dadoBase: configRaridade.dadoBase,
+                dadoBase: regra.dadoBase,
                 atk: valoresNivel.atk,
                 def: valoresNivel.def,
-                rolls: valoresNivel.rolls,
+                rolls: rollInfo.roll,
+                rollInfo: rollInfo,
                 nivel: nivel,
                 qualidade: qualidade,
-                nivelMaximo: configRaridade.nivelMaximo
+                nivelMaximo: regra.nivelMaximo,
+                nivelMinimo: regra.nivelMinimo,
+                extrasDisponiveis: regra.extras,
+                extraValor: extraValor,
+                habilidadesDisponiveis: regra.habilidades,
+                dadoBaseInfo: regra.dadoBase
             };
+
+            console.log('✅ Item gerado:', window.valoresGeradosManualAssistido);
 
             // Fechar modal de geração manual
             const modalManual = bootstrap.Modal.getInstance(document.getElementById('modalGeracaoManualAssistida'));
@@ -41484,7 +43253,13 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             }, 300);
         }
 
-        // Preencher o modal de item com valores gerados
+        // Inicializar listeners do modal de geração manual (após DOMContentLoaded)
+        function inicializarListenersGeracaoManual() {
+            const nomeInput = document.getElementById('manualAssitidoNome');
+            if (nomeInput) {
+                nomeInput.addEventListener('input', atualizarPreviewGeracaoManual);
+            }
+        }
         function preencherItemComValoresGerados() {
             const valores = window.valoresGeradosManualAssistido;
             
@@ -41503,9 +43278,11 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             
             // Limpar e preparar para edição
             document.getElementById('itemExtra').value = '';
-            document.getElementById('itemHabilidade').value = '';
             document.getElementById('itemMesa').value = '';
-            document.getElementById('previewItem').innerHTML = '<span class="text-muted">Pré-visualização da imagem</span>';
+            const previewCardGen = document.getElementById('previewItemEditarModal');
+            if (previewCardGen) {
+                previewCardGen.style.backgroundImage = 'none';
+            }
             document.getElementById('itemImagemUrl').value = '';
             document.getElementById('itemImagemFile').value = '';
 
@@ -41518,6 +43295,428 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
 
             // Limpar valores globais
             window.valoresGeradosManualAssistido = null;
+        }
+
+        // =============== MÓDULO AAA CARD VISUAL - Renderização e Animações ===============
+
+        const itemCardVisualModule = {
+            /**
+             * Renderiza um card visual AAA para um item
+             * @param {Object} itemData - Dados do item (nome, tipo, qualidade, nivel, etc)
+             * @param {HTMLElement} containerElement - Elemento container para inserir o card
+             */
+            renderItemCard: function(itemData, containerElement) {
+                if (!containerElement) return null;
+
+                // Mapear qualidade para classe CSS
+                const qualidadeMap = {
+                    'Comum': 'quality-comum',
+                    'Raro': 'quality-raro',
+                    'Épico': 'quality-epico',
+                    'Lendário': 'quality-lendario',
+                    'Mítico': 'quality-mitico',
+                    'Celestial': 'quality-celestial'
+                };
+
+                const qualidadeClass = qualidadeMap[itemData.qualidade] || 'quality-comum';
+                const badgeText = itemData.qualidade || 'Comum';
+
+                // Calcular cor de badge
+                const corBadge = {
+                    'Comum': '#888',
+                    'Raro': '#2196F3',
+                    'Épico': '#9C27B0',
+                    'Lendário': '#F39C12',
+                    'Mítico': '#E91E63',
+                    'Celestial': '#00BCD4'
+                };
+
+                // Criar estrutura do card
+                const cardHTML = `
+                    <div class="item-card-aaa ${qualidadeClass}" draggable="true" data-item-id="${itemData.id || Date.now()}" data-item-data='${JSON.stringify(itemData)}'>
+                        <div class="item-card-content">
+                            <div class="item-card-header">
+                                <h3 class="item-card-title">${itemData.nome || 'Item Desconhecido'}</h3>
+                                <span class="item-card-rarity ${qualidadeClass}" style="background-color: ${corBadge[itemData.qualidade] || '#888'}">
+                                    ${badgeText}
+                                </span>
+                            </div>
+                            
+                            <div class="item-card-body">
+                                <div class="item-card-stat">
+                                    <span class="item-card-stat-label">ATK</span>
+                                    <span class="item-card-stat-value">${itemData.ataque || 0}</span>
+                                </div>
+                                <div class="item-card-stat">
+                                    <span class="item-card-stat-label">DEF</span>
+                                    <span class="item-card-stat-value">${itemData.defesa || 0}</span>
+                                </div>
+                                <div class="item-card-stat">
+                                    <span class="item-card-stat-label">NÍV</span>
+                                    <span class="item-card-stat-value">${itemData.nivel || 1}</span>
+                                </div>
+                                <div class="item-card-stat">
+                                    <span class="item-card-stat-label">TIPO</span>
+                                    <span class="item-card-stat-value">${itemData.tipo || '—'}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="item-card-description">
+                                ${itemData.descricao || 'Nenhuma descrição disponível'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                containerElement.innerHTML = cardHTML;
+                const cardElement = containerElement.querySelector('.item-card-aaa');
+                
+                // Aplicar interações
+                if (cardElement) {
+                    this.applyCardInteractions(cardElement, itemData);
+                }
+
+                return cardElement;
+            },
+
+            /**
+             * Atualiza a qualidade (raridade) de um card, mudando sua animação
+             * @param {HTMLElement} cardElement - Elemento do card
+             * @param {String} qualidade - Nova qualidade (Comum, Raro, Épico, Lendário, Mítico, Celestial)
+             */
+            updateCardQuality: function(cardElement, qualidade) {
+                if (!cardElement) return;
+
+                const qualidadeMap = {
+                    'Comum': 'quality-comum',
+                    'Raro': 'quality-raro',
+                    'Épico': 'quality-epico',
+                    'Lendário': 'quality-lendario',
+                    'Mítico': 'quality-mitico',
+                    'Celestial': 'quality-celestial'
+                };
+
+                // Remover todas as classes de qualidade
+                Object.values(qualidadeMap).forEach(cls => cardElement.classList.remove(cls));
+
+                // Adicionar nova classe
+                const novaClasse = qualidadeMap[qualidade] || 'quality-comum';
+                cardElement.classList.add(novaClasse);
+
+                // Atualizar badge visual
+                const rarityBadge = cardElement.querySelector('.item-card-rarity');
+                if (rarityBadge) {
+                    const corBadge = {
+                        'Comum': '#888',
+                        'Raro': '#2196F3',
+                        'Épico': '#9C27B0',
+                        'Lendário': '#F39C12',
+                        'Mítico': '#E91E63',
+                        'Celestial': '#00BCD4'
+                    };
+                    rarityBadge.textContent = qualidade;
+                    rarityBadge.style.backgroundColor = corBadge[qualidade] || '#888';
+                    rarityBadge.className = 'item-card-rarity ' + novaClasse;
+                }
+
+                console.log(`🎨 Card atualizado para qualidade: ${qualidade}`);
+            },
+
+            /**
+             * Aplicar microinterações ao card (hover, scale, etc)
+             * @param {HTMLElement} cardElement - Elemento do card
+             * @param {Object} itemData - Dados do item
+             */
+            applyCardInteractions: function(cardElement, itemData) {
+                if (!cardElement) return;
+
+                // Adicionar listeners de drag
+                cardElement.addEventListener('dragstart', (e) => {
+                    itemDragDropModule.iniciarDragItem(e, itemData);
+                });
+
+                cardElement.addEventListener('dragend', (e) => {
+                    itemDragDropModule.finalizarDragItem(e);
+                });
+
+                // Hover visual feedback
+                cardElement.addEventListener('mouseenter', () => {
+                    cardElement.style.transform = 'scale(1.02) translateY(-5px)';
+                });
+
+                cardElement.addEventListener('mouseleave', () => {
+                    if (!cardElement.classList.contains('dragging')) {
+                        cardElement.style.transform = 'scale(1) translateY(0)';
+                    }
+                });
+
+                console.log(`✅ Interações aplicadas ao card: ${itemData.nome}`);
+            }
+        };
+
+        // =============== MÓDULO DRAG & DROP - Gerenciamento de Eventos ===============
+
+        const itemDragDropModule = {
+            /**
+             * Inicia o arraste de um item
+             * @param {DragEvent} event - Evento de drag start
+             * @param {Object} itemData - Dados do item sendo arrastado
+             */
+            iniciarDragItem: function(event, itemData) {
+                const cardElement = event.target.closest('.item-card-aaa');
+                if (!cardElement) return;
+
+                // Adicionar classe visual
+                cardElement.classList.add('dragging');
+
+                // Serializar dados do item em JSON
+                const dataJSON = JSON.stringify(itemData);
+                event.dataTransfer.effectAllowed = 'move';
+                event.dataTransfer.setData('application/json', dataJSON);
+                event.dataTransfer.setData('text/plain', dataJSON);
+
+                // Feedback visual
+                event.dataTransfer.setDragImage(cardElement, 0, 0);
+                console.log(`🎯 Iniciando arraste: ${itemData.nome}`);
+            },
+
+            /**
+             * Finaliza o arraste de um item
+             * @param {DragEvent} event - Evento de drag end
+             */
+            finalizarDragItem: function(event) {
+                const cardElement = event.target.closest('.item-card-aaa');
+                if (!cardElement) return;
+
+                // Remover classe de arraste
+                cardElement.classList.remove('dragging');
+                cardElement.style.transform = 'scale(1) translateY(0)';
+
+                console.log(`✋ Finalizando arraste`);
+            },
+
+            /**
+             * Permitir que um item seja solto em uma área (dragover)
+             * @param {DragEvent} event - Evento de drag over
+             * @param {HTMLElement} dropZone - Zona de drop
+             */
+            permitirDropInventario: function(event, dropZone) {
+                event.preventDefault();
+                event.dataTransfer.dropEffect = 'move';
+
+                if (dropZone) {
+                    dropZone.classList.add('drag-over');
+                }
+            },
+
+            /**
+             * Remover feedback visual de drag over
+             * @param {HTMLElement} dropZone - Zona de drop
+             */
+            removerDragOverFeedback: function(dropZone) {
+                if (dropZone) {
+                    dropZone.classList.remove('drag-over');
+                }
+            },
+
+            /**
+             * Receber um item solto na zona de drop
+             * @param {DragEvent} event - Evento de drop
+             * @param {HTMLElement} dropZone - Zona de drop
+             */
+            receberItemDrop: function(event, dropZone) {
+                event.preventDefault();
+                this.removerDragOverFeedback(dropZone);
+
+                try {
+                    // Recuperar dados do item
+                    const dataJSON = event.dataTransfer.getData('application/json');
+                    const itemData = JSON.parse(dataJSON);
+
+                    // Adicionar item ao inventário
+                    this.adicionarItemInventario(itemData, dropZone);
+
+                    console.log(`✅ Item recebido e adicionado: ${itemData.nome}`);
+                } catch (erro) {
+                    console.error('❌ Erro ao receber item:', erro);
+                }
+            },
+
+            /**
+             * Adicionar item ao inventário (integração com sistema existente)
+             * @param {Object} itemData - Dados do item
+             * @param {HTMLElement} dropZone - Zona de drop onde foi solto
+             */
+            adicionarItemInventario: function(itemData, dropZone) {
+                // Verificar se o sistema de inventário existe
+                if (typeof saveItemInventario !== 'function') {
+                    console.warn('⚠️ Sistema de inventário não disponível');
+                    
+                    // Fallback: adicionar visualmente à dropZone
+                    if (dropZone) {
+                        const cardElement = itemCardVisualModule.renderItemCard(
+                            itemData,
+                            document.createElement('div')
+                        );
+                        if (cardElement) {
+                            dropZone.appendChild(cardElement);
+                        }
+                    }
+                    return;
+                }
+
+                // Salvar item usando sistema existente
+                saveItemInventario(itemData, (sucesso) => {
+                    if (sucesso) {
+                        // Animar adição à dropZone
+                        if (dropZone) {
+                            const containerItem = document.createElement('div');
+                            const cardElement = itemCardVisualModule.renderItemCard(itemData, containerItem);
+                            if (cardElement) {
+                                containerItem.classList.add('inventory-item-container');
+                                dropZone.appendChild(containerItem);
+                                
+                                // Animação de entrada
+                                cardElement.style.opacity = '0';
+                                cardElement.style.transform = 'scale(0.8)';
+                                setTimeout(() => {
+                                    cardElement.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                                    cardElement.style.opacity = '1';
+                                    cardElement.style.transform = 'scale(1)';
+                                }, 10);
+                            }
+                        }
+                        console.log(`🎉 Item adicionado ao inventário: ${itemData.nome}`);
+                    }
+                });
+            },
+
+            /**
+             * Configurar uma zona de drop para aceitar itens
+             * @param {HTMLElement} dropZone - Elemento da zona de drop
+             */
+            configurarZonaDrop: function(dropZone) {
+                if (!dropZone) return;
+
+                dropZone.addEventListener('dragover', (e) => {
+                    this.permitirDropInventario(e, dropZone);
+                });
+
+                dropZone.addEventListener('dragleave', (e) => {
+                    // Verificar se o mouse realmente saiu
+                    if (e.target === dropZone) {
+                        this.removerDragOverFeedback(dropZone);
+                    }
+                });
+
+                dropZone.addEventListener('drop', (e) => {
+                    this.receberItemDrop(e, dropZone);
+                });
+
+                console.log(`✅ Zona de drop configurada`);
+            }
+        };
+
+        // =============== INICIALIZAÇÃO DOS MÓDULOS AAA ===============
+
+        // Auto-configurar zonas de drop quando a página carrega
+        document.addEventListener('DOMContentLoaded', () => {
+            // Procurar por todas as zonas de drop
+            const dropZones = document.querySelectorAll('.inventory-drop-zone');
+            dropZones.forEach(zone => {
+                itemDragDropModule.configurarZonaDrop(zone);
+            });
+            console.log(`🚀 Sistema AAA Card pronto - ${dropZones.length} zona(s) de drop configurada(s)`);
+        });
+
+        // =============== INTEGRAÇÃO COM PREVIEW AAA - Helper Functions ===============
+
+        /**
+         * Renderizar preview AAA do item após geração automática
+         * @param {Object} itemData - Dados do item gerado
+         */
+        function renderizarPreviewAaaGerado(itemData) {
+            const previewContainer = document.getElementById('previewItemGerado');
+            if (previewContainer) {
+                itemCardVisualModule.renderItemCard(itemData, previewContainer);
+                console.log(`📊 Preview AAA renderizado para: ${itemData.nome}`);
+            }
+        }
+
+        /**
+         * Renderizar card AAA durante a visualização no preview
+         * Integração com atualizarPreviewGeracaoManual()
+         */
+        function renderizarCardAaaPreview() {
+            const nome = document.getElementById('manualAssitidoNome')?.value || 'Item';
+            const tipo = document.getElementById('manualAssitidoTipo')?.value || 'Arma';
+            const qualidade = document.getElementById('manualAssitidoQualidade')?.value || 'Comum';
+            const nivel = parseInt(document.getElementById('manualAssitidoNivel')?.value || 1);
+
+            // Construir objeto temporário com dados do preview
+            const previewData = {
+                id: `preview-${Date.now()}`,
+                nome: nome,
+                tipo: tipo,
+                qualidade: qualidade,
+                nivel: nivel,
+                ataque: 0,
+                defesa: 0,
+                descricao: '🔮 Visualização de Item'
+            };
+
+            // Renderizar card
+            const previewCardContainer = document.getElementById('previewItemAaa');
+            if (previewCardContainer) {
+                itemCardVisualModule.renderItemCard(previewData, previewCardContainer);
+            }
+        }
+
+        /**
+         * Criar exemplo de item AAA para demonstração
+         * Útil para testes e validação
+         */
+        function criarExemploItemAaa() {
+            const exemplos = [
+                {
+                    nome: 'Espada do Destino',
+                    tipo: 'Espada',
+                    qualidade: 'Lendário',
+                    nivel: 15,
+                    ataque: 45,
+                    defesa: 10,
+                    descricao: 'Uma lâmina dourada que brilha com poder divino. Diz-se que esta espada foi forjada pelos deuses.'
+                },
+                {
+                    nome: 'Escudo Celestial',
+                    tipo: 'Escudo',
+                    qualidade: 'Celestial',
+                    nivel: 18,
+                    ataque: 5,
+                    defesa: 60,
+                    descricao: 'Um escudo que irradia energia celestial pura. Seus portadores são abençoados pela proteção cósmica.'
+                },
+                {
+                    nome: 'Anel Místico',
+                    tipo: 'Acessório',
+                    qualidade: 'Mítico',
+                    nivel: 12,
+                    ataque: 20,
+                    defesa: 15,
+                    descricao: 'Um anel antigo que sussurra segredos esquecidos. Seus efeitos são envolvidos em mistério.'
+                },
+                {
+                    nome: 'Pocão de Cura',
+                    tipo: 'Consumível',
+                    qualidade: 'Raro',
+                    nivel: 5,
+                    ataque: 0,
+                    defesa: 0,
+                    descricao: 'Uma poção azul cintilante que restaura vitalidade ao usuário.'
+                }
+            ];
+
+            return exemplos[Math.floor(Math.random() * exemplos.length)];
         }
 
         // =============== FUNÇÕES DE GERAÇÃO AUTOMÁTICA DE ITENS ===============
@@ -41554,39 +43753,267 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             // Nível 14
             { nivel: 14, atk: 25, def: 26, rolls: 8 },
             // Nível 15
-            { nivel: 15, atk: 27, def: 28, rolls: 9 }
+            { nivel: 15, atk: 27, def: 28, rolls: 9 },
+            // Nível 16
+            { nivel: 16, atk: 29, def: 30, rolls: 9 },
+            // Nível 17
+            { nivel: 17, atk: 31, def: 32, rolls: 10 },
+            // Nível 18
+            { nivel: 18, atk: 33, def: 34, rolls: 10 },
+            // Nível 19
+            { nivel: 19, atk: 35, def: 36, rolls: 11 },
+            // Nível 20
+            { nivel: 20, atk: 37, def: 38, rolls: 11 },
+            // Nível 21
+            { nivel: 21, atk: 39, def: 40, rolls: 12 },
+            // Nível 22
+            { nivel: 22, atk: 41, def: 42, rolls: 12 },
+            // Nível 23
+            { nivel: 23, atk: 43, def: 44, rolls: 13 },
+            // Nível 24
+            { nivel: 24, atk: 45, def: 46, rolls: 13 },
+            // Nível 25
+            { nivel: 25, atk: 47, def: 48, rolls: 14 }
         ];
 
-        // Configuração de Raridade - Define Dado Base e Nível Máximo
+        // ✨ ItemBalanceSystem - Sistema Inteligente de Balanceamento ✨
+        const ItemBalanceSystem = {
+            // Regras por qualidade (NOVO SISTEMA)
+            regras: {
+                'Comum': {
+                    nivelMinimo: 1,
+                    nivelMaximo: 10,
+                    extras: 0,
+                    habilidades: 0,
+                    dadoBase: 'd4',
+                    conceito: 'Produção simples'
+                },
+                'Raro': {
+                    nivelMinimo: 1,
+                    nivelMaximo: 10,
+                    extras: 1,
+                    habilidades: 0,
+                    dadoBase: 'd6',
+                    conceito: 'Difícil de encontrar'
+                },
+                'Épico': {
+                    nivelMinimo: 1,
+                    nivelMaximo: 15,
+                    extras: 1,
+                    habilidades: 1,
+                    dadoBase: 'd8',
+                    conceito: 'Forjado por mestres'
+                },
+                'Lendário': {
+                    nivelMinimo: 1,
+                    nivelMaximo: 20,
+                    extras: 2,
+                    habilidades: 1,
+                    dadoBase: 'd10',
+                    conceito: 'Muda batalhas'
+                },
+                'Mítico': {
+                    nivelMinimo: 1,
+                    nivelMaximo: 20,
+                    extras: 2,
+                    habilidades: 2,
+                    dadoBase: 'd12',
+                    conceito: 'Além do natural'
+                },
+                'Celestial': {
+                    nivelMinimo: 1,
+                    nivelMaximo: 25,
+                    extras: 3,
+                    habilidades: 3,
+                    dadoBase: 'd20',
+                    conceito: 'Quebra leis'
+                }
+            },
+
+            // Obter regras por qualidade
+            getRegrasPorQualidade(qualidade) {
+                return this.regras[qualidade] || null;
+            },
+
+            // Validar se nível é permitido para qualidade
+            validarNivel(qualidade, nivel) {
+                const regra = this.regras[qualidade];
+                if (!regra) return { valido: false, mensagem: 'Qualidade inválida' };
+                
+                if (nivel < regra.nivelMinimo) {
+                    return { 
+                        valido: false, 
+                        mensagem: `Nível ${nivel} é muito baixo para ${qualidade}. Mínimo: ${regra.nivelMinimo}`,
+                        nivelSugerido: regra.nivelMinimo
+                    };
+                }
+                
+                if (nivel > regra.nivelMaximo) {
+                    return { 
+                        valido: false, 
+                        mensagem: `Nível ${nivel} excede máximo para ${qualidade}. Máximo: ${regra.nivelMaximo}`,
+                        nivelSugerido: regra.nivelMaximo
+                    };
+                }
+                
+                return { valido: true, mensagem: 'Nível válido' };
+            },
+
+            // Calcular rolls baseado no nível (1d4 → 10d12)
+            calcularRoll(nivel) {
+                let numDados, tipoDado;
+                
+                // 1-3 → 1d4
+                if (nivel <= 3) {
+                    numDados = 1;
+                    tipoDado = 'd4';
+                }
+                // 4-6 → 2d4
+                else if (nivel <= 6) {
+                    numDados = 2;
+                    tipoDado = 'd4';
+                }
+                // 7-9 → 3d6
+                else if (nivel <= 9) {
+                    numDados = 3;
+                    tipoDado = 'd6';
+                }
+                // 10-12 → 4d6
+                else if (nivel <= 12) {
+                    numDados = 4;
+                    tipoDado = 'd6';
+                }
+                // 13-15 → 5d8
+                else if (nivel <= 15) {
+                    numDados = 5;
+                    tipoDado = 'd8';
+                }
+                // 16-18 → 6d8
+                else if (nivel <= 18) {
+                    numDados = 6;
+                    tipoDado = 'd8';
+                }
+                // 19-21 → 7d10
+                else if (nivel <= 21) {
+                    numDados = 7;
+                    tipoDado = 'd10';
+                }
+                // 22-24 → 8d10
+                else if (nivel <= 24) {
+                    numDados = 8;
+                    tipoDado = 'd10';
+                }
+                // 25 → 10d12
+                else {
+                    numDados = 10;
+                    tipoDado = 'd12';
+                }
+                
+                return { 
+                    numDados, 
+                    tipoDado, 
+                    roll: numDados + tipoDado,
+                    bonus: 1 + nivel
+                };
+            },
+
+            // Calcular valor de extras baseado no nível
+            calcularExtraValor(nivel) {
+                if (nivel <= 4) return 1;
+                if (nivel <= 8) return 2;
+                if (nivel <= 12) return 3;
+                if (nivel <= 16) return 4;
+                if (nivel <= 20) return 5;
+                return 6;
+            },
+
+            // Validar item completo
+            validarItem(item) {
+                const regra = this.regras[item.qualidade];
+                if (!regra) return { valido: false, erros: ['Qualidade inválida'] };
+                
+                const erros = [];
+                
+                // Validar nível
+                if (item.nivel < regra.nivelMinimo || item.nivel > regra.nivelMaximo) {
+                    erros.push(`Nível fora do intervalo permitido: ${regra.nivelMinimo}-${regra.nivelMaximo}`);
+                }
+                
+                // Validar extras
+                if ((item.extras || []).length > regra.extras) {
+                    erros.push(`Máximo ${regra.extras} extra(s) para ${item.qualidade}`);
+                }
+                
+                // Validar habilidades
+                if ((item.habilidades || []).length > regra.habilidades) {
+                    erros.push(`Máximo ${regra.habilidades} habilidade(s) para ${item.qualidade}`);
+                }
+                
+                // Nome obrigatório
+                if (!item.nome || !item.nome.trim()) {
+                    erros.push('Nome do item é obrigatório');
+                }
+                
+                // Tipo obrigatório
+                if (!item.tipo) {
+                    erros.push('Tipo do item é obrigatório');
+                }
+                
+                return {
+                    valido: erros.length === 0,
+                    erros: erros
+                };
+            }
+        };
+
+        // Configuração de Raridade - Define Dado Base e Nível Máximo (compatível com novo sistema)
         const tabelaRaridade = {
             'Comum': {
                 dadoBase: 'd4',
                 nivelMaximo: 3,
+                nivelMinimo: 1,
+                extras: 0,
+                habilidades: 0,
                 conceito: 'Produção simples'
             },
             'Raro': {
                 dadoBase: 'd6',
-                nivelMaximo: 6,
+                nivelMaximo: 8,
+                nivelMinimo: 4,
+                extras: 1,
+                habilidades: 0,
                 conceito: 'Difícil de encontrar'
             },
             'Épico': {
                 dadoBase: 'd8',
-                nivelMaximo: 6,
+                nivelMaximo: 13,
+                nivelMinimo: 9,
+                extras: 1,
+                habilidades: 1,
                 conceito: 'Forjado por mestres'
-            },
-            'Mítico': {
-                dadoBase: 'd10',
-                nivelMaximo: 9,
-                conceito: 'Além do natural'
             },
             'Lendário': {
                 dadoBase: 'd12',
-                nivelMaximo: 9,
+                nivelMaximo: 18,
+                nivelMinimo: 14,
+                extras: 2,
+                habilidades: 1,
                 conceito: 'Muda batalhas'
+            },
+            'Mítico': {
+                dadoBase: 'd10',
+                nivelMaximo: 22,
+                nivelMinimo: 19,
+                extras: 2,
+                habilidades: 2,
+                conceito: 'Além do natural'
             },
             'Celestial': {
                 dadoBase: 'd20',
-                nivelMaximo: 15,
+                nivelMaximo: 25,
+                nivelMinimo: 23,
+                extras: 3,
+                habilidades: 3,
                 conceito: 'Quebra leis'
             }
         };
