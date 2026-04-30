@@ -16670,7 +16670,7 @@
                                             <span class="item-visual-stat-value empty" id="previewRoll">-</span>
                                         </div>
                                         <div class="item-visual-stat">
-                                            <span class="item-visual-stat-label">⚔️ Bônus</span>
+                                            <span class="item-visual-stat-label">⚔️ AtK & DeF </span>
                                             <span class="item-visual-stat-value empty" id="previewBonus">-</span>
                                         </div>
                                         <div class="item-visual-stat">
@@ -43567,13 +43567,16 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
                     // ✅ CORREÇÃO: Passar qualidade E nível para calcularRoll
                     const rollInfo = ItemBalanceSystem.calcularRoll(qualidade, nivelAjustado);
                     const extraValor = ItemBalanceSystem.calcularExtraValor(nivelAjustado);
+                    
+                    // ✅ Calcular dano fixo: aumenta +1.6 a cada nível (arredondado para cima)
+                    const danoFixo = Math.ceil(nivelAjustado * 0.6);
 
                     // Atualizar ROLL
                     rollEl.textContent = rollInfo.roll;
                     rollEl.classList.remove('empty');
 
-                    // Atualizar BÔNUS
-                    bonusEl.textContent = '+' + rollInfo.bonus;
+                    // Atualizar DANO FIXO (aumenta +1 a cada 2 níveis)
+                    bonusEl.textContent = '+' + danoFixo;
                     bonusEl.classList.remove('empty');
 
                     // Atualizar EXTRAS
@@ -43587,7 +43590,8 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
                     // Atualizar DICAS
                     const dicasTexto = `
                         <div style="margin-bottom: 8px;"><strong>📌 Intervalo de Nível:</strong> ${regra.nivelMinimo} – ${regra.nivelMaximo}</div>
-                        <div style="margin-bottom: 8px;"><strong>🎲 Roll Calculado:</strong> ${rollInfo.roll} + ${rollInfo.bonus}</div>
+                        <div style="margin-bottom: 8px;"><strong>🎲 Roll Calculado:</strong> ${rollInfo.roll}</div>
+                        <div style="margin-bottom: 8px;"><strong>⚔️ AtK & DeF Fixa:</strong> +${danoFixo} (aumenta +1.6 a cada nível)</div>
                         <div style="margin-bottom: 8px;"><strong>⭐ Máximo de Extras:</strong> ${regra.extras}</div>
                         <div style="margin-bottom: 8px;"><strong>🔥 Máximo de Habilidades:</strong> ${regra.habilidades}</div>
                         <div><strong>💡 Conceito:</strong> ${regra.conceito}</div>
@@ -43736,7 +43740,10 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             // ✅ CORREÇÃO: Passar qualidade E nível para calcularRoll
             const rollInfo = ItemBalanceSystem.calcularRoll(qualidade, nivel);
             const extraValor = ItemBalanceSystem.calcularExtraValor(nivel);
-            const ataque = rollInfo.roll + '+' + valoresNivel.atk;
+            
+            // ✅ Calcular dano fixo: aumenta +0.6 a cada nível (arredondado para cima)
+            const danoFixo = Math.ceil(nivel * 0.6);
+            const ataque = rollInfo.roll + '+' + danoFixo;
 
             // Armazenar valores globalmente para aplicar depois
             window.valoresGeradosManualAssistido = {
