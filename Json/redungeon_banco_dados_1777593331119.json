@@ -576,6 +576,26 @@
       "sessoes": [],
       "sessoesPorCapitulo": {},
       "dataCriacao": 1771286634070
+    },
+    {
+      "id": 1777474042462,
+      "tipo": "Campanha",
+      "nome": "Re:Conect",
+      "episodio": 1,
+      "contexto": "",
+      "objetivo": "",
+      "nota": "",
+      "imagem": {
+        "tipo": "indexeddb",
+        "valor": "img-1777588678460-f0u1s5s8g",
+        "dataCriacao": 1777588679530
+      },
+      "locaisDisponiveis": [],
+      "capitulos": [],
+      "sessoes": [],
+      "sessoesPorCapitulo": {},
+      "dataCriacao": 1777474042462,
+      "dataAtualizacao": 1777588679530
     }
   ],
   "origens": [
@@ -2758,6 +2778,426 @@
       "ganchos": "Retorno do Rei\nGuerra no deserto\nConexão com plano elemental",
       "imagemUrl": "https://i.imgur.com/y6UlK5h.png",
       "dataCriacao": "2026-04-12T20:45:15.385Z"
+    },
+    {
+      "id": "card_1777422859201_j4jw4m5l7",
+      "nome": "Trilha Estreita",
+      "tipo": "Evento Ambiental",
+      "intensidade": 6,
+      "raridade": "Comum",
+      "deck": "montanha",
+      "pesoSorteio": 7,
+      "cooldown": 2,
+      "ativa": true,
+      "tags": [
+        "Altura",
+        "Queda",
+        "Caminho",
+        "Equilíbrio"
+      ],
+      "descricao": "A trilha se reduz a uma faixa estreita de pedra cravada na encosta. De um lado, a parede da montanha. Do outro… o vazio. O vento sopra com força irregular, empurrando o corpo sem aviso. Cada passo precisa ser calculado.\n\nNão há espaço para erro.",
+      "contexto": "Travessia em terreno extremamente estreito e perigoso.",
+      "testes": "Agilidade: manter equilíbrio\nPercepção: identificar partes instáveis\nSorte: intensidade do vento",
+      "sucessos": "O grupo atravessa com cuidado:\n\nMantém formação\nEvita acidentes\nProgride com segurança",
+      "falhas": "Erro crítico:\n\nQueda parcial ou total\nPerda de equipamentos\nSeparação do grupo",
+      "recompensas": "Atalho valioso\nPosição estratégica",
+      "consequencias": "Atraso\nFerimentos\nAbalo psicológico",
+      "ganchos": "Caminhos mais perigosos adiante\nÁrea com maior instabilidade",
+      "imagemUrl": "",
+      "dataCriacao": "2026-04-29T00:34:19.201Z"
+    },
+    {
+      "id": "card_1777422940471_f46wpcpni",
+      "nome": "Vento Cortante",
+      "tipo": "Evento Ambiental",
+      "intensidade": 7,
+      "raridade": "Comum",
+      "deck": "montanha",
+      "pesoSorteio": 6,
+      "cooldown": 2,
+      "ativa": true,
+      "tags": [
+        "Vento",
+        "Frio",
+        "Desgaste"
+      ],
+      "descricao": "Rajadas de vento descem pelas encostas como lâminas invisíveis. O ar é gelado e violento, roubando o fôlego e o equilíbrio. Ficar em pé já é difícil — avançar é uma luta constante.",
+      "contexto": "Ventos extremos dificultam movimento e sobrevivência.",
+      "testes": "Vitalidade: resistir ao frio\nAgilidade: manter estabilidade\nForça: avançar contra o vento",
+      "sucessos": "Grupo resiste:\n\nAvança lentamente\nEvita grandes danos",
+      "falhas": "O vento domina:\n\nQuedas\nExaustão\nDesvio de rota",
+      "recompensas": "Conhecimento de padrões do vento",
+      "consequencias": "Desgaste físico\nAtraso",
+      "ganchos": "Região com clima pior\nTempestade iminente",
+      "imagemUrl": "",
+      "dataCriacao": "2026-04-29T00:35:40.471Z"
+    },
+    {
+      "id": "card_1777423180477_exin0gv69",
+      "nome": "Deslizamento de Rochas",
+      "tipo": "Evento Ambiental",
+      "intensidade": 8,
+      "raridade": "Raro",
+      "deck": "montanha",
+      "pesoSorteio": 5,
+      "cooldown": 3,
+      "ativa": true,
+      "tags": [
+        "Rochas",
+        "Queda",
+        "Impacto"
+      ],
+      "descricao": "Um estalo seco ecoa… e então pedras começam a cair. Primeiro pequenas… depois grandes blocos despencam da encosta, ganhando velocidade. O som se transforma em um rugido de destruição descendo direto na direção do grupo.",
+      "contexto": "Deslizamento repentino causado por instabilidade.",
+      "testes": "Percepção: reagir rápido\nAgilidade: desviar\nSorte: intensidade",
+      "sucessos": "Grupo evita impacto direto.",
+      "falhas": "Dano severo\nBloqueio de caminho\nSeparação",
+      "recompensas": "Nova rota revelada",
+      "consequencias": "Perda de tempo\nFerimentos",
+      "ganchos": "Montanha instável\nEvento maior vindo",
+      "imagemUrl": "",
+      "dataCriacao": "2026-04-29T00:39:40.477Z"
+    },
+    {
+      "id": "card_1777423253032_fvqt8yswz",
+      "nome": "Caverna na Encosta",
+      "tipo": "Exploração",
+      "intensidade": 5,
+      "raridade": "Comum",
+      "deck": "montanha",
+      "pesoSorteio": 6,
+      "cooldown": 2,
+      "ativa": true,
+      "tags": [
+        "Caverna",
+        "Abrigo",
+        "Mistério"
+      ],
+      "descricao": "Uma abertura na rocha surge ao lado da trilha. Dentro, o vento cessa e o frio diminui. Marcas nas paredes indicam que outros já estiveram ali… mas não há sinais recentes.\n\nOu talvez… haja.",
+      "contexto": "Abrigo potencial em meio ao ambiente hostil.",
+      "testes": "Percepção: verificar segurança\nIntelecto: avaliar uso",
+      "sucessos": "Abrigo seguro:\n\nRecuperação\nPlanejamento",
+      "falhas": "Criatura presente\nInstabilidade interna",
+      "recompensas": "Descanso\nRecursos deixados",
+      "consequencias": "Emboscada\nColapso",
+      "ganchos": "Sistema de cavernas\nCriatura territorial",
+      "imagemUrl": "",
+      "dataCriacao": "2026-04-29T00:40:53.032Z"
+    },
+    {
+      "id": "card_1777423311196_qfqkv4qyy",
+      "nome": "Águia das Alturas",
+      "tipo": "Encontro",
+      "intensidade": 6,
+      "raridade": "Comum",
+      "deck": "montanha",
+      "pesoSorteio": 6,
+      "cooldown": 3,
+      "ativa": true,
+      "tags": [
+        "Águia",
+        "Altura",
+        "Ataque"
+      ],
+      "descricao": "Uma sombra passa rapidamente. Um grito agudo ecoa — e então uma criatura mergulha do céu em velocidade absurda. Uma águia gigante, com garras capazes de levantar um homem, ataca com precisão letal.",
+      "contexto": "Predador aéreo aproveitando terreno vertical.",
+      "testes": "Percepção: detectar antes\nAgilidade: evitar ataque\nCombate: repelir",
+      "sucessos": "Grupo reage e evita captura.",
+      "falhas": "Personagem agarrado\nQueda potencial\nCombate aéreo caótico",
+      "recompensas": "Pena rara\nGarras valiosas",
+      "consequencias": "Ferimentos\nCaçada contínua",
+      "ganchos": "Ninho nas alturas\nCriatura maior",
+      "imagemUrl": "",
+      "dataCriacao": "2026-04-29T00:41:51.196Z"
+    },
+    {
+      "id": "card_1777423443820_wamoj94gd",
+      "nome": "Escalada Íngreme",
+      "tipo": "Obstáculo",
+      "intensidade": 7,
+      "raridade": "Raro",
+      "deck": "montanha",
+      "pesoSorteio": 6,
+      "cooldown": 3,
+      "ativa": true,
+      "tags": [
+        "Escalada",
+        "Altura",
+        "Queda",
+        "Resistência"
+      ],
+      "descricao": "A trilha simplesmente acaba. À frente, apenas uma parede de rocha quase vertical. Marcas antigas indicam que alguém já tentou subir — algumas conseguiram… outras não. O vento sopra lateralmente, dificultando cada movimento.\n\nSubir é a única opção.",
+      "contexto": "O grupo precisa escalar para continuar.",
+      "testes": "Força: sustentar o próprio peso\nAgilidade: movimentos precisos\nVitalidade: resistir ao esforço prolongado\nSorte: estabilidade da rocha",
+      "sucessos": "O grupo sobe com dificuldade:\n\nMantém coesão\nEvita quedas graves\nAlcança o topo",
+      "falhas": "A montanha cobra:\n\nEscorregão ou queda parcial\nPerda de equipamento\nUm membro pode ficar preso",
+      "recompensas": "Acesso a área elevada\nAtalho importante",
+      "consequencias": "Exaustão\nAtraso\nRisco acumulado",
+      "ganchos": "Região mais alta e perigosa\nCaminhos ainda mais extremos",
+      "imagemUrl": "",
+      "dataCriacao": "2026-04-29T00:44:03.820Z"
+    },
+    {
+      "id": "card_1777423506527_9tk68jsnn",
+      "nome": "Ponte Natural de Pedra",
+      "tipo": "Presságio",
+      "intensidade": 7,
+      "raridade": "Comum",
+      "deck": "montanha",
+      "pesoSorteio": 6,
+      "cooldown": 2,
+      "ativa": true,
+      "tags": [
+        "Ponte",
+        "Altura",
+        "Equilíbrio"
+      ],
+      "descricao": "Uma formação natural conecta duas partes da montanha — uma ponte estreita de pedra sobre um abismo profundo. O vento atravessa o vão com força irregular, criando rajadas imprevisíveis.\n\nUm passo errado… e não há retorno.",
+      "contexto": "Travessia delicada com alto risco de queda.",
+      "testes": "Agilidade: manter equilíbrio\nPercepção: identificar rachaduras\nSorte: intensidade do vento",
+      "sucessos": "Travessia segura e controlada.",
+      "falhas": "Queda parcial ou total\nEquipamento perdido\nGrupo se separa",
+      "recompensas": "Caminho direto\nPosição estratégica",
+      "consequencias": "Ferimentos\nAtraso",
+      "ganchos": "Caminhos mais perigosos\nRegião com pontes instáveis",
+      "imagemUrl": "",
+      "dataCriacao": "2026-04-29T00:45:06.527Z"
+    },
+    {
+      "id": "card_1777423558979_1f6eveq06",
+      "nome": "Nevoeiro de Altitude",
+      "tipo": "Evento Ambiental",
+      "intensidade": 8,
+      "raridade": "Comum",
+      "deck": "montanha",
+      "pesoSorteio": 5,
+      "cooldown": 3,
+      "ativa": true,
+      "tags": [
+        "Nevoeiro",
+        "Perda de visão",
+        "Desorientação"
+      ],
+      "descricao": "Uma névoa espessa começa a subir pelas encostas, cobrindo tudo em segundos. A visibilidade cai drasticamente. Sons ficam distorcidos. Direções se perdem.\n\nA montanha desaparece ao redor do grupo.",
+      "contexto": "Ambiente de visibilidade zero com alto risco de erro.",
+      "testes": "Percepção: manter orientação\nIntelecto: navegação\nSorte: proximidade de perigos",
+      "sucessos": "Grupo mantém direção:\n\nEvita perigos\nContinua avançando",
+      "falhas": "Desvio de rota\nQuase queda\nSeparação",
+      "recompensas": "Descoberta de caminho oculto",
+      "consequencias": "Atraso\nConfusão",
+      "ganchos": "Região com fenômeno constante\nAlgo se move dentro da névoa",
+      "imagemUrl": "",
+      "dataCriacao": "2026-04-29T00:45:58.979Z"
+    },
+    {
+      "id": "card_1777423660635_pcfrq2hst",
+      "nome": "Ruínas no Pico",
+      "tipo": "Exploração",
+      "intensidade": 8,
+      "raridade": "Raro",
+      "deck": "montanha",
+      "pesoSorteio": 3,
+      "cooldown": 4,
+      "ativa": true,
+      "tags": [
+        "Ruína",
+        "Pico",
+        "Antigo",
+        "Segredo"
+      ],
+      "descricao": "No topo da montanha, estruturas antigas resistem ao tempo — colunas quebradas, inscrições desgastadas e sinais de uma civilização que não deveria existir tão alto. O ar é rarefeito… e o silêncio é absoluto.",
+      "contexto": "Ruína antiga em local extremo.",
+      "testes": "Percepção: detectar perigos\nIntelecto: decifrar inscrições\nSorte: estado da estrutura",
+      "sucessos": "Olá, meu caro amigo Chat. Então, eu sou um mestre de RPG, anteriormente eu criei um sistema de bloco que esse sistema auxilia o mestre a fazer ações aleatórias e tudo mais. Meio que como pra determinar algumas coisas aleatórias a serem nem tanto aleatórias, sabe? Um exemplo, quando os jogadores viajam, pode acontecer qualquer coisa na viagem. E isso ajuda a deixar o mundo mais vivo, etc. Com o sistema de blocos que eu criei. Só que eu perdi o sistema de bloco do mais e eu queria criar um sistema de ação pra RPG de mesa pra ajudar a auxiliar o mestre em situações aleatórias, no caso, em situações de viagem, em uma guerra, em qualquer lugar que possa acontecer coisas aleatórias. Um exemplo, se o jogador vai do ponto A ao ponto B, em uma viagem de uma vila a outra, vai acontecer alguma coisa, se não são horas ou dias, ou se não são horas, são dias, são semanas de viagem, entendeu? Então pode acontecer alguma coisa ou não pode acontecer, entendeu? Eles têm que se alimentar, entendeu? Então eu queria criar um sistema de cardaction RPG que é pra diversas situações, só que eu queria pelo menos criar as cartas, né? Pra cada região, tipo Trunda, que é gelo, regiões gélidas, desérticas, regiões na costa, né? Que é próximo do mar, no mar, no ar, que pode ser se vai que eles voam, né? No ar, pra diversas regiões, pra diversos negócios, tipo pra Pântano e tudo mais, pro Inferno, né? Que é um lugar de magma, né? E quente, pro plano espiritual, pro céu, o céu no caso é o plano celestial, né? E pra diversas coisas, até pras coisas básicas, tipo pra guerra, um card de guerra, entendeu? Os jogadores andarão dentro do campo de guerra e pode acontecer qualquer coisa relacionada à guerra, entendeu? Seriam cartas pré-determinadas que ficam ciclando de acordo com os usos dela pra cada ação que vá acontecer no determinado tempo. Eu queria criar um sisteminha desse e aí como é que nós podemos fazer pra ficar maneiro?\nÉ o meu RPG, ele tem, ele é muito narrativo, mas às vezes tem pegada tática, mas ele é bem mais narrativo, tá? Sobre as regras, o meu sistema utiliza rolagem de dado D6. Utiliza bastante rolagem de dado, que é um RPG de mesa narrativo na internet, né? E eu acho que a quantidade de cartas que vai acontecer vai ser pelo tempo, vai ser decidida pelo tempo, né? a quantidade de cartas que podem aparecer. A distância vai ajudar bastante a região, né? Eu acho que vai ser decidido por rolagem mesmo, a compra de carta. A quantidade de carta vai depender do tempo e da distância, né? Se é um lugar muito longe e eles forem mais rápido, vai ter menos cartas. Só que nesse mesmo lugar, a mesma distância for feito de outra forma, ele vai ter mais cartas também. A quantidade de cartas por situação vai ser o seguinte, vai depender do tempo e da distância. A distância, geralmente é o que vai definir a quantidade de carta, só que essa quantidade de carta pode variar de acordo com o tempo, entendeu? Porque pode ser que eles estejam de carroça ou estejam a pé, entendeu? Então vai variar. Pode ter mais eventos em uma distância pequena por eles estarem a pé, entendeu? O nível de complexidade da mecânica. Pode ser mecânicas mais simples, porém pode ter algumas meio complexas também, não tem problema, tá? Meu sistema sim usa atributos, os atributos são força, vitalidade, agilidade, percepção, intelecto e sorte. Se eu não me engano, são seis atributos. Deixa eu só ver. Força, vitalidade, agilidade, percepção, intelecto e sorte. A sorte é um fator crucial do meu sistema, que eu uso bastante, tá? O dado pra definir as rolagem é o D6, tá? O foco é mais narrativo, só que também tem que ter combate, tá? Então não tem que ter uma dificuldadezinha, tá? Não é só barração. Agora me ajuda com essas informações aí.\nEntão, do jeito que as cartas vão ser, é bom ter algumas de objetivos e rápidas, mas também é bom ter umas detalhadas e complexas, assim, ter uma maior variedade, tá? Ó, na segunda opção, que é o que você quer que eu faça com as cartas, elas podem apresentar problemas, mas também podem trazer soluções de mecânicas completas, tá? O estilo do mundo é um mundo medieval. Eu acho que seria um high fantasy, né? Um high fantasy que tem elfo, tem anjo, tem demônio, tem um monte de coisa, então eu acho que seria um high fantasy.\nme da um nome bom para esse sistema curto porem visual\nvou passar isso em um sistem de rpg meu consegue fazer um promp...... tem que ter um grid para as cartas que ao clicar abre cada carta para poder editar etc... claro e tem que ter um botao para cadastrar essas cartas e um botao para jogar ne... utilizar o sistema que criamos tipo um game sabe ..... \neu meio que ja presetei a base essa e a pagina atualiza o promp para fazer o sistema\nos tipos de decks quais sao\nme passa a lista somente \na logica e funcionamento dos sistema de cartas consegue me passar para mandar para ia ver se esta correta\nesse o card od grid vamos t ualizar ele para ficar melhor\nos tipos que e flash ou cenas podemos deixar para colocar outras coisa \nentao eu quero isso quall os tipos so quero eles\nok.. que fizemos as atualizacoes vamos comecar a criar os decks ....\nvamos fazer o deck de jornada \nNNo meu sistema tem dois botao um de importar com funcao de importar por aba ou tudo e a mesma coisa para inscronizar mas eu queriaum funcao diferente mas nao sei com ofazer e um funcao que importar qualquer informacao sabe e com palavras chaves ele implementa no lugar certo sacou tem com foazer isso nao sei se entendue\nvoltando vmaos fazer deck de Jornada vamos fazer as primeiras cartas\npow meu irmao cade as informacoes tudo certinho das cartas voce ta resumindo isso ai\nfaz mas 2\nfaz mas 2\nconsegue me passar a intencidade correta por numeracao tbm de 0 a 10 das que fizemos so a intencidade\nagr quando for fazer mas cartas coloca por numero intenisadade bllz... vamos continuar\nfaz ma 2\ncoloca uma carta de eventos da carroagem\nagora coloca um evento da carroagem dos jogadores\nFaça uma versão mais pesada chamada “Sabotagem na Carroagem”\npode ser\nFechar as 20 cartas completas do deck Jornada\nComeçar o Deck Floresta que combina muito com Jornada\nCompletar as 20 cartas do Deck Floresta\nda carta 12 para frente voce cnao deu detalhes \nEU precebi que os campos estao com pouca informacao tipo resultados, recompensa, etc... no comeco vc estava colocando mas coisas deixar Descrição Narrativa para baixo com mas detalhs se tiver pouco texto fica ruim sacou .....\nnao precisa... vamos fazer deck de Trunda/Gelo\nContinue agora com Cartas 06–10\nMostre cartas 11–20 incluindo lendárias\nvamos fazer da 12 a 15\nRefazer também 16–20 nesse mesmo padrão (lendárias fortes)\ndeserto agora vamos fazer um deck maneiro para deserto bllz faz as 5 primeiras\nContinue com as cartas 06–10 já aumentando o nível\nQuero ver as Cartas 11–20 com lendárias INSANAS tipo “Tempestade Viva”, “Rei das Areias”\nrefaz das cart 16 a 20 denovo que tem informacao faltando\nvamos fazer de montanha agora\nconsegue fazer mas 5 da de montanha",
+      "falhas": "Armadilhas ativadas\nEstrutura instável\nAlgo desperta",
+      "recompensas": "Artefatos antigos\nConhecimento raro",
+      "consequencias": "Combate\nAtraso",
+      "ganchos": "Civilização perdida\nGuardião do pico",
+      "imagemUrl": "",
+      "dataCriacao": "2026-04-29T00:47:40.635Z"
+    },
+    {
+      "id": "card_1777423725584_w01ymzze3",
+      "nome": "Predador das Nuvens",
+      "tipo": "Combate Mortal",
+      "intensidade": 9,
+      "raridade": "Raro",
+      "deck": "montanha",
+      "pesoSorteio": 2,
+      "cooldown": 4,
+      "ativa": true,
+      "tags": [
+        "Predador",
+        "Aéreo",
+        "Emboscada"
+      ],
+      "descricao": "Acima das nuvens, algo se move. Primeiro uma sombra… depois um mergulho veloz. Uma criatura gigantesca desce do céu, aproveitando a altura e o vento para atacar com força devastadora antes de subir novamente.\n\nVocês estão no território dela.",
+      "contexto": "Predador aéreo dominante da região.",
+      "testes": "Percepção: antecipar ataque\nAgilidade: evitar investida\nCombate: enfrentar ou repelir",
+      "sucessos": "Grupo resiste:\n\nEvita ataques críticos\nConsegue reagir",
+      "falhas": "Ataque devastador:\n\nDano severo\nPersonagem pode ser levado\nCombate em desvantagem",
+      "recompensas": "Materiais raros\nTroféus da criatura",
+      "consequencias": "Ferimentos graves\nCaçada contínua",
+      "ganchos": "Ninho nas alturas\nVersão ainda maior\nCriatura lendária",
+      "imagemUrl": "",
+      "dataCriacao": "2026-04-29T00:48:45.584Z"
+    },
+    {
+      "id": "card_1777423909057_okxh85wvl",
+      "nome": "Beco Marcado por Sangue",
+      "tipo": "Exploração",
+      "intensidade": 6,
+      "raridade": "Comum",
+      "deck": "guerra",
+      "pesoSorteio": 6,
+      "cooldown": 2,
+      "ativa": true,
+      "tags": [
+        "Combate",
+        "Rastros",
+        "Magia",
+        "Investigação"
+      ],
+      "descricao": "Um beco estreito, escondido entre prédios antigos. As paredes estão rachadas, o chão manchado por sangue seco e marcas profundas indicam um confronto violento. O ar ainda carrega uma leve vibração mágica… como se a batalha tivesse acabado há pouco.",
+      "contexto": "Percepção: analisar o ambiente\nIntelecto: interpretar energia mágica\nSorte: determinar quão recente foi o evento",
+      "testes": "Percepção: antecipar ataque\nAgilidade: evitar investida\nCombate: enfrentar ou repelir",
+      "sucessos": "Leitura incorreta:\n\nInterpretação errada dos eventos\nCaminho falso\nPode atrair atenção indesejada",
+      "falhas": "Ataque devastador:\n\nDano severo\nPersonagem pode ser levado\nCombate em desvantagem",
+      "recompensas": "Informação tática\nResquícios mágicos utilizáveis",
+      "consequencias": "Ser seguido\nEvento encadeado",
+      "ganchos": "Servos envolvidos retornam\nInvestigação leva a novo confronto",
+      "imagemUrl": "",
+      "dataCriacao": "2026-04-29T00:51:49.057Z"
+    },
+    {
+      "id": "card_1777423999976_2r6930mtd",
+      "nome": "Telhado Sob Observação",
+      "tipo": "Encontro",
+      "intensidade": 5,
+      "raridade": "Comum",
+      "deck": "guerra",
+      "pesoSorteio": 6,
+      "cooldown": 2,
+      "ativa": true,
+      "tags": [
+        "Telhado",
+        "Espionagem",
+        "Emboscada"
+      ],
+      "descricao": "Nos telhados da cidade, uma presença observa silenciosamente. Silhuetas se movem entre antenas e caixas d’água. A visão dali cobre ruas inteiras… perfeito para vigiar ou atacar.",
+      "contexto": "Um Mestre ou Servo está monitorando a área.",
+      "testes": "Percepção: detectar presença\nAgilidade: se movimentar sem ser visto\nSorte: determinar intenção",
+      "sucessos": "Grupo identifica primeiro:\n\nEvita emboscada\nPode contra-atacar\nGanha vantagem tática",
+      "falhas": "O grupo é observado:\n\nEmboscada surpresa\nRastreamento\nPerda de posição estratégica",
+      "recompensas": "Posição elevada\nInformação de movimentação inimiga",
+      "consequencias": "Passam a ser alvo\nEvento encadeado",
+      "ganchos": "Mestre recorrente\nZona de vigilância constante",
+      "imagemUrl": "",
+      "dataCriacao": "2026-04-29T00:53:19.976Z"
+    },
+    {
+      "id": "card_1777424106554_tuebyr164",
+      "nome": "Igreja Neutra",
+      "tipo": "Social",
+      "intensidade": 3,
+      "raridade": "Comum",
+      "deck": "guerra",
+      "pesoSorteio": 7,
+      "cooldown": 2,
+      "ativa": true,
+      "tags": [
+        "Refúgio",
+        "Trégua",
+        "Informação"
+      ],
+      "descricao": "Uma igreja silenciosa em meio à cidade. O ar é pesado, mas estável. Símbolos mágicos discretos indicam que aquele lugar é protegido — um território neutro onde conflitos são proibidos… pelo menos em teoria.",
+      "contexto": "Local seguro para Mestres durante a guerra.",
+      "testes": "Percepção: identificar presença de outros\nSocial: negociar ou obter informação\nIntelecto: entender regras do local",
+      "sucessos": "Interação positiva:\n\nDescobre informações importantes\nPossível aliança\nRecuperação segura",
+      "falhas": "Tensão cresce:\n\nConflito indireto\nInformação enganosa\nMarca como alvo",
+      "recompensas": "Cura leve\nInformação estratégica",
+      "consequencias": "Inimizades\nVigilância constante",
+      "ganchos": "Reuniões importantes\nQuebra da neutralidade",
+      "imagemUrl": "",
+      "dataCriacao": "2026-04-29T00:55:06.554Z"
+    },
+    {
+      "id": "card_1777424170891_w64meb95t",
+      "nome": "Invocação Incompleta",
+      "tipo": "Evento Sobrenatural",
+      "intensidade": 8,
+      "raridade": "Raro",
+      "deck": "guerra",
+      "pesoSorteio": 4,
+      "cooldown": 4,
+      "ativa": true,
+      "tags": [
+        "Ritual",
+        "Invocação",
+        "Anomalia"
+      ],
+      "descricao": "Um círculo mágico instável pulsa no chão. Fragmentos de energia se rompem no ar… e algo começa a se formar — incompleto, distorcido, instável. Não é um Servo… mas também não é algo comum.",
+      "contexto": "Um ritual falhou ou foi interrompido.",
+      "testes": "Intelecto: entender o ritual\nPercepção: identificar perigo\nSorte: determinar resultado da invocação",
+      "sucessos": "Grupo controla a situação:\n\nInterrompe ou estabiliza\nEvita manifestação hostil\nPode extrair energia",
+      "falhas": "Manifestação desc\n\nCriatura instável surge\nAtaque imediato\nÁrea afetada",
+      "recompensas": "Fragmentos mágicos\nConhecimento arcano",
+      "consequencias": "Instabilidade na região\nAtração de outros Mestres",
+      "ganchos": "Ritual maior\nEntidade incompleta retorna",
+      "imagemUrl": "",
+      "dataCriacao": "2026-04-29T00:56:10.891Z"
+    },
+    {
+      "id": "card_1777424230446_3f9bbbyjz",
+      "nome": "Caçada Noturna",
+      "tipo": "Perseguição",
+      "intensidade": 7,
+      "raridade": "Raro",
+      "deck": "guerra",
+      "pesoSorteio": 5,
+      "cooldown": 3,
+      "ativa": true,
+      "tags": [
+        "Caçada",
+        "Servo",
+        "Noite"
+      ],
+      "descricao": "A noite cobre a cidade… e algo se move com propósito. Sons de impacto ecoam à distância. Um Servo está caçando outro — e o grupo está no caminho.",
+      "contexto": "Conflito ativo entre participantes da guerra.",
+      "testes": "Percepção: identificar origem\nSorte: proximidade do combate\nAgilidade: evitar envolvimento",
+      "sucessos": "Grupo controla a situação:\n\nEvita confronto direto\nPode observar e aprender\nEscolhe intervir ou não",
+      "falhas": "Grupo entra no c\n\nDano colateral\nTorna-se alvo\nCombate inevitável",
+      "recompensas": "Informação sobre Servos\nOportunidade tática",
+      "consequencias": "Inimizade\nExposição",
+      "ganchos": "Rivalidade direta\nNova caçada",
+      "imagemUrl": "",
+      "dataCriacao": "2026-04-29T00:57:10.446Z"
+    },
+    {
+      "id": "card_1777424295892_4rolj2csw",
+      "nome": "Distrito Comercial em Ruína",
+      "tipo": "Evento Ambiental",
+      "intensidade": 7,
+      "raridade": "Raro",
+      "deck": "guerra",
+      "pesoSorteio": 5,
+      "cooldown": 3,
+      "ativa": true,
+      "tags": [
+        "Cidade",
+        "Civis",
+        "Destruição"
+      ],
+      "descricao": "Explosões ecoam, vitrines estouram e pessoas correm desesperadas. Um confronto aconteceu ali há instantes — ou ainda está acontecendo. A linha entre guerra oculta e caos público foi quebrada.",
+      "contexto": "Combate exposto envolvendo civis.",
+      "testes": "Percepção: avaliar situação\nAgilidade: evitar danos\nSocial: lidar com civis",
+      "sucessos": "Grupo age com c\n\nEvita danos\nPode salvar civis\nMantém discrição",
+      "falhas": "Caos total:\n\nGrupo se envolve\nAutoridades aparecem\nExposição da guerra",
+      "recompensas": "Reconhecimento\nInformação\nRecursos",
+      "consequencias": "Caça policial\nReputação afetada",
+      "ganchos": "Investigação oficial\nGuerra mais exposta",
+      "imagemUrl": "",
+      "dataCriacao": "2026-04-29T00:58:15.892Z"
     }
   ],
   "regioes": [
@@ -15530,103 +15970,339 @@
     },
     {
       "id": "npc_1777174660808_nlysjodjs",
-      "nome": "Raphael",
+      "nome": "Raphael dACAEN",
       "tipo": "NPC",
       "npcCategoria": "NPC",
       "npcTipo": "Aliados",
       "raca": "Humano",
       "racaID": "1767512913087",
-      "classe": "Guerreiro",
-      "classeID": "1767935738130",
+      "classe": "Cavaleiro",
+      "classeID": "1777178113665",
       "origem": "Alagrann",
       "origemID": "1769383623901",
       "descricao": "",
       "idade": null,
       "atributos": {
         "forca": {
-          "base": 10,
+          "base": 72,
           "extra": 0,
-          "total": 0
+          "total": 72
         },
         "vitalidade": {
-          "base": 10,
+          "base": 56,
           "extra": 0,
-          "total": 0
+          "total": 66
         },
         "agilidade": {
-          "base": 10,
+          "base": 61,
           "extra": 0,
-          "total": 0
+          "total": 61
         },
         "inteligencia": {
-          "base": 10,
+          "base": 47,
           "extra": 0,
-          "total": 0
+          "total": 52
         },
         "percepcao": {
-          "base": 10,
+          "base": 58,
           "extra": 0,
-          "total": 0
+          "total": 58
         },
         "sorte": {
-          "base": 10,
+          "base": 73,
           "extra": 0,
-          "total": 0
+          "total": 73
         }
       },
       "saude": {
-        "atual": 0,
-        "maxima": 100,
-        "extra": 0
+        "atual": 237,
+        "maxima": 237,
+        "extra": 50
       },
       "energia": {
-        "atual": 0,
-        "maxima": 100,
+        "atual": 75,
+        "maxima": 75,
         "extra": 0
       },
       "fadiga": {
-        "atual": 0,
-        "maxima": 100,
+        "atual": 70,
+        "maxima": 70,
         "extra": 0
       },
       "statusSecundarios": {
         "prontidao": {
           "extra": 0,
-          "total": 0,
+          "total": 129,
           "bonus": 0
         },
         "ataque": {
           "extra": 0,
-          "total": 0,
+          "total": 10,
           "bonus": 0
         },
         "defesa": {
           "extra": 0,
-          "total": 0,
+          "total": 7,
           "bonus": 0
         },
         "reacao": {
           "extra": 0,
-          "total": 6,
+          "total": 9,
           "bonus": 0
         },
         "precisao": {
           "extra": 0,
-          "total": -3,
+          "total": 5,
           "bonus": 0
         },
         "evasao": {
           "extra": 0,
-          "total": -3,
+          "total": 5,
           "bonus": 0
         }
       },
-      "sorteBonus": 0,
+      "sorteBonus": 2,
       "tricksterValue": 0,
       "condicoes": [],
-      "aptidoes": [],
+      "aptidoes": [
+        {
+          "nome": "Atletismo",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Sobrevivência",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Vontade",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Tolerância",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Liderança",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Diplomacia",
+          "nivel": 3,
+          "bonusAplicados": false
+        }
+      ],
       "ganhasAptidoes": 0,
-      "habilidades": [],
+      "habilidades": [
+        {
+          "id": 1777588872626.059,
+          "nome": "Adaptabilidade",
+          "tipo": "racial",
+          "descricao": "O jogador pode ajustar na sua ficha um atributo chave (exceto sua sorte) antes da campanha iniciar, assim se adaptando como qualquer humano do mundo de Re'Dungeon.\nAjusta um atributo principal antes da campanha\nMaior flexibilidade no build do personagem\nSem limitações de especialização\n",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512913087,
+          "dataAplicacao": "2026-04-30T22:41:12.626Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777588872627.873,
+          "nome": "Versatilidade",
+          "tipo": "racial",
+          "descricao": "O jogador pode aprender uma categoria de art que possua no sistema, assim se tornando uma especialização única como se fosse uma classe.\nAprende uma categoria de arte extra\nCombina especialidades de forma única\nExemplo: Um mago parradeiro",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512913087,
+          "dataAplicacao": "2026-04-30T22:41:12.627Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777588872627.4785,
+          "nome": "Ambição",
+          "tipo": "racial",
+          "descricao": "O jogador declara uma ambição que esteja de acordo com seu background. Durante eventos e acontecimentos na campanha que estejam com sua ambição em jogo, o jogador recebe o benefício de incentivo.\nBônus +3 em rolagens relacionadas à ambição\nIncentivo narrativo durante a campanha\nConexão com objetivos pessoais",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512913087,
+          "dataAplicacao": "2026-04-30T22:41:12.627Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777588872627.9797,
+          "nome": "Vontade Inabalavel",
+          "tipo": "Duradoura",
+          "descricao": "A força do humano não está no corpo, mas na recusa em desistir. Sempre que o personagem estiver sob efeitos de medo, intimidação, controle mental ou penalidades emocionais, ele recebe +2 em Testes de Resistência mental e emocional.\n\nAlém disso, uma vez por sessão, ao cair abaixo de 30% dos recursos principais (HP, Energia ou Fadiga), o humano ignora uma penalidade negativa ativa por 1 turno.",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Pessoal",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512913087,
+          "dataAplicacao": "2026-04-30T22:41:12.627Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777588872627.4834,
+          "nome": "Poder Latente",
+          "tipo": "Duradoura",
+          "descricao": "Quando pressionado ao limite, algo desperta. Durante 1 turno, o humano escolhe um atributo principal e recebe +3 temporário nele.\n\nSe usado abaixo de 25% de HP, o bônus aumenta para +5, mas o personagem sofre fadiga narrativa após o efeito (descrita pelo mestre).",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "0",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512913087,
+          "dataAplicacao": "2026-04-30T22:41:12.627Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777588872627.9275,
+          "nome": "Aprendizado ",
+          "tipo": "Duradoura",
+          "descricao": "Humanos aprendem observando erros — próprios e alheios. Sempre que o personagem falhar um teste relacionado a uma Art, perícia ou ação repetível, ele recebe um Bônus de +1 na próxima tentativa igual durante a mesmo combate.\n\nEsse bônus não se acumula, mas pode ser aplicado novamente após outra falha diferente.",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "0",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512913087,
+          "dataAplicacao": "2026-04-30T22:41:12.627Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777588872627.7097,
+          "nome": "Adaptação",
+          "tipo": "Duradoura",
+          "descricao": "Ao sofrer dano de um tipo específico (físico, elemental ou efeito especial), o humano ajusta seu corpo e mente. Até o final do próximo turno, recebe redução leve do mesmo tipo de dano ou 2d6 Defesa contra aquela fonte específica.\nNão funciona contra o mesmo tipo de dano duas vezes seguidas sem intervalo.",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Pessoal",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512913087,
+          "dataAplicacao": "2026-04-30T22:41:12.627Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777589142267,
+          "nome": "Guarda Protetora",
+          "tipo": "fadiga",
+          "categoria": "Defensivas",
+          "circulo": "",
+          "tipoCusto": "Fadiga",
+          "tipoAcao": "Duradoura",
+          "recarga": "3",
+          "duracao": "2 TURNOS",
+          "alcance": "n/d",
+          "alvos": "1",
+          "custo": "12 FaD",
+          "dados": "Ler Descrição",
+          "descricao": "O Cavaleiro assume uma postura defensiva, protegendo um aliado adjacente. Durante 2 turnos, 30% do dano recebido pelo aliado é redirecionado para o Cavaleiro. O Cavaleiro recebe +1 em testes de resistência contra efeitos que afetariam o aliado protegido. Se o dano redirecionado exceder 50 pontos por turno, o Cavaleiro gera 1 acúmulo de Honra.",
+          "cantico": "",
+          "condicoes": [],
+          "imagem": "",
+          "dataCriacao": "2026-04-30T22:45:42.267Z"
+        },
+        {
+          "id": 1777589351687,
+          "nome": "Carga Montada",
+          "tipo": "fadiga",
+          "categoria": "Ofensivas",
+          "circulo": "",
+          "tipoCusto": "Fadiga",
+          "tipoAcao": "Imediata",
+          "recarga": "4",
+          "duracao": "0",
+          "alcance": "8 metros",
+          "alvos": "1",
+          "custo": "15 FaD",
+          "dados": "🎲 4d10+12",
+          "descricao": "O Cavaleiro avança rapidamente no lombo de seu corcel, movimentando-se até 8 metros em linha reta e causando 4d10+12 de dano físico ao primeiro inimigo atingido. O alvo é derrubado se falhar em um teste de Força. Se consumir 1 acúmulo de Honra, o Cavaleiro causa +2d8 adicional e todos os inimigos em um raio de 2 metros do alvo sofrem 50% do dano da carga.",
+          "cantico": "",
+          "condicoes": [],
+          "imagem": "",
+          "dataCriacao": "2026-04-30T22:49:11.687Z"
+        },
+        {
+          "id": 1777589473866,
+          "nome": "Resolução do Sacrifício",
+          "tipo": "fadiga",
+          "categoria": "Defensivas",
+          "circulo": "",
+          "tipoCusto": "Fadiga",
+          "tipoAcao": "Duradoura",
+          "recarga": "6",
+          "duracao": "2 T",
+          "alcance": "5 metros",
+          "alvos": "aliados",
+          "custo": "25 FaD",
+          "dados": "n/d ",
+          "descricao": "O Cavaleiro se posiciona entre seus aliados e o perigo. Durante 2 turnos, todos os danos dirigidos a aliados dentro de 5 metros são absorvidos pelo Cavaleiro em sua totalidade. O Cavaleiro não pode se mover durante este efeito, mas recebe +2 em testes de resistência. Se o Cavaleiro absorver dano suficiente para exceder 100 pontos por turno, o próximo Carga Montada tem sua recarga reduzida em 1 turno.",
+          "cantico": "",
+          "condicoes": [],
+          "imagem": "",
+          "dataCriacao": "2026-04-30T22:51:13.866Z"
+        },
+        {
+          "id": 1777590585931,
+          "nome": "Corte Final: Espada da Justiça",
+          "tipo": "fadiga",
+          "categoria": "Ofensivas",
+          "circulo": "",
+          "tipoCusto": "Fadiga",
+          "tipoAcao": "Imediata",
+          "recarga": "5",
+          "duracao": "0",
+          "alcance": "CaC",
+          "alvos": "1",
+          "custo": "22 FaD",
+          "dados": "6d12+250%",
+          "descricao": "O Cavaleiro realiza um ataque final devastador que causa 6d12+250% de dano físico. Se o alvo estiver sob efeitos de redução de defesa ou sangramento, o dano é aumentado em 75%. Se consumir todos os acúmulos de Honra (máx. 3), o ataque também causa um acerto crítico garantido e restaura 30% do dano causado como Vitalidade.",
+          "cantico": "",
+          "condicoes": [],
+          "imagem": "",
+          "dataCriacao": "2026-04-30T23:09:45.931Z"
+        }
+      ],
       "inventario": [],
       "imagem": "https://epic7db.com/images/artifacts/thorn-of-the-blue-rose.webp",
       "morto": false
@@ -15648,78 +16324,78 @@
         "forca": {
           "base": 10,
           "extra": 0,
-          "total": 0
+          "total": 10
         },
         "vitalidade": {
           "base": 10,
           "extra": 0,
-          "total": 0
+          "total": 10
         },
         "agilidade": {
           "base": 10,
           "extra": 0,
-          "total": 0
+          "total": 10
         },
         "inteligencia": {
           "base": 10,
           "extra": 0,
-          "total": 0
+          "total": 10
         },
         "percepcao": {
           "base": 10,
           "extra": 0,
-          "total": 0
+          "total": 10
         },
         "sorte": {
           "base": 10,
           "extra": 0,
-          "total": 0
+          "total": 10
         }
       },
       "saude": {
         "atual": 0,
-        "maxima": 100,
+        "maxima": 20,
         "extra": 0
       },
       "energia": {
         "atual": 0,
-        "maxima": 100,
+        "maxima": 14,
         "extra": 0
       },
       "fadiga": {
         "atual": 0,
-        "maxima": 100,
+        "maxima": 10,
         "extra": 0
       },
       "statusSecundarios": {
         "prontidao": {
           "extra": 0,
-          "total": 0,
+          "total": 21,
           "bonus": 0
         },
         "ataque": {
           "extra": 0,
-          "total": 0,
+          "total": 2,
           "bonus": 0
         },
         "defesa": {
           "extra": 0,
-          "total": 0,
+          "total": 2,
           "bonus": 0
         },
         "reacao": {
           "extra": 0,
-          "total": 6,
+          "total": 7,
           "bonus": 0
         },
         "precisao": {
           "extra": 0,
-          "total": 0,
+          "total": 1,
           "bonus": 0
         },
         "evasao": {
           "extra": 0,
-          "total": 0,
+          "total": 1,
           "bonus": 0
         }
       },
@@ -15732,8 +16408,8 @@
       "inventario": [],
       "imagem": {
         "tipo": "indexeddb",
-        "id": "img-1777174724857-00xqk5d8k",
-        "dataCriacao": 1777174726329
+        "id": "img-1777472358003-b1b031d1a",
+        "dataCriacao": 1777472359627
       },
       "morto": false
     },
@@ -17785,32 +18461,72 @@
   ],
   "itens": [
     {
-      "nome": "Sultrann [Reforjado 🔃]",
-      "qualidade": "Mítico",
-      "level": 8,
-      "levelMax": 9,
-      "ataque": "4d10+13",
-      "extra": "+3 PreC",
-      "habilidade": "Chance Critica: Acerto critico agora e 5!",
-      "historia": "",
+      "nome": "Armadura Enegrecida",
+      "qualidade": "Raro",
+      "level": 10,
+      "levelMax": 10,
+      "ataque": "4d6+5",
+      "extra": "+50 Saude",
+      "Mesa": "",
+      "tipo": "armadura",
+      "imagem": "https://i.imgur.com/UhhqAq9.png",
+      "imagemIndexedDBId": null,
+      "habilidade": "",
+      "habilidades": [],
+      "maxSlotsHabilidades": 0
+    },
+    {
+      "nome": "Sultrann",
+      "qualidade": "Lendário",
+      "level": 10,
+      "levelMax": 20,
+      "ataque": "4d10+5",
+      "extra": "+3 Prec",
+      "Mesa": "",
       "tipo": "arma",
       "imagem": "https://i.pinimg.com/736x/f4/09/da/f409da83e74627d3bde9f00d319b2744.jpg",
       "imagemIndexedDBId": null,
-      "id": "🎒 itens_1769562336161_ey6hs8yjh"
+      "habilidades": [],
+      "maxSlotsHabilidades": 1
     },
     {
-      "nome": "Lamina Fragmentada",
-      "qualidade": "Celestial",
+      "nome": "Espada Eterea",
+      "qualidade": "Épico",
       "level": 15,
       "levelMax": 15,
-      "ataque": "9d20+27",
-      "extra": "+3 Precisão",
-      "habilidade": "",
-      "historia": "",
+      "ataque": "5d8+7",
+      "extra": "+3 PreC",
+      "Mesa": "",
       "tipo": "arma",
-      "imagem": "https://media.sketchfab.com/models/92cdd8a5da0b479c9b310c1fd7b686a5/thumbnails/cb59d9c255d44d2aa63ab0e1fc93231a/31b394f79c9c4862a3b9dbc5eab72495.jpeg",
+      "imagem": "https://i.imgur.com/H7Q1sx1.png",
       "imagemIndexedDBId": null,
-      "id": "🎒 itens_1773030825494_muwx1hypx"
+      "habilidades": [],
+      "maxSlotsHabilidades": 1
+    },
+    {
+      "nome": "Adaga da Morte",
+      "qualidade": "Mítico",
+      "level": 15,
+      "levelMax": 20,
+      "ataque": "5d12+9",
+      "extra": "+3 PreC",
+      "Mesa": "Um item de um Celestine corrompido dado para seu servo mas fiel!",
+      "tipo": "arma",
+      "imagem": "https://i.imgur.com/OPP5Mw1.png",
+      "imagemIndexedDBId": null,
+      "habilidades": [
+        {
+          "slot": 0,
+          "nome": "Devoradora de Essência:",
+          "descricao": "A adaga reconhece aquilo que já foi manchado… e decide terminar o serviço. Efeito Passivo: Ataques contra criaturas corrompidas, amaldiçoadas ou possuídas têm sua chance de acerto crítico aumentada drasticamente (5).\nEfeito em Acerto Crítico: Quando a adaga realiza um crítico em um alvo corrompido: A lâmina absorve parte da essência vital da criatura \nO portador recupera uma quantidade de vida proporcional ao dano causado (25% do dano causado!)\nFragmentos da essência ficam presos na adaga, acumulando cargas (Desconhecido)"
+        },
+        {
+          "slot": 1,
+          "nome": "Encarnação da Morte",
+          "descricao": "O jogador precisa rolar um dado de forca de vontade para resistir a forca da adaga que o controla encarnando a morte, assim ganhando habilidade temporário fios da vida!"
+        }
+      ],
+      "maxSlotsHabilidades": 2
     }
   ],
   "condicoes": [
@@ -21505,8 +22221,8 @@
     }
   ],
   "artes": [],
-  "dataSalvamento": "26/04/2026, 01:36:33",
+  "dataSalvamento": "30/04/2026, 21:05:50",
   "versao": "1.0",
   "tipo": "banco_completo",
-  "totalItens": 452
+  "totalItens": 471
 }

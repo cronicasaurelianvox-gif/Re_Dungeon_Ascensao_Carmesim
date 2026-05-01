@@ -10297,6 +10297,47 @@
             animation: fadeInDown 0.3s ease-out;
         }
 
+        /* ====================================== LAZY LOADING ANIMATIONS ====================================== */
+        
+        /* 🖼️ PLACEHOLDER COM SHIMMER EFFECT */
+        .image-placeholder {
+            background: linear-gradient(90deg, 
+                rgba(212,175,55,0.1) 0%, 
+                rgba(212,175,55,0.2) 25%, 
+                rgba(212,175,55,0.1) 50%, 
+                rgba(212,175,55,0.2) 75%, 
+                rgba(212,175,55,0.1) 100%);
+            background-size: 200% 100%;
+            animation: shimmerLoad 2s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(212,175,55,0.4);
+            font-size: 2rem;
+            position: relative;
+        }
+        
+        @keyframes shimmerLoad {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* 🖼️ FADE IN QUANDO CARREGA */
+        img.lazy-loaded {
+            animation: imageLoadFadeIn 0.4s ease-in;
+        }
+        
+        @keyframes imageLoadFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
         /* ====================================== ESTILOS CARDFLUX ====================================== */
         
         .cardflux-card {
@@ -27700,6 +27741,7 @@
                                 overflow: hidden;
                                 position: relative;
                             ">
+                                <div class="image-placeholder" style="position: absolute; width: 100%; height: 100%; z-index: 1; display: ${sanitizarImagemUrl(raca.imagem) ? 'flex' : 'none'};">📷</div>
                                 ${sanitizarImagemUrl(raca.imagem) ? `
                                     <img src="${sanitizarImagemUrl(raca.imagem)}" alt="${raca.nome}" style="
                                         width: 100%;
@@ -27707,7 +27749,10 @@
                                         object-fit: cover;
                                         object-position: center;
                                         transition: transform 0.4s ease;
-                                    " onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+                                        loading: lazy;
+                                        position: relative;
+                                        z-index: 2;
+                                    " class="lazy-card-image" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';" onerror="this.style.display='none'; this.previousElementSibling.style.display='none';" onload="this.classList.add('lazy-loaded'); this.previousElementSibling.style.display='none';">
                                 ` : '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #666; font-size: 3rem;">📋</div>'}
                                 
                                 <!-- OVERLAY GRADIENTE -->
@@ -27719,6 +27764,7 @@
                                     bottom: 0;
                                     background: linear-gradient(135deg, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
                                     pointer-events: none;
+                                    z-index: 3;
                                 "></div>
                             </div>
 
@@ -30524,9 +30570,10 @@
                             <!-- SEÇÃO 3: 2 COLUNAS (IMAGEM + ATRIBUTOS) -->
                             <div class="classe-card-main-content">
                                 <!-- Coluna Esquerda: Imagem em Pé -->
-                                <div class="classe-card-image-container" style="background: linear-gradient(135deg, ${corPredominante}15 0%, ${corPredominante}05 100%);">
-                                    ${sanitizarImagemUrl(classe.imagem) ? `<img src="${sanitizarImagemUrl(classe.imagem)}" alt="${classe.nome}" class="classe-card-image" onerror="this.style.display='none'">` : '<span style="color: #95a5a6; font-size: 0.9rem;">📋 Sem imagem</span>'}
-                                    <div class="classe-card-image-overlay"></div>
+                                <div class="classe-card-image-container" style="background: linear-gradient(135deg, ${corPredominante}15 0%, ${corPredominante}05 100%); position: relative;">
+                                    <div class="image-placeholder" style="position: absolute; width: 100%; height: 100%; z-index: 1; display: ${sanitizarImagemUrl(classe.imagem) ? 'flex' : 'none'};">📷</div>
+                                    ${sanitizarImagemUrl(classe.imagem) ? `<img src="${sanitizarImagemUrl(classe.imagem)}" alt="${classe.nome}" class="classe-card-image lazy-card-image" style="loading: lazy; position: relative; z-index: 2;" onerror="this.style.display='none'; this.previousElementSibling.style.display='none';" onload="this.classList.add('lazy-loaded'); this.previousElementSibling.style.display='none';">` : '<span style="color: #95a5a6; font-size: 0.9rem;">📋 Sem imagem</span>'}
+                                    <div class="classe-card-image-overlay" style="z-index: 3;"></div>
                                 </div>
 
                                 <!-- Coluna Direita: Atributos em Linhas -->
@@ -32573,8 +32620,9 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             // Renderizar Origens
             todosOrigens.forEach(origem => {
                 const imagemHtml = origem.imagem ? 
-                    `<div class="origem-card-image">
-                        <img src="${sanitizarImagemUrl(origem.imagem)}" alt="${origem.nome}" onerror="this.style.display='none'">
+                    `<div class="origem-card-image" style="position: relative;">
+                        <div class="image-placeholder" style="position: absolute; width: 100%; height: 100%; z-index: 1;">📷</div>
+                        <img src="${sanitizarImagemUrl(origem.imagem)}" alt="${origem.nome}" style="loading: lazy; position: relative; z-index: 2;" class="lazy-card-image" onerror="this.style.display='none'; this.previousElementSibling.style.display='none';" onload="this.classList.add('lazy-loaded'); this.previousElementSibling.style.display='none';">
                     </div>` : '';
                 
                 const dataFormatada = formatarDataSegura(origem.dataCriacao);
@@ -32617,8 +32665,9 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             // Renderizar Regiões
             todasRegioes.forEach(regiao => {
                 const imagemHtml = regiao.imagem ? 
-                    `<div class="origem-card-image">
-                        <img src="${sanitizarImagemUrl(regiao.imagem)}" alt="${regiao.nome}" onerror="this.style.display='none'">
+                    `<div class="origem-card-image" style="position: relative;">
+                        <div class="image-placeholder" style="position: absolute; width: 100%; height: 100%; z-index: 1;">📷</div>
+                        <img src="${sanitizarImagemUrl(regiao.imagem)}" alt="${regiao.nome}" style="loading: lazy; position: relative; z-index: 2;" class="lazy-card-image" onerror="this.style.display='none'; this.previousElementSibling.style.display='none';" onload="this.classList.add('lazy-loaded'); this.previousElementSibling.style.display='none';">
                     </div>` : '';
                 
                 const tagsHtml = regiao.tags ? regiao.tags.split(',').map(tag => tag.trim()).filter(t => t).map(tag => `<span class="origem-card-tag">${tag}</span>`).join('') : '';
@@ -32655,8 +32704,9 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             // Renderizar Cenários
             todosCenarios.forEach(cenario => {
                 const imagemHtml = cenario.imagem ? 
-                    `<div class="origem-card-image">
-                        <img src="${sanitizarImagemUrl(cenario.imagem)}" alt="${cenario.nome}" onerror="this.style.display='none'">
+                    `<div class="origem-card-image" style="position: relative;">
+                        <div class="image-placeholder" style="position: absolute; width: 100%; height: 100%; z-index: 1;">📷</div>
+                        <img src="${sanitizarImagemUrl(cenario.imagem)}" alt="${cenario.nome}" style="loading: lazy; position: relative; z-index: 2;" class="lazy-card-image" onerror="this.style.display='none'; this.previousElementSibling.style.display='none';" onload="this.classList.add('lazy-loaded'); this.previousElementSibling.style.display='none';">
                     </div>` : '';
                 
                 const tagsHtml = cenario.tags ? cenario.tags.split(',').map(tag => tag.trim()).filter(t => t).map(tag => `<span class="origem-card-tag">${tag}</span>`).join('') : '';
@@ -40806,7 +40856,7 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
                     (imagemParaExibir.startsWith('http://') || imagemParaExibir.startsWith('https://') || imagemParaExibir.startsWith('data:') || imagemParaExibir.startsWith('blob:'));
                     
                 const imagemHtml = isUrlValida ? 
-                    `<img src="${imagemParaExibir}" alt="${npc.nome}" onerror="this.style.display='none'">` : 
+                    `<div class="image-placeholder" style="position: absolute; width: 100%; height: 100%; z-index: 1;">📷</div><img src="${imagemParaExibir}" alt="${npc.nome}" style="loading: lazy; position: relative; z-index: 2;" class="lazy-card-image" onerror="this.style.display='none'; this.previousElementSibling.style.display='none';" onload="this.classList.add('lazy-loaded'); this.previousElementSibling.style.display='none';" />` : 
                     `<div class="npc-card-image-placeholder">📸</div>`;
 
                 // ✅ NOVO: Determinar cores baseado na CATEGORIA e TIPO
@@ -40850,7 +40900,7 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
                         <div class="npc-card-premium${npc.morto ? ' npc-card-dead' : ''}" style="--card-color: ${corBorda};">
                             <!-- SEÇÃO DE IMAGEM COM OVERLAY -->
                             <div class="npc-card-image-section">
-                                <div class="npc-card-image">
+                                <div class="npc-card-image" style="position: relative;">
                                     ${imagemHtml}
                                 </div>
                                 
@@ -44561,9 +44611,9 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
                 html += `
                     <div class="material-card-lux" data-raridade-material="${material.raridade}" data-tipo-material="${material.tipo}">
                         <!-- IMAGEM -->
-                        <div class="material-card-image">
+                        <div class="material-card-image" style="position: relative;">
                             ${imagemUrl 
-                                ? `<img src="${imagemUrl}" alt="${material.nome}" />` 
+                                ? `<div class="image-placeholder" style="position: absolute; width: 100%; height: 100%; z-index: 1;">📷</div><img src="${imagemUrl}" alt="${material.nome}" style="loading: lazy; position: relative; z-index: 2;" class="lazy-card-image" onerror="this.style.display='none'; this.previousElementSibling.style.display='none';" onload="this.classList.add('lazy-loaded'); this.previousElementSibling.style.display='none';" />` 
                                 : `<div class="material-card-image-placeholder">${tipoIcon[material.tipo] || '⛏️'}</div>`
                             }
                         </div>
@@ -45893,9 +45943,9 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
                 html += `
                     <div class="receita-card-lux" data-categoria-receita="${receita.categoria}" data-raridade-receita="${receita.raridade}">
                         <!-- IMAGEM -->
-                        <div class="receita-card-image">
+                        <div class="receita-card-image" style="position: relative;">
                             ${imagemUrl 
-                                ? `<img src="${imagemUrl}" alt="${receita.nome}" />` 
+                                ? `<div class="image-placeholder" style="position: absolute; width: 100%; height: 100%; z-index: 1;">📷</div><img src="${imagemUrl}" alt="${receita.nome}" style="loading: lazy; position: relative; z-index: 2;" class="lazy-card-image" onerror="this.style.display='none'; this.previousElementSibling.style.display='none';" onload="this.classList.add('lazy-loaded'); this.previousElementSibling.style.display='none';" />` 
                                 : `<div class="receita-card-image-placeholder">${categoriaIcon[receita.categoria] || '📖'}</div>`
                             }
                         </div>
@@ -46389,8 +46439,8 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
                             <div class="condition-card-top-bar" style="background: linear-gradient(to right, ${corTipo}ff, ${corTipo}66);"></div>
                             
                             <!-- IMAGEM DA ESQUERDA -->
-                            <div class="condition-card-icon" style="border-right-color: ${corTipo};">
-                                ${condicao.imagem ? `<img src="${sanitizarImagemUrl(condicao.imagem)}" alt="${condicao.nome}" />` : `<span style="font-size: 3.5rem; color: ${corTipo};">${iconTipo}</span>`}
+                            <div class="condition-card-icon" style="border-right-color: ${corTipo}; position: relative;">
+                                ${condicao.imagem ? `<div class="image-placeholder" style="position: absolute; width: 100%; height: 100%; z-index: 1;">📷</div><img src="${sanitizarImagemUrl(condicao.imagem)}" alt="${condicao.nome}" style="loading: lazy; position: relative; z-index: 2;" class="lazy-card-image" onerror="this.style.display='none'; this.previousElementSibling.style.display='none';" onload="this.classList.add('lazy-loaded'); this.previousElementSibling.style.display='none';" />` : `<span style="font-size: 3.5rem; color: ${corTipo};">${iconTipo}</span>`}
                             </div>
                             
                             <!-- CONTEÚDO CENTRAL -->
@@ -58699,13 +58749,17 @@ ${arteGerada.justificativa}`;
                                 background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(52, 152, 219, 0.08));
                                 overflow: hidden;
                                 border-bottom: 2px solid rgba(212, 175, 55, 0.2);
-                            ">
+                            " class="image-placeholder-container">
+                                <div class="image-placeholder" style="position: absolute; width: 100%; height: 100%; z-index: 1;">📷</div>
                                 <img src="${carta.imagemUrl}" alt="${carta.nome}" style="
                                     width: 100%;
                                     height: 100%;
                                     object-fit: cover;
                                     transition: transform 0.4s ease;
-                                " onerror="this.parentElement.style.display='none';">
+                                    loading: lazy;
+                                    position: relative;
+                                    z-index: 2;
+                                " class="lazy-card-image" onerror="this.style.display='none'; this.previousElementSibling.style.display='none';" onload="this.classList.add('lazy-loaded'); this.previousElementSibling.style.display='none';">
                                 
                                 <!-- Overlay Gradient -->
                                 <div style="
@@ -58713,6 +58767,7 @@ ${arteGerada.justificativa}`;
                                     inset: 0;
                                     background: linear-gradient(180deg, rgba(0,0,0,0), rgba(15,15,20,0.6));
                                     pointer-events: none;
+                                    z-index: 3;
                                 "></div>
                             </div>
                         ` : `
