@@ -545,25 +545,6 @@
       "dataAtualizacao": 1770352452426
     },
     {
-      "id": 1771286634070,
-      "tipo": "Campanha",
-      "nome": "The Legends Of Murim",
-      "episodio": 0,
-      "contexto": "Há 300 anos ocorreu o Cisma do Lótus Carmesim.\n\nAs grandes seitas se dividiram em:\n\n🏯 Aliança Ortodoxa (Zhengdao)\n\nDefendem cultivo puro, linhagens tradicionais, respeito ao Dao Celestial.\n\n🩸 Aliança Não Ortodoxa (Xiedao)\n\nAcreditam que o Dao não é moral. O Qi é ferramenta. Evolução acima de dogma.\n\nO problema?\n\nAs Tribulações Celestiais estão vindo antes do tempo.\nCultivadores no estágio de Núcleo Dourado (Jindan) estão sofrendo tribulações como se fossem Alma Nascente (Yuanying).\n\nAlgo está perturbando o fluxo do Dao.\n\nE ninguém quer admitir.",
-      "objetivo": "",
-      "nota": "",
-      "imagem": {
-        "tipo": "indexeddb",
-        "valor": "img-1771286284370-q6s71pllw",
-        "dataCriacao": 1771286634070
-      },
-      "locaisDisponiveis": [],
-      "capitulos": [],
-      "sessoes": [],
-      "sessoesPorCapitulo": {},
-      "dataCriacao": 1771286634070
-    },
-    {
       "id": 1777474042462,
       "tipo": "Campanha",
       "nome": "Re:Conect",
@@ -25728,8 +25709,8 @@
     }
   ],
   "artes": [],
-  "dataSalvamento": "17/05/2026, 23:53:11",
+  "dataSalvamento": "26/05/2026, 01:11:08",
   "versao": "1.0",
   "tipo": "banco_completo",
-  "totalItens": 477
+  "totalItens": 476
 }
