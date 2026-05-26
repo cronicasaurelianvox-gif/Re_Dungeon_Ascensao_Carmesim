@@ -49331,7 +49331,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                     }
 
                 } else if (escopo === 'aba') {
-                    // Salvar apenas aba atual
+                    // Salvar aba atual
                     let idAba = obterAbaAtual();
                     if (!idAba) {
                         alert('❌ Erro: Nenhuma aba válida selecionada.');
@@ -49356,17 +49356,33 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                         return;
                     }
 
-                    dataObj = {
-                        [idAba]: dadosAba,
-                        dataSalvamento: new Date().toLocaleString('pt-BR'),
-                        versao: '1.0',
-                        tipo: 'aba_unica',
-                        abaId: idAba
-                    };
-
-                    nomeArquivo = `redungeon_${idAba}_${new Date().getTime()}.json`;
-                    
-                    console.log(`Salvando aba "${idAba}" com ${dadosAba.length} itens`);
+                    // Se for a aba "origens", também incluir regiões e cenários relacionados
+                    if (idAba === 'origens') {
+                        const dadosRegioes = window.parseJsonString(localStorage.getItem('redungeon_regioes'), []);
+                        const dadosCenarios = window.parseJsonString(localStorage.getItem('redungeon_cenarios'), []);
+                        
+                        dataObj = {
+                            'origens': dadosAba,
+                            'regioes': dadosRegioes,
+                            'cenarios': dadosCenarios,
+                            dataSalvamento: new Date().toLocaleString('pt-BR'),
+                            versao: '1.0',
+                            tipo: 'aba_locais',
+                            abaId: idAba
+                        };
+                        nomeArquivo = `redungeon_locais_${new Date().getTime()}.json`;
+                        console.log(`Salvando aba "locais" com ${dadosAba.length} origens, ${dadosRegioes.length} regiões e ${dadosCenarios.length} cenários`);
+                    } else {
+                        dataObj = {
+                            [idAba]: dadosAba,
+                            dataSalvamento: new Date().toLocaleString('pt-BR'),
+                            versao: '1.0',
+                            tipo: 'aba_unica',
+                            abaId: idAba
+                        };
+                        nomeArquivo = `redungeon_${idAba}_${new Date().getTime()}.json`;
+                        console.log(`Salvando aba "${idAba}" com ${dadosAba.length} itens`);
+                    }
                 }
 
                 // Criar arquivo e fazer download
@@ -49538,80 +49554,93 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                         }
 
                     } else if (escopo === 'aba') {
-                        // Importação de aba específica
+                        // Importação de aba específica (com suporte a múltiplas abas no mesmo arquivo)
                         console.log('🔄 Importando ABA ESPECÍFICA...');
 
-                        // Detectar qual aba está no arquivo
-                        let abaEncontrada = null;
-                        let dadosAba = null;
+                        // Detectar TODAS as abas presentes no arquivo
+                        const abasEncontradas = [];
+                        const abasParaSincronizar = [];
 
                         // MODO LEGADO: Mapear "historia", "Historia", "redungeon_historia" para "Mesa"
                         if (Array.isArray(dados['Historia']) && dados['Historia'].length > 0) {
-                            abaEncontrada = 'Mesa';
-                            dadosAba = dados['Historia'];
+                            abasEncontradas.push({ id: 'Mesa', nome: 'Mesa', dados: dados['Historia'], info: mapaAbas['Mesa'] });
+                            abasParaSincronizar.push('Mesa');
                             console.log('✅ Detectado formato legacy Historia (maiúscula), mapeado para Mesa');
                         } else if (Array.isArray(dados['historia']) && dados['historia'].length > 0) {
-                            abaEncontrada = 'Mesa';
-                            dadosAba = dados['historia'];
+                            abasEncontradas.push({ id: 'Mesa', nome: 'Mesa', dados: dados['historia'], info: mapaAbas['Mesa'] });
+                            abasParaSincronizar.push('Mesa');
                             console.log('✅ Detectado formato legacy historia (minúscula), mapeado para Mesa');
                         } else if (Array.isArray(dados['redungeon_historia']) && dados['redungeon_historia'].length > 0) {
-                            abaEncontrada = 'Mesa';
-                            dadosAba = dados['redungeon_historia'];
+                            abasEncontradas.push({ id: 'Mesa', nome: 'Mesa', dados: dados['redungeon_historia'], info: mapaAbas['Mesa'] });
+                            abasParaSincronizar.push('Mesa');
                             console.log('✅ Detectado formato legacy redungeon_historia, mapeado para Mesa');
                         }
 
-                        // Se não achou "historia", procurar normalmente
-                        if (!abaEncontrada) {
-                            for (const [chave, infoAba] of Object.entries(mapaAbas)) {
-                                if (Array.isArray(dados[chave]) && dados[chave].length > 0) {
-                                    abaEncontrada = chave;
-                                    dadosAba = dados[chave];
-                                    break;
+                        // Procurar por TODAS as abas (não fazer break)
+                        for (const [chave, infoAba] of Object.entries(mapaAbas)) {
+                            if (Array.isArray(dados[chave]) && dados[chave].length > 0) {
+                                // Evitar duplicação da aba Mesa já detectada por legacy
+                                if (!(chave === 'Mesa' && abasParaSincronizar.includes('Mesa'))) {
+                                    abasEncontradas.push({ id: chave, nome: infoAba.nome, dados: dados[chave], info: infoAba });
+                                    abasParaSincronizar.push(chave);
+                                    console.log(`✅ Aba detectada: ${chave} com ${dados[chave].length} itens`);
                                 }
                             }
                         }
 
-                        if (!abaEncontrada) {
+                        if (abasEncontradas.length === 0) {
                             alert(`❌ Erro: O arquivo JSON não contém dados válidos de nenhuma aba ReDungeon.\n\nAbas suportadas:\n• Mesa\n• Origens\n• Regiões\n• Cenários\n• Raças\n• Classes\n• Aptidões\n• NPCs\n• Criaturas\n• Materiais\n• Receitas\n• Itens\n• Condições\n• Regras\n• ART's\n\nVerifique se o arquivo foi exportado corretamente.`);
                             return;
                         }
 
-                        const infoAbaAtual = mapaAbas[abaEncontrada];
-                        const confirmacao = confirm(`📥 Importar aba: ${infoAbaAtual.nome}\n\nItens a importar: ${dadosAba.length}\n\nAtenção: Os dados desta aba serão SUBSTITUÍDOS.\nOutras abas NÃO serão afetadas.\n\nDeseja continuar?`);
+                        // Mensagem informando quantas abas foram encontradas
+                        const totalItensAbas = abasEncontradas.reduce((sum, aba) => sum + aba.dados.length, 0);
+                        const listaAbas = abasEncontradas.map(a => `${a.nome} (${a.dados.length} itens)`).join('\n• ');
+                        
+                        const confirmacao = confirm(`📥 Importação de Aba Específica\n\nAbas encontradas:\n• ${listaAbas}\n\nTotal: ${totalItensAbas} itens\n\nAtenção: Os dados destas abas serão SUBSTITUÍDOS.\nOutras abas NÃO serão afetadas.\n\nDeseja continuar?`);
 
                         if (confirmacao) {
-                            // Importar apenas a aba específica
-                            armazenar[abaEncontrada] = dadosAba;
-                            
-                            // Sincronizar artes com a variável global se necessário
-                            if (abaEncontrada === 'artes') {
-                                artes = dadosAba;
-                                armazenar.arts = dadosAba;
-                            }
-
-                            // Salvar no localStorage apenas esta aba
                             try {
-                                localStorage.setItem(infoAbaAtual.key, JSON.stringify(dadosAba));
-                                console.log(`✅ Aba "${abaEncontrada}" importada com sucesso: ${dadosAba.length} itens`);
-                            } catch (storageError) {
-                                if (storageError.name === 'QuotaExceededError') {
-                                    alert('❌ Espaço insuficiente no navegador para armazenar estes dados.');
-                                    return;
+                                // Importar TODAS as abas encontradas
+                                for (const abaInfo of abasEncontradas) {
+                                    armazenar[abaInfo.id] = abaInfo.dados;
+                                    
+                                    // Sincronizar artes com a variável global se necessário
+                                    if (abaInfo.id === 'artes') {
+                                        artes = abaInfo.dados;
+                                        armazenar.arts = abaInfo.dados;
+                                    }
+
+                                    // Salvar no localStorage
+                                    try {
+                                        localStorage.setItem(abaInfo.info.key, JSON.stringify(abaInfo.dados));
+                                        console.log(`✅ Aba "${abaInfo.id}" importada com sucesso: ${abaInfo.dados.length} itens`);
+                                    } catch (storageError) {
+                                        if (storageError.name === 'QuotaExceededError') {
+                                            alert('❌ Espaço insuficiente no navegador para armazenar estes dados.');
+                                            return;
+                                        }
+                                        throw storageError;
+                                    }
                                 }
-                                throw storageError;
+
+                                // ✅ ADICIONAR DELAY PARA GARANTIR QUE LOCALSTORAGE FOI ATUALIZADO
+                                await new Promise(resolve => setTimeout(resolve, 100));
+                                
+                                // ✅ RECARREGAR TODAS AS ABAS DO LOCALSTORAGE
+                                for (const abaInfo of abasEncontradas) {
+                                    armazenar[abaInfo.id] = parseJsonSeguro(abaInfo.info.key);
+                                    console.log(`✅ Dados de "${abaInfo.id}" recarregados do localStorage`);
+                                }
+
+                                // Atualizar UI global automaticamente
+                                await atualizarUIGlobal();
+
+                                alert(`✅ Abas importadas com sucesso!\n\n${listaAbas}\n\nTotal importado: ${totalItensAbas} itens`);
+                            } catch (erro) {
+                                console.error('❌ Erro ao importar abas específicas:', erro);
+                                alert('❌ Erro ao importar: ' + erro.message);
                             }
-
-                            // ✅ ADICIONAR DELAY PARA GARANTIR QUE LOCALSTORAGE FOI ATUALIZADO
-                            await new Promise(resolve => setTimeout(resolve, 100));
-                            
-                            // ✅ RECARREGAR ABA DO LOCALSTORAGE
-                            armazenar[abaEncontrada] = parseJsonSeguro(infoAbaAtual.key);
-                            console.log(`✅ Dados de "${abaEncontrada}" recarregados do localStorage`);
-
-                            // Atualizar UI global automaticamente
-                            await atualizarUIGlobal();
-
-                            alert(`✅ Aba importada com sucesso!\n\n${infoAbaAtual.nome}\nItens importados: ${dadosAba.length}`);
                         }
                     }
 
