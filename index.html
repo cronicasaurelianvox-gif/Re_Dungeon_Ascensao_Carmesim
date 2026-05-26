@@ -49824,10 +49824,17 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             };
 
             const chaveAba = mapaAbas[idAba] || idAba.toLowerCase();
+            
+            // 🌍 MAPEAMENTO ESPECIAL: "origens" contém 3 tipos de dados
+            let abasParaResetar = [chaveAba];
+            if (chaveAba === 'origens') {
+                abasParaResetar = ['origens', 'regioes', 'cenarios'];
+                console.log('🌍 Modo "Origens" detectado - resetando: Origens + Regiões + Cenários');
+            }
 
             if (confirm(`⚠️ ATENÇÃO: Isso vai deletar TODOS os dados de "${nomeAba}". Essa ação NÃO pode ser desfeita!\n\nDeseja continuar?`)) {
                 if (confirm(`🔥 Última confirmação: Tem certeza que deseja resetar "${nomeAba}"?`)) {
-                    await resetarAbaAtual(chaveAba);
+                    await resetarAbaAtualMulti(abasParaResetar);
                 }
             }
         }
@@ -49841,6 +49848,40 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                     resetarTodosDados();
                 }
             }
+        }
+
+        /**
+         * Executa o reset de uma ou múltiplas abas
+         */
+        async function resetarAbaAtualMulti(abasParaResetar = []) {
+            if (!Array.isArray(abasParaResetar) || abasParaResetar.length === 0) {
+                console.error('❌ Lista de abas para resetar inválida');
+                return;
+            }
+
+            console.log(`🗑️ Resetando abas: ${abasParaResetar.join(', ')}`);
+
+            // Resetar cada aba
+            for (const chaveAba of abasParaResetar) {
+                // Resetar dados em memória
+                if (armazenar[chaveAba]) {
+                    armazenar[chaveAba] = [];
+                }
+
+                // Resetar no localStorage
+                const chaveLocalStorage = chaveAba === 'Mesa' ? 
+                    'redungeon_Mesa' : 
+                    (chaveAba === 'arts' ? 'artes' : `redungeon_${chaveAba}`);
+                
+                localStorage.setItem(chaveLocalStorage, JSON.stringify([]));
+                console.log(`✅ "${chaveAba}" resetado`);
+            }
+
+            // Atualizar UI global automaticamente
+            await atualizarUIGlobal();
+
+            const listaAbas = abasParaResetar.map(a => a.charAt(0).toUpperCase() + a.slice(1)).join(', ');
+            alert(`✅ ${listaAbas} foi/foram resetado(s) com sucesso!`);
         }
 
         /**
