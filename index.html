@@ -4,6 +4,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' https: data: blob:; font-src 'self' https: data:; connect-src 'self' https: data: blob: file:; frame-src 'none'; object-src 'none';">
     <title>ReDungeon - Banco de Dados</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./css-classes-raridade.css?v=3.7">
@@ -11,33 +12,358 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- 🔇 SUPRESSOR GLOBAL DE ERROS NO CONSOLE -->
+    <!-- 🔐 SISTEMA DE LOGGING SEGURO - Substitui supressor de erros -->
     <script>
-        // Interceptar window.onerror para suprimir erros
-        window.onerror = function(msg, url, lineNo, columnNo, error) {
-            return true; // Retorna true para suprimir o erro
+        // ✅ ARMAZENAR ERROS EM VEZ DE SUPRIMIR
+        window.APP_LOGS = [];
+        window.APP_ERRORS = [];
+        
+        /**
+         * 🛡️ FUNÇÃO GLOBAL parseJsonString
+         * Disponível globalmente para uso em qualquer lugar do código
+         */
+        window.parseJsonString = function(storedValue, fallback) {
+            try {
+                if (!storedValue) {
+                    return fallback ? (typeof fallback === 'string' ? JSON.parse(fallback) : fallback) : [];
+                }
+                return typeof storedValue === 'string' ? JSON.parse(storedValue) : storedValue;
+            } catch (e) {
+                console.debug(`⚠️ parseJsonString erro:`, e.message);
+                return fallback ? (typeof fallback === 'string' ? JSON.parse(fallback) : fallback) : [];
+            }
         };
         
-        // Interceptar console.error para suprimir
+        /**
+         * 🗄️ STORAGE MANAGER - IndexedDB com fallback localStorage
+         * Uso automático: StorageManager.set(key, value) / StorageManager.get(key)
+         */
+        window.StorageManager = {
+            db: null,
+            ready: false,
+            useIndexedDB: true,
+            _isSettingItem: false,  // Flag para evitar recursão infinita
+            
+            // Inicializar IndexedDB
+            async init() {
+                try {
+                    return new Promise((resolve, reject) => {
+                        const request = indexedDB.open('ReDungeon', 2);
+                        
+                        request.onerror = () => {
+                            console.warn('❌ IndexedDB não disponível, usando localStorage');
+                            this.useIndexedDB = false;
+                            this.ready = true;
+                            resolve();
+                        };
+                        
+                        request.onsuccess = (event) => {
+                            this.db = event.target.result;
+                            this.ready = true;
+                            console.log('✅ IndexedDB inicializado');
+                            resolve();
+                        };
+                        
+                        request.onupgradeneeded = (event) => {
+                            const db = event.target.result;
+                            if (!db.objectStoreNames.contains('redungeon_store')) {
+                                db.createObjectStore('redungeon_store', { keyPath: 'key' });
+                                console.log('✅ IndexedDB object store criado');
+                            }
+                        };
+                    });
+                } catch (error) {
+                    console.warn('❌ IndexedDB init erro:', error);
+                    this.useIndexedDB = false;
+                    this.ready = true;
+                }
+            },
+            
+            // Salvar dados (IndexedDB ou localStorage)
+            async set(key, value) {
+                try {
+                    const jsonValue = typeof value === 'string' ? value : JSON.stringify(value);
+                    
+                    if (this.useIndexedDB && this.db) {
+                        return new Promise((resolve, reject) => {
+                            try {
+                                const transaction = this.db.transaction(['redungeon_store'], 'readwrite');
+                                const store = transaction.objectStore('redungeon_store');
+                                const request = store.put({ key, value: jsonValue, timestamp: Date.now() });
+                                
+                                request.onsuccess = () => {
+                                    console.log(`✅ IndexedDB: ${key} salvo`);
+                                    // Atualizar localStorage para compatibilidade (usando flag para evitar recursão)
+                                    try {
+                                        const wasSettingItem = window.StorageManager._isSettingItem;
+                                        window.StorageManager._isSettingItem = true;
+                                        originalLocalStorage.setItem(key, jsonValue);
+                                        window.StorageManager._isSettingItem = wasSettingItem;
+                                    } catch (e) {
+                                        console.debug('⚠️ localStorage backup falhou');
+                                    }
+                                    resolve();
+                                };
+                                
+                                request.onerror = () => {
+                                    console.warn(`❌ IndexedDB erro ao salvar ${key}`);
+                                    const wasSettingItem = window.StorageManager._isSettingItem;
+                                    window.StorageManager._isSettingItem = true;
+                                    originalLocalStorage.setItem(key, jsonValue);
+                                    window.StorageManager._isSettingItem = wasSettingItem;
+                                    reject(request.error);
+                                };
+                            } catch (e) {
+                                const wasSettingItem = window.StorageManager._isSettingItem;
+                                window.StorageManager._isSettingItem = true;
+                                originalLocalStorage.setItem(key, jsonValue);
+                                window.StorageManager._isSettingItem = wasSettingItem;
+                                reject(e);
+                            }
+                        });
+                    } else {
+                        // Fallback localStorage (com flag para evitar recursão)
+                        const wasSettingItem = this._isSettingItem;
+                        this._isSettingItem = true;
+                        originalLocalStorage.setItem(key, jsonValue);
+                        this._isSettingItem = wasSettingItem;
+                    }
+                } catch (error) {
+                    console.error(`🔴 StorageManager.set erro: ${error.message}`);
+                    throw error;
+                }
+            },
+            
+            // Carregar dados (IndexedDB ou localStorage)
+            async get(key) {
+                try {
+                    if (this.useIndexedDB && this.db) {
+                        return new Promise((resolve, reject) => {
+                            try {
+                                const transaction = this.db.transaction(['redungeon_store'], 'readonly');
+                                const store = transaction.objectStore('redungeon_store');
+                                const request = store.get(key);
+                                
+                                request.onsuccess = () => {
+                                    const result = request.result;
+                                    if (result) {
+                                        console.log(`✅ IndexedDB: ${key} carregado`);
+                                        resolve(result.value);
+                                    } else {
+                                        // Fallback para localStorage
+                                        const localValue = localStorage.getItem(key);
+                                        resolve(localValue);
+                                    }
+                                };
+                                
+                                request.onerror = () => {
+                                    console.warn(`❌ IndexedDB erro ao carregar ${key}`);
+                                    resolve(localStorage.getItem(key));
+                                };
+                            } catch (e) {
+                                resolve(localStorage.getItem(key));
+                            }
+                        });
+                    } else {
+                        // Fallback localStorage
+                        return localStorage.getItem(key);
+                    }
+                } catch (error) {
+                    console.error(`🔴 StorageManager.get erro: ${error.message}`);
+                    return localStorage.getItem(key);
+                }
+            },
+            
+            // Remover dados
+            async remove(key) {
+                try {
+                    if (this.useIndexedDB && this.db) {
+                        return new Promise((resolve, reject) => {
+                            try {
+                                const transaction = this.db.transaction(['redungeon_store'], 'readwrite');
+                                const store = transaction.objectStore('redungeon_store');
+                                const request = store.delete(key);
+                                
+                                request.onsuccess = () => {
+                                    console.log(`✅ IndexedDB: ${key} removido`);
+                                    localStorage.removeItem(key);
+                                    resolve();
+                                };
+                                
+                                request.onerror = () => {
+                                    console.warn(`❌ IndexedDB erro ao remover ${key}`);
+                                    localStorage.removeItem(key);
+                                    reject(request.error);
+                                };
+                            } catch (e) {
+                                localStorage.removeItem(key);
+                                reject(e);
+                            }
+                        });
+                    } else {
+                        localStorage.removeItem(key);
+                    }
+                } catch (error) {
+                    console.error(`🔴 StorageManager.remove erro: ${error.message}`);
+                    throw error;
+                }
+            },
+            
+            // Migrar dados de localStorage para IndexedDB
+            async migrateFromLocalStorage() {
+                try {
+                    if (!this.useIndexedDB || !this.db) return;
+                    
+                    console.log('🔄 Migrando dados de localStorage para IndexedDB...');
+                    let migrated = 0;
+                    
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        if (key && key.startsWith('redungeon_')) {
+                            const value = localStorage.getItem(key);
+                            await this.set(key, value);
+                            migrated++;
+                        }
+                    }
+                    
+                    console.log(`✅ ${migrated} entradas migradas para IndexedDB`);
+                    return migrated;
+                } catch (error) {
+                    console.error('❌ Erro ao migrar de localStorage:', error);
+                }
+            }
+        };
+        
+        // Capturar erros globais (NÃO suprimir)
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            // Silenciar erros conhecidos de Bootstrap que não são críticos
+            if (msg.includes('Cannot read properties of null') && 
+                (url.includes('modal.js') || url.includes('bootstrap'))) {
+                console.warn(`⚠️ [Bootstrap] Erro tratado silenciosamente: ${msg}`);
+                return true; // Suprimir (erro tratado)
+            }
+            
+            const errorLog = {
+                timestamp: new Date().toISOString(),
+                message: msg,
+                url: url,
+                line: lineNo,
+                column: columnNo,
+                error: error ? error.toString() : 'unknown',
+                type: 'uncaught'
+            };
+            window.APP_ERRORS.push(errorLog);
+            window.APP_LOGS.push(`❌ ${msg} (${url}:${lineNo}:${columnNo})`);
+            console.log(`[ReDungeon] Erro registrado: ${msg}`);
+            return false; // Deixa o erro ser tratado normalmente
+        };
+        
+        // Interceptar console.error para registrar (NÃO suprimir)
         const originalError = console.error;
         console.error = function(...args) {
-            // Silenciosamente ignora erros
+            const msg = args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ');
+            window.APP_LOGS.push(`🔴 ERROR: ${msg}`);
+            window.APP_ERRORS.push({
+                timestamp: new Date().toISOString(),
+                message: msg,
+                type: 'console.error',
+                args: args
+            });
+            originalError.apply(console, args); // MOSTRAR o erro
         };
         
-        // Interceptar erros não capturados (unhandledrejection)
+        // Interceptar console.warn
+        const originalWarn = console.warn;
+        console.warn = function(...args) {
+            const msg = args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ');
+            window.APP_LOGS.push(`⚠️ WARN: ${msg}`);
+            originalWarn.apply(console, args);
+        };
+        
+        // Capturar Promise rejections não tratadas (NÃO suprimir)
         window.addEventListener('unhandledrejection', (event) => {
-            event.preventDefault(); // Previne que o erro apareça no console
+            const msg = event.reason ? event.reason.toString() : 'Unknown promise rejection';
+            window.APP_LOGS.push(`💥 UNHANDLED REJECTION: ${msg}`);
+            window.APP_ERRORS.push({
+                timestamp: new Date().toISOString(),
+                message: msg,
+                type: 'unhandledrejection'
+            });
+            // Deixar o erro ser tratado
+            console.warn('[ReDungeon] Promise rejection não tratada:', event.reason);
         });
         
-        // ✅ SUPRESSOR DE ERROS DE IMAGEM: Interceptar erros de carregamento de imagem em todo o documento
+        // Ignorar APENAS erros de imagem e recursos de loading (não é perda de dados)
         document.addEventListener('error', (event) => {
-            // Se for erro de imagem, suprimir silenciosamente
-            if (event.target && event.target.tagName === 'IMG') {
-                event.preventDefault();
-                event.stopPropagation();
-                return false;
+            if (event.target) {
+                // Recursos externos que podem falhar legitimamente (não registrar como erro crítico)
+                const isExternalResource = event.target.tagName === 'IMG' || 
+                                          event.target.tagName === 'SCRIPT' ||
+                                          event.target.tagName === 'LINK' ||
+                                          event.target.tagName === 'IFRAME';
+                if (isExternalResource) {
+                    // Silenciar erro de recurso externo - são 404s normais
+                    event.preventDefault();
+                    return false;
+                }
             }
-        }, true); // Usar capture para pegar antes dos handlers de elemento
+        }, true);
+        
+        /**
+         * 🔍 FUNÇÃO PARA INSPECIONAR ERROS
+         * Uso: verErros() - mostra tabela de erros
+         */
+        window.verErros = function() {
+            if (window.APP_ERRORS.length === 0) {
+                console.log('✅ Nenhum erro registrado!');
+                return;
+            }
+            console.table(window.APP_ERRORS);
+            console.log(`Total de erros: ${window.APP_ERRORS.length}`);
+        };
+        
+        /**
+         * 📋 FUNÇÃO PARA INSPECIONAR LOGS
+         * Uso: verLogs() - mostra todos os logs
+         */
+        window.verLogs = function() {
+            console.log('=== REDUNGEON APP LOGS ===');
+            window.APP_LOGS.forEach((log, i) => console.log(`${i + 1}. ${log}`));
+            console.log(`=== Total: ${window.APP_LOGS.length} entradas ===`);
+        };
+        
+        /**
+         * 🎬 GLOBAL ERROR HANDLER PARA RECURSOS EXTERNOS
+         * Silencia erros de 404 e CORS para imagens/recursos que não são críticos
+         */
+        window.addEventListener('error', function(event) {
+            // Se for erro de carregamento de imagem/recurso
+            if (event.target && (event.target.tagName === 'IMG' || 
+                                 event.target.tagName === 'SCRIPT' ||
+                                 event.target.tagName === 'LINK')) {
+                // Silenciar com preventDefault
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                
+                // Logar apenas em debug
+                if (event.target.src || event.target.href) {
+                    console.debug(`[404 Resource] ${event.target.src || event.target.href}`);
+                }
+                return true; // Suprimir do console
+            }
+        }, true); // Use capture phase para interceptar antes de outros listeners
+        
+        /**
+         * 🛡️ SUPRIMIR ERROS DE CORS COM FILE:// PROTOCOL
+         * Tauri usa file:// protocol, então erros de CORS são esperados
+         * Silenciar especificamente "Unsafe attempt to load URL"
+         */
+        window.addEventListener('securitypolicyviolation', function(event) {
+            if (event.violatedDirective === 'frame-src' || event.blockedURI?.includes('file://')) {
+                console.debug('[CORS/file://] Security policy violation ignorada:', event.blockedURI);
+                event.preventDefault();
+            }
+        }, true);
     </script>
 
     <!-- 🔥 PATCH IMEDIATO: Interceptar bootstrap.Modal.show() ANTES de qualquer outro código -->
@@ -54,14 +380,19 @@
                 const originalActivate = focustrap.activate;
                 focustrap.activate = function() {
                     try {
-                        // Verificar se _trigger (elemento) ainda existe no DOM
+                        // Verificar se todos os elementos críticos existem e estão acessíveis
                         if (!this._trigger || !document.contains(this._trigger)) {
                             console.warn('⚠️ FocusTrap: _trigger não existe no DOM, ignorando activate');
                             return;
                         }
+                        // Verificar se há elementos focáveis
+                        if (!this._previousActiveElement && this._trigger.ownerDocument) {
+                            this._previousActiveElement = this._trigger.ownerDocument.activeElement;
+                        }
                         return originalActivate.call(this);
                     } catch (e) {
                         console.warn('⚠️ FocusTrap.activate() erro:', e.message);
+                        // Ignorar erro silenciosamente
                         return undefined;
                     }
                 };
@@ -69,6 +400,14 @@
                 const originalDeactivate = focustrap.deactivate;
                 focustrap.deactivate = function() {
                     try {
+                        // Proteger contra deactivate com _previousActiveElement null
+                        if (this._previousActiveElement && this._previousActiveElement.focus) {
+                            try {
+                                this._previousActiveElement.focus();
+                            } catch (e) {
+                                // Ignore focus errors
+                            }
+                        }
                         return originalDeactivate.call(this);
                     } catch (e) {
                         console.warn('⚠️ FocusTrap.deactivate() erro:', e.message);
@@ -176,6 +515,34 @@
             };
             
             console.log('✅ [PATCH] bootstrap.Modal.show() e hide() patchados com sucesso!');
+        }
+    </script>
+
+    <!-- 🛡️ PATCH 2: Proteger contra erros de transição CSS do Bootstrap -->
+    <script>
+        // Interceptar addEventListener para modais para proteger contra erros de transição
+        if (typeof bootstrap !== 'undefined') {
+            const originalRemoveEventListener = Element.prototype.removeEventListener;
+            const originalAddEventListener = Element.prototype.addEventListener;
+            
+            // Proteger transitionend e transitionstart
+            Element.prototype.addEventListener = function(type, listener, ...args) {
+                if (type === 'transitionend' || type === 'transitionstart') {
+                    const wrappedListener = function(event) {
+                        try {
+                            return listener.call(this, event);
+                        } catch (e) {
+                            if (e.message.includes('Cannot read properties of null')) {
+                                console.debug('[Transition Error] Erro de transição tratado:', e.message);
+                                return;
+                            }
+                            throw e;
+                        }
+                    };
+                    return originalAddEventListener.call(this, type, wrappedListener, ...args);
+                }
+                return originalAddEventListener.call(this, type, listener, ...args);
+            };
         }
     </script>
 
@@ -538,6 +905,291 @@
             console.log(`✅ ${recoveredItems.length} item(s) recuperado(s): ${recoveredItems.join(', ')}`);
         }
     })();
+    
+    /**
+     * 💾 FUNÇÃO DE RECUPERAÇÃO DE BACKUPS
+     * Permite restaurar dados de backup corrompidos
+     * Uso: restaurarBackup() - lista backups
+     *      restaurarBackup('backup-key') - restaura um backup específico
+     */
+    window.restaurarBackup = function(backupKey = null) {
+        const prefix = 'backup-corrupted-';
+        const backups = [];
+        
+        // Listar todos os backups disponíveis
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith(prefix)) {
+                backups.push({
+                    key: key,
+                    originalKey: key.replace(prefix, ''),
+                    size: (localStorage.getItem(key).length / 1024).toFixed(2) + ' KB',
+                    timestamp: new Date(parseInt(key.split('_').pop()) || 0).toLocaleString()
+                });
+            }
+        }
+        
+        if (backups.length === 0) {
+            console.log('✅ Nenhum backup de corrupção disponível');
+            return;
+        }
+        
+        // Se não especificou qual backup, listar todos
+        if (backupKey === null) {
+            console.log(`📋 ${backups.length} backup(s) disponível(is):`);
+            console.table(backups);
+            console.log(`\nPara restaurar um backup, use: restaurarBackup('${backups[0].key}')`);
+            return backups;
+        }
+        
+        // Restaurar backup específico
+        const backup = backups.find(b => b.key === backupKey);
+        if (!backup) {
+            console.error(`❌ Backup não encontrado: ${backupKey}`);
+            console.log(`Backups disponíveis:`);
+            console.table(backups);
+            return false;
+        }
+        
+        // Confirmar restauração
+        const confirmRestore = confirm(
+            `⚠️ RESTAURAR BACKUP?\n\n` +
+            `Key: ${backup.originalKey}\n` +
+            `Tamanho: ${backup.size}\n` +
+            `Backup criado: ${backup.timestamp}\n\n` +
+            `Isso vai SOBRESCREVER os dados atuais!\n\n` +
+            `✅ OK → Restaurar\n` +
+            `❌ Cancelar`
+        );
+        
+        if (!confirmRestore) {
+            console.log('❌ Restauração cancelada');
+            return false;
+        }
+        
+        try {
+            const backupData = localStorage.getItem(backupKey);
+            const originalKey = backup.originalKey;
+            
+            // Validar o backup antes de restaurar
+            try {
+                JSON.parse(backupData);
+            } catch (e) {
+                console.error(`❌ Backup está corrompido: ${e.message}`);
+                return false;
+            }
+            
+            // Criar backup da versão atual antes de restaurar
+            const currentData = localStorage.getItem(originalKey);
+            if (currentData) {
+                localStorage.setItem(`backup-before-restore-${originalKey}-${Date.now()}`, currentData);
+                console.log(`💾 Backup da versão atual criado`);
+            }
+            
+            // Restaurar
+            localStorage.setItem(originalKey, backupData);
+            console.log(`✅ Backup restaurado com sucesso em ${originalKey}`);
+            console.log(`💡 Dica: Recarregue a página para aplicar as mudanças`);
+            
+            return true;
+        } catch (e) {
+            console.error(`❌ Erro ao restaurar: ${e.message}`);
+            return false;
+        }
+    };
+    
+    /**
+     * 📊 FUNÇÃO PARA LIMPAR BACKUPS ANTIGOS
+     * Uso: limparBackupsAntigos(diasRetencao) - padrão 7 dias
+     */
+    window.limparBackupsAntigos = function(diasRetencao = 7) {
+        const prefix = 'backup-';
+        const agora = Date.now();
+        const msporDia = 24 * 60 * 60 * 1000;
+        const dataLimite = agora - (diasRetencao * msporDia);
+        let deletados = 0;
+        
+        for (let i = localStorage.length - 1; i >= 0; i--) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith(prefix)) {
+                try {
+                    const timestamp = parseInt(key.split('_').pop() || key.split('-').pop());
+                    if (timestamp < dataLimite && !isNaN(timestamp)) {
+                        localStorage.removeItem(key);
+                        deletados++;
+                    }
+                } catch (e) {
+                    // Ignorar se não conseguir parsear timestamp
+                }
+            }
+        }
+        
+        console.log(`🗑️ ${deletados} backup(s) antigo(s) removido(s)`);
+        return deletados;
+    };
+    
+    /**
+     * 📊 MONITORAR QUOTA DE LOCALSTORAGE
+     * Retorna informações de uso de localStorage
+     * Uso: verificarQuota() - mostra status
+     *      verificarQuota().percentual > 90 - para alertar se >90%
+     */
+    window.verificarQuota = function() {
+        try {
+            let totalSize = 0;
+            const dados = {};
+            
+            // Calcular tamanho total de localStorage
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                const size = key.length + value.length;
+                totalSize += size;
+                
+                // Agrupar por tipo de dados
+                if (key.startsWith('redungeon_')) {
+                    const tipo = key.replace('redungeon_', '');
+                    dados[tipo] = {
+                        size: size,
+                        sizeKB: (size / 1024).toFixed(2),
+                        sizeMB: (size / (1024 * 1024)).toFixed(3)
+                    };
+                }
+            }
+            
+            // Estimativa de quota (5-10MB típico)
+            const quotaEstimada = 5 * 1024 * 1024; // 5MB
+            const percentual = (totalSize / quotaEstimada * 100).toFixed(2);
+            
+            const status = {
+                totalSize: totalSize,
+                totalSizeKB: (totalSize / 1024).toFixed(2),
+                totalSizeMB: (totalSize / (1024 * 1024)).toFixed(3),
+                quotaEstimada: quotaEstimada,
+                quotaEstimadaMB: (quotaEstimada / (1024 * 1024)).toFixed(1),
+                percentual: parseFloat(percentual),
+                alerta: percentual > 90 ? '🔴 CRÍTICO' : (percentual > 75 ? '🟡 AVISO' : '🟢 OK'),
+                dados: dados
+            };
+            
+            console.log(`📊 Quota de localStorage: ${percentual}% usado`);
+            console.table(status);
+            console.log('Detalhes por tipo de dado:');
+            console.table(dados);
+            
+            return status;
+        } catch (error) {
+            window.APP_ERRORS.push({
+                timestamp: new Date().toISOString(),
+                message: `Quota check error: ${error.message}`,
+                type: 'quota-check-error',
+                error: error.toString()
+            });
+            console.error('❌ Erro ao verificar quota:', error);
+            return null;
+        }
+    };
+    
+    /**
+     * 💾 VALIDAR QUOTA ANTES DE SALVAR
+     * Use esta função antes de qualquer localStorage.setItem() crítico
+     * Retorna: true se seguro para salvar, false se quota em risco
+     */
+    window.validarQuotaAntesDeSalvar = function(tamanhoEstimado = 1024) {
+        try {
+            const quota = window.verificarQuota();
+            if (!quota) return false;
+            
+            // Se usar mais 50% do estimado, alertar
+            const novoPercentual = ((parseFloat(quota.totalSize) + tamanhoEstimado) / quota.quotaEstimada * 100);
+            
+            if (novoPercentual > 90) {
+                console.error(`❌ CRÍTICO: Quota excederia ${novoPercentual.toFixed(1)}%`);
+                window.APP_ERRORS.push({
+                    timestamp: new Date().toISOString(),
+                    message: `Quota critical: ${novoPercentual.toFixed(1)}%`,
+                    type: 'quota-critical',
+                    percentual: novoPercentual,
+                    tamanhoEstimado: tamanhoEstimado
+                });
+                return false;
+            }
+            
+            if (novoPercentual > 75) {
+                console.warn(`⚠️ AVISO: Quota seria ${novoPercentual.toFixed(1)}%`);
+                window.APP_LOGS.push(`⚠️ Quota warning: ${novoPercentual.toFixed(1)}%`);
+                return true; // Permitir, mas avisar
+            }
+            
+            return true; // OK
+        } catch (error) {
+            console.error('❌ Erro ao validar quota:', error);
+            return true; // Permitir se não conseguir validar
+        }
+    };
+    
+    /**
+     * 🚨 TRATAMENTO UNIFORME DE QUOTA EXCEEDED
+     * Centraliza o tratamento de QuotaExceededError em toda a app
+     * Uso: tratarQuotaExceeded(error, contexto)
+     */
+    window.tratarQuotaExceeded = function(error, contexto = 'operação') {
+        const msg = `❌ QUOTA EXCEEDED em ${contexto}`;
+        
+        window.APP_LOGS.push(`🔴 ${msg}`);
+        window.APP_ERRORS.push({
+            timestamp: new Date().toISOString(),
+            message: msg,
+            type: 'quota-exceeded-error',
+            contexto: contexto,
+            error: error.toString()
+        });
+        
+        console.warn(`⚠️ ${msg} - Tentando liberar espaço...`);
+        
+        // Estratégia 1: Limpar backups antigos
+        try {
+            const deletados = window.limparBackupsAntigos(1); // Backups com > 1 dia
+            if (deletados > 0) {
+                console.log(`✅ ${deletados} backup(s) antigo(s) removido(s)`);
+                return true;
+            }
+        } catch (e) {
+            console.warn('⚠️ Não foi possível limpar backups:', e);
+        }
+        
+        // Estratégia 2: Remover imagens base64 maiores
+        try {
+            let bytesLiberados = 0;
+            if (window.armazenar && window.armazenar.npcs) {
+                window.armazenar.npcs.forEach(npc => {
+                    if (npc.imagem && npc.imagem.startsWith('data:')) {
+                        bytesLiberados += npc.imagem.length;
+                        npc.imagem = ''; // Remover
+                    }
+                });
+                if (bytesLiberados > 0) {
+                    console.log(`✅ ${(bytesLiberados / 1024).toFixed(2)}KB liberado removendo imagens`);
+                    return true;
+                }
+            }
+        } catch (e) {
+            console.warn('⚠️ Não foi possível remover imagens:', e);
+        }
+        
+        // Se chegou aqui, não conseguiu liberar espaço
+        alert(
+            `⚠️ ARMAZENAMENTO CHEIO!\n\n` +
+            `${contexto} não pôde ser salvo.\n\n` +
+            `Sugestões:\n` +
+            `1. Feche outras abas da app\n` +
+            `2. Exporte seus dados (File → Export)\n` +
+            `3. Considere usar IndexedDB\n` +
+            `4. Limpe o cache do navegador`
+        );
+        
+        return false;
+    };
     
     /**
      * 🔐 DATA STORE - CAMADA DE ABSTRAÇÃO CENTRALIZADA
@@ -931,6 +1583,20 @@
     (function sanitizeStorageImages() {
         console.log('🧹 Iniciando limpeza de URLs inválidas no localStorage...');
         try {
+            // Padrões de URLs que sabidamente retornam 404
+            const known404Patterns = [
+                'brachydios', 'monster-hunter', '141-870x563', 
+                'micropolis', /\d+\.\d+\.\d+\.\d+/ // IPs
+            ];
+            
+            function isBrokenURL(url) {
+                if (!url || typeof url !== 'string') return false;
+                return known404Patterns.some(pattern => {
+                    if (pattern instanceof RegExp) return pattern.test(url);
+                    return url.toLowerCase().includes(pattern.toLowerCase());
+                });
+            }
+            
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 if (key && key.includes('redungeon_')) {
@@ -940,14 +1606,16 @@
                             const data = JSON.parse(value);
                             let modified = false;
 
-                            // Se é um array (múltiplos NPCs)
+                            // Se é um array (múltiplos NPCs, Itens, etc)
                             if (Array.isArray(data)) {
                                 data.forEach(item => {
                                     if (item.imagem && typeof item.imagem === 'string') {
-                                        // Apenas remove URLs que são obviamente inválidas (strings vazias, "undefined", etc)
-                                        // Permite: URLs normais (http/https), data URIs, blob URIs, GIFs, imagens de upload
-                                        if (item.imagem.trim() === '' || item.imagem === 'undefined' || item.imagem === 'null') {
-                                            console.warn('🗑️ URL inválida removida:', item.imagem.substring(0, 50));
+                                        // Remove URLs inválidas ou que sabidamente retornam 404
+                                        if (item.imagem.trim() === '' || 
+                                            item.imagem === 'undefined' || 
+                                            item.imagem === 'null' ||
+                                            isBrokenURL(item.imagem)) {
+                                            console.warn('🗑️ URL inválida/404 removida:', item.imagem.substring(0, 60));
                                             item.imagem = null;
                                             modified = true;
                                         }
@@ -957,10 +1625,11 @@
                             // Se é um objeto único
                             else if (data && typeof data === 'object') {
                                 if (data.imagem && typeof data.imagem === 'string') {
-                                    // Apenas remove URLs que são obviamente inválidas (strings vazias, "undefined", etc)
-                                    // Permite: URLs normais (http/https), data URIs, blob URIs, GIFs, imagens de upload
-                                    if (data.imagem.trim() === '' || data.imagem === 'undefined' || data.imagem === 'null') {
-                                        console.warn('🗑️ URL inválida removida:', data.imagem.substring(0, 50));
+                                    if (data.imagem.trim() === '' || 
+                                        data.imagem === 'undefined' || 
+                                        data.imagem === 'null' ||
+                                        isBrokenURL(data.imagem)) {
+                                        console.warn('🗑️ URL inválida/404 removida:', data.imagem.substring(0, 60));
                                         data.imagem = null;
                                         modified = true;
                                     }
@@ -970,7 +1639,7 @@
                             // Se foi modificado, salvar de volta
                             if (modified) {
                                 localStorage.setItem(key, JSON.stringify(data));
-                                console.log('✅ localStorage atualizado:', key);
+                                console.log('✅ localStorage atualizado (imagens removidas):', key);
                             }
                         }
                     } catch (e) {
@@ -978,12 +1647,24 @@
                     }
                 }
             }
+            console.log('✅ Limpeza de URLs concluída');
         } catch (e) {
             console.error('❌ Erro ao sanitizar localStorage:', e);
         }
     })();
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 🗄️ Inicializar StorageManager (IndexedDB com fallback localStorage)
+            console.log('🚀 Inicializando StorageManager...');
+            await window.StorageManager.init();
+            
+            // Migrar dados existentes de localStorage para IndexedDB
+            const migrados = await window.StorageManager.migrateFromLocalStorage();
+            if (migrados > 0) {
+                console.log(`✅ Migração concluída: ${migrados} entradas`);
+                window.APP_LOGS.push(`🗄️ ${migrados} entradas migradas para IndexedDB`);
+            }
+            
             DataStore.init();
             // ✅ INICIAR MONITOR DE SCROLL
             ScrollProtector.startMonitor();
@@ -1110,7 +1791,17 @@
                     }
                 }
             } catch (error) {
-                console.warn('⚠️ [restaurarFocoAposOperacao] Erro ao restaurar foco:', error);
+                // 🔴 Registrar no novo sistema de logging para rastreabilidade
+                const errorMsg = `[restaurarFocoAposOperacao] Erro ao restaurar foco: ${error.message}`;
+                window.APP_LOGS.push(`🔴 ${errorMsg}`);
+                window.APP_ERRORS.push({
+                    timestamp: new Date().toISOString(),
+                    message: errorMsg,
+                    type: 'focus-restoration-error',
+                    error: error.toString(),
+                    stack: error.stack
+                });
+                console.warn('⚠️ ' + errorMsg, error);
             }
         }, delay);
     };
@@ -10657,6 +11348,38 @@
         // Sobrescrever localStorage.setItem
         localStorage.setItem = function(key, value) {
             try {
+                // 🛡️ EVITAR RECURSÃO INFINITA: Se StorageManager já está salvando, usar originalmente
+                if (window.StorageManager && window.StorageManager._isSettingItem) {
+                    return originalLocalStorage.setItem(key, value);
+                }
+                
+                // Se StorageManager está ready e é dado redungeon_, usar IndexedDB
+                if (window.StorageManager && window.StorageManager.ready && key.startsWith('redungeon_')) {
+                    // Marcar que estamos em uma operação de storage
+                    window.StorageManager._isSettingItem = true;
+                    
+                    // Usar StorageManager async (será aguardado depois)
+                    window.StorageManager.set(key, value).catch(err => {
+                        console.warn(`⚠️ StorageManager.set falhou, usando localStorage:`, err);
+                        return originalLocalStorage.setItem(key, value);
+                    }).finally(() => {
+                        window.StorageManager._isSettingItem = false;
+                    });
+                    return;
+                }
+                
+                // ⚠️ VALIDAR QUOTA ANTES (apenas para localStorage)
+                if (!window.validarQuotaAntesDeSalvar(key.length + (value ? value.length : 0))) {
+                    const msg = `❌ QUOTA EXCEEDED: Não foi possível salvar ${key}`;
+                    window.APP_ERRORS.push({
+                        timestamp: new Date().toISOString(),
+                        message: msg,
+                        type: 'quota-exceeded',
+                        key: key
+                    });
+                    throw new Error(msg);
+                }
+                
                 // Se não é string, salvar direto
                 if (typeof value !== 'string') {
                     return originalLocalStorage.setItem(key, value || '');
@@ -10665,7 +11388,14 @@
                 // Detecção de patterns REALMENTE perigosos APENAS
                 const criticalDanger = /eval\s*\(|Function\s*\(|new\s+Function|<script/gi;
                 if (criticalDanger.test(value)) {
-                    console.error('🚨 BLOQUEADO: Código malicioso detectado');
+                    const msg = '🚨 BLOQUEADO: Código malicioso detectado';
+                    window.APP_ERRORS.push({
+                        timestamp: new Date().toISOString(),
+                        message: msg,
+                        type: 'malicious-code-detected',
+                        key: key
+                    });
+                    console.error(msg);
                     return; // Não salva
                 }
                 
@@ -10683,7 +11413,16 @@
                 // Salvar
                 return originalLocalStorage.setItem(key, sanitizedValue);
             } catch (error) {
-                console.error('❌ Erro ao setItem:', error.message);
+                const msg = `Erro ao setItem(${key}): ${error.message}`;
+                window.APP_LOGS.push(`🔴 ${msg}`);
+                window.APP_ERRORS.push({
+                    timestamp: new Date().toISOString(),
+                    message: msg,
+                    type: 'setitem-error',
+                    key: key,
+                    error: error.toString()
+                });
+                console.error('❌ ' + msg, error);
                 // Fallback: salvar o valor original se tudo falhar
                 try {
                     return originalLocalStorage.setItem(key, value);
@@ -10696,6 +11435,12 @@
         // Sobrescrever localStorage.getItem
         localStorage.getItem = function(key) {
             try {
+                // Se StorageManager está ready e é dado redungeon_, preferir IndexedDB
+                if (window.StorageManager && window.StorageManager.ready && key.startsWith('redungeon_')) {
+                    // Nota: Como getItem é síncrono, só retorna localStorage
+                    // O valor será sincronizado do IndexedDB na migração
+                }
+                
                 const value = originalLocalStorage.getItem(key);
                 if (!value) return value;
                 
@@ -18698,7 +19443,7 @@
         function preencherListaSeletorRaca() {
             const lista = document.getElementById('listaSelecionarRaca');
             // Carrega do localStorage se armazenar estiver vazio
-            const racas = armazenar.racas && armazenar.racas.length > 0 ? armazenar.racas : (JSON.parse(localStorage.getItem('redungeon_racas')) || []);
+            const racas = armazenar.racas && armazenar.racas.length > 0 ? armazenar.racas : (window.parseJsonSeguro('redungeon_racas'));
             
             // Guardar globalmente para filtro
             racasGlobalSelecionador = racas;
@@ -19151,7 +19896,7 @@
         function preencherListaSeletorClasse() {
             const lista = document.getElementById('listaSelecionarClasse');
             // Carrega do localStorage se armazenar estiver vazio
-            const classes = armazenar.classes && armazenar.classes.length > 0 ? armazenar.classes : (JSON.parse(localStorage.getItem('redungeon_classes')) || []);
+            const classes = armazenar.classes && armazenar.classes.length > 0 ? armazenar.classes : (window.parseJsonSeguro('redungeon_classes'));
             
             lista.innerHTML = '';
             if (classes.length === 0) {
@@ -19226,7 +19971,7 @@
         function preencherListaSeletorOrigem() {
             const lista = document.getElementById('listaSelecionarOrigem');
             // Carrega do localStorage se armazenar estiver vazio
-            const origens = armazenar.origens && armazenar.origens.length > 0 ? armazenar.origens : (JSON.parse(localStorage.getItem('redungeon_origens')) || []);
+            const origens = armazenar.origens && armazenar.origens.length > 0 ? armazenar.origens : (window.parseJsonSeguro('redungeon_origens'));
             
             lista.innerHTML = '';
             if (origens.length === 0) {
@@ -23238,7 +23983,7 @@
                 if (typeof condicao === 'string') {
                     // Se for string, tentar carregar do localStorage
                     try {
-                        const condicoesArmazenadas = JSON.parse(localStorage.getItem('redungeon_condicoes')) || [];
+                        const condicoesArmazenadas = window.parseJsonSeguro('redungeon_condicoes');
                         condicaoObj = condicoesArmazenadas.find(c => c.nome === condicao || c.id === condicao) || {
                             nome: condicao,
                             tipo: 'Estado',
@@ -23465,7 +24210,7 @@
         // Função para atualizar lista com filtros aplicados (HABILIDADES)
         function atualizarListaCondicoesFiltradaSkill() {
             const container = document.getElementById('listaSeletorCondicoesSkill');
-            const condicoesArmazenadas = JSON.parse(localStorage.getItem('redungeon_condicoes')) || [];
+            const condicoesArmazenadas = window.parseJsonSeguro('redungeon_condicoes');
             
             if (!condicoesArmazenadas || condicoesArmazenadas.length === 0) {
                 container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 20px;">Nenhuma condição disponível.</div>';
@@ -25042,7 +25787,7 @@
                         // Reverter a última alteração
                         if (window.npcEmEdicao !== null) {
                             // Recarregar do localStorage
-                            armazenar.npcs = JSON.parse(localStorage.getItem('redungeon_npcs')) || [];
+                            armazenar.npcs = window.parseJsonSeguro('redungeon_npcs');
                         } else {
                             // Remover NPC que acabou de ser adicionado
                             armazenar.npcs.pop();
@@ -25279,7 +26024,7 @@
         // Função para atualizar lista com filtros aplicados
         function atualizarListaCondicoesFiltrada() {
             const container = document.getElementById('listaSeletorCondicoes');
-            const condicoesArmazenadas = JSON.parse(localStorage.getItem('redungeon_condicoes')) || [];
+            const condicoesArmazenadas = window.parseJsonSeguro('redungeon_condicoes');
             
             if (!condicoesArmazenadas || condicoesArmazenadas.length === 0) {
                 container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 20px;">Nenhuma condição disponível.</div>';
@@ -25335,7 +26080,7 @@
 
                 html += `
                     <div style="background: ${isDisabled ? '#1a1a1a' : '#222'}; border: 2px solid ${isChecked ? '#d4af37' : '#444'}; border-radius: 8px; padding: 12px; cursor: ${isDisabled ? 'not-allowed' : 'pointer'}; transition: all 0.3s; opacity: ${isDisabled ? '0.6' : '1'}; position: relative; filter: ${isDisabled ? 'grayscale(60%) brightness(0.8)' : 'none'};" 
-                         onclick="${isDisabled ? '' : `toggleCondicaoSeletor(${indexOriginal}, event, JSON.parse(localStorage.getItem('redungeon_condicoes')))`}" id="condicao-seletor-${indexOriginal}">
+                         onclick="${isDisabled ? '' : `toggleCondicaoSeletor(${indexOriginal}, event, window.parseJsonSeguro('redungeon_condicoes'))`}" id="condicao-seletor-${indexOriginal}">
                         ${isDisabled ? '<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 3rem; background: rgba(0, 0, 0, 0.2);">🚫</div>' : ''}
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; ${isDisabled ? 'opacity: 0.7;' : ''}">
                             <input type="checkbox" id="check-${indexOriginal}" ${isChecked ? 'checked' : ''} ${isDisabled ? 'disabled' : ''} style="cursor: ${isDisabled ? 'not-allowed' : 'pointer'};" onchange="event.stopPropagation();">
@@ -25434,7 +26179,7 @@
         // Função para visualizar detalhes de uma condição
         function visualizarCondicao(event, index) {
             event.stopPropagation();
-            const condicoes = JSON.parse(localStorage.getItem('redungeon_condicoes')) || [];
+            const condicoes = window.parseJsonSeguro('redungeon_condicoes');
             if (!condicoes[index]) return;
             
             const condicao = condicoes[index];
@@ -25887,7 +26632,7 @@
         // Função para atualizar lista com filtros aplicados (ARTES)
         function atualizarListaCondicoesFiltradaArt() {
             const container = document.getElementById('listaSeletorCondicoesArt');
-            const condicoesArmazenadas = JSON.parse(localStorage.getItem('redungeon_condicoes')) || [];
+            const condicoesArmazenadas = window.parseJsonSeguro('redungeon_condicoes');
             
             if (!condicoesArmazenadas || condicoesArmazenadas.length === 0) {
                 container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 20px;">Nenhuma condição disponível.</div>';
@@ -25939,7 +26684,7 @@
 
                 html += `
                     <div style="background: ${isDisabled ? '#1a1a1a' : '#222'}; border: 2px solid ${isChecked ? '#d4af37' : '#444'}; border-radius: 8px; padding: 12px; cursor: ${isDisabled ? 'not-allowed' : 'pointer'}; transition: all 0.3s; opacity: ${isDisabled ? '0.6' : '1'}; position: relative; filter: ${isDisabled ? 'grayscale(60%) brightness(0.8)' : 'none'};" 
-                         onclick="${isDisabled ? '' : `toggleCondicaoSeletorArt(${indexOriginal}, event, JSON.parse(localStorage.getItem('redungeon_condicoes')))`}" id="condicao-seletor-art-${indexOriginal}">
+                         onclick="${isDisabled ? '' : `toggleCondicaoSeletorArt(${indexOriginal}, event, window.parseJsonSeguro('redungeon_condicoes'))`}" id="condicao-seletor-art-${indexOriginal}">
                         ${isDisabled ? '<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 3rem; background: rgba(0, 0, 0, 0.2);">🚫</div>' : ''}
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; ${isDisabled ? 'opacity: 0.7;' : ''}">
                             <input type="checkbox" id="check-art-${indexOriginal}" ${isChecked ? 'checked' : ''} ${isDisabled ? 'disabled' : ''} style="cursor: ${isDisabled ? 'not-allowed' : 'pointer'};" onchange="event.stopPropagation();">
@@ -26018,7 +26763,7 @@
                 if (typeof condicao === 'string') {
                     // Se for string, tentar carregar do localStorage
                     try {
-                        const condicoesArmazenadas = JSON.parse(localStorage.getItem('redungeon_condicoes')) || [];
+                        const condicoesArmazenadas = window.parseJsonSeguro('redungeon_condicoes');
                         condicaoObj = condicoesArmazenadas.find(c => c.nome === condicao || c.id === condicao) || {
                             nome: condicao,
                             tipo: 'Estado',
@@ -26105,7 +26850,7 @@
         // Função para visualizar condição no seletor (ARTES)
         function visualizarCondicaoArt(event, index) {
             event.stopPropagation();
-            const condicoes = JSON.parse(localStorage.getItem('redungeon_condicoes')) || [];
+            const condicoes = window.parseJsonSeguro('redungeon_condicoes');
             if (!condicoes[index]) return;
             
             const condicao = condicoes[index];
@@ -26623,6 +27368,120 @@
             }
         }
         
+        /**
+         * 🔄 SINCRONIZAÇÃO CROSS-TAB GLOBAL
+         * Monitora mudanças em localStorage de outras abas e sincroniza automaticamente
+         */
+        
+        // Armazenar referências aos listeners para poder removê-los depois (evita vazamento de memória)
+        window._syncListeners = window._syncListeners || {};
+        
+        // Storage event listener - pode ser removido via window.removeEventListener
+        const onStorageChange = (event) => {
+            try {
+                if (event.key && event.key.startsWith('redungeon_')) {
+                    console.log(`🔄 [SYNC] Mudança detectada em outra aba: ${event.key}`);
+                    
+                    // Recarregar dados do localStorage
+                    const novoValor = parseJsonSeguro(event.key);
+                    const chaveObjeto = event.key.replace('redungeon_', '');
+                    
+                    // Atualizar objeto armazenar
+                    if (armazenar && chaveObjeto in armazenar) {
+                        armazenar[chaveObjeto] = novoValor;
+                        console.log(`✅ [SYNC] ${chaveObjeto} sincronizado de outra aba`);
+                        
+                        // Disparar evento custom de sincronização
+                        const syncEvent = new CustomEvent('data-synced', {
+                            detail: { key: chaveObjeto, data: novoValor }
+                        });
+                        window.dispatchEvent(syncEvent);
+                    }
+                }
+            } catch (error) {
+                window.APP_LOGS.push(`🔴 [SYNC] Erro ao sincronizar: ${error.message}`);
+                window.APP_ERRORS.push({
+                    timestamp: new Date().toISOString(),
+                    message: `Storage sync error: ${error.message}`,
+                    type: 'storage-sync-error',
+                    key: event.key,
+                    error: error.toString()
+                });
+                console.error('[SYNC] Erro:', error);
+            }
+        };
+        
+        window._syncListeners.onStorageChange = onStorageChange;
+        window.addEventListener('storage', onStorageChange);
+        
+        /**
+         * 🔄 SINCRONIZAÇÃO AO FOCAR/DESFOCAR JANELA
+         * Se a janela foi focada, força sincronização de todos os dados
+         */
+        let lastSyncTime = Date.now();
+        
+        const onFocus = () => {
+            try {
+                console.log('👁️ Janela ganhando foco - verificando sincronização...');
+                const agora = Date.now();
+                
+                // Sincronizar apenas se passaram mais de 2 segundos desde a última sincronização
+                if (agora - lastSyncTime > 2000) {
+                    console.log('🔄 Executando sincronização forçada...');
+                    
+                    // Verificar cada chave de dados
+                    const chavesData = [
+                        'redungeon_Mesa', 'redungeon_origens', 'redungeon_cardflux',
+                        'redungeon_regioes', 'redungeon_cenarios', 'redungeon_racas',
+                        'redungeon_classes', 'redungeon_aptidoes', 'redungeon_npcs',
+                        'redungeon_criaturas', 'redungeon_materiais', 'redungeon_receitas',
+                        'redungeon_itens', 'redungeon_condicoes', 'redungeon_regras'
+                    ];
+                    
+                    chavesData.forEach(chave => {
+                        const chaveObjeto = chave.replace('redungeon_', '');
+                        const novoValor = parseJsonSeguro(chave);
+                        if (armazenar && chaveObjeto in armazenar) {
+                            armazenar[chaveObjeto] = novoValor;
+                        }
+                    });
+                    
+                    lastSyncTime = agora;
+                    console.log('✅ Sincronização forçada concluída');
+                }
+            } catch (error) {
+                window.APP_LOGS.push(`🔴 [FOCUS-SYNC] Erro: ${error.message}`);
+                window.APP_ERRORS.push({
+                    timestamp: new Date().toISOString(),
+                    message: `Focus sync error: ${error.message}`,
+                    type: 'focus-sync-error',
+                    error: error.toString()
+                });
+                console.error('[FOCUS-SYNC] Erro:', error);
+            }
+        };
+        
+        window._syncListeners.onFocus = onFocus;
+        window.addEventListener('focus', onFocus);
+        
+        /**
+         * 🧹 FUNÇÃO PARA LIMPAR LISTENERS DE SINCRONIZAÇÃO
+         * Use isso se fechar a aba ou quiser liberar memória
+         */
+        window.desabilitarSincronizacao = function() {
+            if (window._syncListeners) {
+                if (window._syncListeners.onStorageChange) {
+                    window.removeEventListener('storage', window._syncListeners.onStorageChange);
+                    console.log('✅ Storage listener removido');
+                }
+                if (window._syncListeners.onFocus) {
+                    window.removeEventListener('focus', window._syncListeners.onFocus);
+                    console.log('✅ Focus listener removido');
+                }
+                console.log('✅ Sincronização desabilitada');
+            }
+        };
+        
         // DADOS EM LOCALSTORAGE
         let armazenar = {
             Mesa: (() => {
@@ -26717,7 +27576,7 @@
                 dataCriacao: new Date().toLocaleString('pt-BR')
             };
             
-            let origens = JSON.parse(localStorage.getItem('redungeon_origens')) || [];
+            let origens = window.parseJsonSeguro('redungeon_origens');
             origens.push(exemploOrigem);
             localStorage.setItem('redungeon_origens', JSON.stringify(origens));
             armazenar.origens = origens;
@@ -26816,6 +27675,120 @@
             console.log(`📊 Mesclagem [${nomeAba}]: +${novosCont} novos | ⏭️ ${duplicadosCont} duplicados ignorados | Total: ${dadosExistentes.length}`);
             
             return { mesclados: dadosExistentes, novosCont, duplicadosCont };
+        }
+
+        /**
+         * Sincroniza (mescla) dados importados com os dados existentes.
+         * Pode sincronizar uma aba específica ou todas as abas.
+         * 
+         * @param {Object} dadosImportados - Objeto JSON importado com dados
+         * @param {String} escopo - 'aba' para aba atual, 'tudo' para todas as abas
+         * @returns {Object} - Resultado da sincronização com estatísticas
+         */
+        /**
+         * Sincroniza (mescla) dados importados para múltiplas abas.
+         * Versão especial para abas que contêm múltiplos tipos de dados.
+         * 
+         * @param {Object} dadosImportados - Objeto JSON importado com dados
+         * @param {Array} abasParaSincronizar - Array de IDs de abas a sincronizar
+         * @returns {Object} - Resultado da sincronização com estatísticas
+         */
+        async function sincronizarDadosMultiabas(dadosImportados, abasParaSincronizar = []) {
+            if (!dadosImportados || typeof dadosImportados !== 'object') {
+                throw new Error('Dados importados inválidos');
+            }
+
+            if (!Array.isArray(abasParaSincronizar) || abasParaSincronizar.length === 0) {
+                throw new Error('Lista de abas para sincronizar inválida ou vazia');
+            }
+
+            const mapaAbas = {
+                'Mesa': { key: 'redungeon_Mesa', nome: '📅 História' },
+                'origens': { key: 'redungeon_origens', nome: '🌍 Origens' },
+                'cardflux': { key: 'redungeon_cardflux', nome: '🂡 Cardflux' },
+                'regioes': { key: 'redungeon_regioes', nome: '🌍 Regiões' },
+                'cenarios': { key: 'redungeon_cenarios', nome: '🏛️ Cenários' },
+                'racas': { key: 'redungeon_racas', nome: '👥 Raças' },
+                'classes': { key: 'redungeon_classes', nome: '🛡️ Classes' },
+                'aptidoes': { key: 'redungeon_aptidoes', nome: '✨ Aptidões' },
+                'npcs': { key: 'redungeon_npcs', nome: '🧑 NPCs' },
+                'criaturas': { key: 'redungeon_criaturas', nome: '👹 Criaturas' },
+                'materiais': { key: 'redungeon_materiais', nome: '⚙️ Materiais' },
+                'receitas': { key: 'redungeon_receitas', nome: '📖 Receitas' },
+                'itens': { key: 'redungeon_itens', nome: '🎒 Itens' },
+                'condicoes': { key: 'redungeon_condicoes', nome: '⚡ Condições' },
+                'regras': { key: 'redungeon_regras', nome: '📋 Regras' },
+                'artes': { key: 'artes', nome: '🎨 ART\'s' }
+            };
+
+            let abasProcessadas = [];
+            let totalNovos = 0;
+            let totalDuplicados = 0;
+
+            try {
+                // Sincronizar cada aba da lista
+                for (const idAba of abasParaSincronizar) {
+                    const metadadosAba = mapaAbas[idAba];
+
+                    if (!metadadosAba) {
+                        console.warn(`⚠️ Aba "${idAba}" não mapeada, pulando...`);
+                        continue;
+                    }
+
+                    // Pular se não houver dados para esta aba no arquivo
+                    if (!Array.isArray(dadosImportados[idAba]) || dadosImportados[idAba].length === 0) {
+                        console.log(`ℹ️ Aba "${idAba}" não contém dados no arquivo, pulando...`);
+                        continue;
+                    }
+
+                    // Sincronizar esta aba
+                    const dadosExistentes = parseJsonSeguro(metadadosAba.key) || [];
+                    const dadosNovosLimpos = limparDadosCorretos(dadosImportados[idAba], metadadosAba.nome);
+                    const resultado = mesclarDados(dadosExistentes, dadosNovosLimpos, metadadosAba.nome);
+
+                    // Atualizar localStorage e armazenar com sanitizacao
+                    const mesclados = limparDadosCorretos(resultado.mesclados, metadadosAba.nome);
+                    localStorage.setItem(metadadosAba.key, sanitizarParaSalvar(mesclados, metadadosAba.nome));
+                    armazenar[idAba] = mesclados;
+                    
+                    // ✅ Migração automática para NPCs
+                    if (idAba === 'npcs' && Array.isArray(armazenar.npcs)) {
+                        armazenar.npcs.forEach(npc => {
+                            if (npc && typeof migrarNPCAntigo === 'function') {
+                                migrarNPCAntigo(npc);
+                            }
+                        });
+                    }
+                    
+                    // Sincronizar variáveis globais para artes
+                    if (idAba === 'artes') {
+                        artes = resultado.mesclados;
+                        armazenar.arts = resultado.mesclados;
+                    }
+
+                    abasProcessadas.push({
+                        aba: idAba,
+                        nome: metadadosAba.nome,
+                        novos: resultado.novosCont,
+                        duplicados: resultado.duplicadosCont
+                    });
+
+                    totalNovos += resultado.novosCont;
+                    totalDuplicados += resultado.duplicadosCont;
+                }
+
+                return {
+                    sucesso: true,
+                    escopo: 'multi-aba',
+                    abasProcessadas: abasProcessadas,
+                    totalNovos: totalNovos,
+                    totalDuplicados: totalDuplicados,
+                    totalAbasAfetadas: abasProcessadas.length
+                };
+            } catch (erro) {
+                console.error('❌ Erro durante sincronização multi-aba:', erro);
+                throw erro;
+            }
         }
 
         /**
@@ -27025,8 +27998,8 @@
         
         // Migração: Adicionar campos "Duração" e "Tipo" às habilidades de raças e classes existentes
         function migrarRacasComDuracao() {
-            const racas = JSON.parse(localStorage.getItem('redungeon_racas')) || [];
-            const classes = JSON.parse(localStorage.getItem('redungeon_classes')) || [];
+            const racas = window.parseJsonSeguro('redungeon_racas');
+            const classes = window.parseJsonSeguro('redungeon_classes');
             let precisaMigrarRacas = false;
             let precisaMigrarClasses = false;
 
@@ -27089,7 +28062,7 @@
             console.log('Blob disponível:', typeof Blob !== 'undefined');
             console.log('URL.createObjectURL disponível:', typeof URL !== 'undefined' && typeof URL.createObjectURL !== 'undefined');
             
-            const Mesa = JSON.parse(localStorage.getItem('redungeon_Mesa')) || [];
+            const Mesa = window.parseJsonSeguro('redungeon_Mesa');
             console.log('Mesa items:', Mesa.length);
             console.log('Primeiro item Mesa:', Mesa[0]);
             
@@ -27103,7 +28076,7 @@
         // Diagnóstico e reparo de imagens inválidas nos NPCs
         async function diagnosticarRepararImagensNPC() {
             console.log('🔍 Verificando imagens dos NPCs...');
-            const npcs = JSON.parse(localStorage.getItem('redungeon_npcs')) || [];
+            const npcs = window.parseJsonSeguro('redungeon_npcs');
             if (npcs.length === 0) {
                 console.log('Nenhum NPC cadastrado');
                 return;
@@ -33197,7 +34170,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             const container = document.getElementById('listItemsExistentes');
             if (!armazenar || !armazenar.itens) {
                 // Carregar do localStorage se armazenar vazio
-                const itensLocal = JSON.parse(localStorage.getItem('redungeon_itens') || '[]');
+                const itensLocal = window.parseJsonString(localStorage.getItem('redungeon_itens'), "[]");
                 if (armazenar) armazenar.itens = itensLocal;
             }
             
@@ -33295,7 +34268,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
         function renderizarItensExistentesFiltrados() {
             const container = document.getElementById('listItemsExistentes');
             if (!armazenar || !armazenar.itens) {
-                const itensLocal = JSON.parse(localStorage.getItem('redungeon_itens') || '[]');
+                const itensLocal = window.parseJsonString(localStorage.getItem('redungeon_itens'), "[]");
                 if (armazenar) armazenar.itens = itensLocal;
             }
             
@@ -34231,7 +35204,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             console.log('🔍 === DIAGNÓSTICO DE IMAGENS ARMAZENADAS ===');
             
             // Verificar localStorage
-            const itensLocal = JSON.parse(localStorage.getItem('redungeon_itens') || '[]');
+            const itensLocal = window.parseJsonString(localStorage.getItem('redungeon_itens'), "[]");
             console.log(`📦 Itens no localStorage: ${itensLocal.length}`);
             
             itensLocal.forEach((item, idx) => {
@@ -34741,7 +35714,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             // Recarregar ARTs do localStorage com as novas adições
             const chaves = ['redungeon_artes', 'artes', 'arts'];
             for (const chave of chaves) {
-                const dados = JSON.parse(localStorage.getItem(chave) || '[]');
+                const dados = window.parseJsonString(localStorage.getItem(chave), []);
                 if (dados && dados.length > 0) {
                     armazenar.arts = dados;
                     console.log(`🔄 ARTs recarregadas da chave "${chave}" (${dados.length} itens)`);
@@ -34806,7 +35779,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 // Tentar múltiplas chaves no localStorage
                 const chaves = ['redungeon_artes', 'artes', 'arts'];
                 for (const chave of chaves) {
-                    const dados = JSON.parse(localStorage.getItem(chave) || '[]');
+                    const dados = window.parseJsonString(localStorage.getItem(chave), []);
                     if (dados && dados.length > 0) {
                         armazenar.arts = dados;
                         console.log(`✅ ARTs carregadas da chave "${chave}":`, dados.length);
@@ -34877,7 +35850,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             const chaves = ['redungeon_artes', 'artes', 'arts'];
             let artsDoArmazenamento = null;
             for (const chave of chaves) {
-                const dados = JSON.parse(localStorage.getItem(chave) || '[]');
+                const dados = window.parseJsonString(localStorage.getItem(chave), []);
                 if (dados && dados.length > 0) {
                     artsDoArmazenamento = dados;
                     console.log(`📥 ARTs recarregadas do localStorage (chave: "${chave}"):`, dados.length);
@@ -35107,7 +36080,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             if (!armazenar || !armazenar.arts || armazenar.arts.length === 0) {
                 const chaves = ['redungeon_artes', 'artes', 'arts'];
                 for (const chave of chaves) {
-                    const dados = JSON.parse(localStorage.getItem(chave) || '[]');
+                    const dados = window.parseJsonString(localStorage.getItem(chave), []);
                     if (dados && dados.length > 0) {
                         armazenar.arts = dados;
                         break;
@@ -36170,7 +37143,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             // Carregar campanhas existentes
             let campanhasSalvas = [];
             try {
-                campanhasSalvas = JSON.parse(localStorage.getItem('redungeon_Mesa')) || [];
+                campanhasSalvas = window.parseJsonSeguro('redungeon_Mesa');
             } catch (e) {
                 console.error('Erro ao carregar Mesa:', e);
             }
@@ -38220,7 +39193,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             // Carregar campanhas do localStorage
             let campanhasSalvas = [];
             try {
-                campanhasSalvas = JSON.parse(localStorage.getItem('redungeon_Mesa')) || [];
+                campanhasSalvas = window.parseJsonSeguro('redungeon_Mesa');
             } catch (e) {
                 console.error('Erro ao carregar campanhas:', e);
             }
@@ -38679,7 +39652,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             // Carregar dados atuais do localStorage
             let origensSalvas;
             try {
-                origensSalvas = JSON.parse(localStorage.getItem('redungeon_origens')) || [];
+                origensSalvas = window.parseJsonSeguro('redungeon_origens');
             } catch (e) {
                 alert('❌ Erro ao carregar dados. Tente limpar o navegador (Ctrl+Shift+Delete) e tente novamente.');
                 return;
@@ -38760,7 +39733,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             // Carregar dados atuais do localStorage
             let regioesSalvas;
             try {
-                regioesSalvas = JSON.parse(localStorage.getItem('redungeon_regioes')) || [];
+                regioesSalvas = window.parseJsonSeguro('redungeon_regioes');
             } catch (e) {
                 alert('❌ Erro ao carregar dados. Tente limpar o navegador (Ctrl+Shift+Delete) e tente novamente.');
                 return;
@@ -38844,7 +39817,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             // Carregar dados atuais do localStorage
             let cenariosSalvos;
             try {
-                cenariosSalvos = JSON.parse(localStorage.getItem('redungeon_cenarios')) || [];
+                cenariosSalvos = window.parseJsonSeguro('redungeon_cenarios');
             } catch (e) {
                 alert('❌ Erro ao carregar dados. Tente limpar o navegador (Ctrl+Shift+Delete) e tente novamente.');
                 return;
@@ -39118,7 +40091,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
 
             let origensSalvas;
             try {
-                origensSalvas = JSON.parse(localStorage.getItem('redungeon_origens')) || [];
+                origensSalvas = window.parseJsonSeguro('redungeon_origens');
             } catch (e) {
                 alert('❌ Erro ao carregar dados.');
                 return;
@@ -39190,7 +40163,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
 
             let regioesSalvas;
             try {
-                regioesSalvas = JSON.parse(localStorage.getItem('redungeon_regioes')) || [];
+                regioesSalvas = window.parseJsonSeguro('redungeon_regioes');
             } catch (e) {
                 alert('❌ Erro ao carregar dados.');
                 return;
@@ -39264,7 +40237,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
 
             let cenariosSalvos;
             try {
-                cenariosSalvos = JSON.parse(localStorage.getItem('redungeon_cenarios')) || [];
+                cenariosSalvos = window.parseJsonSeguro('redungeon_cenarios');
             } catch (e) {
                 alert('❌ Erro ao carregar dados.');
                 return;
@@ -41522,7 +42495,7 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             console.log('🔄 Atualizando Items...');
             
             // Chamar diretamente sem dependência de event.target
-            armazenar.itens = JSON.parse(localStorage.getItem('redungeon_itens')) || [];
+            armazenar.itens = window.parseJsonSeguro('redungeon_itens');
             console.log('✅ Items recarregados do localStorage:', armazenar.itens.length, 'items encontrados');
             await listarItens();
             console.log('✅ Lista de Items atualizada com sucesso');
@@ -41532,7 +42505,7 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
         async function listarItens() {
             try {
                 // 🔥 CRUCIAL: Recarregar do localStorage ANTES de listar
-                armazenar.itens = JSON.parse(localStorage.getItem('redungeon_itens')) || [];
+                armazenar.itens = window.parseJsonSeguro('redungeon_itens');
                 console.log('📦 Items carregados do localStorage:', armazenar.itens);
                 
                 const container = document.getElementById('listItens');
@@ -47534,21 +48507,21 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             try {
                 // Step 1: Ler dados
                 console.log('Step 1: Lendo dados do localStorage...');
-                const Mesa = JSON.parse(localStorage.getItem('redungeon_Mesa')) || [];
-                const origens = JSON.parse(localStorage.getItem('redungeon_origens')) || [];
-                const regioes = JSON.parse(localStorage.getItem('redungeon_regioes')) || [];
-                const cenarios = JSON.parse(localStorage.getItem('redungeon_cenarios')) || [];
-                const racas = JSON.parse(localStorage.getItem('redungeon_racas')) || [];
-                const classes = JSON.parse(localStorage.getItem('redungeon_classes')) || [];
-                const aptidoes = JSON.parse(localStorage.getItem('redungeon_aptidoes')) || [];
-                const npcs = JSON.parse(localStorage.getItem('redungeon_npcs')) || [];
-                const criaturas = JSON.parse(localStorage.getItem('redungeon_criaturas')) || [];
-                const materiais = JSON.parse(localStorage.getItem('redungeon_materiais')) || [];
-                const receitas = JSON.parse(localStorage.getItem('redungeon_receitas')) || [];
-                const itens = JSON.parse(localStorage.getItem('redungeon_itens')) || [];
-                const condicoes = JSON.parse(localStorage.getItem('redungeon_condicoes')) || [];
-                const regras = JSON.parse(localStorage.getItem('redungeon_regras')) || [];
-                const artes = JSON.parse(localStorage.getItem('artes')) || [];
+                const Mesa = window.parseJsonSeguro('redungeon_Mesa');
+                const origens = window.parseJsonSeguro('redungeon_origens');
+                const regioes = window.parseJsonSeguro('redungeon_regioes');
+                const cenarios = window.parseJsonSeguro('redungeon_cenarios');
+                const racas = window.parseJsonSeguro('redungeon_racas');
+                const classes = window.parseJsonSeguro('redungeon_classes');
+                const aptidoes = window.parseJsonSeguro('redungeon_aptidoes');
+                const npcs = window.parseJsonSeguro('redungeon_npcs');
+                const criaturas = window.parseJsonSeguro('redungeon_criaturas');
+                const materiais = window.parseJsonSeguro('redungeon_materiais');
+                const receitas = window.parseJsonSeguro('redungeon_receitas');
+                const itens = window.parseJsonSeguro('redungeon_itens');
+                const condicoes = window.parseJsonSeguro('redungeon_condicoes');
+                const regras = window.parseJsonSeguro('redungeon_regras');
+                const artes = window.parseJsonSeguro('artes');
                 
                 console.log('Dados lidos com sucesso');
 
@@ -47763,6 +48736,14 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                 idAba = 'artes';
             }
             
+            // 🌍 MAPEAMENTO ESPECIAL: "origens" contém 3 tipos de dados
+            // Quando sincronizar apenas a aba "origens", sincronizar também regioes e cenarios
+            let abasSincronizar = [idAba];
+            if (idAba === 'origens') {
+                abasSincronizar = ['origens', 'regioes', 'cenarios'];
+                console.log('🌍 Modo "Origens" detectado - sincronizando: Origens + Regiões + Cenários');
+            }
+            
             console.log(`🔄 Iniciando sincronização da aba: ${idAba}`);
 
             // Criar e abrir input de arquivo temporário
@@ -47791,25 +48772,68 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                             console.log('✅ Modo legacy: Historia mapeado para Mesa');
                         }
 
-                        // Validar se o JSON tem dados para a aba atual
-                        if (!Array.isArray(dadosImportados[idAba])) {
-                            alert(`⚠️ Aviso: O arquivo JSON não contém dados para a aba "${idAba}".\n\n💡 Se você está importando um arquivo antigo, verifique se está usando o formato correto.`);
+                        // Validar se o JSON tem dados para TODAS as abas a sincronizar
+                        let temDadosValidos = false;
+                        let totalItensASincronizar = 0;
+                        
+                        for (const aba of abasSincronizar) {
+                            if (Array.isArray(dadosImportados[aba]) && dadosImportados[aba].length > 0) {
+                                temDadosValidos = true;
+                                totalItensASincronizar += dadosImportados[aba].length;
+                            }
+                        }
+                        
+                        if (!temDadosValidos) {
+                            const listaAbas = abasSincronizar.join(', ');
+                            alert(`⚠️ Aviso: O arquivo JSON não contém dados para: ${listaAbas}.\n\n💡 Se você está importando um arquivo antigo, verifique se está usando o formato correto.`);
                             return;
                         }
 
-                        const qtdItens = dadosImportados[idAba].length;
-                        if (qtdItens === 0) {
-                            alert('⚠️ Aviso: O arquivo contém dados vazios para esta aba. Operação cancelada.');
+                        if (totalItensASincronizar === 0) {
+                            alert('⚠️ Aviso: O arquivo contém dados vazios para estas abas. Operação cancelada.');
                             return;
                         }
 
-                        if (!confirm(`🔄 Sincronizar "${idAba}"?\n\nItens a sincronizar: ${qtdItens}\n\nDados existentes serão preservados.\nItens duplicados (mesmo ID) serão ignorados.\n\nDeseja continuar?`)) {
+                        const listaAbasFormatada = abasSincronizar.map(a => a.charAt(0).toUpperCase() + a.slice(1)).join(', ');
+                        if (!confirm(`🔄 Sincronizar "${listaAbasFormatada}"?\n\nItens a sincronizar: ${totalItensASincronizar}\n\nDados existentes serão preservados.\nItens duplicados (mesmo ID) serão ignorados.\n\nDeseja continuar?`)) {
                             return;
                         }
 
                         try {
-                            // Executar sincronização apenas da aba atual
-                            const resultado = await sincronizarDados(dadosImportados, 'aba');
+                            // ✅ SINCRONIZAÇÃO ESPECIAL: Passar a lista de abas a sincronizar
+                            // Se for apenas "origens", sincronizar também "regioes" e "cenarios"
+                            const resultado = await sincronizarDadosMultiabas(dadosImportados, abasSincronizar);
+
+                            // ✅ ADICIONAR DELAY PARA GARANTIR QUE LOCALSTORAGE FOI ATUALIZADO
+                            await new Promise(resolve => setTimeout(resolve, 100));
+                            
+                            // ✅ RECARREGAR TODOS OS DADOS SINCRONIZADOS DO LOCALSTORAGE
+                            const mapa = {
+                                'Mesa': 'redungeon_Mesa',
+                                'origens': 'redungeon_origens',
+                                'regioes': 'redungeon_regioes',
+                                'cenarios': 'redungeon_cenarios',
+                                'racas': 'redungeon_racas',
+                                'classes': 'redungeon_classes',
+                                'aptidoes': 'redungeon_aptidoes',
+                                'npcs': 'redungeon_npcs',
+                                'criaturas': 'redungeon_criaturas',
+                                'materiais': 'redungeon_materiais',
+                                'receitas': 'redungeon_receitas',
+                                'itens': 'redungeon_itens',
+                                'condicoes': 'redungeon_condicoes',
+                                'regras': 'redungeon_regras',
+                                'artes': 'artes'
+                            };
+                            
+                            // Recarregar TODAS as abas sincronizadas
+                            for (const aba of abasSincronizar) {
+                                const chaveLocalstorage = mapa[aba];
+                                if (chaveLocalstorage) {
+                                    armazenar[aba] = parseJsonSeguro(chaveLocalstorage);
+                                    console.log(`✅ Dados de "${aba}" recarregados do localStorage`);
+                                }
+                            }
 
                             // Atualizar interface da aba
                             const funcoes = {
@@ -47933,6 +48957,9 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                             // Executar sincronização de todas as abas
                             const resultado = await sincronizarDados(dadosImportados, 'tudo');
 
+                            // ✅ ADICIONAR DELAY PARA GARANTIR QUE LOCALSTORAGE FOI ATUALIZADO
+                            await new Promise(resolve => setTimeout(resolve, 100));
+                            
                             // Atualizar UI global automaticamente
                             await atualizarUIGlobal();
 
@@ -48145,6 +49172,9 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                                 throw storageError;
                             }
 
+                            // ✅ ADICIONAR DELAY PARA GARANTIR QUE LOCALSTORAGE FOI ATUALIZADO
+                            await new Promise(resolve => setTimeout(resolve, 100));
+
                             // Atualizar interface
                             // Atualizar UI global automaticamente
                             await atualizarUIGlobal();
@@ -48208,6 +49238,26 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
         async function atualizarUIGlobal() {
             console.log('🔄 Atualizando UI global de todas as abas...');
             try {
+                // ✅ RECARREGAR DADOS DO LOCALSTORAGE PARA GARANTIR SINCRONIZAÇÃO
+                armazenar.Mesa = parseJsonSeguro('redungeon_Mesa');
+                armazenar.origens = parseJsonSeguro('redungeon_origens');
+                armazenar.cardflux = parseJsonSeguro('redungeon_cardflux');
+                armazenar.regioes = parseJsonSeguro('redungeon_regioes');
+                armazenar.cenarios = parseJsonSeguro('redungeon_cenarios');
+                armazenar.racas = parseJsonSeguro('redungeon_racas');
+                armazenar.classes = parseJsonSeguro('redungeon_classes');
+                armazenar.aptidoes = parseJsonSeguro('redungeon_aptidoes');
+                armazenar.npcs = parseJsonSeguro('redungeon_npcs');
+                armazenar.criaturas = parseJsonSeguro('redungeon_criaturas');
+                armazenar.materiais = parseJsonSeguro('redungeon_materiais');
+                armazenar.receitas = parseJsonSeguro('redungeon_receitas');
+                armazenar.itens = parseJsonSeguro('redungeon_itens');
+                armazenar.condicoes = parseJsonSeguro('redungeon_condicoes');
+                armazenar.regras = parseJsonSeguro('redungeon_regras');
+                armazenar.arts = parseJsonSeguro('artes');
+                
+                console.log('✅ Dados recarregados do localStorage');
+                
                 // Atualizar todas as listas simultaneamente
                 listarMesa();
                 listarOrigens();
@@ -48250,22 +49300,22 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                     console.log('Salvando TUDO...');
                     
                     dataObj = {
-                        Mesa: JSON.parse(localStorage.getItem('redungeon_Mesa')) || [],
-                        origens: JSON.parse(localStorage.getItem('redungeon_origens')) || [],
-                        cardflux: JSON.parse(localStorage.getItem('redungeon_cardflux')) || [],
-                        regioes: JSON.parse(localStorage.getItem('redungeon_regioes')) || [],
-                        cenarios: JSON.parse(localStorage.getItem('redungeon_cenarios')) || [],
-                        racas: JSON.parse(localStorage.getItem('redungeon_racas')) || [],
-                        classes: JSON.parse(localStorage.getItem('redungeon_classes')) || [],
-                        aptidoes: JSON.parse(localStorage.getItem('redungeon_aptidoes')) || [],
-                        npcs: JSON.parse(localStorage.getItem('redungeon_npcs')) || [],
-                        criaturas: JSON.parse(localStorage.getItem('redungeon_criaturas')) || [],
-                        materiais: JSON.parse(localStorage.getItem('redungeon_materiais')) || [],
-                        receitas: JSON.parse(localStorage.getItem('redungeon_receitas')) || [],
-                        itens: JSON.parse(localStorage.getItem('redungeon_itens')) || [],
-                        condicoes: JSON.parse(localStorage.getItem('redungeon_condicoes')) || [],
-                        regras: JSON.parse(localStorage.getItem('redungeon_regras')) || [],
-                        artes: JSON.parse(localStorage.getItem('artes')) || [],
+                        Mesa: window.parseJsonSeguro('redungeon_Mesa'),
+                        origens: window.parseJsonSeguro('redungeon_origens'),
+                        cardflux: window.parseJsonSeguro('redungeon_cardflux'),
+                        regioes: window.parseJsonSeguro('redungeon_regioes'),
+                        cenarios: window.parseJsonSeguro('redungeon_cenarios'),
+                        racas: window.parseJsonSeguro('redungeon_racas'),
+                        classes: window.parseJsonSeguro('redungeon_classes'),
+                        aptidoes: window.parseJsonSeguro('redungeon_aptidoes'),
+                        npcs: window.parseJsonSeguro('redungeon_npcs'),
+                        criaturas: window.parseJsonSeguro('redungeon_criaturas'),
+                        materiais: window.parseJsonSeguro('redungeon_materiais'),
+                        receitas: window.parseJsonSeguro('redungeon_receitas'),
+                        itens: window.parseJsonSeguro('redungeon_itens'),
+                        condicoes: window.parseJsonSeguro('redungeon_condicoes'),
+                        regras: window.parseJsonSeguro('redungeon_regras'),
+                        artes: window.parseJsonSeguro('artes'),
                         dataSalvamento: new Date().toLocaleString('pt-BR'),
                         versao: '1.0',
                         tipo: 'banco_completo'
@@ -48299,7 +49349,7 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                     }
 
                     const infoAba = mapaAbas[idAba];
-                    const dadosAba = JSON.parse(localStorage.getItem(infoAba.key)) || [];
+                    const dadosAba = window.parseJsonString(localStorage.getItem(infoAba.key), []);
 
                     if (dadosAba.length === 0) {
                         alert(`⚠️ Aviso: A aba "${infoAba.nome}" está vazia. Nada a salvar.`);
@@ -48479,24 +49529,10 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                                 }
                                 throw storageError;
                             }
-                            // Atualizar interface
-                            listarMesa();
-                            listarOrigens();
-                            listarCardflux();
-                            listarRegioes();
-                            // listarCenarios(); // ⚠️ Container não existe - bloqueado
-                            listarRacas();
-                            listarClasses();
-                            listarAptidoes();
-                            await listarNPCs();
-                            listarCriaturas();
-                            listarMateriais();
-                            listarReceitas();
-                            await atualizarListaItems();
-                            listarCondicoes();
-                            listarRegras();
-                            artes = armazenar.arts;
-                            await renderizarArtes();
+                            // ✅ ADICIONAR DELAY PARA GARANTIR QUE LOCALSTORAGE FOI ATUALIZADO
+                            await new Promise(resolve => setTimeout(resolve, 100));
+                            // Atualizar interface via função global
+                            await atualizarUIGlobal();
 
                             alert(`✅ Banco de dados importado com sucesso!\n\nTotal de itens importados: ${totalItens}`);
                         }
@@ -48565,24 +49601,12 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
                                 throw storageError;
                             }
 
-                            // Obter função de atualização para a aba
-                            const funcoesAtualizacao = {
-                                'Mesa': listarMesa,
-                                'origens': listarOrigens,
-                                'regioes': listarRegioes,
-                                'cenarios': listarCenarios,
-                                'racas': listarRacas,
-                                'classes': listarClasses,
-                                'aptidoes': listarAptidoes,
-                                'npcs': listarNPCs,
-                                'criaturas': listarCriaturas,
-                                'materiais': listarMateriais,
-                                'receitas': listarReceitas,
-                                'itens': atualizarListaItems,
-                                'condicoes': listarCondicoes,
-                                'regras': listarRegras,
-                                'artes': renderizarArtes
-                            };
+                            // ✅ ADICIONAR DELAY PARA GARANTIR QUE LOCALSTORAGE FOI ATUALIZADO
+                            await new Promise(resolve => setTimeout(resolve, 100));
+                            
+                            // ✅ RECARREGAR ABA DO LOCALSTORAGE
+                            armazenar[abaEncontrada] = parseJsonSeguro(infoAbaAtual.key);
+                            console.log(`✅ Dados de "${abaEncontrada}" recarregados do localStorage`);
 
                             // Atualizar UI global automaticamente
                             await atualizarUIGlobal();
@@ -49247,9 +50271,9 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
         // =============== FUNÇÕES PARA POPULAR SELECTS DE RAÇA, CLASSE E ORIGEM ===============
         function preencherSelectsNPC() {
             // Garantir que os dados mais recentes sejam carregados do localStorage
-            const racas = JSON.parse(localStorage.getItem('redungeon_racas')) || armazenar.racas || [];
-            const classes = JSON.parse(localStorage.getItem('redungeon_classes')) || armazenar.classes || [];
-            const origens = JSON.parse(localStorage.getItem('redungeon_origens')) || armazenar.origens || [];
+            const racas = (window.parseJsonSeguro('redungeon_racas') || armazenar.racas || []);
+            const classes = (window.parseJsonSeguro('redungeon_classes') || armazenar.classes || []);
+            const origens = (window.parseJsonSeguro('redungeon_origens') || armazenar.origens || []);
 
             console.log('📋 INICIANDO preencherSelectsNPC');
             console.log('   localStorage redungeon_racas:', localStorage.getItem('redungeon_racas'));
@@ -49311,11 +50335,11 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
             // Se não encontrou pelo ID, procura pelo nome na lista de racas/classes/origens
             let arrayDados = [];
             if (selectId === 'npcRaca') {
-                arrayDados = JSON.parse(localStorage.getItem('redungeon_racas')) || armazenar.racas || [];
+                arrayDados = (window.parseJsonSeguro('redungeon_racas') || armazenar.racas || []);
             } else if (selectId === 'npcClasse') {
-                arrayDados = JSON.parse(localStorage.getItem('redungeon_classes')) || armazenar.classes || [];
+                arrayDados = (window.parseJsonSeguro('redungeon_classes') || armazenar.classes || []);
             } else if (selectId === 'npcOrigem') {
-                arrayDados = JSON.parse(localStorage.getItem('redungeon_origens')) || armazenar.origens || [];
+                arrayDados = (window.parseJsonSeguro('redungeon_origens') || armazenar.origens || []);
             }
 
             console.log(`🔍 Procurando "${valor}" em array de ${selectId}:`, arrayDados);
@@ -50642,19 +51666,41 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
         const originalFetch = fetch;
         const originalXHR = XMLHttpRequest.prototype.open;
         
+        // Lista de padrões de URLs que podem retornar 404 mas não são críticas
+        const externalResourcePatterns = [
+            'micropolis', 'discord', 'media.discord', 'gif', 'jpg', 'png', 
+            'brachydios', '141-870x563', /\d+\.\d+\.\d+\.\d+/ // IPs
+        ];
+        
+        function isExternalResourceURL(url) {
+            if (!url) return false;
+            return externalResourcePatterns.some(pattern => {
+                if (pattern instanceof RegExp) return pattern.test(url);
+                return url.toLowerCase().includes(pattern.toLowerCase());
+            });
+        }
+        
         // Interceptar avisos de fetch que resultam em 404
         window.fetch = function(...args) {
-            return originalFetch.apply(this, args).catch(err => {
-                // Silenciar erros de rede esperados
-                return Promise.resolve(new Response('', { status: 404 }));
-            });
+            const url = args[0];
+            if (isExternalResourceURL(url)) {
+                // Para recursos externos, usar fallback silencioso
+                return originalFetch.apply(this, args).catch(err => {
+                    console.debug(`[Recurso Externo] ${url} não acessível`);
+                    return Promise.resolve(new Response('', { status: 404 }));
+                });
+            }
+            return originalFetch.apply(this, args);
         };
         
-        // Interceptar XHR para silenciar 404s
+        // Interceptar XHR para silenciar 404s de recursos externos
         XMLHttpRequest.prototype.open = function(method, url, ...rest) {
             const origOnReadyStateChange = this.onreadystatechange;
+            const isExternal = isExternalResourceURL(url);
+            
             this.onreadystatechange = function(...args) {
-                if (this.status === 404 && (url.includes('micropolis') || url.includes('discord') || url.includes('media.discord'))) {
+                if (isExternal && this.status === 404) {
+                    console.debug(`[XHR Externo] ${url} retornou 404`);
                     return; // Silenciar 404 de recursos externos
                 }
                 return origOnReadyStateChange?.apply(this, args);
@@ -59046,7 +60092,7 @@ ${arteGerada.justificativa}`;
             localStorage.setItem('redungeon_cardflux', JSON.stringify(armazenar.cardflux));
             
             // Verificar se salvou corretamente
-            const savedData = JSON.parse(localStorage.getItem('redungeon_cardflux'));
+            const savedData = window.parseJsonSeguro('redungeon_cardflux');
             const cartaSalva = savedData.find(c => c.id === carta.id);
             console.log('🔍 Verificação pós-salvamento:'); // DEBUG
             console.log('  - Carta existe em localStorage?', !!cartaSalva); // DEBUG

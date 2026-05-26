@@ -11,7 +11,7 @@
       "imagem": {
         "tipo": "url",
         "valor": "https://64.media.tumblr.com/07ba95ce769f382e7572eaabf8f77104/09bea23c0747348d-23/s540x810/f4b73b2b8a7eabd189c7b4c82b7a960d07b61f0a.gif",
-        "dataCriacao": 1771118363202
+        "dataCriacao": 1777824299215
       },
       "locaisDisponiveis": [
         {
@@ -86,20 +86,6 @@
         },
         {
           "capitulo": "3",
-          "nome": "O Tumulo de Tiamat!",
-          "local": "",
-          "objetivoRas": "",
-          "objetivoRhanAmides": "",
-          "encontroChave": "",
-          "recompensaConsequencia": "",
-          "imagem": {
-            "tipo": "url",
-            "valor": "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDBrZHJ2bWNreHRod2R1bng1djZ6cW9sMXA3MmM1cWZjOTNsMm5qNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xUA7aXVq3MNHs2XKlG/giphy.gif",
-            "dataCriacao": 1768029874665
-          }
-        },
-        {
-          "capitulo": "4",
           "nome": "O Rompimento do Selo!",
           "local": "",
           "objetivoRas": "",
@@ -113,7 +99,7 @@
           }
         },
         {
-          "capitulo": "5",
+          "capitulo": "4",
           "nome": "A Queda da Terceira Estrela!",
           "local": "",
           "objetivoRas": "",
@@ -127,7 +113,7 @@
           }
         },
         {
-          "capitulo": "6",
+          "capitulo": "5",
           "nome": "A Chegada da Mãe!",
           "local": "",
           "objetivoRas": "",
@@ -271,7 +257,7 @@
         ]
       },
       "dataCriacao": 1767767569567,
-      "dataAtualizacao": 1771118363202
+      "dataAtualizacao": 1777824299215
     },
     {
       "id": 1767908433874,
@@ -582,20 +568,74 @@
       "tipo": "Campanha",
       "nome": "Re:Conect",
       "episodio": 1,
-      "contexto": "",
-      "objetivo": "",
+      "contexto": "Após serem teletransportado por chamas roxas os jogadores acordam em uma cama de hotel...",
+      "objetivo": "Descobrir oque e o umbral e voltarem vivo!",
       "nota": "",
       "imagem": {
-        "tipo": "indexeddb",
-        "valor": "img-1777588678460-f0u1s5s8g",
-        "dataCriacao": 1777588679530
+        "tipo": "url",
+        "valor": "https://i.imgur.com/jk8nKqF.png",
+        "dataCriacao": 1777871111516
       },
       "locaisDisponiveis": [],
-      "capitulos": [],
+      "capitulos": [
+        {
+          "capitulo": "1",
+          "nome": "Cap 1 – TUTORIAL",
+          "local": "PARALEL CITY",
+          "objetivoRas": "- Concluir as 5 missões do tutorial.\n",
+          "objetivoRhanAmides": "- Coletar 10, Essência do Desespero.",
+          "encontroChave": "Encontram Ralph no Hotel Noite Chuvosa!",
+          "recompensaConsequencia": "Os jogadores que conseguirem sair, ganham os poderes adquiridos em Umbral.",
+          "imagem": {
+            "tipo": "url",
+            "valor": "https://i.pinimg.com/originals/7c/b7/fe/7cb7fee465024f546d4eced9bb9c6645.gif",
+            "dataCriacao": 1777870796454
+          }
+        },
+        {
+          "capitulo": "2",
+          "nome": "Acampamento Fantasma",
+          "local": "",
+          "objetivoRas": "",
+          "objetivoRhanAmides": "",
+          "encontroChave": "",
+          "recompensaConsequencia": "",
+          "imagem": {
+            "tipo": "url",
+            "valor": "https://i.imgur.com/sFwJ0jA.png",
+            "dataCriacao": 1777870979666
+          }
+        },
+        {
+          "capitulo": "3",
+          "nome": "Cidade de Grey Hills",
+          "local": "",
+          "objetivoRas": "",
+          "objetivoRhanAmides": "",
+          "encontroChave": "",
+          "recompensaConsequencia": "",
+          "imagem": {
+            "tipo": "url",
+            "valor": "https://static.wikia.nocookie.net/silenthill/images/2/25/Ruas_de_Silent_Hills.png/revision/latest?cb=20230201032605&path-prefix=pt",
+            "dataCriacao": 1777870946608
+          }
+        }
+      ],
       "sessoes": [],
-      "sessoesPorCapitulo": {},
+      "sessoesPorCapitulo": {
+        "0": [
+          {
+            "sessao": 1,
+            "nome": "",
+            "local": "",
+            "resumo": "",
+            "notas": "",
+            "imagem": ""
+          }
+        ]
+      },
       "dataCriacao": 1777474042462,
-      "dataAtualizacao": 1777588679530
+      "dataAtualizacao": 1777871111516
     }
   ],
   "origens": [
@@ -15859,88 +15899,139 @@
       "idade": 666,
       "atributos": {
         "forca": {
-          "base": 10,
+          "base": 64,
           "extra": 0,
-          "total": 10
+          "total": 64
         },
         "vitalidade": {
-          "base": 10,
+          "base": 58,
           "extra": 0,
-          "total": 10
+          "total": 63
         },
         "agilidade": {
-          "base": 10,
+          "base": 77,
           "extra": 0,
-          "total": 10
+          "total": 82
         },
         "inteligencia": {
-          "base": 10,
+          "base": 110,
           "extra": 0,
-          "total": 10
+          "total": 125
         },
         "percepcao": {
-          "base": 10,
+          "base": 135,
           "extra": 0,
-          "total": 10
+          "total": 140
         },
         "sorte": {
-          "base": 10,
+          "base": 88,
           "extra": 0,
-          "total": 10
+          "total": 98
         }
       },
       "saude": {
-        "atual": 0,
-        "maxima": 20,
+        "atual": 134,
+        "maxima": 134,
         "extra": 0
       },
       "energia": {
-        "atual": 0,
-        "maxima": 14,
+        "atual": 170,
+        "maxima": 170,
         "extra": 0
       },
       "fadiga": {
-        "atual": 0,
-        "maxima": 10,
+        "atual": 71,
+        "maxima": 71,
         "extra": 0
       },
       "statusSecundarios": {
         "prontidao": {
           "extra": 0,
-          "total": 21,
+          "total": 213,
           "bonus": 0
         },
         "ataque": {
           "extra": 0,
-          "total": 2,
+          "total": 12,
           "bonus": 0
         },
         "defesa": {
           "extra": 0,
-          "total": 2,
+          "total": 8,
           "bonus": 0
         },
         "reacao": {
           "extra": 0,
-          "total": 7,
+          "total": 11,
           "bonus": 0
         },
         "precisao": {
-          "extra": 0,
-          "total": 1,
-          "bonus": 0
+          "extra": 3,
+          "total": 14,
+          "bonus": 1
         },
         "evasao": {
           "extra": 0,
-          "total": 1,
-          "bonus": 0
+          "total": 10,
+          "bonus": 1
         }
       },
-      "sorteBonus": 0,
+      "sorteBonus": 3,
       "tricksterValue": 0,
       "condicoes": [],
-      "aptidoes": [],
-      "ganhasAptidoes": 0,
+      "aptidoes": [
+        {
+          "nome": "Arcanismo",
+          "nivel": 5,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Lábia",
+          "nivel": 4,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Sedução",
+          "nivel": 5,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Beleza",
+          "nivel": 5,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Vontade",
+          "nivel": 4,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Liderança",
+          "nivel": 4,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Dança",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Atuação",
+          "nivel": 1,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Conhecimento",
+          "nivel": 1,
+          "bonusAplicados": false
+        }
+      ],
+      "ganhasAptidoes": 10,
       "habilidades": [
         {
           "id": 1777175070558,
@@ -15950,27 +16041,484 @@
           "circulo": "3º Círculo",
           "tipoCusto": "Energia",
           "tipoAcao": "Sustentada",
-          "recarga": "",
-          "duracao": "",
-          "alcance": "",
-          "alvos": "",
-          "custo": "",
-          "dados": "",
-          "descricao": "dsadas",
-          "cantico": "",
+          "recarga": "2",
+          "duracao": "n/d",
+          "alcance": "n/d",
+          "alvos": "Usuario",
+          "custo": "5 EnR",
+          "dados": "n/d",
+          "descricao": "O Ilusionista cria uma replica de si mesma com 75% da sua força, assim podendo executar ações que divergem da própria personagem sendo um novo ser. Para cada ilusão criada usuário reduz sua vida em 5% total, caso a ilusão seja destruída a vida máxima volta, mas a atual e perdida.",
+          "cantico": "“Com as sombras que habitam meu ser, eu me lanço à vastidão do abismo.\nAssim sou eu… e assim és tu.\nErgue-te, meu outro, e reverencia tua origem.\nTorna-te um comigo —\ne na união de dois, transcendemos o que jamais deveria existir.”",
           "condicoes": [],
-          "imagem": null,
+          "imagem": "https://i.imgur.com/Yk5igEq.png",
           "dataCriacao": "2026-04-26T03:44:30.558Z",
           "imagemURL": "https://i.imgur.com/Yk5igEq.png"
+        },
+        {
+          "id": 1777597998959.859,
+          "nome": "Adaptabilidade",
+          "tipo": "racial",
+          "descricao": "O jogador pode ajustar na sua ficha um atributo chave (exceto sua sorte) antes da campanha iniciar, assim se adaptando como qualquer humano do mundo de Re'Dungeon.\nAjusta um atributo principal antes da campanha\nMaior flexibilidade no build do personagem\nSem limitações de especialização\n",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512913087,
+          "dataAplicacao": "2026-05-01T01:13:18.959Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777597998959.4797,
+          "nome": "Versatilidade",
+          "tipo": "racial",
+          "descricao": "O jogador pode aprender uma categoria de art que possua no sistema, assim se tornando uma especialização única como se fosse uma classe.\nAprende uma categoria de arte extra\nCombina especialidades de forma única\nExemplo: Um mago parradeiro",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512913087,
+          "dataAplicacao": "2026-05-01T01:13:18.959Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777597998959.8599,
+          "nome": "Ambição",
+          "tipo": "racial",
+          "descricao": "O jogador declara uma ambição que esteja de acordo com seu background. Durante eventos e acontecimentos na campanha que estejam com sua ambição em jogo, o jogador recebe o benefício de incentivo.\nBônus +3 em rolagens relacionadas à ambição\nIncentivo narrativo durante a campanha\nConexão com objetivos pessoais",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512913087,
+          "dataAplicacao": "2026-05-01T01:13:18.959Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777597998959.3325,
+          "nome": "Vontade Inabalavel",
+          "tipo": "Duradoura",
+          "descricao": "A força do humano não está no corpo, mas na recusa em desistir. Sempre que o personagem estiver sob efeitos de medo, intimidação, controle mental ou penalidades emocionais, ele recebe +2 em Testes de Resistência mental e emocional.\n\nAlém disso, uma vez por sessão, ao cair abaixo de 30% dos recursos principais (HP, Energia ou Fadiga), o humano ignora uma penalidade negativa ativa por 1 turno.",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Pessoal",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512913087,
+          "dataAplicacao": "2026-05-01T01:13:18.959Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777597998959.952,
+          "nome": "Poder Latente",
+          "tipo": "Duradoura",
+          "descricao": "Quando pressionado ao limite, algo desperta. Durante 1 turno, o humano escolhe um atributo principal e recebe +3 temporário nele.\n\nSe usado abaixo de 25% de HP, o bônus aumenta para +5, mas o personagem sofre fadiga narrativa após o efeito (descrita pelo mestre).",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "0",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512913087,
+          "dataAplicacao": "2026-05-01T01:13:18.959Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777597998959.5476,
+          "nome": "Aprendizado ",
+          "tipo": "Duradoura",
+          "descricao": "Humanos aprendem observando erros — próprios e alheios. Sempre que o personagem falhar um teste relacionado a uma Art, perícia ou ação repetível, ele recebe um Bônus de +1 na próxima tentativa igual durante a mesmo combate.\n\nEsse bônus não se acumula, mas pode ser aplicado novamente após outra falha diferente.",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "0",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512913087,
+          "dataAplicacao": "2026-05-01T01:13:18.959Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777597998959.3052,
+          "nome": "Adaptação",
+          "tipo": "Duradoura",
+          "descricao": "Ao sofrer dano de um tipo específico (físico, elemental ou efeito especial), o humano ajusta seu corpo e mente. Até o final do próximo turno, recebe redução leve do mesmo tipo de dano ou 2d6 Defesa contra aquela fonte específica.\nNão funciona contra o mesmo tipo de dano duas vezes seguidas sem intervalo.",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Pessoal",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512913087,
+          "dataAplicacao": "2026-05-01T01:13:18.959Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777599416284,
+          "nome": "Jardim do Sacrifício Carmesim",
+          "tipo": "energia",
+          "categoria": "Controle",
+          "circulo": "3º Círculo",
+          "tipoCusto": "Energia",
+          "tipoAcao": "Duradoura",
+          "recarga": "4 T",
+          "duracao": "2 T",
+          "alcance": "9 m",
+          "alvos": "1 a 3",
+          "custo": "5 p/  EnR",
+          "dados": "Obstáculo 13 (2d12+4)",
+          "descricao": "As vinhas espinhosas emergem do corpo do usuário, rastejando por sua pele e se enraizando como se fossem parte de sua própria essência. À medida que crescem, pequenas rosas começam a surgir entre os espinhos, inicialmente frágeis, mas rapidamente se tornando vívidas e pulsantes.\nÀ medida que as vinhas crescem e as rosas florescem, elas drenam continuamente a mana e a energia vital do usuário, enfraquecendo seu corpo e mente. Quanto mais completas e belas as rosas, maior o poder — e mais próximo o usuário chega da exaustão total, sendo consumido pela própria habilidade.",
+          "cantico": "",
+          "condicoes": [
+            {
+              "id": 1768258617042,
+              "nome": "Fraqueza",
+              "tipo": "Debuff",
+              "origem": "Habilidade",
+              "raridade": "Raro",
+              "descricaoCurta": "O alvo perde firmeza física e energética, tendo sua força e resistência gradualmente comprometidas.",
+              "imagem": "https://i.imgur.com/IvWgvgB.png",
+              "efeitosMecanicos": {
+                "modificadores": "– Penalidade em testes de Força e Resistência (-3)\n– Redução leve no dano causado por ataques físicos (-1 dados de dano)",
+                "efetosPassivos": "– Esforços prolongados exigem mais do corpo, acelerando o cansaço",
+                "efetosAtivos": "n/d",
+                "interacoes": "– Exausto: dobra a penalidade em testes físicos\n– Fragilizado: ataques contra o alvo recebem bônus situacional"
+              },
+              "duracao": {
+                "tipo": "Turnos",
+                "valor": "3"
+              },
+              "aplicacao": {
+                "metodo": "Automático",
+                "detalhes": "Aplicado ao falhar em testes físicos críticos, sofrer certos debuffs cumulativos ou por habilidades específicas."
+              },
+              "escalonamento": {
+                "temEscalonamento": false,
+                "descricao": "",
+                "maxNiveis": null,
+                "crescimento": ""
+              },
+              "risco": {
+                "exaustao": "n/d",
+                "danoColateral": "n/d"
+              },
+              "encerramento": {
+                "condicoes": "– Fim da duração\n– Remoção por habilidades de purificação ou descanso adequado",
+                "removeivel": "sim"
+              },
+              "design": {
+                "narrativa": "Peso no corpo, golpes menos firmes, respiração curta.",
+                "sinergias": "Funciona bem com controle, lentidão e efeitos de desgaste contínuo.",
+                "casosUso": "Enfraquecer combatentes físicos sem anulá-los.",
+                "notas": "Debuff pensado para pressão tática, não para invalidar o personagem.\nEsse aqui é o clássico “você ainda luta, mas agora dói”. Limpo, funcional e elegante."
+              },
+              "dataCriacao": "12/01/2026, 19:56:57",
+              "dataAtualizacao": "19/01/2026, 18:41:59"
+            },
+            {
+              "id": 1768261432629,
+              "nome": "Paralisado",
+              "tipo": "Debuff",
+              "origem": "Item",
+              "raridade": "",
+              "descricaoCurta": "O sistema nervoso do alvo entra em colapso temporário, impedindo qualquer ação voluntária.",
+              "imagem": "https://i.imgur.com/Y4riPp8.png",
+              "efeitosMecanicos": {
+                "modificadores": "– Incapaz de agir\n– Defesa severamente reduzida (- 3 dados de defesa)",
+                "efetosPassivos": "– O alvo não pode realizar ações, reações ou movimentos\n– Falha automática em testes físicos",
+                "efetosAtivos": "",
+                "interacoes": "– Exausto: aumenta a duração\n– Fragilizado: ataques causam efeito máximo\n– Medo (se existir): facilita aplicação"
+              },
+              "duracao": {
+                "tipo": "Turnos",
+                "valor": "1"
+              },
+              "aplicacao": {
+                "metodo": "Gatilho",
+                "detalhes": "Aplicado por falha crítica em resistências, venenos específicos ou habilidades de alto risco."
+              },
+              "escalonamento": {
+                "temEscalonamento": false,
+                "descricao": "",
+                "maxNiveis": null,
+                "crescimento": ""
+              },
+              "risco": {
+                "exaustao": "n/d",
+                "danoColateral": "– Ao sair da Paralisia, o alvo sofre Exaustão leve"
+              },
+              "encerramento": {
+                "condicoes": "– Fim da duração\n– Purificação avançada",
+                "removeivel": "nao"
+              },
+              "design": {
+                "narrativa": "Consciência ativa, corpo inerte. Pânico silencioso.",
+                "sinergias": "Estado terminal de controle — ideal para janelas curtas de burst.",
+                "casosUso": "Criar momentos decisivos sem trivializar encontros.",
+                "notas": "Curtíssima duração e sem escalonamento para evitar abuso."
+              },
+              "dataCriacao": "12/01/2026, 20:43:52",
+              "dataAtualizacao": "19/01/2026, 18:43:45"
+            }
+          ],
+          "imagem": "https://i.pinimg.com/webp80/736x/28/62/7b/28627b3c3e9fb96252d0b3d3814d95b4.webp",
+          "dataCriacao": "2026-05-01T01:36:56.284Z",
+          "imagemURL": "https://i.pinimg.com/webp80/736x/28/62/7b/28627b3c3e9fb96252d0b3d3814d95b4.webp"
+        },
+        {
+          "id": 1777599981598,
+          "nome": "Forma Morvak",
+          "tipo": "fadiga",
+          "categoria": "Utilidade",
+          "circulo": "",
+          "tipoCusto": "Fadiga",
+          "tipoAcao": "Duradoura",
+          "recarga": "7 T",
+          "duracao": "3 T",
+          "alcance": "3 T",
+          "alvos": "Usuario",
+          "custo": "15 FaD ",
+          "dados": "",
+          "descricao": "Pelo turno definido o usuário consegue utilizar as habilidades de Morvak e influenciar o ambiente. -MENTIRA-",
+          "cantico": "",
+          "condicoes": [],
+          "imagem": "https://i.pinimg.com/736x/c5/50/45/c55045274231e99d619c009eebcd4238.jpg",
+          "dataCriacao": "2026-05-01T01:46:21.598Z",
+          "imagemURL": "https://i.pinimg.com/736x/c5/50/45/c55045274231e99d619c009eebcd4238.jpg"
+        },
+        {
+          "id": 1777600297341,
+          "nome": "Troca De Clone",
+          "tipo": "energia",
+          "categoria": "Utilidade",
+          "circulo": "3º Círculo",
+          "tipoCusto": "Energia",
+          "tipoAcao": "Imediata",
+          "recarga": "3",
+          "duracao": "0",
+          "alcance": "n/d",
+          "alvos": "1",
+          "custo": "15 EnR",
+          "dados": "Troca",
+          "descricao": "Pode trocar de lugar com um clone.",
+          "cantico": "",
+          "condicoes": [
+            {
+              "id": 1768860911013,
+              "nome": "INVENCIBILIDADE",
+              "tipo": "Buff",
+              "origem": "Combinação",
+              "raridade": "Lendário",
+              "descricaoCurta": "O alvo torna-se completamente imune a danos e efeitos negativos por um curto período.",
+              "imagem": "https://i.imgur.com/C4nIkHD.png",
+              "efeitosMecanicos": {
+                "modificadores": "- Imune a todo tipo de dano\n- Imune a debuffs, condições e efeitos negativos",
+                "efetosPassivos": "- Não sofre empurrões, quedas ou controle de grupo\n- Não perde HP, Mana ou recursos",
+                "efetosAtivos": "Nenhum",
+                "interacoes": "- Remove automaticamente todos os debuffs ao ser aplicado\n- Não pode coexistir com Vulnerável ou Stigma\n- Suspende efeitos de dano contínuo (DoT)"
+              },
+              "duracao": {
+                "tipo": "Turnos",
+                "valor": "1 turno (máximo 2 em casos especiais)"
+              },
+              "aplicacao": {
+                "metodo": "Gatilho",
+                "detalhes": "Aplicação direta Não pode ser reaplicada enquanto ativa"
+              },
+              "escalonamento": {
+                "temEscalonamento": false,
+                "descricao": "",
+                "maxNiveis": null,
+                "crescimento": ""
+              },
+              "risco": {
+                "exaustao": "Ao término, aplica Exausto por 1 turno",
+                "danoColateral": "Após o fim, o alvo sofre -20% Defesa por 1 turno"
+              },
+              "encerramento": {
+                "condicoes": "- Fim da duração\n- Efeitos de Anulação Lendária",
+                "removeivel": "nao"
+              },
+              "design": {
+                "narrativa": "Momento épico.\nSensação de poder absoluto e segurança total.",
+                "sinergias": "Boa com: Aumento de Ataque, Fúria\nRuim com: Dissipar, Anulação",
+                "casosUso": "- Sobreviver a golpes finais\n- Viradas épicas de combate",
+                "notas": "Uso extremamente limitado.\nCurta duração é essencial para equilíbrio."
+              },
+              "dataCriacao": "19/01/2026, 19:15:11",
+              "dataAtualizacao": "19/01/2026, 21:34:01"
+            }
+          ],
+          "imagem": "",
+          "dataCriacao": "2026-05-01T01:51:37.341Z"
+        },
+        {
+          "id": 1777600407214,
+          "nome": "Teleporte",
+          "tipo": "energia",
+          "categoria": "Movimento",
+          "circulo": "6º Círculo",
+          "tipoCusto": "Energia",
+          "tipoAcao": "Imediata",
+          "recarga": "3",
+          "duracao": "0",
+          "alcance": "n/d",
+          "alvos": "Usuario",
+          "custo": "2 EnR p/ m",
+          "dados": "+3 Evasao",
+          "descricao": "Utiliza sua magia para mover seu corpo de lugar com magia de teleporte para um local desejado, caso utilize para esquiva aumenta sua evasao em +3.",
+          "cantico": "",
+          "condicoes": [],
+          "imagem": "",
+          "dataCriacao": "2026-05-01T01:53:27.214Z"
+        },
+        {
+          "id": 1777600716416,
+          "nome": "Mundo Ilusorio, Paraiso do Alem",
+          "tipo": "energia",
+          "categoria": "Controle",
+          "circulo": "9º Círculo",
+          "tipoCusto": "Energia",
+          "tipoAcao": "Duradoura",
+          "recarga": "7 T",
+          "duracao": "5",
+          "alcance": "15 m",
+          "alvos": "No Alcance",
+          "custo": "29 EnR",
+          "dados": "",
+          "descricao": "Com bater de seu cajado a realidade se altera se tornando aquilo que o usuário mas teme. A única maneira de sair e vencendo seu medo se não o usuário rolara um teste de sanidade por turno e caso tenha 3 falhas sua mente e quebrada.",
+          "cantico": "O mundo é um paraíso… mas todo sonho carrega medo.\nAqueles que demonstram coragem também escondem covardia.\nNo meu mundo, tudo se torna nosso —\nteu medo é minha salvação,\ne minha salvação… é o teu medo.",
+          "condicoes": [
+            {
+              "id": 1768261661750,
+              "nome": "Medo",
+              "tipo": "Debuff",
+              "origem": "Evento",
+              "raridade": "",
+              "descricaoCurta": "O alvo é dominado pelo medo, tendo sua capacidade de agir com clareza e firmeza seriamente comprometida.",
+              "imagem": "https://i.imgur.com/ZKZR5ou.png",
+              "efeitosMecanicos": {
+                "modificadores": "– Penalidade em testes de Vontade, Sanidade e ataques ofensivos (-3)\n– Penalidade em testes para resistir a efeitos mentais (-3)",
+                "efetosPassivos": "– O alvo evita aproximação voluntária da fonte do medo, se possível\n– Ações ofensivas diretas exigem esforço emocional adicional",
+                "efetosAtivos": "n/d",
+                "interacoes": "– Exausto: aumenta a duração do Medo\n– Fraqueza: amplia penalidades físicas\n– Paralisado: Medo pode evoluir para Paralisia por pânico extremo\n– Imobilizado: dificulta tentativas de se libertar"
+              },
+              "duracao": {
+                "tipo": "Turnos",
+                "valor": "2"
+              },
+              "aplicacao": {
+                "metodo": "Gatilho",
+                "detalhes": "Aplicado ao falhar em testes contra intimidação, presenciar eventos traumáticos ou enfrentar entidades aterradoras."
+              },
+              "escalonamento": {
+                "temEscalonamento": true,
+                "descricao": "O medo se intensifica conforme o alvo perde controle emocional.",
+                "maxNiveis": 2,
+                "crescimento": "– Falha consecutiva em testes de Vontade – Reexposição à fonte do medo"
+              },
+              "risco": {
+                "exaustao": "n/d",
+                "danoColateral": "n/d"
+              },
+              "encerramento": {
+                "condicoes": "– Fim da duração\n– Sucesso em teste de Vontade\n– Remoção da fonte do medo\n– Habilidades de coragem ou purificação",
+                "removeivel": "sim"
+              },
+              "design": {
+                "narrativa": "Coração acelerado, mente em caos, instinto de fuga constante.",
+                "sinergias": "Base para controle mental e escalada emocional.",
+                "casosUso": "Criar tensão, quebrar formações e abrir janelas táticas.",
+                "notas": "Afeta decisões, não retira completamente o turno — o perigo é psicológico."
+              },
+              "dataCriacao": "12/01/2026, 20:47:41",
+              "dataAtualizacao": "19/01/2026, 18:42:52"
+            }
+          ],
+          "imagem": "",
+          "dataCriacao": "2026-05-01T01:58:36.416Z"
+        },
+        {
+          "id": 1777600976262,
+          "nome": "Enganei Voce",
+          "tipo": "energia",
+          "categoria": "Controle",
+          "circulo": "3º Círculo",
+          "tipoCusto": "Energia",
+          "tipoAcao": "Duradoura",
+          "recarga": "5",
+          "duracao": "3",
+          "alcance": "5 m",
+          "alvos": "1",
+          "custo": "7 EnR",
+          "dados": "Obstaculo 11",
+          "descricao": "Usuário canaliza uma magia que aplica uma ilusão no alvo imperceptível que afeta sua visão.\nPara sair da ilusao e -11, para cada falha e -1 obstaculo!",
+          "cantico": "",
+          "condicoes": [],
+          "imagem": "",
+          "dataCriacao": "2026-05-01T02:02:56.262Z"
         }
       ],
-      "inventario": [],
+      "inventario": [
+        {
+          "id": 1777598021709.035,
+          "nome": "Armadura Enegrecida",
+          "qualidade": "Mítico",
+          "level": 17,
+          "levelMax": 10,
+          "ataque": "6d10+11",
+          "extra": "Magia Proteção",
+          "tipo": "armadura",
+          "imagem": "https://i.pinimg.com/736x/18/64/b0/1864b0313df35a5980b3da6ba9bc4f31.jpg",
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 0,
+          "origemDatabase": true,
+          "habilidade": "Ao sofrer um dano maior que 30% do HP o dano se perde em sombras!"
+        },
+        {
+          "id": 1777598024058.0493,
+          "nome": "Cajado do Ilusionista",
+          "qualidade": "Mítico",
+          "level": 15,
+          "levelMax": 15,
+          "ataque": "5d10+7",
+          "extra": "+5 PreC",
+          "tipo": "arma",
+          "imagem": "https://i.pinimg.com/736x/5f/3a/47/5f3a47098ed3ecdccd4a14cb282d1aa7.jpg",
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true,
+          "habilidade": "Suas Ilusões se tornam Reais!"
+        }
+      ],
       "imagem": "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Leblanc_0.jpg",
       "morto": false
     },
     {
       "id": "npc_1777174660808_nlysjodjs",
-      "nome": "Raphael dACAEN",
+      "nome": "RAPHAEL DECAEN",
       "tipo": "NPC",
       "npcCategoria": "NPC",
       "npcTipo": "Aliados",
@@ -16303,8 +16851,42 @@
           "dataCriacao": "2026-04-30T23:09:45.931Z"
         }
       ],
-      "inventario": [],
-      "imagem": "https://epic7db.com/images/artifacts/thorn-of-the-blue-rose.webp",
+      "inventario": [
+        {
+          "id": 1777595295073.7217,
+          "nome": "Armadura Enegrecida",
+          "qualidade": "Raro",
+          "level": 10,
+          "levelMax": 10,
+          "ataque": "4d6+5",
+          "extra": "+50 Saude",
+          "Mesa": "",
+          "tipo": "armadura",
+          "imagem": "https://i.imgur.com/UhhqAq9.png",
+          "imagemIndexedDBId": null,
+          "habilidade": "",
+          "habilidades": [],
+          "maxSlotsHabilidades": 0,
+          "origemDatabase": true
+        },
+        {
+          "id": 1777595298239.8933,
+          "nome": "Espada Eterea",
+          "qualidade": "Épico",
+          "level": 15,
+          "levelMax": 15,
+          "ataque": "5d8+7",
+          "extra": "+3 PreC",
+          "Mesa": "",
+          "tipo": "arma",
+          "imagem": "https://i.imgur.com/H7Q1sx1.png",
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        }
+      ],
+      "imagem": "https://i.imgur.com/3BWwdIf.png",
       "morto": false
     },
     {
@@ -16322,198 +16904,3103 @@
       "idade": null,
       "atributos": {
         "forca": {
-          "base": 10,
+          "base": 58,
           "extra": 0,
-          "total": 10
+          "total": 58
         },
         "vitalidade": {
-          "base": 10,
+          "base": 64,
           "extra": 0,
-          "total": 10
+          "total": 64
         },
         "agilidade": {
-          "base": 10,
+          "base": 65,
           "extra": 0,
-          "total": 10
+          "total": 70
         },
         "inteligencia": {
-          "base": 10,
+          "base": 116,
           "extra": 0,
-          "total": 10
+          "total": 121
         },
         "percepcao": {
-          "base": 10,
+          "base": 92,
           "extra": 0,
-          "total": 10
+          "total": 97
         },
         "sorte": {
-          "base": 10,
+          "base": 79,
           "extra": 0,
-          "total": 10
+          "total": 79
         }
       },
       "saude": {
-        "atual": 0,
-        "maxima": 20,
-        "extra": 0
+        "atual": 178,
+        "maxima": 178,
+        "extra": 50
       },
       "energia": {
-        "atual": 0,
-        "maxima": 14,
+        "atual": 147,
+        "maxima": 147,
         "extra": 0
       },
       "fadiga": {
-        "atual": 0,
-        "maxima": 10,
+        "atual": 66,
+        "maxima": 66,
         "extra": 0
       },
       "statusSecundarios": {
         "prontidao": {
           "extra": 0,
-          "total": 21,
+          "total": 166,
           "bonus": 0
         },
         "ataque": {
           "extra": 0,
-          "total": 2,
+          "total": 11,
           "bonus": 0
         },
         "defesa": {
           "extra": 0,
-          "total": 2,
+          "total": 8,
           "bonus": 0
         },
         "reacao": {
           "extra": 0,
-          "total": 7,
+          "total": 10,
           "bonus": 0
         },
         "precisao": {
-          "extra": 0,
-          "total": 1,
-          "bonus": 0
+          "extra": 3,
+          "total": 11,
+          "bonus": 1
         },
         "evasao": {
           "extra": 0,
-          "total": 1,
-          "bonus": 0
+          "total": 8,
+          "bonus": 1
         }
       },
-      "sorteBonus": 0,
+      "sorteBonus": 3,
       "tricksterValue": 0,
       "condicoes": [],
-      "aptidoes": [],
+      "aptidoes": [
+        {
+          "nome": "Dança",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Liderança",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Tolerância",
+          "nivel": 5,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Sobrevivência",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Intimidação",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Ambidestro",
+          "nivel": 5,
+          "bonusAplicados": false
+        }
+      ],
       "ganhasAptidoes": 0,
-      "habilidades": [],
-      "inventario": [],
+      "habilidades": [
+        {
+          "id": 1777596210678.4524,
+          "nome": "Pacto da Fome Ancestral",
+          "tipo": "racial",
+          "descricao": "Sempre que o Worgen causar dano direto em combate, ele pode recuperar vitalidade ou reduzir o custo de uma habilidade baseada em sangue. Se o combate se prolongar, ele recebe bônus progressivo em força ou agressividade, mas perde sutileza.\nRecupera vitalidade ao causar dano\nReduz custo de habilidades de sangue\nBônus progressivo em combates longos",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767514612393,
+          "dataAplicacao": "2026-05-01T00:43:30.678Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777596210678.422,
+          "nome": "Pacto da Mente Predatória",
+          "tipo": "racial",
+          "descricao": "O Worgen recebe +2 em percepção, estratégia ou leitura de inimigos. Uma vez por cena, pode antecipar uma ação inimiga, ganhando vantagem defensiva ou ofensiva imediata.\n+2 em Percepção e leitura de inimigos\nAntecipa ação inimiga uma vez por cena\nVantagem defensiva ou ofensiva\n",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767514612393,
+          "dataAplicacao": "2026-05-01T00:43:30.678Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777596210678.0269,
+          "nome": "Pacto do Legado Profano",
+          "tipo": "racial",
+          "descricao": "O Worgen carrega fragmentos ativos do ritual ancestral em seu sangue. Uma vez por cena, ele pode invocar um eco do Espírito Antigo, fortalecendo uma ação ofensiva ou defensiva com bônus significativo ou um efeito especial. Após o uso, o Worgen sofre recuo ritual: penalidade leve temporária.\nInvoca eco do Espírito Antigo uma vez por cena\nRompe defesa, atravessa resistência ou ignora medo\nPenalidade leve temporária após uso",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767514612393,
+          "dataAplicacao": "2026-05-01T00:43:30.678Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777596210678.442,
+          "nome": "Fome Carmesim",
+          "tipo": "Imediata",
+          "descricao": "Ao causar dano corpo a corpo, o Worgen pode ativar esta Art para absorver vitalidade do alvo, recuperando HP equivalente a uma fração do dano causado (escala leve, definida pelo mestre).\n\nSe o alvo estiver sangrando, inconsciente ou abaixo de 50% de HP, a recuperação é ligeiramente maior.",
+          "recarga": "2",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "CaC",
+          "alvos": "1",
+          "custo": "7 EnR",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767514612393,
+          "dataAplicacao": "2026-05-01T00:43:30.678Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777596210678.9045,
+          "nome": "Instinto Predatório",
+          "tipo": "Sustentada",
+          "descricao": "O Worgen percebe fraqueza como um cheiro no ar. Sempre que houver uma criatura ferida ou debilitada a até 9 metros, o personagem recebe:\n- +1 em Percepção e rastreio\n- +1 Precisão contra alvos abaixo de 50% de HP\n\nEste bônus não se aplica contra alvos em plena condição física.",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "9 m",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767514612393,
+          "dataAplicacao": "2026-05-01T00:43:30.678Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777596210678.8328,
+          "nome": "Metamorfose Bestial",
+          "tipo": "Sustentada",
+          "descricao": "O Worgen libera parcialmente sua forma amaldiçoada. Enquanto ativa:\n- Ataques desarmados passam a causar dano equivalente a arma média (3d8)\n- Recebe +1 dado de dano e +1 dado de defesa\n- Sofre –1 em Precisão com armas que exigem técnica fina\n\nAo encerrar a Art, o personagem fica ofegante (penalidade leve narrativa).",
+          "recarga": "7",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "CaC",
+          "alvos": "Jogador",
+          "custo": "11 EnR",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767514612393,
+          "dataAplicacao": "2026-05-01T00:43:30.678Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777596210678.8484,
+          "nome": "Regeneração Profana",
+          "tipo": "Imediata",
+          "descricao": "Ferimentos se fecham de forma antinatural. No início do turno seguinte à ativação, o Worgen:\n- Recupera uma quantidade moderada de HP (6d6+12)\n- Ignora penalidades de ferimentos leves durante a duração\n- Se usado sob fogo sagrado ou efeito similar, a cura é reduzida pela metade.",
+          "recarga": "3",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "CaC",
+          "alvos": "Jogador",
+          "custo": "11 EnR",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767514612393,
+          "dataAplicacao": "2026-05-01T00:43:30.678Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777596210678.3667,
+          "nome": "Fome Worgen",
+          "tipo": "Sustentada",
+          "descricao": "O personagem possui um atributo especial chamado Fome, variando de 0 a 100, iniciando em 50.\n- Ficar longos períodos sem se alimentar ou ativar Art’s vampíricas aumenta a Fome em 2d8 + ATK\n- Alimentar-se de uma criatura viva reduz a Fome em 2d12\n- Ao se alimentar, o personagem também recupera 2d12 + ATK de HP\nCriaturas sem sangue não reduzem Fome nem curam HP.",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "CaC",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767514612393,
+          "dataAplicacao": "2026-05-01T00:43:30.678Z",
+          "condicoes": []
+        },
+        {
+          "nome": "Lâmina Hemática",
+          "recarga": "1",
+          "duracao": "Imediato",
+          "tipo": "",
+          "alcance": "CaC",
+          "alvos": "1",
+          "custo": "9 EnR",
+          "descricao": "Conjura uma lâmina de sangue sólido que causa 1d10 de dano físico. Recupera 5 HP se causar dano.",
+          "id": "hab_1777596277138_agma82vnf",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Maré Carmesim",
+          "recarga": "5",
+          "duracao": "Imediato",
+          "tipo": "",
+          "alcance": "9 m",
+          "alvos": "3",
+          "custo": "31 EnR",
+          "descricao": "Uma onda de sangue sólido atravessa o campo, causando 8d12 de dano físico e empurrando os alvos.",
+          "id": "hab_1777596277138_bubn155wb",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Explosão de Veias",
+          "recarga": "3",
+          "duracao": "Imediato",
+          "tipo": "",
+          "alcance": "6 m",
+          "alvos": "3 m AOE",
+          "custo": "21 EnR & 15 HP",
+          "descricao": "Veias se rompem violentamente, causando 6d12 de dano físico em todos os inimigos na área.",
+          "id": "hab_1777596277138_ve4mh299b",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Hemorragia Controlada",
+          "recarga": "2",
+          "duracao": "Imediato",
+          "tipo": "",
+          "alcance": "CaC",
+          "alvos": "Jogador",
+          "custo": "21 HP",
+          "descricao": "O Hemomante perde 5 HP e recebe +2 dado de dano no próximo ataque ou Art ofensiva.",
+          "id": "hab_1777596277138_lw6dadond",
+          "ganha": false,
+          "condicoes": []
+        }
+      ],
+      "inventario": [
+        {
+          "id": 1777596296918.9604,
+          "nome": "Foice Sanguinaria",
+          "qualidade": "Mítico",
+          "level": 10,
+          "levelMax": 20,
+          "ataque": "4d12+5",
+          "extra": "+3 PreC",
+          "tipo": "arma",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [
+            {
+              "slot": 0,
+              "nome": "Devoradora de Essência:",
+              "descricao": "A adaga reconhece aquilo que já foi manchado… e decide terminar o serviço. Efeito Passivo: Ataques contra criaturas corrompidas, amaldiçoadas ou possuídas têm sua chance de acerto crítico aumentada drasticamente (5).\nEfeito em Acerto Crítico: Quando a adaga realiza um crítico em um alvo corrompido: A lâmina absorve parte da essência vital da criatura \nO portador recupera uma quantidade de vida proporcional ao dano causado (25% do dano causado!)\nFragmentos da essência ficam presos na adaga, acumulando cargas (Desconhecido)"
+            },
+            {
+              "slot": 1,
+              "nome": "Encarnação da Morte",
+              "descricao": "O jogador precisa rolar um dado de forca de vontade para resistir a forca da adaga que o controla encarnando a morte, assim ganhando habilidade temporário fios da vida!"
+            }
+          ],
+          "maxSlotsHabilidades": 2,
+          "origemDatabase": true
+        },
+        {
+          "id": 1777596300587.146,
+          "nome": "Roupa Sanguinea",
+          "qualidade": "Mítico",
+          "level": 15,
+          "levelMax": 10,
+          "ataque": "4d10+7",
+          "extra": "+50 Saude",
+          "tipo": "armadura",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 0,
+          "origemDatabase": true
+        }
+      ],
       "imagem": {
         "tipo": "indexeddb",
-        "id": "img-1777472358003-b1b031d1a",
-        "dataCriacao": 1777472359627
+        "id": "img-1779058202652-59eovs1iq",
+        "dataCriacao": 1779058204131
       },
       "morto": false
     },
     {
-      "nome": "cartethyia",
+      "nome": "AERY",
       "tipo": "NPC",
       "npcCategoria": "NPC",
       "npcTipo": "Aliados",
-      "raca": "Nenhuma raça selecionada",
-      "racaID": "Nenhuma raça selecionada",
-      "classe": "Nenhuma classe selecionada",
-      "classeID": "Nenhuma classe selecionada",
+      "raca": "Elfo",
+      "racaID": "1767512726313",
+      "classe": "Elementalista",
+      "classeID": "1767942960993",
+      "origem": "🌿 Reino Élfico de Myunn",
+      "origemID": "1769383689705",
+      "descricao": "",
+      "idade": null,
+      "atributos": {
+        "forca": {
+          "base": 40,
+          "extra": 0,
+          "total": 40
+        },
+        "vitalidade": {
+          "base": 53,
+          "extra": 0,
+          "total": 53
+        },
+        "agilidade": {
+          "base": 59,
+          "extra": 0,
+          "total": 69
+        },
+        "inteligencia": {
+          "base": 87,
+          "extra": 0,
+          "total": 92
+        },
+        "percepcao": {
+          "base": 82,
+          "extra": 0,
+          "total": 82
+        },
+        "sorte": {
+          "base": 63,
+          "extra": 0,
+          "total": 68
+        }
+      },
+      "saude": {
+        "atual": 127,
+        "maxima": 127,
+        "extra": 25
+      },
+      "energia": {
+        "atual": 116,
+        "maxima": 116,
+        "extra": 0
+      },
+      "fadiga": {
+        "atual": 53,
+        "maxima": 53,
+        "extra": 0
+      },
+      "statusSecundarios": {
+        "prontidao": {
+          "extra": 0,
+          "total": 153,
+          "bonus": 0
+        },
+        "ataque": {
+          "extra": 0,
+          "total": 8,
+          "bonus": 0
+        },
+        "defesa": {
+          "extra": 0,
+          "total": 7,
+          "bonus": 0
+        },
+        "reacao": {
+          "extra": 0,
+          "total": 11,
+          "bonus": 2
+        },
+        "precisao": {
+          "extra": 3,
+          "total": 10,
+          "bonus": 0
+        },
+        "evasao": {
+          "extra": 0,
+          "total": 7,
+          "bonus": 1
+        }
+      },
+      "sorteBonus": 2,
+      "tricksterValue": 0,
+      "condicoes": [],
+      "aptidoes": [
+        {
+          "nome": "Dança",
+          "nivel": 5,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Beleza",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Acrobacia",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Pressentimento",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Sobrevivência",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Lábia",
+          "nivel": 2,
+          "bonusAplicados": false
+        }
+      ],
+      "ganhasAptidoes": 0,
+      "habilidades": [
+        {
+          "id": 1777597589045.0164,
+          "nome": "Legado da Eternidade",
+          "tipo": "racial",
+          "descricao": "O jogador pode escolher um efeito passivo permanente ligado a um atributo mental (Intelecto, Vontade ou Percepção). Uma vez por cena, pode ignorar penalidades relacionadas a fadiga mental, confusão, medo ou distração.\nEscolhe efeito passivo mental permanente\nIgnora penalidades mentais uma vez por cena\nFadiga mental, confusão, medo ou distração",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512726313,
+          "dataAplicacao": "2026-05-01T01:06:29.045Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777597589045.937,
+          "nome": "Legado da Sintonia",
+          "tipo": "racial",
+          "descricao": "O jogador escolhe um elemento, escola mágica ou força natural (ex: Água, Vento ou Mana). Sempre que utilizar habilidades ligadas a essa afinidade, recebe +2 nas rolagens e reduz o custo ou tempo de conjuração.\n+2 em rolagens da afinidade eleita\nRedução de custo ou tempo de conjuração\nElemento, escola mágica ou força natural",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512726313,
+          "dataAplicacao": "2026-05-01T01:06:29.045Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777597589045.3625,
+          "nome": "Legado da Precisão",
+          "tipo": "racial",
+          "descricao": "Uma vez por turno, o elfo pode re-rolar um dado em ações que envolvam ataque, furtividade ou ações técnicas. Deve manter o novo resultado. Além disso, recebe bônus narrativo ao agir com planejamento, posicionamento ou paciência.\nRe-rola um dado uma vez por turno\nAtaque, furtividade ou ações técnicas\nBônus narrativo com planejamento",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512726313,
+          "dataAplicacao": "2026-05-01T01:06:29.045Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777597589045.635,
+          "nome": "Percepção Aguçada",
+          "tipo": "Duradoura",
+          "descricao": "Os sentidos élficos são treinados desde a infância para perceber o que outros ignoram. O elfo recebe +2 em Testes de Percepção, rastreio e detecção (incluindo armadilhas, emboscadas e presenças ocultas).\n\nAlém disso, uma vez por sessão, pode agir antes do turno normal ao detectar uma ameaça oculta ou ataque surpresa (não concede turno extra, apenas prioridade na reação inicial).",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "19 m",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512726313,
+          "dataAplicacao": "2026-05-01T01:06:29.045Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777597589045.7896,
+          "nome": "Acrobacia Sobrenatural",
+          "tipo": "Imediata",
+          "descricao": "O corpo élfico se move com leveza quase irreal. Ao sofrer um ataque corpo a corpo ou à distância, o elfo pode ativar esta Art para receber +2 em Evasão ou Reação contra aquele ataque.\n\nSe o ataque errar, o elfo pode se mover até 3 metros sem provocar reações.",
+          "recarga": "2",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Pessoal",
+          "alvos": "Jogador",
+          "custo": "7 EnR",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512726313,
+          "dataAplicacao": "2026-05-01T01:06:29.045Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777597589045.3245,
+          "nome": "Treinamento com Arco",
+          "tipo": "Duradoura",
+          "descricao": "O arco é uma extensão natural do corpo élfico. O personagem recebe:\n+1 em Precisão ao usar arcos ou armas de longo alcance similares.\nIgnora penalidades leves de distância ao atacar além do alcance ideal.\n\nAlém disso, uma vez por turno, ao permanecer imóvel, o próximo disparo recebe +2 dado de dano adicional.",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "0",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512726313,
+          "dataAplicacao": "2026-05-01T01:06:29.045Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777597589045.2646,
+          "nome": "Longevidade",
+          "tipo": "Duradoura",
+          "descricao": "A vida longa do elfo permite aperfeiçoamento contínuo. Sempre que o personagem subir (Adaptação 1d4+1) o Domínio de uma Art, ele recebe um bônus narrativo adicional, como:\n\nRedução leve de custo ou\nPequeno bônus secundário aprovado pelo mestre (ex: +1 alcance, +1 duração).\nEsse bônus só pode ser aplicado uma vez por Art.",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "0",
+          "alvos": "0",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512726313,
+          "dataAplicacao": "2026-05-01T01:06:29.045Z",
+          "condicoes": []
+        },
+        {
+          "nome": "Pulso Elemental",
+          "recarga": "1",
+          "duracao": "Imediata",
+          "tipo": "",
+          "alcance": "7 m",
+          "alvos": "no alcance",
+          "custo": "15 EnR",
+          "descricao": "Libera uma onda elemental que causa 4d8 de dano elemental em todos os inimigos na área. O efeito secundário depende do elemento ativo (ex: empurrar, retardar, queimar, petrificar leve).",
+          "id": "hab_1777597729998_d11v40bac",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Prisão Elemental",
+          "recarga": "5",
+          "duracao": "Duradoura",
+          "tipo": "",
+          "alcance": "7 m",
+          "alvos": "are 2 m",
+          "custo": "29 EnR",
+          "descricao": "Condensa o elemento em uma área, causando 6d8+1/4 INT de dano elemental e aplicando uma condição de restrição leve por 2 turnos, adaptada ao elemento ativo.",
+          "id": "hab_1777597729998_4s18mvphp",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Cataclismo Adaptativo",
+          "recarga": "9",
+          "duracao": "Imediato",
+          "tipo": "",
+          "alcance": "13 m",
+          "alvos": "6 m AOE",
+          "custo": "45 EnR",
+          "descricao": "Libera o ápice do elemento ativo, causando 8d12 de dano elemental em todos os inimigos na área e aplicando um efeito massivo adaptado ao elemento.",
+          "id": "hab_1777597729998_37cpjq74z",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "id": 1777597796176,
+          "nome": "Santa da Agua",
+          "tipo": "energia",
+          "categoria": "Ofensivas",
+          "circulo": "",
+          "tipoCusto": "Energia",
+          "tipoAcao": "Imediata",
+          "recarga": "2 T",
+          "duracao": "1 T",
+          "alcance": "9 m",
+          "alvos": "1",
+          "custo": "9 EnR",
+          "dados": "3d12+6",
+          "descricao": "Cura o alvo com energia magica de agua que circunda com movimentos leves!",
+          "cantico": "",
+          "condicoes": [],
+          "imagem": "",
+          "dataCriacao": "2026-05-01T01:09:56.176Z"
+        }
+      ],
+      "inventario": [
+        {
+          "id": 1777597811012.19,
+          "nome": "Roupa Elfica",
+          "qualidade": "Épico",
+          "level": 10,
+          "levelMax": 10,
+          "ataque": "4d8+5",
+          "extra": "+25Saude",
+          "tipo": "armadura",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 0,
+          "origemDatabase": true
+        },
+        {
+          "id": 1777597814119.102,
+          "nome": "Espada Elfica",
+          "qualidade": "Épico",
+          "level": 15,
+          "levelMax": 15,
+          "ataque": "5d10+7",
+          "extra": "+3 PreC",
+          "tipo": "arma",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        }
+      ],
+      "imagem": "https://beneaththetangles.com/wp-content/uploads/2025/06/Cartethyia-Wuthering-Waves-fanart-3-703x1024.jpg",
+      "morto": false
+    },
+    {
+      "id": "npc_1777601111026_hn3ss5p6a",
+      "nome": "Liraen Thelarian",
+      "tipo": "NPC",
+      "npcCategoria": "NPC",
+      "npcTipo": "Aliados",
+      "raca": "Elfo",
+      "racaID": "1767512726313",
+      "classe": "Musa",
+      "classeID": "1768866062849",
+      "origem": "🌿 Reino Élfico de Myunn",
+      "origemID": "1769383689705",
+      "descricao": "",
+      "idade": null,
+      "atributos": {
+        "forca": {
+          "base": 54,
+          "extra": 0,
+          "total": 54
+        },
+        "vitalidade": {
+          "base": 56,
+          "extra": 0,
+          "total": 56
+        },
+        "agilidade": {
+          "base": 57,
+          "extra": 0,
+          "total": 57
+        },
+        "inteligencia": {
+          "base": 65,
+          "extra": 0,
+          "total": 80
+        },
+        "percepcao": {
+          "base": 55,
+          "extra": 0,
+          "total": 65
+        },
+        "sorte": {
+          "base": 79,
+          "extra": 0,
+          "total": 89
+        }
+      },
+      "saude": {
+        "atual": 168,
+        "maxima": 168,
+        "extra": 50
+      },
+      "energia": {
+        "atual": 102,
+        "maxima": 102,
+        "extra": 0
+      },
+      "fadiga": {
+        "atual": 62,
+        "maxima": 62,
+        "extra": 0
+      },
+      "statusSecundarios": {
+        "prontidao": {
+          "extra": 0,
+          "total": 132,
+          "bonus": 0
+        },
+        "ataque": {
+          "extra": 0,
+          "total": 9,
+          "bonus": 0
+        },
+        "defesa": {
+          "extra": 0,
+          "total": 7,
+          "bonus": 0
+        },
+        "reacao": {
+          "extra": 0,
+          "total": 9,
+          "bonus": 0
+        },
+        "precisao": {
+          "extra": 3,
+          "total": 10,
+          "bonus": 1
+        },
+        "evasao": {
+          "extra": 0,
+          "total": 6,
+          "bonus": 0
+        }
+      },
+      "sorteBonus": 3,
+      "tricksterValue": 0,
+      "condicoes": [],
+      "aptidoes": [
+        {
+          "nome": "Beleza",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Sobrevivência",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Pressentimento",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Lábia",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Conhecimento",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Canto",
+          "nivel": 5,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Arcanismo",
+          "nivel": 4,
+          "bonusAplicados": false
+        }
+      ],
+      "ganhasAptidoes": 10,
+      "habilidades": [
+        {
+          "id": 1777601262133.1602,
+          "nome": "Legado da Precisão",
+          "tipo": "racial",
+          "descricao": "Uma vez por turno, o elfo pode re-rolar um dado em ações que envolvam ataque, furtividade ou ações técnicas. Deve manter o novo resultado. Além disso, recebe bônus narrativo ao agir com planejamento, posicionamento ou paciência.\nRe-rola um dado uma vez por turno\nAtaque, furtividade ou ações técnicas\nBônus narrativo com planejamento",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512726313,
+          "dataAplicacao": "2026-05-01T02:07:42.133Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777601262133.2488,
+          "nome": "Percepção Aguçada",
+          "tipo": "Duradoura",
+          "descricao": "Os sentidos élficos são treinados desde a infância para perceber o que outros ignoram. O elfo recebe +2 em Testes de Percepção, rastreio e detecção (incluindo armadilhas, emboscadas e presenças ocultas).\n\nAlém disso, uma vez por sessão, pode agir antes do turno normal ao detectar uma ameaça oculta ou ataque surpresa (não concede turno extra, apenas prioridade na reação inicial).",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "19 m",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512726313,
+          "dataAplicacao": "2026-05-01T02:07:42.133Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777601262133.1543,
+          "nome": "Acrobacia Sobrenatural",
+          "tipo": "Imediata",
+          "descricao": "O corpo élfico se move com leveza quase irreal. Ao sofrer um ataque corpo a corpo ou à distância, o elfo pode ativar esta Art para receber +2 em Evasão ou Reação contra aquele ataque.\n\nSe o ataque errar, o elfo pode se mover até 3 metros sem provocar reações.",
+          "recarga": "2",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Pessoal",
+          "alvos": "Jogador",
+          "custo": "7 EnR",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512726313,
+          "dataAplicacao": "2026-05-01T02:07:42.133Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777601262133.5002,
+          "nome": "Treinamento com Arco",
+          "tipo": "Duradoura",
+          "descricao": "O arco é uma extensão natural do corpo élfico. O personagem recebe:\n+1 em Precisão ao usar arcos ou armas de longo alcance similares.\nIgnora penalidades leves de distância ao atacar além do alcance ideal.\n\nAlém disso, uma vez por turno, ao permanecer imóvel, o próximo disparo recebe +2 dado de dano adicional.",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "0",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512726313,
+          "dataAplicacao": "2026-05-01T02:07:42.133Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777601262133.848,
+          "nome": "Longevidade",
+          "tipo": "Duradoura",
+          "descricao": "A vida longa do elfo permite aperfeiçoamento contínuo. Sempre que o personagem subir (Adaptação 1d4+1) o Domínio de uma Art, ele recebe um bônus narrativo adicional, como:\n\nRedução leve de custo ou\nPequeno bônus secundário aprovado pelo mestre (ex: +1 alcance, +1 duração).\nEsse bônus só pode ser aplicado uma vez por Art.",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "0",
+          "alvos": "0",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767512726313,
+          "dataAplicacao": "2026-05-01T02:07:42.133Z",
+          "condicoes": []
+        },
+        {
+          "nome": "Canto Sustentado",
+          "recarga": "2",
+          "duracao": "Sustentada",
+          "tipo": "",
+          "alcance": "8 m",
+          "alvos": "no alcance",
+          "custo": "6 EnR",
+          "descricao": "Mantém um canto contínuo que fortalece aliados.\nEnquanto ativo:\nAliados recebem +1 dado de dano adicional.\nEfeitos sonoros da Musa têm custo –3 EnR ou FaD.",
+          "id": "hab_1777601511723_2op69hje1",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Nota de Abertura",
+          "recarga": "1",
+          "duracao": "Imediato",
+          "tipo": "",
+          "alcance": "6 m",
+          "alvos": "1",
+          "custo": "8 EnR",
+          "descricao": "A Musa emite uma nota precisa que quebra o foco do alvo.\nCausa 3d6 de dano sonoro e aplica Desatento por 1 turno.\nSe o alvo já estiver sob efeito sonoro, a duração aumenta em +1 turno.",
+          "id": "hab_1777601511723_udyrnsqn5",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Grito Dissonante",
+          "recarga": "2",
+          "duracao": "Imediata",
+          "tipo": "",
+          "alcance": "5 m",
+          "alvos": "1",
+          "custo": "15 EnR",
+          "descricao": "Um grito agressivo que fere corpo e mente.\nCausa 4d8 + 6 de dano sonoro.\nSe o alvo estiver sob efeito emocional, fica Atordoado por 1 ação leve.",
+          "id": "hab_1777601511723_b9dv2uvs1",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Nota Final",
+          "recarga": "4",
+          "duracao": "Imediato",
+          "tipo": "",
+          "alcance": "4 m",
+          "alvos": "1",
+          "custo": "25 EnR",
+          "descricao": "Uma nota curta, perfeita e letal.\nCausa 8d12+1/4 INT de dano sonoro.\nSe derrotar o alvo, recupera 2d12+6 de Energia.",
+          "id": "hab_1777601511723_lmijsuftb",
+          "ganha": false,
+          "condicoes": []
+        }
+      ],
+      "inventario": [
+        {
+          "id": 1777601538184.9272,
+          "nome": "Roupa Elfica",
+          "qualidade": "Épico",
+          "level": 10,
+          "levelMax": 10,
+          "ataque": "4d8+5",
+          "extra": "+50 Saude",
+          "tipo": "armadura",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 0,
+          "origemDatabase": true
+        },
+        {
+          "id": 1777601578343.1226,
+          "nome": "Anel Elfico",
+          "qualidade": "Épico",
+          "level": 15,
+          "levelMax": 15,
+          "ataque": "5d8+7",
+          "extra": "+3 PreC",
+          "tipo": "arma",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        }
+      ],
+      "imagem": "https://static.zerochan.net/Echidna.%28Re%3AZero%29.full.3078442.jpg",
+      "morto": false
+    },
+    {
+      "id": "npc_1777601838886_w693cyopz",
+      "nome": "Lilibeth - A Rainha da Mentira",
+      "tipo": "NPC",
+      "npcCategoria": "NPC",
+      "npcTipo": "Vilões",
+      "raca": "Celestine",
+      "racaID": "1767513673767",
+      "classe": "Arcanista",
+      "classeID": "1767969634419",
+      "origem": "Nenhuma origem selecionada",
+      "origemID": "Nenhuma origem selecionada",
+      "descricao": "",
+      "idade": 69696969,
+      "atributos": {
+        "forca": {
+          "base": 121,
+          "extra": 0,
+          "total": 121
+        },
+        "vitalidade": {
+          "base": 136,
+          "extra": 0,
+          "total": 141
+        },
+        "agilidade": {
+          "base": 138,
+          "extra": 0,
+          "total": 138
+        },
+        "inteligencia": {
+          "base": 229,
+          "extra": 0,
+          "total": 244
+        },
+        "percepcao": {
+          "base": 190,
+          "extra": 0,
+          "total": 200
+        },
+        "sorte": {
+          "base": 88,
+          "extra": 0,
+          "total": 103
+        }
+      },
+      "saude": {
+        "atual": 763,
+        "maxima": 763,
+        "extra": 500
+      },
+      "energia": {
+        "atual": 289,
+        "maxima": 289,
+        "extra": 0
+      },
+      "fadiga": {
+        "atual": 128,
+        "maxima": 128,
+        "extra": 0
+      },
+      "statusSecundarios": {
+        "prontidao": {
+          "extra": 0,
+          "total": 322,
+          "bonus": 0
+        },
+        "ataque": {
+          "extra": 0,
+          "total": 23,
+          "bonus": 0
+        },
+        "defesa": {
+          "extra": 0,
+          "total": 15,
+          "bonus": 0
+        },
+        "reacao": {
+          "extra": 0,
+          "total": 13,
+          "bonus": 1
+        },
+        "precisao": {
+          "extra": 0,
+          "total": 16,
+          "bonus": 2
+        },
+        "evasao": {
+          "extra": 0,
+          "total": 13,
+          "bonus": 0
+        }
+      },
+      "sorteBonus": 4,
+      "tricksterValue": 0,
+      "condicoes": [],
+      "aptidoes": [
+        {
+          "nome": "Beleza",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Sedução",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Lábia",
+          "nivel": 6,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Arcanismo",
+          "nivel": 6,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Liderança",
+          "nivel": 4,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 5,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Pressentimento",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Olho Crítico",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Intimidação",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Vontade",
+          "nivel": 4,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Tolerância",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Conhecimento",
+          "nivel": 3,
+          "bonusAplicados": false
+        }
+      ],
+      "ganhasAptidoes": 3,
+      "habilidades": [
+        {
+          "id": 1777602497974.3867,
+          "nome": "Manifestação do Dogma",
+          "tipo": "racial",
+          "descricao": "Enquanto agir estritamente de acordo com seu Propósito, o Celestine recebe +3 em todas as rolagens diretamente relacionadas a ele. Uma vez por cena, pode impor seu Propósito sobre a cena ou um alvo.\n+3 em rolagens do Propósito\nImpõe Propósito uma vez por cena\nForça resolução alinhada\n",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767513673767,
+          "dataAplicacao": "2026-05-01T02:28:17.974Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777602497974.8015,
+          "nome": "Manifestação da Autoridade",
+          "tipo": "racial",
+          "descricao": "O Celestine emana uma aura conceitual ligada ao seu Propósito, concedendo bônus a aliados alinhados e penalidades a inimigos que o desafiem.\n+2 bônus para aliados alinhados\n-2 penalidade para inimigos opostos\nAura conceitual do Propósito",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767513673767,
+          "dataAplicacao": "2026-05-01T02:28:17.974Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777602497974.144,
+          "nome": "Manifestação da Ascensão",
+          "tipo": "racial",
+          "descricao": "Uma vez por cena, o Celestine pode despertar sua habilidade latente, elevando temporariamente seu Propósito a um nível quase divino. Após o uso, sofre consequências narrativas.\nDespertar latente uma vez por cena\nElevação divina temporária\nPoder absoluto com custo\n",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767513673767,
+          "dataAplicacao": "2026-05-01T02:28:17.974Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777602497974.4812,
+          "nome": "Consagração Pós-Morte",
+          "tipo": "Duradoura",
+          "descricao": "A alma do Celestine foi elevada além da condição mortal.\n- +5 em um atributo ligado ao Propósito (FOR, INT, AGI, etc.)\n- +1 Resistência Mística\n\nNão sofre penalidades por medo, corrupção ou efeitos de desespero",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "Duradoura",
+          "alcance": "Pessoal",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767513673767,
+          "dataAplicacao": "2026-05-01T02:28:17.974Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777602497974.32,
+          "nome": "Forma do Propósito",
+          "tipo": "Duradoura",
+          "descricao": "A aparência do Celestine é reflexo direto da lei que ele representa.\n- Pode alterar sua forma de maneira coerente com o Propósito\n- Recebe vantagens narrativas em interações relacionadas à sua lei\n- Criaturas sensíveis à ordem ou ao sagrado reconhecem sua presença",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Pessoal",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767513673767,
+          "dataAplicacao": "2026-05-01T02:28:17.974Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777602497974.6467,
+          "nome": "Autoridade do Propósito",
+          "tipo": "Imediata",
+          "descricao": "A simples presença do Celestine impõe a lei que ele encarna.\n- Inimigos sofrem –3 em ações que contrariem o Propósito\n- Ações alinhadas ao Propósito recebem –30% no custo EnR ou FaD\n- Criaturas caóticas ou instáveis podem hesitar",
+          "recarga": "3",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "7 m",
+          "alvos": "no alcance",
+          "custo": "15 EnR",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767513673767,
+          "dataAplicacao": "2026-05-01T02:28:17.974Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777602497974.795,
+          "nome": "Manifestação da Lei Viva",
+          "tipo": "Imediata",
+          "descricao": "O Celestine manifesta sua lei como efeito direto.\nExemplos (escolher 1 ao criar): \n- Justiça: dano verdadeiro leve ou imobilização curta\n- Vida: cura moderada ou remoção de condição\n- Verdade: revelar ilusões ou expor mentiras\n- Sobrevivência: escudo temporário ou resistência",
+          "recarga": "2",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "7 m",
+          "alvos": "1",
+          "custo": "13 EnR",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767513673767,
+          "dataAplicacao": "2026-05-01T02:28:17.974Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777602497974.4287,
+          "nome": "Existência Consagrada",
+          "tipo": "Duradoura",
+          "descricao": "O corpo do Celestine não é apenas físico — é um símbolo.\n- Dano recebido sofre –15\n- Efeitos que tentam apagar, selar ou corromper sua existência sofrem penalidade (-5)\n- Enquanto cumprir seu Propósito ativamente, recebe +2 em todas as defesas",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Pessoal",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767513673767,
+          "dataAplicacao": "2026-05-01T02:28:17.974Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777602497974.504,
+          "nome": "Eco dos Deuses Antigos",
+          "tipo": "Imediata",
+          "descricao": "Os ecos dos deuses desaparecidos respondem ao chamado do Celestine.\n- Recebe +3 em todas as ações ligadas ao Propósito por 1 Batalha.\n- Pode alterar levemente a realidade de forma simbólica e limitada\n- O uso excessivo pode gerar consequências cósmicas narrativas",
+          "recarga": "1 p/ Sessão",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Pessoal",
+          "alvos": "Jogador",
+          "custo": "21 EnR",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767513673767,
+          "dataAplicacao": "2026-05-01T02:28:17.974Z",
+          "condicoes": []
+        },
+        {
+          "nome": "Explosão Vetorial",
+          "recarga": "5",
+          "duracao": "Imediato",
+          "tipo": "",
+          "alcance": "7 m",
+          "alvos": "AOE",
+          "custo": "29 EnR",
+          "descricao": "Compressão e liberação de mana causa 4d8 de dano em área. O centro da explosão sofre +1/3 INT.",
+          "id": "hab_1777603288561_u4ay11r4n",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Sobrecarga de Mana",
+          "recarga": "3",
+          "duracao": "Imediato",
+          "tipo": "",
+          "alcance": "7 m",
+          "alvos": "1",
+          "custo": "13 EnR",
+          "descricao": "Liberação instável causa 2d10 de dano arcano. Após o uso, o Arcanista sofre –2 Defesa por 1 turno.",
+          "id": "hab_1777603288561_66r1rcjkp",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Geometria Arcana",
+          "recarga": "0",
+          "duracao": "Duradoura",
+          "tipo": "",
+          "alcance": "0",
+          "alvos": "0",
+          "custo": "0",
+          "descricao": "Sempre que uma runa é ativada por um inimigo, o Rune Caster recupera 1d12+6 Energia.",
+          "id": "hab_1777603288561_t93y2bxd2",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Núcleo Arcano",
+          "recarga": "0",
+          "duracao": "Duradoura",
+          "tipo": "",
+          "alcance": "0",
+          "alvos": "0",
+          "custo": "0",
+          "descricao": "Aumenta o limite máximo de Energia em +20%. Sempre que gastar 15+ Energia em um turno, recebe +1 em controle arcano no próximo.",
+          "id": "hab_1777603288561_vd0f5ug65",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Colapso Controlado",
+          "recarga": "7",
+          "duracao": "Imediato",
+          "tipo": "",
+          "alcance": "9 m",
+          "alvos": "AOE",
+          "custo": "19 EnR",
+          "descricao": "Implosão de mana causa 8d12 de dano arcano. Após o uso, não pode usar Arts no próximo turno.",
+          "id": "hab_1777603288561_k2ndtfjz7",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Ruptura de Fluxo",
+          "recarga": "3",
+          "duracao": "Imediato",
+          "tipo": "",
+          "alcance": "9 m",
+          "alvos": "1",
+          "custo": "11 EnR",
+          "descricao": "Interrompe conjuração e causa 4d8 de dano. Se interromper com sucesso, o alvo perde a próxima ação.",
+          "id": "hab_1777603288561_wk69r868w",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Sentir Fluxo Arcano",
+          "recarga": "1",
+          "duracao": "Sustentada",
+          "tipo": "",
+          "alcance": "9 m",
+          "alvos": "AOE",
+          "custo": "5",
+          "descricao": "O Arcanista percebe correntes de mana. Revela fontes mágicas e concede +1 em testes de conjuração e controle arcano enquanto ativo.",
+          "id": "hab_1777603288561_iwvxidboy",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Condensar Mana",
+          "recarga": "2",
+          "duracao": "Duradoura",
+          "tipo": "",
+          "alcance": "CaC",
+          "alvos": "Jogador",
+          "custo": "15  EnR",
+          "descricao": "Compacta mana no corpo. A próxima Art usada custa –50% Energia e recebe +1 de efeito.",
+          "id": "hab_1777603288561_r5kp4ino7",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "id": 1777674576028,
+          "nome": "O Sol do Amanhã",
+          "tipo": "energia",
+          "categoria": "Ofensivas",
+          "circulo": "",
+          "tipoCusto": "Energia",
+          "tipoAcao": "Duradoura",
+          "recarga": "7 T",
+          "duracao": "n/d",
+          "alcance": "11 m",
+          "alvos": "7 m AOE",
+          "custo": "35 EnR",
+          "dados": "12d12+150%",
+          "descricao": "Ao entoar o cântico, o conjurador invoca uma chama viva que não apenas queima — ela domina o espaço. O ar se torna abrasador, o chão começa a crepitar e o próprio céu parece tingido de vermelho.\n\n⚔️ Efeito Principal\n\nApós a conjuração, uma explosão de fogo se expande ao redor do c\n\nCausa dano em área elevado\nAplica Queimadura (dano contínuo por X turnos)\nInimigos no centro sofrem +40% de dano\n\nA área afetada permanece em chamas por 3 turnos:\n\nQuem entra ou permanece sofre dano por turno\nReduz resistência a fogo gradualmente (stack leve, tipo -5% por turno)\nO terreno fica visualmente instável (brasas, ar distorcido)",
+          "cantico": "\"Pelo sopro vermelho que dança no véu do mundo,\neu convoco o brilho que devora a escuridão.\nChama viva, ergue teu rugido!\nQue o ar se torne brasas,\nque o céu se curve à tua coroa ardente.\nInflama, incendeia, resplandece —\npois onde meus passos caem,\nnasce o fogo que não conhece medo.\"",
+          "condicoes": [],
+          "imagem": "",
+          "dataCriacao": "2026-05-01T22:29:36.028Z"
+        }
+      ],
+      "inventario": [
+        {
+          "id": 1777602599176.3547,
+          "nome": "Roupa Magica",
+          "qualidade": "Lendário",
+          "level": 20,
+          "levelMax": 10,
+          "ataque": "7d12+12",
+          "extra": "+750 Saude",
+          "tipo": "armadura",
+          "imagem": "https://i.pinimg.com/webp80/1200x/7b/d0/8e/7bd08e3df9f8b860c08323548e0dfaec.webp",
+          "imagemIndexedDBId": null,
+          "habilidade": "Essência da Mentira: Ataques mágicos tem reducao do dano em 75%.",
+          "habilidades": [],
+          "maxSlotsHabilidades": 0,
+          "origemDatabase": true
+        },
+        {
+          "id": 1777602602045.828,
+          "nome": "Fala Amaldicoada!",
+          "qualidade": "Celestial",
+          "level": 25,
+          "levelMax": 25,
+          "ataque": "9d20+15",
+          "tipo": "arma",
+          "imagem": "https://i.pinimg.com/originals/b0/ea/57/b0ea57d97f8f16aebd7127b207d04130.gif",
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true,
+          "habilidade": "Com uma simples palavra ela pode causar dano em seus alvos!"
+        }
+      ],
+      "imagem": "https://i.pinimg.com/webp80/1200x/7b/d0/8e/7bd08e3df9f8b860c08323548e0dfaec.webp",
+      "morto": false
+    },
+    {
+      "id": "npc_1777603438590_p7jsp5w5s",
+      "nome": "FENIX",
+      "tipo": "MOB",
+      "npcCategoria": "MOB",
+      "npcTipo": "Chefes",
+      "raca": "Mythar ( Bestas Fantasticas)",
+      "racaID": "1773115723747",
+      "classe": "Elementalista",
+      "classeID": "1767942960993",
+      "origem": "Alagrann",
+      "origemID": "1769383623901",
+      "descricao": "",
+      "idade": null,
+      "atributos": {
+        "forca": {
+          "base": 61,
+          "extra": 0,
+          "total": 61
+        },
+        "vitalidade": {
+          "base": 57,
+          "extra": 0,
+          "total": 57
+        },
+        "agilidade": {
+          "base": 54,
+          "extra": 0,
+          "total": 64
+        },
+        "inteligencia": {
+          "base": 59,
+          "extra": 0,
+          "total": 64
+        },
+        "percepcao": {
+          "base": 69,
+          "extra": 0,
+          "total": 69
+        },
+        "sorte": {
+          "base": 80,
+          "extra": 0,
+          "total": 85
+        }
+      },
+      "saude": {
+        "atual": 622,
+        "maxima": 622,
+        "extra": 500
+      },
+      "energia": {
+        "atual": 91,
+        "maxima": 91,
+        "extra": 0
+      },
+      "fadiga": {
+        "atual": 64,
+        "maxima": 64,
+        "extra": 0
+      },
+      "statusSecundarios": {
+        "prontidao": {
+          "extra": 0,
+          "total": 142,
+          "bonus": 0
+        },
+        "ataque": {
+          "extra": 0,
+          "total": 9,
+          "bonus": 0
+        },
+        "defesa": {
+          "extra": 0,
+          "total": 7,
+          "bonus": 0
+        },
+        "reacao": {
+          "extra": 0,
+          "total": 10,
+          "bonus": 1
+        },
+        "precisao": {
+          "extra": 3,
+          "total": 10,
+          "bonus": 1
+        },
+        "evasao": {
+          "extra": 0,
+          "total": 7,
+          "bonus": 1
+        }
+      },
+      "sorteBonus": 3,
+      "tricksterValue": 0,
+      "condicoes": [],
+      "aptidoes": [
+        {
+          "nome": "Acrobacia",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Dança",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Intimidação",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Sobrevivência",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Tolerância",
+          "nivel": 5,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Beleza",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Arcanismo",
+          "nivel": 4,
+          "bonusAplicados": false
+        }
+      ],
+      "ganhasAptidoes": 6,
+      "habilidades": [
+        {
+          "id": 1777603681322.2192,
+          "nome": "Essência Mágica",
+          "tipo": "racial",
+          "descricao": "Mythar são naturalmente conectados às energias mágicas do mundo.\nEfeito:\n• resistência natural contra efeitos mágicos fracos (+1)\n• bônus em testes envolvendo magia ou fenômenos arcanos (+3)",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1773115723747,
+          "dataAplicacao": "2026-05-01T02:48:01.322Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777603681322.2476,
+          "nome": "Presença Primordial",
+          "tipo": "racial",
+          "descricao": "A presença de uma Besta Fantástica impõe respeito ou medo nas criaturas ao redor.\nEfeito:\n• criaturas comuns podem demonstrar hesitação ou cautela\n• bônus narrativo em intimidação contra criaturas menores (+3)",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1773115723747,
+          "dataAplicacao": "2026-05-01T02:48:01.322Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777603681322.8909,
+          "nome": "Corpo Sobrenatural",
+          "tipo": "racial",
+          "descricao": "O corpo de um Mythar é mais resistente que o de animais normais.\nEfeito:\n• leve resistência contra dano físico e elemental (+20% Defesa)\n• maior tolerância a ambientes hostis ",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1773115723747,
+          "dataAplicacao": "2026-05-01T02:48:01.322Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777603681322.2998,
+          "nome": "Investida Bestial",
+          "tipo": "Imediata",
+          "descricao": "O Mythar avança com ferocidade sobrenatural contra o inimigo.\nCausa 6d8 de dano físico e pode derrubar o alvo caso ele falhe em um teste de resistência.",
+          "recarga": "2 T",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "8 m",
+          "alvos": "1",
+          "custo": "11 FaD",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1773115723747,
+          "dataAplicacao": "2026-05-01T02:48:01.322Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777603681322.6895,
+          "nome": "Rugido Primordial",
+          "tipo": "Imediata",
+          "descricao": "A criatura solta um rugido carregado de energia primordial.\nInimigos próximos podem sofrer desorientação ou hesitação momentânea, reduzindo sua capacidade de reação. Teste Obstaculo -13",
+          "recarga": "3",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "6 m",
+          "alvos": "1",
+          "custo": "8 EnR",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1773115723747,
+          "dataAplicacao": "2026-05-01T02:48:01.322Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777603681322.6238,
+          "nome": "Instinto Místico",
+          "tipo": "Imediata",
+          "descricao": "A criatura amplia seus sentidos mágicos.\nDurante a duração:\n• pode sentir presença de magia próxima (+3)\n• recebe bônus em percepção sobrenatural (+1)",
+          "recarga": "2 t",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Proprio",
+          "alvos": "Usuario",
+          "custo": "5 EnR",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1773115723747,
+          "dataAplicacao": "2026-05-01T02:48:01.322Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777603681322.289,
+          "nome": "Fúria Arcana",
+          "tipo": "Duradoura",
+          "descricao": "O Mythar libera sua energia mágica interior.\nDurante a habilidade:\n• aumenta força e agressividade em combate (Condição Aumento de Forca)\n• ataques causam dano adicional mágico de +50%.",
+          "recarga": "3",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Proprio",
+          "alvos": "1",
+          "custo": "15 EnR",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1773115723747,
+          "dataAplicacao": "2026-05-01T02:48:01.322Z",
+          "condicoes": []
+        },
+        {
+          "nome": "Pulso Elemental",
+          "recarga": "1",
+          "duracao": "Imediata",
+          "tipo": "",
+          "alcance": "7 m",
+          "alvos": "no alcance",
+          "custo": "15 EnR",
+          "descricao": "Libera uma onda elemental que causa 4d8 de dano elemental em todos os inimigos na área. O efeito secundário depende do elemento ativo (ex: empurrar, retardar, queimar, petrificar leve).",
+          "id": "hab_1777603822002_au2vvq3ch",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Corrente Fluida",
+          "recarga": "2",
+          "duracao": "Imediato",
+          "tipo": "",
+          "alcance": "9 m",
+          "alvos": "3",
+          "custo": "10 EnR",
+          "descricao": "A energia elemental salta entre alvos, causando 2d12 de dano elemental em cada um. Cada salto adapta sua forma ao elemento ativo.",
+          "id": "hab_1777603822002_7nnl3fikp",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Afinidade Primordial",
+          "recarga": "0",
+          "duracao": "Duradoura",
+          "tipo": "",
+          "alcance": "0",
+          "alvos": "0",
+          "custo": "0",
+          "descricao": "Sempre que uma Art causar dano em área, o Elementalista recebe +2 dados de dano elemental no próximo uso de Art.",
+          "id": "hab_1777603822002_jjqdxxq5h",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Prisão Elemental",
+          "recarga": "5",
+          "duracao": "Duradoura",
+          "tipo": "",
+          "alcance": "7 m",
+          "alvos": "are 2 m",
+          "custo": "29 EnR",
+          "descricao": "Condensa o elemento em uma área, causando 6d8+1/4 INT de dano elemental e aplicando uma condição de restrição leve por 2 turnos, adaptada ao elemento ativo.",
+          "id": "hab_1777603822002_3e0xklm3m",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Cataclismo Adaptativo",
+          "recarga": "9",
+          "duracao": "Imediato",
+          "tipo": "",
+          "alcance": "13 m",
+          "alvos": "6 m AOE",
+          "custo": "45 EnR",
+          "descricao": "Libera o ápice do elemento ativo, causando 8d12 de dano elemental em todos os inimigos na área e aplicando um efeito massivo adaptado ao elemento.",
+          "id": "hab_1777603822002_1bd7q7t4x",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "nome": "Eco dos Elementos",
+          "recarga": "0",
+          "duracao": "Duradoura",
+          "tipo": "",
+          "alcance": "0",
+          "alvos": "0",
+          "custo": "0",
+          "descricao": "Sempre que uma Art em área atingir 3 ou mais inimigos, role 1d6 de dano adicional para eco dos elementos causando um efeito segundario nas Arts, assim podendo aplicar efeitos exclusivos.",
+          "id": "hab_1777603822002_p3r3b2jek",
+          "ganha": false,
+          "condicoes": []
+        }
+      ],
+      "inventario": [
+        {
+          "id": 1777603850955.8696,
+          "nome": "Penas Flamejantes",
+          "qualidade": "Mítico",
+          "level": 15,
+          "levelMax": 15,
+          "ataque": "5d10+7",
+          "tipo": "arma",
+          "imagem": "https://i.pinimg.com/736x/25/d7/f9/25d7f966462a0ac1cf9c0a7bcabd735d.jpg",
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true,
+          "extra": "+3 PreC"
+        },
+        {
+          "id": 1777603852112.1838,
+          "nome": "Vitalidade Da Fenix",
+          "qualidade": "Mítico",
+          "level": 7,
+          "levelMax": 10,
+          "ataque": "3d10+4",
+          "extra": "+500 Saude",
+          "tipo": "armadura",
+          "imagem": "https://i.pinimg.com/736x/25/d7/f9/25d7f966462a0ac1cf9c0a7bcabd735d.jpg",
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 0,
+          "origemDatabase": true
+        }
+      ],
+      "imagem": "https://i.pinimg.com/736x/25/d7/f9/25d7f966462a0ac1cf9c0a7bcabd735d.jpg",
+      "morto": false
+    },
+    {
+      "id": "npc_1777657751196_7tvay7vfy",
+      "nome": "MORDRED",
+      "tipo": "NPC",
+      "npcCategoria": "NPC",
+      "npcTipo": "Chefes",
+      "raca": "Demonoid",
+      "racaID": "1767514205176",
+      "classe": "Berserker",
+      "classeID": "1767942421804",
       "origem": "Nenhuma origem selecionada",
       "origemID": "Nenhuma origem selecionada",
       "descricao": "",
       "idade": null,
       "atributos": {
         "forca": {
-          "base": 10,
+          "base": 118,
           "extra": 0,
-          "total": 0
+          "total": 118
         },
         "vitalidade": {
-          "base": 10,
+          "base": 79,
           "extra": 0,
-          "total": 0
+          "total": 89
         },
         "agilidade": {
-          "base": 10,
+          "base": 66,
           "extra": 0,
-          "total": 0
+          "total": 66
         },
         "inteligencia": {
-          "base": 10,
+          "base": 51,
           "extra": 0,
-          "total": 0
+          "total": 61
         },
         "percepcao": {
-          "base": 10,
+          "base": 56,
           "extra": 0,
-          "total": 0
+          "total": 66
         },
         "sorte": {
-          "base": 10,
+          "base": 53,
           "extra": 0,
-          "total": 0
+          "total": 53
         }
       },
       "saude": {
-        "atual": 0,
-        "maxima": 100,
-        "extra": 0
+        "atual": 529,
+        "maxima": 739,
+        "extra": 500
       },
       "energia": {
-        "atual": 0,
-        "maxima": 100,
+        "atual": 54,
+        "maxima": 83,
         "extra": 0
       },
       "fadiga": {
-        "atual": 0,
-        "maxima": 100,
+        "atual": 91,
+        "maxima": 91,
         "extra": 0
       },
       "statusSecundarios": {
         "prontidao": {
           "extra": 0,
-          "total": 0,
+          "total": 136,
           "bonus": 0
         },
         "ataque": {
           "extra": 0,
-          "total": 0,
+          "total": 15,
           "bonus": 0
         },
         "defesa": {
           "extra": 0,
-          "total": 0,
+          "total": 9,
           "bonus": 0
         },
         "reacao": {
-          "extra": 0,
-          "total": 6,
+          "extra": 5,
+          "total": 14,
           "bonus": 0
         },
         "precisao": {
-          "extra": 0,
-          "total": 0,
-          "bonus": 0
+          "extra": 3,
+          "total": 11,
+          "bonus": 2
         },
         "evasao": {
-          "extra": 0,
-          "total": 0,
+          "extra": 5,
+          "total": 11,
           "bonus": 0
         }
       },
-      "sorteBonus": 0,
+      "sorteBonus": 2,
       "tricksterValue": 0,
       "condicoes": [],
-      "aptidoes": [],
-      "ganhasAptidoes": 0,
-      "habilidades": [],
-      "inventario": [],
-      "imagem": "https://scontent-gru2-2.xx.fbcdn.net/v/t39.30808-6/512673387_3201063793392373_5632032628472556367_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=102&ccb=1-7&_nc_sid=e06c5d&_nc_eui2=AeEhYbXhryiJ3edAJxjLC9773H0NfBPn8xHcfQ18E-fzEY5u7rdP7RJ5Od0Ud3qEbbRR71PTiBHrsklhOFrNoOqj&_nc_ohc=p2EqcQxAqiEQ7kNvwFSSVOC&_nc_oc=AdoVAxfnJ1P2uqCH96mnYGGJmm2-7CUh9JS4hxYnfBEz9Eqk1BxEPAX_4uY6D6tURjE&_nc_zt=23&_nc_ht=scontent-gru2-2.xx&_nc_gid=0etJ7FyaTVFR2zIqw2-3sw&_nc_ss=7b2a8&oh=00_Af2EEvhVtW3PhOq-3HS8o3tjZLMBcbGBmSTPD7Ugs5rcRw&oe=69F3561F",
-      "morto": false
+      "aptidoes": [
+        {
+          "nome": "Atletismo",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Ambidestro",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Tolerância",
+          "nivel": 5,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Vontade",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Intimidação",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Olho Crítico",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 4,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Conhecimento",
+          "nivel": 3,
+          "bonusAplicados": false
+        }
+      ],
+      "ganhasAptidoes": 5,
+      "habilidades": [
+        {
+          "id": 1777658733658.4985,
+          "nome": "Vetor da Assimilação",
+          "tipo": "racial",
+          "descricao": "Sempre que derrotar inimigos relevantes, o Demonoid pode absorver fragmentos de poder, recebendo bônus temporários ou evoluções graduais a critério do sistema.\nAbsorve poder de inimigos derrotados\nBônus temporários progressivos\nEvolução gradual permanente",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767514205176,
+          "dataAplicacao": "2026-05-01T18:05:33.658Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777658733658.4153,
+          "nome": "Vetor da Forma",
+          "tipo": "racial",
+          "descricao": "O Demonoid pode alterar parcialmente sua forma para combate, defesa ou mobilidade. Quanto mais humanoide for sua forma base, maior o controle e menor o custo dessas alterações.\nAltera forma para combate ou defesa\nControle baseado em humanidade\nCustos reduzidos com mais humanoidade",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767514205176,
+          "dataAplicacao": "2026-05-01T18:05:33.658Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777658733658.487,
+          "nome": "Vetor da Consciência",
+          "tipo": "racial",
+          "descricao": "O Demonoid recebe bônus em ações táticas, intimidação e uso consciente de poder. Uma vez por cena, pode antecipar uma ação inimiga, reduzindo seu impacto ou anulando vantagens.\n+2 em ações táticas e intimidação\nAntecipa ação inimiga uma vez por cena\nReduz impacto ou anula vantagens",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767514205176,
+          "dataAplicacao": "2026-05-01T18:05:33.658Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777658733658.024,
+          "nome": "Forma Bestial Inicial",
+          "tipo": "Duradoura",
+          "descricao": "O Demonoid nasce como uma criatura instintiva e grotesca.\n- +10 FOR\n- Ataques corpo a corpo causam +9 de dano\n- Sofre –3 em testes sociais e estratégicos\n\nEssa Art representa o estado primitivo da raça.",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Pessoal",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767514205176,
+          "dataAplicacao": "2026-05-01T18:05:33.658Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777658733658.085,
+          "nome": "Humanização Progressiva",
+          "tipo": "Duradoura",
+          "descricao": "Quanto mais o Demonoid se aproxima de uma forma humanoide, mais perigoso ele se torna.\n-  Sempre que absorve energia, experiência narrativa ou derrota uma criatura infernal relevante, recebe 1 Marca de Humanização\n- A cada 3 Marcas:\n- +1 INT ou PER (escolha)\n- Reduz penalidades sociais em 1\n- Em estágios avançados, o mestre pode liberar evoluções estéticas e narrativas",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Pessoal",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767514205176,
+          "dataAplicacao": "2026-05-01T18:05:33.658Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777658733658.307,
+          "nome": "Metabolismo do Caos",
+          "tipo": "Duradoura",
+          "descricao": "O corpo do Demonoid recicla dor e energia infernal.\n- Sempre que sofre dano, recupera 1d12+4 de Energia\n- Efeitos caóticos, infernais ou instáveis causam –50% de dano\n- Não funciona contra dano puramente sagrado ou absoluto",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Pessoal",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767514205176,
+          "dataAplicacao": "2026-05-01T18:05:33.658Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777658733658.794,
+          "nome": "Aparência do Perigo",
+          "tipo": "Duradoura",
+          "descricao": "No Inferno, a aparência é um aviso.\n- Quanto mais humanoide o Demonoid se apresenta, maior o respeito (ou medo) gerado\n- Recebe vantagens narrativas em intimidação, barganhas ou domínio territorial\n- Criaturas experientes reconhecem o Demonoid como ameaça real, mesmo sem ação direta",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Pessoal",
+          "alvos": "Jogador",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767514205176,
+          "dataAplicacao": "2026-05-01T18:05:33.658Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777658733658.6047,
+          "nome": "Olhar do Demônio Civilizado",
+          "tipo": "Imediata",
+          "descricao": "Um Demonoid consciente não ameaça — ele calcula.\nO alvo sofre –3 em ações defensivas\nO Demonoid recebe +3 em ações contra esse alvo\nCriaturas infernais inferiores podem hesitar ou recuar",
+          "recarga": "4",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "7 m",
+          "alvos": "1",
+          "custo": "13 EnR",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1767514205176,
+          "dataAplicacao": "2026-05-01T18:05:33.658Z",
+          "condicoes": []
+        },
+        {
+          "nome": "Ritmo de Carnificina",
+          "recarga": "0",
+          "duracao": "Duradoura",
+          "tipo": "",
+          "alcance": "0",
+          "alvos": "0",
+          "custo": "0",
+          "descricao": "A cada turno consecutivo atacando, o Berserker recebe +1 Precisão acumulativa (reseta se passar um turno sem atacar). Os ataques do berserker causam fadiga 2 pontos.",
+          "id": "hab_1777659133409_3y02veibp",
+          "ganha": false,
+          "categoria": "Ofensivas",
+          "circulo": "",
+          "tipoCusto": "Fadiga",
+          "tipoAcao": "Imediata",
+          "dados": "",
+          "cantico": "",
+          "condicoes": []
+        },
+        {
+          "nome": "Massacre Final",
+          "recarga": "5",
+          "duracao": "Imediato",
+          "tipo": "",
+          "alcance": "7 m",
+          "alvos": "3",
+          "custo": "20 EnR &  5 FaD",
+          "descricao": "Avança entre inimigos, realizando ataques consecutivos que causam 1d10 de dano físico em cada alvo. Se derrotar ao menos um inimigo, reduz a recarga em 1 turno.",
+          "id": "hab_1777659133409_qwuod3ukf",
+          "ganha": false,
+          "condicoes": []
+        },
+        {
+          "id": 1777659686911,
+          "nome": "Tempestade",
+          "tipo": "energia",
+          "categoria": "Feitiços",
+          "circulo": "6º Círculo",
+          "tipoCusto": "Energia",
+          "tipoAcao": "Duradoura",
+          "recarga": "7 T",
+          "duracao": "5 T",
+          "alcance": "15 m",
+          "alvos": "No alcance",
+          "custo": "29 EnR",
+          "dados": "8d12+12 ",
+          "descricao": "Ao erguer sua espada, Valak invoca uma tempestade devastadora que cobre toda a área de combate, desencadeando uma chuva torrencial acompanhada de relâmpagos violentos.\n- Enquanto a tempestade estiver ativa, cada ação realizada por qualquer criatura no turno possui 25% de chance de atrair um raio, que cai de forma aleatória no campo de batalha.\n-Os alvos atingidos sofrem dano elétrico (defina conforme seu sistema) e podem receber efeitos adicionais, como atordoamento ou queimadura elétrica.\n- No turno de Valak, a fúria da tempestade atinge seu ápice: um raio é invocado com 100% de chance, podendo ser direcionado ou ainda manter um comportamento caótico",
+          "cantico": "Dos céus partidos eu clamo o caos,\nQue os ventos dobrem-se à minha vontade.\n\nÓ trovão antigo, desperta em fúria,\nRasga os céus e consome a realidade.\n\nQue a chuva caia como lamento dos fracos,\nE os raios julguem aqueles que ousam ficar.\n\nSob minha lâmina, o mundo se curva…\nE na tormenta, apenas eu irei reinar.",
+          "condicoes": [
+            {
+              "id": 1768804799766,
+              "nome": "⚡ELETRIFICADO",
+              "tipo": "Debuff",
+              "origem": "Habilidade",
+              "raridade": "Comum",
+              "descricaoCurta": "O corpo do alvo é atravessado por descargas elétricas, causando dor, espasmos e dificuldade de controle motor.",
+              "imagem": "https://i.imgur.com/O37KFQL.png",
+              "efeitosMecanicos": {
+                "modificadores": "-25% Precisão\n-30% Prontidao",
+                "efetosPassivos": "- Sofre dano elétrico leve por turno\n- 20% de chance de falhar ações físicas",
+                "efetosAtivos": "Nenhum",
+                "interacoes": "- Se aplicado novamente, renova a duração\n- Se combinado com Molhado, dobra o dano por turno\n- Se combinado com Paralisado, vira Atordoado"
+              },
+              "duracao": {
+                "tipo": "Turnos",
+                "valor": "2 a 4 turnos"
+              },
+              "aplicacao": {
+                "metodo": "Gatilho",
+                "detalhes": "Chance base de 35% Pode acumular até 2 vezes"
+              },
+              "escalonamento": {
+                "temEscalonamento": true,
+                "descricao": "1 acúmulo – efeitos normais\n2 acúmulos – dano por turno dobrado",
+                "maxNiveis": 2,
+                "crescimento": ""
+              },
+              "risco": {
+                "exaustao": "Nenhum",
+                "danoColateral": "Ao fim da condição, sofre -10% Velocidade por 1 turno"
+              },
+              "encerramento": {
+                "condicoes": "- Fim da duração\n- Uso de resistência elétrica ou purificação",
+                "removeivel": "sim"
+              },
+              "design": {
+                "narrativa": "Desconforto constante e perda de controle.\nBoa para pressão contínua.",
+                "sinergias": "Boa com: Molhado, Vulnerável\nRuim com: Resistência Elétrica",
+                "casosUso": "- Dano ao longo do tempo\n- Controle leve de inimigos",
+                "notas": "Debuff comum com impacto gradual.\nNão substitui Paralisia ou Atordoamento."
+              },
+              "dataCriacao": "19/01/2026, 03:39:59",
+              "dataAtualizacao": "19/01/2026, 19:03:16"
+            },
+            {
+              "id": 1768261432629,
+              "nome": "Paralisado",
+              "tipo": "Debuff",
+              "origem": "Item",
+              "raridade": "",
+              "descricaoCurta": "O sistema nervoso do alvo entra em colapso temporário, impedindo qualquer ação voluntária.",
+              "imagem": "https://i.imgur.com/Y4riPp8.png",
+              "efeitosMecanicos": {
+                "modificadores": "– Incapaz de agir\n– Defesa severamente reduzida (- 3 dados de defesa)",
+                "efetosPassivos": "– O alvo não pode realizar ações, reações ou movimentos\n– Falha automática em testes físicos",
+                "efetosAtivos": "",
+                "interacoes": "– Exausto: aumenta a duração\n– Fragilizado: ataques causam efeito máximo\n– Medo (se existir): facilita aplicação"
+              },
+              "duracao": {
+                "tipo": "Turnos",
+                "valor": "1"
+              },
+              "aplicacao": {
+                "metodo": "Gatilho",
+                "detalhes": "Aplicado por falha crítica em resistências, venenos específicos ou habilidades de alto risco."
+              },
+              "escalonamento": {
+                "temEscalonamento": false,
+                "descricao": "",
+                "maxNiveis": null,
+                "crescimento": ""
+              },
+              "risco": {
+                "exaustao": "n/d",
+                "danoColateral": "– Ao sair da Paralisia, o alvo sofre Exaustão leve"
+              },
+              "encerramento": {
+                "condicoes": "– Fim da duração\n– Purificação avançada",
+                "removeivel": "nao"
+              },
+              "design": {
+                "narrativa": "Consciência ativa, corpo inerte. Pânico silencioso.",
+                "sinergias": "Estado terminal de controle — ideal para janelas curtas de burst.",
+                "casosUso": "Criar momentos decisivos sem trivializar encontros.",
+                "notas": "Curtíssima duração e sem escalonamento para evitar abuso."
+              },
+              "dataCriacao": "12/01/2026, 20:43:52",
+              "dataAtualizacao": "19/01/2026, 18:43:45"
+            },
+            {
+              "id": 1769478753712,
+              "nome": "💥 Dano Crítico",
+              "tipo": "Estado",
+              "origem": "Habilidade",
+              "raridade": "Comum",
+              "descricaoCurta": "Enquanto ativo, permite que acertos críticos convertam o dano causado em dano máximo, em vez de rolar o valor.",
+              "imagem": "https://i.imgur.com/rg2r3uw.png",
+              "efeitosMecanicos": {
+                "modificadores": "💥 Acertos Críticos causam dano máximo\n\n🎲 Ataques normais não são afetados\n\n❌ Nenhum bônus direto fora do crítico",
+                "efetosPassivos": "O efeito só dispara se ocorrer Acerto Crítico\n\nSem Acerto Crítico, o buff não tem efeito",
+                "efetosAtivos": "❌ Nenhum\n(buff passivo condicionado a evento)",
+                "interacoes": "🎯 Requer: Acerto Crítico\n\n❌ Sem Acerto Crítico → sem Dano Crítico\n\n🔥 Buffs de dano alteram o valor máximo\n\n🛡️ Reduções e resistências ainda se aplicam\n\n⛔ Não acumula com outros efeitos de dano crítico"
+              },
+              "duracao": {
+                "tipo": "Tempo Real",
+                "valor": "➡️ 1 ataque"
+              },
+              "aplicacao": {
+                "metodo": "Automático",
+                "detalhes": "O buff fica ativo no personagem  Ao ocorrer Acerto Crítico, o efeito é consumido  Pode ou não ser consumível (regra da fonte)"
+              },
+              "escalonamento": {
+                "temEscalonamento": true,
+                "descricao": "⚔️ EFEITO BASE (Sempre Ativo)\nNível I: +10% de dano causado\nNível II: +20% de dano causado\nNível III: +30% de dano causado\n(Aplica-se a ataques, habilidades e efeitos diretos.)\n\n💥 INTERAÇÃO — ACERTO CRÍTICO\nAo realizar um Acerto Crítico, o bônus de dano é ampliado apenas naquele ataque:\nNível I: dano total passa a +20%\nNível II: dano total passa a +35%\nNível III: dano total passa a +50%\n\n🎯 INTERAÇÃO — CHANCE CRÍTICA\nSe o usuário possuir Chance Crítica ativa, cada nível dela \n+5% de dano adicional em Acertos Críticos\n📌 Esse bônus só se aplica quando o crítico ocorre.",
+                "maxNiveis": null,
+                "crescimento": ""
+              },
+              "risco": {
+                "exaustao": "",
+                "danoColateral": ""
+              },
+              "encerramento": {
+                "condicoes": "Ao consumir todos os usos de Dano Crítico\n\nAo fim da duração\n\nPor efeitos que removem Buffs",
+                "removeivel": "nao"
+              },
+              "design": {
+                "narrativa": "Sensação de preparo e explosão no momento certo. O jogador “arma” o crítico.",
+                "sinergias": "✔️ Acerto Crítico\n\n✔️ Bênção\n\n✔️ Amplificação de Dano\n\n❌ Estados que impedem ataque",
+                "casosUso": "Builds focadas em precisão\n\nPreparação antes de boss\n\nCombos planejados",
+                "notas": "Separa sorte (crítico) de recompensa (dano máximo)\n\nEvita explosão automática de dano\n\nDá controle de design ao sistema"
+              },
+              "dataCriacao": "26/01/2026, 22:52:33",
+              "dataAtualizacao": "26/01/2026, 23:28:35"
+            }
+          ],
+          "imagem": "",
+          "dataCriacao": "2026-05-01T18:21:26.911Z"
+        },
+        {
+          "id": 1777660092760,
+          "nome": "⚡ Ecos da Tempestade",
+          "tipo": "energia",
+          "categoria": "Suporte",
+          "circulo": "2º Círculo",
+          "tipoCusto": "Energia",
+          "tipoAcao": "Duradoura",
+          "recarga": "7 T",
+          "duracao": "5 T",
+          "alcance": "n/d",
+          "alvos": "Usuario",
+          "custo": "25 EnR",
+          "dados": "1d3+1 ",
+          "descricao": "Valak dissipa parte da energia da tempestade ao seu redor, criando clones feitos de pura eletricidade viva que vibram com poder instável.\n\nAo ativar a habilidade, Valak cria 2 a 4 clones elétricos ao seu redor.\nOs clones possuem 30% da vida de Valak e compartilham parte de sua essência, mas são instáveis.\nCada clone age de forma independente e pode:\nRealizar ataques elétricos básicos\nAplicar choque (chance de atordoamento leve ou redução de ação)\nSempre que um clone é destruído, ele explode em energia, causando dano em área.\n\nMecânica especial:\n\nNo início de cada turno de Valak, existe 20% de chance por clone ativo de gerar um novo clone (máximo definido por você, ex: 6).\nEnquanto houver clones em campo, Valak recebe 10% de redução de dano por clone ativo (efeito opcional, mas deixa a luta mais tensa).\n\nFraqueza:\nClones recebem +50% de dano de ataques em área ou habilidades de dissipação mágica.",
+          "cantico": "Fragmenta-te, ó trovão indomável…\nE responde ao chamado do teu senhor.\n\nQue minha essência se divida no relâmpago,\nE caminhe em múltiplas formas de destruição.\n\nEcos vivos da fúria celeste, despertem…\nDancem entre o caos e a ruína.\n\nPois onde cai a centelha do meu poder…\nLá estarei, em mil corpos, para julgar.",
+          "condicoes": [
+            {
+              "id": 1769463100471,
+              "nome": "Acerto Crítico",
+              "tipo": "Estado",
+              "origem": "Combinação",
+              "raridade": "Comum",
+              "descricaoCurta": "Quando o jogador obtém um 6 na rolagem, o ataque se torna crítico e causa dano máximo automático, sem necessidade de rolar dano.",
+              "imagem": "https://i.imgur.com/RKzdxAT.png",
+              "efeitosMecanicos": {
+                "modificadores": "– Dano do ataque é considerado valor máximo possível\n– Ignora rolagem de dano",
+                "efetosPassivos": "– Enquanto ativo, o próximo ataque confirmado aplica dano máximo",
+                "efetosAtivos": "– Não possui ativação manual\n– É aplicado automaticamente ao cumprir a condição (rolar 6)",
+                "interacoes": "– Combina com Buffs de dano (o bônus soma ao dano máximo)\n– Ignora penalidades de dano mínimo\n– Não acumula com outros tipos de crítico alternativo"
+              },
+              "duracao": {
+                "tipo": "Condicional",
+                "valor": "Até o ataque crítico ser resolvido"
+              },
+              "aplicacao": {
+                "metodo": "Chance",
+                "detalhes": "– Ativa automaticamente ao tirar 6 – Não requer gasto de recurso – Não pode ser prevenido ou negado por defesas comuns"
+              },
+              "escalonamento": {
+                "temEscalonamento": false,
+                "descricao": "",
+                "maxNiveis": null,
+                "crescimento": ""
+              },
+              "risco": {
+                "exaustao": "Não possui custo direto",
+                "danoColateral": "Nenhum"
+              },
+              "encerramento": {
+                "condicoes": "– Após a aplicação do dano crítico",
+                "removeivel": "nao"
+              },
+              "design": {
+                "narrativa": "Impacto absoluto. Um golpe perfeito, sem margem de erro. Momento de hype total na mesa.",
+                "sinergias": "– Excelente com Fúria, Força Aprimorada e Foco\n– Neutra com debuffs defensivos\n– Não interage com efeitos de rolagem mínima",
+                "casosUso": "– Finalizar inimigos\n– Reverter combates difíceis\n– Criar picos dramáticos de dano",
+                "notas": "Sistema simples, previsível e justo.\nO crítico não aumenta números arbitrariamente — apenas remove a incerteza, mantendo o jogo rápido e limpo."
+              },
+              "dataCriacao": "26/01/2026, 18:31:40",
+              "dataAtualizacao": "26/01/2026, 23:27:26"
+            },
+            {
+              "id": 1768860710250,
+              "nome": "AUMENTO DE VELOCIDADE",
+              "tipo": "Buff",
+              "origem": "Combinação",
+              "raridade": "Comum",
+              "descricaoCurta": "O alvo se move e reage com mais rapidez, aumentando sua prontidão de ação e agilidade física.",
+              "imagem": "https://i.imgur.com/AkJCLaF.png",
+              "efeitosMecanicos": {
+                "modificadores": "+20% Prontidão\n+15% Agilidade",
+                "efetosPassivos": "- Maior chance de agir antes na rodada\n- Melhora ações de esquiva e deslocamento",
+                "efetosAtivos": "Nenhum",
+                "interacoes": "- Não acumula com outros buffs de Velocidade\n- Pode coexistir com Aumento de Ataque e Aumento de Defesa"
+              },
+              "duracao": {
+                "tipo": "Turnos",
+                "valor": "3 a 5 turnos"
+              },
+              "aplicacao": {
+                "metodo": "Gatilho",
+                "detalhes": "Aplicação direta Sem teste"
+              },
+              "escalonamento": {
+                "temEscalonamento": true,
+                "descricao": "Nível 1 – +20% Prontidão | +15% Agilidade\nNível 2 – +30% Prontidão | +20% Agilidade\nNível 3 – +40% Prontidão | +25% Agilidade",
+                "maxNiveis": 3,
+                "crescimento": "Nenhum"
+              },
+              "risco": {
+                "exaustao": "Nenhum",
+                "danoColateral": "Ao término, sofre -10% Prontidão por 1 turno"
+              },
+              "encerramento": {
+                "condicoes": "- Fim da duração\n- Dissipação de buffs",
+                "removeivel": "sim"
+              },
+              "design": {
+                "narrativa": "Agilidade extrema e reflexos rápidos.\nFavorece jogadas táticas e evasivas.",
+                "sinergias": "Boa com: Crítico, Esquiva, Ataque\nRuim com: Exaustão, Lentidão",
+                "casosUso": "- Início de combate\n- Reposicionamento\n- Builds ágeis",
+                "notas": "Buff forte de ritmo.\nRequer controle de duração para não quebrar turnos."
+              },
+              "dataCriacao": "19/01/2026, 19:11:50",
+              "dataAtualizacao": "19/01/2026, 21:31:59"
+            }
+          ],
+          "imagem": "",
+          "dataCriacao": "2026-05-01T18:28:12.760Z"
+        },
+        {
+          "id": 1777660381005,
+          "nome": "⚡ Julgamento Celestial",
+          "tipo": "energia",
+          "categoria": "Ofensivas",
+          "circulo": "6º Círculo",
+          "tipoCusto": "Energia",
+          "tipoAcao": "Imediata",
+          "recarga": "6 T",
+          "duracao": "0",
+          "alcance": "15 m",
+          "alvos": "6 m AOE",
+          "custo": "35 EnR",
+          "dados": "12d12+12 ",
+          "descricao": "Valak ergue sua espada aos céus, acumulando uma quantidade absurda de energia elétrica enquanto a tempestade ao redor entra em colapso momentâneo.\n\nApós um breve carregamento, um raio colossal desce dos céus, atingindo o campo com força devastadora.\n\nCarregamento: 1 turno (sinais claros: céu escurece, eletricidade converge, som de trovão crescente)\nAo final do carregamento, Valak invoca um raio que:\nCausa dano massivo em área (ou em linha, se quiser algo mais tático)\nAplica Atordoamento (50%) ou Paralisia (25%)\nAlvos no centro do impacto recebem +50% de dano\nO",
+          "cantico": "Céus, abram-se diante da minha vontade…\nQue o silêncio preceda o fim.\n\nÓ relâmpago primordial, desce em tua forma pura,\nE grava teu veredito sobre os indignos.\n\nNem carne, nem alma escaparão do teu toque,\nPois és a lâmina que corta o destino.\n\nEu ergo o juízo…\nE tu, trovão eterno, o executes.",
+          "condicoes": [
+            {
+              "id": 1768261432629,
+              "nome": "Paralisado",
+              "tipo": "Debuff",
+              "origem": "Item",
+              "raridade": "",
+              "descricaoCurta": "O sistema nervoso do alvo entra em colapso temporário, impedindo qualquer ação voluntária.",
+              "imagem": "https://i.imgur.com/Y4riPp8.png",
+              "efeitosMecanicos": {
+                "modificadores": "– Incapaz de agir\n– Defesa severamente reduzida (- 3 dados de defesa)",
+                "efetosPassivos": "– O alvo não pode realizar ações, reações ou movimentos\n– Falha automática em testes físicos",
+                "efetosAtivos": "",
+                "interacoes": "– Exausto: aumenta a duração\n– Fragilizado: ataques causam efeito máximo\n– Medo (se existir): facilita aplicação"
+              },
+              "duracao": {
+                "tipo": "Turnos",
+                "valor": "1"
+              },
+              "aplicacao": {
+                "metodo": "Gatilho",
+                "detalhes": "Aplicado por falha crítica em resistências, venenos específicos ou habilidades de alto risco."
+              },
+              "escalonamento": {
+                "temEscalonamento": false,
+                "descricao": "",
+                "maxNiveis": null,
+                "crescimento": ""
+              },
+              "risco": {
+                "exaustao": "n/d",
+                "danoColateral": "– Ao sair da Paralisia, o alvo sofre Exaustão leve"
+              },
+              "encerramento": {
+                "condicoes": "– Fim da duração\n– Purificação avançada",
+                "removeivel": "nao"
+              },
+              "design": {
+                "narrativa": "Consciência ativa, corpo inerte. Pânico silencioso.",
+                "sinergias": "Estado terminal de controle — ideal para janelas curtas de burst.",
+                "casosUso": "Criar momentos decisivos sem trivializar encontros.",
+                "notas": "Curtíssima duração e sem escalonamento para evitar abuso."
+              },
+              "dataCriacao": "12/01/2026, 20:43:52",
+              "dataAtualizacao": "19/01/2026, 18:43:45"
+            },
+            {
+              "id": 1768804799766,
+              "nome": "⚡ELETRIFICADO",
+              "tipo": "Debuff",
+              "origem": "Habilidade",
+              "raridade": "Comum",
+              "descricaoCurta": "O corpo do alvo é atravessado por descargas elétricas, causando dor, espasmos e dificuldade de controle motor.",
+              "imagem": "https://i.imgur.com/O37KFQL.png",
+              "efeitosMecanicos": {
+                "modificadores": "-25% Precisão\n-30% Prontidao",
+                "efetosPassivos": "- Sofre dano elétrico leve por turno\n- 20% de chance de falhar ações físicas",
+                "efetosAtivos": "Nenhum",
+                "interacoes": "- Se aplicado novamente, renova a duração\n- Se combinado com Molhado, dobra o dano por turno\n- Se combinado com Paralisado, vira Atordoado"
+              },
+              "duracao": {
+                "tipo": "Turnos",
+                "valor": "2 a 4 turnos"
+              },
+              "aplicacao": {
+                "metodo": "Gatilho",
+                "detalhes": "Chance base de 35% Pode acumular até 2 vezes"
+              },
+              "escalonamento": {
+                "temEscalonamento": true,
+                "descricao": "1 acúmulo – efeitos normais\n2 acúmulos – dano por turno dobrado",
+                "maxNiveis": 2,
+                "crescimento": ""
+              },
+              "risco": {
+                "exaustao": "Nenhum",
+                "danoColateral": "Ao fim da condição, sofre -10% Velocidade por 1 turno"
+              },
+              "encerramento": {
+                "condicoes": "- Fim da duração\n- Uso de resistência elétrica ou purificação",
+                "removeivel": "sim"
+              },
+              "design": {
+                "narrativa": "Desconforto constante e perda de controle.\nBoa para pressão contínua.",
+                "sinergias": "Boa com: Molhado, Vulnerável\nRuim com: Resistência Elétrica",
+                "casosUso": "- Dano ao longo do tempo\n- Controle leve de inimigos",
+                "notas": "Debuff comum com impacto gradual.\nNão substitui Paralisia ou Atordoamento."
+              },
+              "dataCriacao": "19/01/2026, 03:39:59",
+              "dataAtualizacao": "19/01/2026, 19:03:16"
+            }
+          ],
+          "imagem": "",
+          "dataCriacao": "2026-05-01T18:33:01.005Z"
+        }
+      ],
+      "inventario": [
+        {
+          "id": 1777660404136.7441,
+          "nome": "Valak Sword",
+          "qualidade": "Mítico",
+          "level": 20,
+          "levelMax": 20,
+          "ataque": "7d12+10",
+          "extra": "+3 PreC",
+          "tipo": "arma",
+          "imagem": "https://static.wikia.nocookie.net/solo-leveling-arise/images/e/ea/Demon_King%27s_Longsword.png/revision/latest?cb=20241014015123",
+          "imagemIndexedDBId": null,
+          "habilidades": [
+            {
+              "slot": 0,
+              "nome": "Devoradora de Essência:",
+              "descricao": "A adaga reconhece aquilo que já foi manchado… e decide terminar o serviço. Efeito Passivo: Ataques contra criaturas corrompidas, amaldiçoadas ou possuídas têm sua chance de acerto crítico aumentada drasticamente (5).\nEfeito em Acerto Crítico: Quando a adaga realiza um crítico em um alvo corrompido: A lâmina absorve parte da essência vital da criatura \nO portador recupera uma quantidade de vida proporcional ao dano causado (25% do dano causado!)\nFragmentos da essência ficam presos na adaga, acumulando cargas (Desconhecido)"
+            },
+            {
+              "slot": 1,
+              "nome": "Encarnação da Morte",
+              "descricao": "O jogador precisa rolar um dado de forca de vontade para resistir a forca da adaga que o controla encarnando a morte, assim ganhando habilidade temporário fios da vida!"
+            }
+          ],
+          "maxSlotsHabilidades": 2,
+          "origemDatabase": true,
+          "habilidade": "Amplifica seus ataques elétricos em 30%."
+        },
+        {
+          "id": 1777660405496.762,
+          "nome": "Armadura Demoniaca",
+          "qualidade": "Mítico",
+          "level": 15,
+          "levelMax": 15,
+          "ataque": "5d10+8",
+          "extra": "+500 Saude",
+          "tipo": "armadura",
+          "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOu2tpur1C7dj80B9DwMk5DJWgYKL1BH0dRA&s",
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 0,
+          "origemDatabase": true
+        }
+      ],
+      "imagem": "https://i.imgur.com/GDlGOLi.png",
+      "morto": true
+    },
+    {
+      "id": "npc_1777660853684_dqfz3zsnf",
+      "nome": "WYVERN",
+      "tipo": "MOB",
+      "npcCategoria": "MOB",
+      "npcTipo": "Chefes",
+      "raca": "Mythar ( Bestas Fantasticas)",
+      "racaID": "1773115723747",
+      "classe": "Cavaleiro",
+      "classeID": "1777178113665",
+      "origem": "Nenhuma origem selecionada",
+      "origemID": "Nenhuma origem selecionada",
+      "descricao": "",
+      "idade": null,
+      "atributos": {
+        "forca": {
+          "base": 87,
+          "extra": 0,
+          "total": 87
+        },
+        "vitalidade": {
+          "base": 85,
+          "extra": 0,
+          "total": 95
+        },
+        "agilidade": {
+          "base": 56,
+          "extra": 0,
+          "total": 61
+        },
+        "inteligencia": {
+          "base": 39,
+          "extra": 0,
+          "total": 44
+        },
+        "percepcao": {
+          "base": 75,
+          "extra": 0,
+          "total": 80
+        },
+        "sorte": {
+          "base": 46,
+          "extra": 0,
+          "total": 46
+        }
+      },
+      "saude": {
+        "atual": 91,
+        "maxima": 576,
+        "extra": 350
+      },
+      "energia": {
+        "atual": 74,
+        "maxima": 74,
+        "extra": 0
+      },
+      "fadiga": {
+        "atual": 83,
+        "maxima": 83,
+        "extra": 0
+      },
+      "statusSecundarios": {
+        "prontidao": {
+          "extra": 0,
+          "total": 137,
+          "bonus": 0
+        },
+        "ataque": {
+          "extra": 0,
+          "total": 11,
+          "bonus": 0
+        },
+        "defesa": {
+          "extra": 0,
+          "total": 9,
+          "bonus": 0
+        },
+        "reacao": {
+          "extra": 5,
+          "total": 15,
+          "bonus": 1
+        },
+        "precisao": {
+          "extra": 3,
+          "total": 9,
+          "bonus": 0
+        },
+        "evasao": {
+          "extra": 3,
+          "total": 9,
+          "bonus": 0
+        }
+      },
+      "sorteBonus": 1,
+      "tricksterValue": 2,
+      "condicoes": [
+        {
+          "id": 1768804657288,
+          "nome": "💤 DESACORDADO",
+          "tipo": "Estado",
+          "origem": "Combinação",
+          "raridade": "Raro",
+          "descricaoCurta": "O alvo perde a consciência temporariamente, ficando incapaz de agir ou reagir ao combate.",
+          "imagem": "https://i.imgur.com/cPLo8L9.png",
+          "efeitosMecanicos": {
+            "modificadores": "- Incapaz de realizar ações\n- Não pode se mover, atacar ou usar habilidades",
+            "efetosPassivos": "- Defesa reduzida em 50%\n- Ataques contra o alvo têm +25% de chance de acerto crítico",
+            "efetosAtivos": "Nenhum",
+            "interacoes": "- Remove automaticamente: Desorientado, Desatento, Medo\n- Não pode coexistir com Atordoamento ou Banido"
+          },
+          "duracao": {
+            "tipo": "Turnos",
+            "valor": "1 a 3 turnos"
+          },
+          "aplicacao": {
+            "metodo": "Gatilho",
+            "detalhes": "Chance base de 25% Não acumula"
+          },
+          "escalonamento": {
+            "temEscalonamento": false,
+            "descricao": "",
+            "maxNiveis": null,
+            "crescimento": ""
+          },
+          "risco": {
+            "exaustao": "Ao acordar, sofre Desorientado por 1 turno",
+            "danoColateral": "Ao sofrer dano crítico, acorda imediatamente"
+          },
+          "encerramento": {
+            "condicoes": "- Fim da duração\n- Ao sofrer dano\n- Uso de habilidades de Despertar ou Cura",
+            "removeivel": "dificil"
+          },
+          "design": {
+            "narrativa": "Vulnerabilidade extrema.\nAlvo exposto e indefeso.",
+            "sinergias": "Combina bem com: Stigma, Vulnerável\nRuim com: Escudos, Proteções",
+            "casosUso": "- Controle temporário\n- Finalização de alvos",
+            "notas": "Muito forte.\nBaixa duração e fácil de quebrar com dano."
+          },
+          "dataCriacao": "19/01/2026, 03:37:37",
+          "dataAtualizacao": "19/01/2026, 19:39:42"
+        }
+      ],
+      "aptidoes": [
+        {
+          "nome": "Acrobacia",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Atletismo",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Intimidação",
+          "nivel": 5,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Tolerância",
+          "nivel": 4,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Fôlego",
+          "nivel": 3,
+          "bonusAplicados": false
+        }
+      ],
+      "ganhasAptidoes": 5,
+      "habilidades": [
+        {
+          "id": 1777660756807.9155,
+          "nome": "Essência Mágica",
+          "tipo": "racial",
+          "descricao": "Mythar são naturalmente conectados às energias mágicas do mundo.\nEfeito:\n• resistência natural contra efeitos mágicos fracos (+1)\n• bônus em testes envolvendo magia ou fenômenos arcanos (+3)",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1773115723747,
+          "dataAplicacao": "2026-05-01T18:39:16.807Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777660756807.333,
+          "nome": "Presença Primordial",
+          "tipo": "racial",
+          "descricao": "A presença de uma Besta Fantástica impõe respeito ou medo nas criaturas ao redor.\nEfeito:\n• criaturas comuns podem demonstrar hesitação ou cautela\n• bônus narrativo em intimidação contra criaturas menores (+3)",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1773115723747,
+          "dataAplicacao": "2026-05-01T18:39:16.807Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777660756807.444,
+          "nome": "Corpo Sobrenatural",
+          "tipo": "racial",
+          "descricao": "O corpo de um Mythar é mais resistente que o de animais normais.\nEfeito:\n• leve resistência contra dano físico e elemental (+20% Defesa)\n• maior tolerância a ambientes hostis ",
+          "recarga": "0",
+          "acao": "Imediata",
+          "duracao": "",
+          "alcance": "0",
+          "alvos": "1",
+          "custo": "0",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1773115723747,
+          "dataAplicacao": "2026-05-01T18:39:16.807Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777660756807.5217,
+          "nome": "Investida Bestial",
+          "tipo": "Imediata",
+          "descricao": "O Mythar avança com ferocidade sobrenatural contra o inimigo.\nCausa 6d8 de dano físico e pode derrubar o alvo caso ele falhe em um teste de resistência.",
+          "recarga": "2 T",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "8 m",
+          "alvos": "1",
+          "custo": "11 FaD",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1773115723747,
+          "dataAplicacao": "2026-05-01T18:39:16.807Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777660756807.3088,
+          "nome": "Rugido Primordial",
+          "tipo": "Imediata",
+          "descricao": "A criatura solta um rugido carregado de energia primordial.\nInimigos próximos podem sofrer desorientação ou hesitação momentânea, reduzindo sua capacidade de reação. Teste Obstaculo -13",
+          "recarga": "3",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "6 m",
+          "alvos": "1",
+          "custo": "8 EnR",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1773115723747,
+          "dataAplicacao": "2026-05-01T18:39:16.807Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777660756807.6785,
+          "nome": "Instinto Místico",
+          "tipo": "Imediata",
+          "descricao": "A criatura amplia seus sentidos mágicos.\nDurante a duração:\n• pode sentir presença de magia próxima (+3)\n• recebe bônus em percepção sobrenatural (+1)",
+          "recarga": "2 t",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Proprio",
+          "alvos": "Usuario",
+          "custo": "5 EnR",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1773115723747,
+          "dataAplicacao": "2026-05-01T18:39:16.807Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777660756807.441,
+          "nome": "Fúria Arcana",
+          "tipo": "Duradoura",
+          "descricao": "O Mythar libera sua energia mágica interior.\nDurante a habilidade:\n• aumenta força e agressividade em combate (Condição Aumento de Forca)\n• ataques causam dano adicional mágico de +50%.",
+          "recarga": "3",
+          "acao": "Imediata",
+          "duracao": "0",
+          "alcance": "Proprio",
+          "alvos": "1",
+          "custo": "15 EnR",
+          "dano": "",
+          "imagem": "",
+          "dataOrigemRaca": 1773115723747,
+          "dataAplicacao": "2026-05-01T18:39:16.807Z",
+          "condicoes": []
+        },
+        {
+          "id": 1777661138957,
+          "nome": "Halito Infernal",
+          "tipo": "fadiga",
+          "categoria": "Ofensivas",
+          "circulo": "1º Círculo",
+          "tipoCusto": "Fadiga",
+          "tipoAcao": "Imediata",
+          "recarga": "2",
+          "duracao": "0",
+          "alcance": "9 m",
+          "alvos": "4.5  m em cone",
+          "custo": "9 FaD",
+          "dados": "6d8+12",
+          "descricao": "Wyvern utiliza suas chamas para queimar todos alvos a sua frente!",
+          "cantico": "",
+          "condicoes": [
+            {
+              "id": 1768261169744,
+              "nome": "Queimando",
+              "tipo": "Debuff",
+              "origem": "Habilidade",
+              "raridade": "Épico",
+              "descricaoCurta": "Chamas consomem o corpo e os equipamentos do alvo, causando dano contínuo e forçando decisões rápidas.",
+              "imagem": "https://i.imgur.com/axT9lFV.png",
+              "efeitosMecanicos": {
+                "modificadores": "– Dano leve contínuo por turno (30% de dano)\n– Penalidade em testes de concentração e furtividade (-3)",
+                "efetosPassivos": "– Equipamentos inflamáveis correm risco de dano\n– Ações defensivas sob pressão se tornam mais difíceis",
+                "efetosAtivos": "n/d",
+                "interacoes": "– Molhado: remove ou reduz Queimando imediatamente\n– Corrosão: gera dano colateral adicional\n– Exausto: acelera o colapso físico"
+              },
+              "duracao": {
+                "tipo": "Turnos",
+                "valor": "3"
+              },
+              "aplicacao": {
+                "metodo": "Chance",
+                "detalhes": "Aplicado ao sofrer dano de fogo, explosões ou falhar em testes contra efeitos incendiários."
+              },
+              "escalonamento": {
+                "temEscalonamento": true,
+                "descricao": "Chamas se intensificam se não forem apagadas rapidamente.",
+                "maxNiveis": 2,
+                "crescimento": "– Nova aplicação – Falha ao tentar extinguir o fogo"
+              },
+              "risco": {
+                "exaustao": "n/d",
+                "danoColateral": "– Pode causar dano permanente leve a equipamentos ao final do efeito"
+              },
+              "encerramento": {
+                "condicoes": "– Fim da duração\n– Apagar o fogo manualmente\n– Estado Molhado ou efeitos de água",
+                "removeivel": "sim"
+              },
+              "design": {
+                "narrativa": "Dor constante, pânico, cheiro de fumaça e decisões apressadas.",
+                "sinergias": "Perfeita para pressão imediata e negação de tempo.",
+                "casosUso": "Forçar movimentação, quebrar concentração e acelerar combates.",
+                "notas": "Dano existe, mas o verdadeiro perigo é a urgência."
+              },
+              "dataCriacao": "12/01/2026, 20:39:29",
+              "dataAtualizacao": "19/01/2026, 18:43:52"
+            }
+          ],
+          "imagem": "",
+          "dataCriacao": "2026-05-01T18:45:38.957Z"
+        },
+        {
+          "id": 1777661226252,
+          "nome": "Voou",
+          "tipo": "fadiga",
+          "categoria": "Movimento",
+          "circulo": "",
+          "tipoCusto": "Fadiga",
+          "tipoAcao": "Sustentada",
+          "recarga": "2 T",
+          "duracao": "n/d",
+          "alcance": "n/d",
+          "alvos": "Usuario",
+          "custo": "3 FaD ",
+          "dados": "+5 ReA & +3 EvA",
+          "descricao": "Wyvern Bate suas asas e vouua sobre seus inimigos......",
+          "cantico": "",
+          "condicoes": [],
+          "imagem": "",
+          "dataCriacao": "2026-05-01T18:47:06.252Z"
+        },
+        {
+          "id": 1777661378293,
+          "nome": "Bater de Asas",
+          "tipo": "fadiga",
+          "categoria": "Controle",
+          "circulo": "",
+          "tipoCusto": "Fadiga",
+          "tipoAcao": "Imediata",
+          "recarga": "1 T",
+          "duracao": "n/d",
+          "alcance": "15 m",
+          "alvos": "180 Graus",
+          "custo": "5 FaD",
+          "dados": "Obstaculo 13 Atletismo",
+          "descricao": "Bate suas asas para tirar os alvos próximos dele, assim jogando com a forca do vento todos para traz  aplicando condição queda para aqueles que falham miseravelmente no teste de obstáculo.",
+          "cantico": "",
+          "condicoes": [
+            {
+              "id": 1768860911013,
+              "nome": "INVENCIBILIDADE",
+              "tipo": "Buff",
+              "origem": "Combinação",
+              "raridade": "Lendário",
+              "descricaoCurta": "O alvo torna-se completamente imune a danos e efeitos negativos por um curto período.",
+              "imagem": "https://i.imgur.com/C4nIkHD.png",
+              "efeitosMecanicos": {
+                "modificadores": "- Imune a todo tipo de dano\n- Imune a debuffs, condições e efeitos negativos",
+                "efetosPassivos": "- Não sofre empurrões, quedas ou controle de grupo\n- Não perde HP, Mana ou recursos",
+                "efetosAtivos": "Nenhum",
+                "interacoes": "- Remove automaticamente todos os debuffs ao ser aplicado\n- Não pode coexistir com Vulnerável ou Stigma\n- Suspende efeitos de dano contínuo (DoT)"
+              },
+              "duracao": {
+                "tipo": "Turnos",
+                "valor": "1 turno (máximo 2 em casos especiais)"
+              },
+              "aplicacao": {
+                "metodo": "Gatilho",
+                "detalhes": "Aplicação direta Não pode ser reaplicada enquanto ativa"
+              },
+              "escalonamento": {
+                "temEscalonamento": false,
+                "descricao": "",
+                "maxNiveis": null,
+                "crescimento": ""
+              },
+              "risco": {
+                "exaustao": "Ao término, aplica Exausto por 1 turno",
+                "danoColateral": "Após o fim, o alvo sofre -20% Defesa por 1 turno"
+              },
+              "encerramento": {
+                "condicoes": "- Fim da duração\n- Efeitos de Anulação Lendária",
+                "removeivel": "nao"
+              },
+              "design": {
+                "narrativa": "Momento épico.\nSensação de poder absoluto e segurança total.",
+                "sinergias": "Boa com: Aumento de Ataque, Fúria\nRuim com: Dissipar, Anulação",
+                "casosUso": "- Sobreviver a golpes finais\n- Viradas épicas de combate",
+                "notas": "Uso extremamente limitado.\nCurta duração é essencial para equilíbrio."
+              },
+              "dataCriacao": "19/01/2026, 19:15:11",
+              "dataAtualizacao": "19/01/2026, 21:34:01"
+            }
+          ],
+          "imagem": "",
+          "dataCriacao": "2026-05-01T18:49:38.293Z"
+        }
+      ],
+      "inventario": [
+        {
+          "id": 1777661392688.8486,
+          "nome": "Escamas Enrigecidas",
+          "qualidade": "Épico",
+          "level": 15,
+          "levelMax": 15,
+          "ataque": "5d8+7",
+          "extra": "+350 Saude",
+          "tipo": "armadura",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 0,
+          "origemDatabase": true
+        },
+        {
+          "id": 1777661395041.4836,
+          "nome": "Garras",
+          "qualidade": "Mítico",
+          "level": 15,
+          "levelMax": 20,
+          "ataque": "5d10+7",
+          "extra": "+3 PreC",
+          "tipo": "arma",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        },
+        {
+          "id": 1777661454586.4658,
+          "nome": "Mordiscar",
+          "qualidade": "Lendário",
+          "level": 15,
+          "levelMax": 20,
+          "ataque": "5d12+7",
+          "extra": "+3 Prec",
+          "tipo": "arma",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        }
+      ],
+      "imagem": "https://static.wikia.nocookie.net/solo-leveling/images/9/90/Kaisel1.jpg/revision/latest?cb=20210922223323",
+      "morto": true
     }
   ],
   "criaturas": [],
@@ -18527,6 +22014,26 @@
         }
       ],
       "maxSlotsHabilidades": 2
+    },
+    {
+      "nome": "Luvas",
+      "qualidade": "Épico",
+      "level": 10,
+      "levelMax": 15,
+      "ataque": "SKill Estabilidade",
+      "extra": "-3 Obstaculo",
+      "Mesa": "",
+      "tipo": "acessorio",
+      "imagem": "",
+      "imagemIndexedDBId": null,
+      "habilidades": [
+        {
+          "slot": 0,
+          "nome": "Estabilidade",
+          "descricao": "Um luva de arquearia elfica que estabiliza o disparo a longo alcance aumentando a penetração do disparo e reduzindo o gasto de fadiga em -25%."
+        }
+      ],
+      "maxSlotsHabilidades": 1
     }
   ],
   "condicoes": [
@@ -22221,8 +25728,8 @@
     }
   ],
   "artes": [],
-  "dataSalvamento": "30/04/2026, 21:05:50",
+  "dataSalvamento": "17/05/2026, 23:53:11",
   "versao": "1.0",
   "tipo": "banco_completo",
-  "totalItens": 471
+  "totalItens": 477
 }
