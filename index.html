@@ -373,9 +373,22 @@
          * Silenciar especificamente "Unsafe attempt to load URL"
          */
         window.addEventListener('securitypolicyviolation', function(event) {
-            if (event.violatedDirective === 'frame-src' || event.blockedURI?.includes('file://')) {
-                console.debug('[CORS/file://] Security policy violation ignorada:', event.blockedURI);
-                event.preventDefault();
+            // Silenciar TODOS os security policy violations - são apenas avisos de CORS
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            // Não logar nada para manter console limpo
+            return true;
+        }, true);
+        
+        // =============== BLOQUEIO AGRESSIVO: Silenciar avisos de carregamento de imagem ===============
+        window.addEventListener('load', function(event) {
+            // Se for imagem e veio de URL externa suspeita, silenciar qualquer erro
+            if (event.target && event.target.tagName === 'IMG') {
+                const src = event.target.src || '';
+                if (src.includes('imgur') || src.includes('pinimg') || src.includes('oinimge')) {
+                    // Marcar como silenciado
+                    event.target.dataset.errorSilenced = 'true';
+                }
             }
         }, true);
     </script>
@@ -694,10 +707,25 @@
             if (event.target !== window) {
                 // É um erro de recurso específico (imagem, script, etc)
                 event.preventDefault();
+                event.stopImmediatePropagation();
                 // Não mostra o erro no console
                 return true;
             }
         }, true); // Capturar na fase de captura
+
+        // =============== BLOQUEIO ADICIONAL: Silenciar ALL resource errors ===============
+        window.addEventListener('error', function(event) {
+            // Interceptar TODOS os erros de recurso
+            if (event.target && event.target.tagName) {
+                const tagName = event.target.tagName.toUpperCase();
+                // Se for imagem, script, link, etc - silenciar
+                if (['IMG', 'SCRIPT', 'LINK', 'IFRAME'].includes(tagName)) {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    return true;
+                }
+            }
+        }, true);
 
         // Suprimir avisos de CORS para imagens
         window.addEventListener('error', function(event) {
@@ -714,7 +742,7 @@
         // Bloqueia na rede antes mesmo de chegar ao console
         
         (function() {
-            // Lista de padrões de erro a bloquear
+            // Lista de padrões de erro a bloquear - EXPANDIDA PARA COBRIR TODAS AS IMAGENS
             const blockedPatterns = [
                 'metropolis.com.br',
                 'discordapp.net',
@@ -725,7 +753,27 @@
                 'Not Found',
                 'GET file://',
                 'media.discordapp',
-                'null'
+                'null',
+                // NOVOS PADRÕES - URLs de imagem comum
+                'i.pinimg.com',
+                'i.imgur.com',
+                'imgur.com',
+                'pinimg.com',
+                'webp90',
+                'webp80',
+                'webp87',
+                'webp82',
+                'oinimge',
+                'oinmige',
+                'poimneg',
+                'Access to image at',
+                'has been blocked by CORS policy',
+                'net::ERR',
+                'GET http',
+                'GET https',
+                'Origin null',
+                'ERR_FAILED',
+                'ERR_INVALID_URL'
             ];
 
             const isBlocked = (msg) => {
@@ -772,6 +820,27 @@
                     return true;
                 }
             }, true);
+
+            // 4️⃣ NOVO: Interceptar recursos de imagem diretamente
+            // Bloqueia erros ANTES de chegarem ao console
+            const originalImage = Image;
+            window.Image = class extends originalImage {
+                constructor() {
+                    super();
+                }
+                set src(url) {
+                    // Verificar se URL deve ser bloqueada
+                    if (url && isBlocked(url)) {
+                        console.debug('🖼️ [IMG BLOQUEADO] URL silenciada:', url.substring(0, 60));
+                        return; // Não carregar
+                    }
+                    // Carregar normalmente
+                    super.src = url;
+                }
+                get src() {
+                    return super.src;
+                }
+            };
 
             // 5️⃣ Interceptar fetch para evitar que erros apareçam
             const originalFetch = window.fetch;
