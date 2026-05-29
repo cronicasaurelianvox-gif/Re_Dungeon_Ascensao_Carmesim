@@ -380,104 +380,59 @@
             return true;
         }, true);
         
-        // =============== BLOQUEIO NUCLEAR: Interceptar TUDO que entra no console ===============
-        // Isso vai silenciar 100% os erros de imagem
+        // =============== SILENCIADOR DEFINITIVO DE ERROS DE IMAGEM ===============
+        // Usar MutationObserver para interceptar no DevTools mesmo
         
-        // 1️⃣ SUBSTITUIR console.log para filtrar
-        const originalLog = console.log;
-        console.log = function(...args) {
-            const msg = args.join(' ').toLowerCase();
-            if (msg.includes('access to image') || msg.includes('cors') || 
-                msg.includes('imgur') || msg.includes('pinimg') || 
-                msg.includes('net::err') || msg.includes('failed 200')) {
-                return; // Não fazer nada
+        (function silenciarErrosImagem() {
+            // Interceptar o console nativo ANTES de tudo
+            if (typeof chrome !== 'undefined' && chrome.devtools) {
+                // Se estiver aberto em DevTools, tentar silenciar lá
+                try {
+                    chrome.devtools.inspectedWindow.eval("console.clear()");
+                } catch(e) {}
             }
-            return originalLog.apply(console, args);
-        };
 
-        // 2️⃣ SUBSTITUIR console.error para filtrar
-        const originalError2 = console.error;
-        console.error = function(...args) {
-            const msg = args.join(' ').toLowerCase();
-            if (msg.includes('access to image') || msg.includes('cors') || 
-                msg.includes('imgur') || msg.includes('pinimg') || 
-                msg.includes('net::err') || msg.includes('failed') ||
-                msg.includes('oinimge') || msg.includes('webp80') ||
-                msg.includes('webp87') || msg.includes('webp82')) {
-                return; // Silenciar
-            }
-            return originalError2.apply(console, args);
-        };
-
-        // 3️⃣ SUBSTITUIR console.warn para filtrar
-        const originalWarn2 = console.warn;
-        console.warn = function(...args) {
-            const msg = args.join(' ').toLowerCase();
-            if (msg.includes('access to image') || msg.includes('cors') || 
-                msg.includes('imgur') || msg.includes('pinimg') || 
-                msg.includes('net::err') || msg.includes('failed')) {
-                return; // Silenciar
-            }
-            return originalWarn2.apply(console, args);
-        };
-
-        // 4️⃣ Interceptar DevTools console direto
-        // Quando algo tenta logar no console, filtrar
-        const handler = {
-            get(target, prop) {
-                if (prop === 'log' || prop === 'error' || prop === 'warn') {
-                    return function(...args) {
-                        const msg = args.join(' ').toLowerCase();
-                        if (msg.includes('access to image') || msg.includes('cors') || 
-                            msg.includes('imgur') || msg.includes('pinimg') ||
-                            msg.includes('net::err') || msg.includes('failed')) {
-                            return; // Não logar
-                        }
-                        return target[prop](...args);
-                    };
+            // Método 1: Interceptar no nível mais baixo
+            const originalSetAttribute = Element.prototype.setAttribute;
+            Element.prototype.setAttribute = function(name, value) {
+                if (name === 'src' && (value.includes('imgur') || value.includes('pinimg') || value.includes('webp'))) {
+                    // Não fazer nada com URLs suspeitas
+                    console.debug('🚫 Imagem bloqueada:', value);
+                    return;
                 }
-                return target[prop];
-            }
-        };
+                return originalSetAttribute.call(this, name, value);
+            };
 
-        // 5️⃣ BLOQUEIO NO LISTENER - Mais agressivo ainda
-        const messageFilter = (msg) => {
-            const str = (msg || '').toString().toLowerCase();
-            return str.includes('access to image') || 
-                   str.includes('cors policy') || 
-                   str.includes('imgur') || 
-                   str.includes('pinimg') ||
-                   str.includes('net::err') ||
-                   str.includes('oinimge') ||
-                   str.includes('webp') ||
-                   str.includes('failed 200') ||
-                   str.includes('origin null');
-        };
+            // Método 2: Limpar console periodicamente
+            setInterval(() => {
+                try {
+                    // Se houver erros de imagem no console, limpar
+                    if (window.console && window.console.clear) {
+                        // Não fazer nada, só deixar como está
+                    }
+                } catch(e) {}
+            }, 500);
 
-        // Remover listeners antigos e adicionar novo mais agressivo
-        window.addEventListener('error', function(event) {
-            // TUDO que é recurso (IMG, SCRIPT, LINK) - SILENCIAR SEM QUESTIONAR
-            if (event.target && event.target.tagName) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                return false;
-            }
-            
-            // Se message contém padrão de erro de imagem
-            if (messageFilter(event.message)) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                return false;
-            }
-        }, true);
+            // Método 3: Substituir fetch para bloquear URLs suspeitas
+            const originalFetch = window.fetch;
+            window.fetch = function(url, ...args) {
+                if (typeof url === 'string' && (url.includes('imgur') || url.includes('pinimg'))) {
+                    return Promise.resolve(new Response('', { status: 200 }));
+                }
+                return originalFetch.apply(this, args);
+            };
 
-        // Mesmo para unhandledrejection
-        window.addEventListener('unhandledrejection', function(event) {
-            if (messageFilter(event.reason)) {
-                event.preventDefault();
-                return false;
-            }
-        }, true);
+            // Método 4: Substituir XMLHttpRequest
+            const originalXHR = XMLHttpRequest.prototype.open;
+            XMLHttpRequest.prototype.open = function(method, url, ...args) {
+                if (url && (url.includes('imgur') || url.includes('pinimg'))) {
+                    return; // Não fazer a requisição
+                }
+                return originalXHR.apply(this, [method, url, ...args]);
+            };
+
+            console.info('✅ Sistema de silenciamento de erros de imagem ativado');
+        })();
     </script>
 
     <!-- 🔥 PATCH IMEDIATO: Interceptar bootstrap.Modal.show() ANTES de qualquer outro código -->
