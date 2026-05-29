@@ -35,6 +35,20 @@
         };
         
         /**
+         * 🛡️ FUNÇÃO GLOBAL parseJsonSeguro
+         * Função auxiliar para parsear JSON com segurança do localStorage
+         */
+        window.parseJsonSeguro = function(chave) {
+            try {
+                const valor = localStorage.getItem(chave);
+                return valor ? JSON.parse(valor) : [];
+            } catch (e) {
+                console.warn(`⚠️ Erro ao carregar ${chave}:`, e.message);
+                return [];
+            }
+        };
+        
+        /**
          * 🗄️ STORAGE MANAGER - IndexedDB com fallback localStorage
          * Uso automático: StorageManager.set(key, value) / StorageManager.get(key)
          */
@@ -1654,6 +1668,16 @@
     })();
 
         document.addEventListener('DOMContentLoaded', async () => {
+            // ✅ INICIALIZAR FLAGS DE PROTEÇÃO CONTRA REABERTURA
+            window._bloqueiaRreaberturaNPC = false;
+            window._bloqueiaReaberturaRaca = false;
+            window._bloqueiaReaberturaClasse = false;
+            window._bloqueiaReaberturaOrigem = false;
+            window._bloqueiaReaberturaCondicao = false;
+            window._bloqueiaReaberturaHabilidade = false;
+            window._bloqueiaReaberturaArte = false;
+            console.log('✅ Flags de bloqueio de reabertura inicializadas');
+            
             // 🗄️ Inicializar StorageManager (IndexedDB com fallback localStorage)
             console.log('🚀 Inicializando StorageManager...');
             await window.StorageManager.init();
@@ -11488,7 +11512,7 @@
             <header class="redungeon-hero-header">
                 <!-- Background Banner com Overlay -->
                 <div class="hero-background">
-                    <img src="https://i.imgur.com/DdohBKH.png" alt="ReDungeon Banner" class="hero-banner-img">
+                    <img src="https://i.imgur.com/BE6koSr.png" alt="ReDungeon Banner" class="hero-banner-img">
                     <div class="hero-overlay"></div>
                 </div>
 
@@ -11497,7 +11521,7 @@
 
                     <!-- Lado Esquerdo: Logo + Título -->
                     <div class="hero-branding">
-                        <img src="https://i.imgur.com/aVfMgAq.png" alt="ReDungeon Logo" class="hero-logo">
+                        <img src="https://i.imgur.com/fQOph6G.png" alt="ReDungeon Logo" class="hero-logo">
                         <div class="hero-text">
                             <h1 class="hero-title">BANCO DE DADOS</h1>
                             <p class="hero-subtitle">Gerencie tudo do seu mundo</p>
@@ -25845,6 +25869,9 @@
             npcImagemBase64Temp = null;
             npcImagemIndexedDBIdTemp = null;
 
+            // 🔥 BLOQUEAR REABERTURA DO MODAL TEMPORARIAMENTE
+            window._bloqueiaRreaberturaNPC = true;
+            
             // Aguardar um momento para o modal fechar e DEPOIS limpar dados
             setTimeout(async () => {
                 // Limpar dados de criação do NPC APÓS salvar com sucesso
@@ -25871,6 +25898,10 @@
                 // Sem isso, o Electron perde foco interno após tab.click() e inputs ficam inoperáveis
                 window.restaurarFocoAposOperacao(100);
                 console.log('🔧 [salvarNPC] Foco restaurado via restaurarFocoAposOperacao');
+                
+                // ✅ DESBLOQUEAR REABERTURA APÓS TERMINAR
+                window._bloqueiaRreaberturaNPC = false;
+                console.log('✅ Desbloqueio de reabertura de NPC ativado');
             }, 300);
         }
         
@@ -41421,6 +41452,12 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
 
         // Editar NPC - MOVIDO PARA ANTES DE listarNPCsComFiltro PARA EVITAR ERRO DE REFERÊNCIA
         async function editarNPC(index) {
+            // 🛡️ PROTEÇÃO CONTRA REABERTURA DURANTE SINCRONIZAÇÃO
+            if (window._bloqueiaRreaberturaNPC) {
+                console.warn('⚠️ [editarNPC] Reabertura bloqueada - operação anterior ainda em progresso');
+                return;
+            }
+            
             const npc = armazenar.npcs[index];
             if (!npc) return;
 
