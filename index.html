@@ -564,8 +564,18 @@
     <script>
         // Detectar quando FocusTrap é criado e protegê-lo
         const observeModalEvents = () => {
+            // 🛡️ PROTETOR CRÍTICO: Bloquear reabertura não-intencional de modais
             document.addEventListener('show.bs.modal', (e) => {
                 const modal = e.target;
+                
+                // Se há um bloqueio ativo E o modal não foi explicitamente solicitado, PARAR
+                if (window._bloqueiaRreaberturaNPC && modal.id === 'modalNovoNPC') {
+                    console.warn('🔴 [BLOQUEIO] Tentativa de reabertura de modalNovoNPC bloqueada!');
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    return;
+                }
+                
                 const bsModalInstance = bootstrap.Modal.getInstance(modal);
                 
                 if (bsModalInstance && bsModalInstance._focustrap) {
@@ -1911,6 +1921,51 @@
         return { push, pop, clean, isModalOpen, getTopModal, getDiagnostics };
     })();
 
+    // 🔒 LISTENER GLOBAL: Forçar fechamento de modais quando dismiss é clicado
+    if (!window._forcedCloseListenerAdded) {
+        document.addEventListener('click', function(e) {
+            // Interceptar botões data-bs-dismiss
+            if (e.target && e.target.getAttribute('data-bs-dismiss') === 'modal') {
+                const modal = e.target.closest('.modal');
+                if (modal) {
+                    console.log('🔴 [FORÇAR CLOSE] Botão dismiss clicado:', modal.id);
+                    
+                    // Forçar fechamento visual imediato
+                    modal.classList.remove('show');
+                    modal.classList.remove('fade');
+                    modal.setAttribute('aria-hidden', 'true');
+                    modal.style.display = 'none';
+                    modal.style.visibility = 'hidden';
+                    modal.style.opacity = '0';
+                    modal.style.pointerEvents = 'none';
+                    
+                    // Remover backdrop
+                    document.querySelectorAll('.modal-backdrop').forEach(bd => {
+                        bd.style.display = 'none';
+                        bd.remove();
+                    });
+                    
+                    // Restaurar body
+                    document.body.classList.remove('modal-open');
+                    document.body.style.overflow = 'auto';
+                    
+                    // Destruir instância Bootstrap
+                    const bsInstance = bootstrap.Modal.getInstance(modal);
+                    if (bsInstance) {
+                        try {
+                            bsInstance.dispose();
+                        } catch (err) {
+                            console.warn('⚠️ Erro ao destruir modal via dismiss:', err);
+                        }
+                    }
+                    
+                    console.log('✅ Modal forçado a fechar via dismiss');
+                }
+            }
+        }, true); // Usar capture phase para interceptar antes
+        window._forcedCloseListenerAdded = true;
+    }
+
     // 🔒 LISTENER GLOBAL: Re-habilitar inputs quando modais ficam visíveis (após focustrap tentar bloqueá-los)
     if (!window._inputsReenableListenerAdded) {
         document.addEventListener('shown.bs.modal', function(e) {
@@ -1962,6 +2017,25 @@
             if (e.target && e.target.classList.contains('modal')) {
                 const closedModal = e.target;
                 console.log('🔓 [hidden.bs.modal] Modal fechado:', closedModal.id);
+                
+                // 🔴 FORÇAR ESTADO FECHADO - IMPEDIR REABERTURA
+                closedModal.classList.remove('show');
+                closedModal.style.display = 'none';
+                closedModal.style.visibility = 'hidden';
+                closedModal.setAttribute('aria-hidden', 'true');
+                
+                // Remover todos os backdrops
+                document.querySelectorAll('.modal-backdrop').forEach(bd => {
+                    bd.style.display = 'none';
+                    setTimeout(() => bd.remove(), 50);
+                });
+                
+                // Restaurar body completamente
+                document.body.classList.remove('modal-open');
+                document.body.style.overflow = 'auto';
+                document.body.style.paddingRight = '';
+                
+                console.log('🔴 Modal forçado a permanecer fechado no hidden event');
                 
                 // 🛡️ OPÇÃO 1: Restaurar foco de forma segura (proteção defensiva)
                 if (focusBeforeModal && document.contains(focusBeforeModal)) {
@@ -2235,6 +2309,14 @@
             if (e.target && e.target.classList.contains('modal')) {
                 const openingModal = e.target;
                 console.log('🔓 Modal abrindo:', openingModal.id);
+                
+                // 🔴 PROTEÇÃO CRÍTICA: Se bloqueio está ativo, impedir reabertura
+                if (window._bloqueiaRreaberturaNPC && openingModal.id === 'modalNovoNPC') {
+                    console.warn('🔴 [BLOQUEIO SHOW] Reabertura de modalNovoNPC bloqueada!');
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    return false;
+                }
                 
                 // Reduzir z-index de todos os containers de filtro
                 const filterContainers = document.querySelectorAll('[style*="z-index: 10000"]');
@@ -25836,33 +25918,62 @@
             // ✅ RESTAURAR SCROLL APÓS SUCESSO DE SALVAMENTO
             ScrollProtector.restore();
 
-            // Fechar modal com fallback robusto
+            // 🔥 FORÇAR FECHAMENTO TOTAL DO MODAL - SEM REABERTURA
             try {
                 const modalElement = document.getElementById('modalNovoNPC');
                 if (modalElement) {
-                    const modal = bootstrap.Modal.getInstance(modalElement);
+                    // 1️⃣ REMOVER TODOS OS LISTENERS DE SHOW PARA EVITAR REABERTURA
+                    const oldElement = modalElement.cloneNode(true);
+                    modalElement.parentNode.replaceChild(oldElement, modalElement);
+                    console.log('🧹 Listeners de modal removidos');
+                    
+                    // 2️⃣ FORÇAR FECHAMENTO VISUAL COMPLETO
+                    const newModalElement = document.getElementById('modalNovoNPC');
+                    if (newModalElement) {
+                        newModalElement.classList.remove('show');
+                        newModalElement.classList.remove('fade');
+                        newModalElement.setAttribute('aria-hidden', 'true');
+                        newModalElement.setAttribute('aria-modal', 'false');
+                        newModalElement.style.display = 'none';
+                        newModalElement.style.visibility = 'hidden';
+                        newModalElement.style.opacity = '0';
+                        newModalElement.style.pointerEvents = 'none';
+                        console.log('🚪 Modal ocultado completamente');
+                    }
+                    
+                    // 3️⃣ REMOVER BACKDROP E RESTAURAR BODY
+                    document.body.classList.remove('modal-open');
+                    document.body.style.overflow = 'auto';
+                    document.body.style.paddingRight = '';
+                    document.querySelectorAll('.modal-backdrop').forEach(bd => {
+                        bd.style.display = 'none';
+                        setTimeout(() => bd.remove(), 100);
+                    });
+                    console.log('🚪 Backdrop removido e body restaurado');
+                    
+                    // 4️⃣ DESTRUIR INSTÂNCIA BOOTSTRAP SE EXISTIR
+                    const modal = bootstrap.Modal.getInstance(newModalElement);
                     if (modal) {
-                        modal.hide();
-                        console.log('🚪 Modal fechado com bootstrap');
-                    } else {
-                        // Fallback: fechar manualmente com CSS
-                        modalElement.classList.remove('show');
-                        modalElement.style.display = 'none';
-                        document.body.classList.remove('modal-open');
-                        const backdrop = document.querySelector('.modal-backdrop');
-                        if (backdrop) backdrop.remove();
-                        console.log('🚪 Modal fechado com fallback CSS');
+                        try {
+                            modal.dispose();
+                            console.log('💀 Instância Bootstrap destruída');
+                        } catch (err) {
+                            console.warn('⚠️ Erro ao destruir modal:', err);
+                        }
                     }
                 }
             } catch (e) {
-                console.error('Erro ao fechar modal:', e);
-                // Último recurso
+                console.error('❌ Erro ao fechar modal:', e);
+                // Último recurso - forçar CSS puro
                 const modalElement = document.getElementById('modalNovoNPC');
                 if (modalElement) {
                     modalElement.classList.remove('show');
-                    modalElement.style.display = 'none';
-                    document.body.classList.remove('modal-open');
+                    modalElement.style.display = 'none !important';
+                    modalElement.style.visibility = 'hidden !important';
+                    modalElement.setAttribute('aria-hidden', 'true');
                 }
+                document.body.classList.remove('modal-open');
+                document.querySelectorAll('.modal-backdrop').forEach(bd => bd.remove());
             }
 
             // Limpar variáveis de imagem IMEDIATAMENTE (antes do setTimeout)
