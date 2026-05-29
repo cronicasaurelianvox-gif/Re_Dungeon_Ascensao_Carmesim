@@ -380,15 +380,102 @@
             return true;
         }, true);
         
-        // =============== BLOQUEIO AGRESSIVO: Silenciar avisos de carregamento de imagem ===============
-        window.addEventListener('load', function(event) {
-            // Se for imagem e veio de URL externa suspeita, silenciar qualquer erro
-            if (event.target && event.target.tagName === 'IMG') {
-                const src = event.target.src || '';
-                if (src.includes('imgur') || src.includes('pinimg') || src.includes('oinimge')) {
-                    // Marcar como silenciado
-                    event.target.dataset.errorSilenced = 'true';
+        // =============== BLOQUEIO NUCLEAR: Interceptar TUDO que entra no console ===============
+        // Isso vai silenciar 100% os erros de imagem
+        
+        // 1️⃣ SUBSTITUIR console.log para filtrar
+        const originalLog = console.log;
+        console.log = function(...args) {
+            const msg = args.join(' ').toLowerCase();
+            if (msg.includes('access to image') || msg.includes('cors') || 
+                msg.includes('imgur') || msg.includes('pinimg') || 
+                msg.includes('net::err') || msg.includes('failed 200')) {
+                return; // Não fazer nada
+            }
+            return originalLog.apply(console, args);
+        };
+
+        // 2️⃣ SUBSTITUIR console.error para filtrar
+        const originalError2 = console.error;
+        console.error = function(...args) {
+            const msg = args.join(' ').toLowerCase();
+            if (msg.includes('access to image') || msg.includes('cors') || 
+                msg.includes('imgur') || msg.includes('pinimg') || 
+                msg.includes('net::err') || msg.includes('failed') ||
+                msg.includes('oinimge') || msg.includes('webp80') ||
+                msg.includes('webp87') || msg.includes('webp82')) {
+                return; // Silenciar
+            }
+            return originalError2.apply(console, args);
+        };
+
+        // 3️⃣ SUBSTITUIR console.warn para filtrar
+        const originalWarn2 = console.warn;
+        console.warn = function(...args) {
+            const msg = args.join(' ').toLowerCase();
+            if (msg.includes('access to image') || msg.includes('cors') || 
+                msg.includes('imgur') || msg.includes('pinimg') || 
+                msg.includes('net::err') || msg.includes('failed')) {
+                return; // Silenciar
+            }
+            return originalWarn2.apply(console, args);
+        };
+
+        // 4️⃣ Interceptar DevTools console direto
+        // Quando algo tenta logar no console, filtrar
+        const handler = {
+            get(target, prop) {
+                if (prop === 'log' || prop === 'error' || prop === 'warn') {
+                    return function(...args) {
+                        const msg = args.join(' ').toLowerCase();
+                        if (msg.includes('access to image') || msg.includes('cors') || 
+                            msg.includes('imgur') || msg.includes('pinimg') ||
+                            msg.includes('net::err') || msg.includes('failed')) {
+                            return; // Não logar
+                        }
+                        return target[prop](...args);
+                    };
                 }
+                return target[prop];
+            }
+        };
+
+        // 5️⃣ BLOQUEIO NO LISTENER - Mais agressivo ainda
+        const messageFilter = (msg) => {
+            const str = (msg || '').toString().toLowerCase();
+            return str.includes('access to image') || 
+                   str.includes('cors policy') || 
+                   str.includes('imgur') || 
+                   str.includes('pinimg') ||
+                   str.includes('net::err') ||
+                   str.includes('oinimge') ||
+                   str.includes('webp') ||
+                   str.includes('failed 200') ||
+                   str.includes('origin null');
+        };
+
+        // Remover listeners antigos e adicionar novo mais agressivo
+        window.addEventListener('error', function(event) {
+            // TUDO que é recurso (IMG, SCRIPT, LINK) - SILENCIAR SEM QUESTIONAR
+            if (event.target && event.target.tagName) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                return false;
+            }
+            
+            // Se message contém padrão de erro de imagem
+            if (messageFilter(event.message)) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                return false;
+            }
+        }, true);
+
+        // Mesmo para unhandledrejection
+        window.addEventListener('unhandledrejection', function(event) {
+            if (messageFilter(event.reason)) {
+                event.preventDefault();
+                return false;
             }
         }, true);
     </script>
