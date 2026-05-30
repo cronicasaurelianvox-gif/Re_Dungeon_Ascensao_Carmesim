@@ -21177,8 +21177,12 @@
                     modalBody.scrollTop = 0;
                 }
 
-                // 🎯 HABILITAR CAMPOS PARA EDIÇÃO (mostrar botões de seleção de Raça, Classe, Origem)
-                habilitarCamposNPC(true);
+                // 🎯 RESPEITAR O MODO DE VISUALIZAÇÃO se foi definido por verNPCCompleto()
+                if (!window.npcModoVisualizacao) {
+                    // Modo de EDIÇÃO: Habilitar campos
+                    habilitarCamposNPC(true);
+                }
+                // Se npcModoVisualizacao=true, não altera o estado (já foi configurado como visualização)
 
                 // Se não está editando um NPC existente, resetar o formulário para novo NPC
                 if (window.npcEmEdicao === null || window.npcEmEdicao === undefined) {
@@ -21325,6 +21329,8 @@
                 habilitarCamposNPC(true);
                 // Resetar o índice de edição
                 window.npcEmEdicao = null;
+                // 👁️ Resetar modo de visualização
+                window.npcModoVisualizacao = false;
                 // Limpar formulário
                 document.getElementById('formNovoNPC').reset();
                 condicoesSelecionadas = [];
@@ -41680,6 +41686,9 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
                 return;
             }
             
+            // 📝 Definir modo de EDIÇÃO (não visualização)
+            window.npcModoVisualizacao = false;
+            
             const npc = armazenar.npcs[index];
             if (!npc) return;
 
@@ -42385,6 +42394,9 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             // Migração: Garantir que NPCs antigos têm propriedades necessárias
             migrarNPCAntigo(npc);
 
+            // 👁️ Definir modo de VISUALIZAÇÃO (não edição)
+            window.npcModoVisualizacao = true;
+            
             // Desabilitar campos para modo de visualização
             habilitarCamposNPC(false);
 
