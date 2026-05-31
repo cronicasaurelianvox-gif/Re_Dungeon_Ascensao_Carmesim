@@ -7414,28 +7414,29 @@
         
         /* 🔧 SCROLLBAR CUSTOMIZADO PARA MODAL NPC */
         #modalNovoNPC .modal-body {
-            scrollbar-width: thin;
-            scrollbar-color: #d4af37 #222;
+            scrollbar-width: thin !important;
+            scrollbar-color: #d4af37 #222 !important;
+            overflow-y: auto !important;
         }
         
         #modalNovoNPC .modal-body::-webkit-scrollbar {
-            width: 12px;
-            background: #222;
+            width: 12px !important;
+            background: #222 !important;
         }
         
         #modalNovoNPC .modal-body::-webkit-scrollbar-track {
-            background: #222;
-            border-radius: 6px;
+            background: #222 !important;
+            border-radius: 6px !important;
         }
         
         #modalNovoNPC .modal-body::-webkit-scrollbar-thumb {
-            background: #d4af37;
-            border-radius: 6px;
-            border: 2px solid #222;
+            background: #d4af37 !important;
+            border-radius: 6px !important;
+            border: 2px solid #222 !important;
         }
         
         #modalNovoNPC .modal-body::-webkit-scrollbar-thumb:hover {
-            background: #f0c850;
+            background: #f0c850 !important;
         }
         
         /* MODAL: Detalhes de Classe (abre sobre modalNovoNPC) */
