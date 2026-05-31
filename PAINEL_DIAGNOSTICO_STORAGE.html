@@ -1,0 +1,212 @@
+<!-- 🔍 PAINEL DE DIAGNÓSTICO DO STORAGE - ADICIONAR À PÁGINA -->
+
+<!-- Adicionar este botão na seção de ações (próximo aos botões de Salvar/Sincronizar) -->
+
+<button class="btn btn-info btn-sm" onclick="abrirDiagnosticoStorage()" style="margin: 5px;" title="Diagnosticar problemas de armazenamento">
+    🔍 Diagnóstico Storage
+</button>
+
+<!-- MODAL DE DIAGNÓSTICO -->
+<div class="modal fade" id="modalDiagnosticoStorage" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="background: #0f0f14;">
+            <div class="modal-header border-bottom border-warning">
+                <h5 class="modal-title" style="color: #ffc107;">🔍 Diagnóstico de Armazenamento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="color: #ecf0f1; max-height: 60vh; overflow-y: auto;">
+                <div id="diagnosticoConteudo">
+                    <p style="text-align: center;">⏳ Analisando...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-warning" onclick="sincronizarArmazenamento()">🔄 Sincronizar Agora</button>
+                <button type="button" class="btn btn-danger" onclick="limparArmazenamentoCorrompido()">🧹 Limpar Corrompidos</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+/**
+ * 🔍 PAINEL DE DIAGNÓSTICO DO STORAGE
+ * Adicionado em 30/05/2026 para resolver problema de perda de dados
+ */
+
+function abrirDiagnosticoStorage() {
+    const modal = new bootstrap.Modal(document.getElementById('modalDiagnosticoStorage'));
+    
+    // Coletar informações
+    const diagnosticos = window.StorageManager.getDiagnostics();
+    const localstorageLista = [];
+    
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('redungeon_')) {
+            const value = localStorage.getItem(key);
+            const tamanho = value ? (value.length / 1024).toFixed(2) : 0;
+            
+            let status = '✅ OK';
+            try {
+                JSON.parse(value);
+            } catch (e) {
+                status = '❌ CORROMPIDO';
+            }
+            
+            localstorageLista.push({
+                chave: key,
+                tamanho: `${tamanho} KB`,
+                status: status
+            });
+        }
+    }
+    
+    // Calcular tamanho total
+    let totalSize = 0;
+    localstorageLista.forEach(item => {
+        totalSize += parseFloat(item.tamanho);
+    });
+    
+    // Montar HTML
+    let html = `
+        <div style="background: rgba(100,150,200,0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+            <h6 style="color: #64a8ff; margin-bottom: 10px;">📊 RESUMO</h6>
+            <table style="width: 100%; font-size: 0.9rem;">
+                <tr>
+                    <td style="padding: 5px;"><strong>StorageManager Pronto:</strong></td>
+                    <td>${diagnosticos.ready ? '✅ Sim' : '❌ Não'}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px;"><strong>Usando IndexedDB:</strong></td>
+                    <td>${diagnosticos.useIndexedDB ? '✅ Sim' : '❌ Não (usando localStorage)'}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px;"><strong>Total de Chaves localStorage:</strong></td>
+                    <td>${diagnosticos.totalKeys}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px;"><strong>Chaves ReDungeon:</strong></td>
+                    <td>${diagnosticos.redungeonKeys}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px;"><strong>Tamanho Total:</strong></td>
+                    <td>${(diagnosticos.totalSize / 1024).toFixed(2)} MB</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div style="background: rgba(200,150,100,0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+            <h6 style="color: #d4af37; margin-bottom: 10px;">📦 DADOS ARMAZENADOS</h6>
+            <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 2px solid rgba(212,175,55,0.3);">
+                        <th style="text-align: left; padding: 8px;">Chave</th>
+                        <th style="text-align: right; padding: 8px;">Tamanho</th>
+                        <th style="text-align: center; padding: 8px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+    
+    localstorageLista.forEach(item => {
+        const corStatus = item.status === '✅ OK' ? '#7ED321' : '#E74C3C';
+        html += `
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <td style="padding: 8px; word-break: break-all; font-size: 0.8rem;">${item.chave}</td>
+                <td style="text-align: right; padding: 8px;">${item.tamanho}</td>
+                <td style="text-align: center; padding: 8px; color: ${corStatus};">${item.status}</td>
+            </tr>
+        `;
+    });
+    
+    html += `
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="background: rgba(150,100,200,0.1); padding: 15px; border-radius: 8px;">
+            <h6 style="color: #9B59B6; margin-bottom: 10px;">📝 ÚLTIMOS SALVAMENTOS</h6>
+            <table style="width: 100%; font-size: 0.85rem;">
+    `;
+    
+    const lastSaves = diagnosticos.lastSaves || {};
+    const keys = Object.keys(lastSaves).slice(-10); // Últimas 10
+    
+    if (keys.length === 0) {
+        html += `<tr><td style="padding: 8px; color: rgba(255,255,255,0.5);">Nenhum salvamento registrado</td></tr>`;
+    } else {
+        keys.forEach(key => {
+            const time = new Date(lastSaves[key]).toLocaleString('pt-BR');
+            html += `
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <td style="padding: 8px; font-size: 0.8rem;">${key}</td>
+                    <td style="padding: 8px; text-align: right; color: #7ED321;">${time}</td>
+                </tr>
+            `;
+        });
+    }
+    
+    html += `
+            </table>
+        </div>
+        
+        <div style="background: rgba(200,100,100,0.1); padding: 15px; border-radius: 8px; margin-top: 15px;">
+            <p style="margin: 0; font-size: 0.85rem; color: #E74C3C;">
+                ⚠️ <strong>Observações:</strong><br>
+                • Tamanho total próximo a <strong>5 MB</strong>? Limpe o cache!<br>
+                • Tem dados <strong>CORROMPIDOS</strong>? Use "Limpar Corrompidos"<br>
+                • Dados desapareceram? Use "Sincronizar Agora"
+            </p>
+        </div>
+    `;
+    
+    document.getElementById('diagnosticoConteudo').innerHTML = html;
+    modal.show();
+}
+
+/**
+ * 🔄 Sincronizar armazenamento
+ */
+async function sincronizarArmazenamento() {
+    console.log('🔄 [Diagnóstico] Sincronizando...');
+    const resultado = await window.StorageManager.syncCurrentTab();
+    alert(`✅ Sincronização concluída!\n\n${resultado} dados validados e sincronizados.`);
+    
+    // Reabrir modal para mostrar resultado
+    setTimeout(() => {
+        abrirDiagnosticoStorage();
+    }, 500);
+}
+
+/**
+ * 🧹 Limpar dados corrompidos
+ */
+function limparArmazenamentoCorrompido() {
+    if (!confirm('⚠️ AVISO: Isto vai DELETAR dados corrompidos!\n\nTem certeza?')) {
+        return;
+    }
+    
+    let contagem = 0;
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('redungeon_')) {
+            try {
+                const value = localStorage.getItem(key);
+                JSON.parse(value);
+            } catch (e) {
+                console.warn(`🧹 Deletando corrompido: ${key}`);
+                localStorage.removeItem(key);
+                contagem++;
+            }
+        }
+    }
+    
+    alert(`✅ Limpeza concluída!\n\n${contagem} itens corrompidos foram deletados.`);
+    
+    // Reabrir modal
+    setTimeout(() => {
+        abrirDiagnosticoStorage();
+    }, 500);
+}
+</script>

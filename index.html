@@ -49,203 +49,265 @@
         };
         
         /**
-         * 🗄️ STORAGE MANAGER - IndexedDB com fallback localStorage
+         * 🗄️ STORAGE MANAGER - localStorage ROBUSTO com sincronização e recuperação
          * Uso automático: StorageManager.set(key, value) / StorageManager.get(key)
+         * 
+         * ⚠️ MUDANÇA CRÍTICA (30/05/2026):
+         * - DESABILITADO IndexedDB como primário (causava desincronização)
+         * - Usando apenas localStorage com sincronização entre abas
+         * - Adicionado sistema de verificação de integridade e auto-recovery
          */
         window.StorageManager = {
             db: null,
             ready: false,
-            useIndexedDB: true,
+            useIndexedDB: false,  // DESABILITADO - usar apenas localStorage
             _isSettingItem: false,  // Flag para evitar recursão infinita
+            _lastSaveTime: {},  // Rastrear último salvamento por chave
+            _saveAttempts: {},  // Contar tentativas de salvamento
             
-            // Inicializar IndexedDB
+            // Inicializar (simplificado - apenas localStorage)
             async init() {
                 try {
-                    return new Promise((resolve, reject) => {
-                        const request = indexedDB.open('ReDungeon', 2);
-                        
-                        request.onerror = () => {
-                            console.warn('❌ IndexedDB não disponível, usando localStorage');
-                            this.useIndexedDB = false;
-                            this.ready = true;
-                            resolve();
-                        };
-                        
-                        request.onsuccess = (event) => {
-                            this.db = event.target.result;
-                            this.ready = true;
-                            console.log('✅ IndexedDB inicializado');
-                            resolve();
-                        };
-                        
-                        request.onupgradeneeded = (event) => {
-                            const db = event.target.result;
-                            if (!db.objectStoreNames.contains('redungeon_store')) {
-                                db.createObjectStore('redungeon_store', { keyPath: 'key' });
-                                console.log('✅ IndexedDB object store criado');
-                            }
-                        };
-                    });
-                } catch (error) {
-                    console.warn('❌ IndexedDB init erro:', error);
-                    this.useIndexedDB = false;
                     this.ready = true;
+                    console.log('✅ StorageManager inicializado (localStorage mode)');
+                    
+                    // Verificar espaço disponível
+                    this._checkStorageSpace();
+                    
+                    // Iniciar monitor de sincronização entre abas
+                    this._initializeStorageEventListener();
+                    
+                    return true;
+                } catch (error) {
+                    console.warn('❌ StorageManager init erro:', error);
+                    this.ready = true;
+                    return false;
                 }
             },
             
-            // Salvar dados (IndexedDB ou localStorage)
+            // 🔄 NOVO: Listener para sincronização entre abas
+            _initializeStorageEventListener() {
+                window.addEventListener('storage', (event) => {
+                    if (event.key && event.key.startsWith('redungeon_')) {
+                        console.log(`🔄 [StorageSync] Detectada mudança em outra aba: ${event.key}`);
+                        
+                        // Avisar que dados foram sincronizados
+                        window.dispatchEvent(new CustomEvent('redungeon-storage-changed', {
+                            detail: { key: event.key, newValue: event.newValue }
+                        }));
+                        
+                        // Recarregar dados da aba atual se necessário
+                        if (event.key === 'redungeon_npcs' && window.abaAtual === 'npcs') {
+                            console.log('📦 [StorageSync] Recarregando NPCs...');
+                            recarregarDadosArmazenar('npcs');
+                        }
+                    }
+                });
+            },
+            
+            // ✅ NOVO: Verificar espaço em storage
+            _checkStorageSpace() {
+                try {
+                    const test = '__storage_test__';
+                    const testValue = new Array(1024 * 1024).join('x'); // 1MB
+                    localStorage.setItem(test, testValue);
+                    localStorage.removeItem(test);
+                    console.log('✅ Espaço em storage: OK (>1MB disponível)');
+                } catch (e) {
+                    console.warn('⚠️ AVISO: Storage está cheio ou quase cheio!');
+                    alert('⚠️ ARMAZENAMENTO CHEIO!\n\nExporte seus dados urgentemente:\nFile → Export\n\nDepois limpe o cache do navegador.');
+                }
+            },
+            
+            // 💾 Salvar dados (apenas localStorage, robusto)
             async set(key, value) {
                 try {
                     const jsonValue = typeof value === 'string' ? value : JSON.stringify(value);
                     
-                    if (this.useIndexedDB && this.db) {
-                        return new Promise((resolve, reject) => {
-                            try {
-                                const transaction = this.db.transaction(['redungeon_store'], 'readwrite');
-                                const store = transaction.objectStore('redungeon_store');
-                                const request = store.put({ key, value: jsonValue, timestamp: Date.now() });
-                                
-                                request.onsuccess = () => {
-                                    console.log(`✅ IndexedDB: ${key} salvo`);
-                                    // Atualizar localStorage para compatibilidade (usando flag para evitar recursão)
-                                    try {
-                                        const wasSettingItem = window.StorageManager._isSettingItem;
-                                        window.StorageManager._isSettingItem = true;
-                                        originalLocalStorage.setItem(key, jsonValue);
-                                        window.StorageManager._isSettingItem = wasSettingItem;
-                                    } catch (e) {
-                                        console.debug('⚠️ localStorage backup falhou');
-                                    }
-                                    resolve();
-                                };
-                                
-                                request.onerror = () => {
-                                    console.warn(`❌ IndexedDB erro ao salvar ${key}`);
-                                    const wasSettingItem = window.StorageManager._isSettingItem;
-                                    window.StorageManager._isSettingItem = true;
-                                    originalLocalStorage.setItem(key, jsonValue);
-                                    window.StorageManager._isSettingItem = wasSettingItem;
-                                    reject(request.error);
-                                };
-                            } catch (e) {
-                                const wasSettingItem = window.StorageManager._isSettingItem;
-                                window.StorageManager._isSettingItem = true;
-                                originalLocalStorage.setItem(key, jsonValue);
-                                window.StorageManager._isSettingItem = wasSettingItem;
-                                reject(e);
-                            }
-                        });
-                    } else {
-                        // Fallback localStorage (com flag para evitar recursão)
-                        const wasSettingItem = this._isSettingItem;
-                        this._isSettingItem = true;
-                        originalLocalStorage.setItem(key, jsonValue);
-                        this._isSettingItem = wasSettingItem;
+                    // ✅ NOVO: Validação antes de salvar
+                    if (!jsonValue || jsonValue.length === 0) {
+                        console.warn(`⚠️ [StorageManager.set] Tentativa de salvar valor vazio: ${key}`);
+                        return false;
                     }
+                    
+                    // ✅ NOVO: Verificar se JSON é válido
+                    try {
+                        JSON.parse(jsonValue);
+                    } catch (e) {
+                        console.error(`🔴 [StorageManager.set] JSON inválido para ${key}:`, e);
+                        return false;
+                    }
+                    
+                    // ✅ NOVO: Registrar tentativa
+                    this._lastSaveTime[key] = Date.now();
+                    this._saveAttempts[key] = (this._saveAttempts[key] || 0) + 1;
+                    
+                    // Salvar em localStorage
+                    originalLocalStorage.setItem(key, jsonValue);
+                    
+                    console.log(`✅ [StorageManager] ${key} salvo com sucesso (tentativa ${this._saveAttempts[key]})`);
+                    return true;
                 } catch (error) {
+                    if (error.name === 'QuotaExceededError') {
+                        console.error(`🔴 [StorageManager.set] STORAGE CHEIO! Não foi possível salvar ${key}`);
+                        alert('⚠️ STORAGE CHEIO!\n\nExporte seus dados:\nFile → Export\n\nDepois limpe cache do navegador.');
+                        return false;
+                    }
                     console.error(`🔴 StorageManager.set erro: ${error.message}`);
-                    throw error;
+                    return false;
                 }
             },
             
-            // Carregar dados (IndexedDB ou localStorage)
+            // 📖 Carregar dados (apenas localStorage)
             async get(key) {
                 try {
-                    if (this.useIndexedDB && this.db) {
-                        return new Promise((resolve, reject) => {
-                            try {
-                                const transaction = this.db.transaction(['redungeon_store'], 'readonly');
-                                const store = transaction.objectStore('redungeon_store');
-                                const request = store.get(key);
-                                
-                                request.onsuccess = () => {
-                                    const result = request.result;
-                                    if (result) {
-                                        console.log(`✅ IndexedDB: ${key} carregado`);
-                                        resolve(result.value);
-                                    } else {
-                                        // Fallback para localStorage
-                                        const localValue = localStorage.getItem(key);
-                                        resolve(localValue);
-                                    }
-                                };
-                                
-                                request.onerror = () => {
-                                    console.warn(`❌ IndexedDB erro ao carregar ${key}`);
-                                    resolve(localStorage.getItem(key));
-                                };
-                            } catch (e) {
-                                resolve(localStorage.getItem(key));
-                            }
-                        });
-                    } else {
-                        // Fallback localStorage
-                        return localStorage.getItem(key);
+                    const jsonValue = originalLocalStorage.getItem(key);
+                    
+                    if (!jsonValue) {
+                        console.debug(`ℹ️ [StorageManager.get] ${key} não encontrado`);
+                        return null;
+                    }
+                    
+                    // ✅ NOVO: Validar JSON
+                    try {
+                        const parsed = JSON.parse(jsonValue);
+                        console.log(`✅ [StorageManager.get] ${key} carregado com sucesso`);
+                        return parsed;
+                    } catch (e) {
+                        console.error(`🔴 [StorageManager.get] JSON corrompido em ${key}, deletando...`, e);
+                        originalLocalStorage.removeItem(key);
+                        
+                        // Tentar recuperar de backup
+                        const backupKey = `backup-${key}`;
+                        const backup = originalLocalStorage.getItem(backupKey);
+                        if (backup) {
+                            console.log(`✅ [StorageManager.get] Recuperado backup para ${key}`);
+                            return JSON.parse(backup);
+                        }
+                        
+                        return null;
                     }
                 } catch (error) {
                     console.error(`🔴 StorageManager.get erro: ${error.message}`);
-                    return localStorage.getItem(key);
+                    return null;
                 }
             },
             
-            // Remover dados
+            // 🗑️ Remover dados (apenas localStorage)
             async remove(key) {
                 try {
-                    if (this.useIndexedDB && this.db) {
-                        return new Promise((resolve, reject) => {
-                            try {
-                                const transaction = this.db.transaction(['redungeon_store'], 'readwrite');
-                                const store = transaction.objectStore('redungeon_store');
-                                const request = store.delete(key);
-                                
-                                request.onsuccess = () => {
-                                    console.log(`✅ IndexedDB: ${key} removido`);
-                                    localStorage.removeItem(key);
-                                    resolve();
-                                };
-                                
-                                request.onerror = () => {
-                                    console.warn(`❌ IndexedDB erro ao remover ${key}`);
-                                    localStorage.removeItem(key);
-                                    reject(request.error);
-                                };
-                            } catch (e) {
-                                localStorage.removeItem(key);
-                                reject(e);
-                            }
-                        });
-                    } else {
-                        localStorage.removeItem(key);
-                    }
+                    originalLocalStorage.removeItem(key);
+                    console.log(`✅ [StorageManager] ${key} removido`);
+                    return true;
                 } catch (error) {
                     console.error(`🔴 StorageManager.remove erro: ${error.message}`);
-                    throw error;
+                    return false;
                 }
             },
             
-            // Migrar dados de localStorage para IndexedDB
-            async migrateFromLocalStorage() {
+            // 🔄 NOVO: Sincronizar dados da aba atual
+            async syncCurrentTab() {
                 try {
-                    if (!this.useIndexedDB || !this.db) return;
+                    console.log('🔄 [StorageSync] Sincronizando dados da aba atual...');
                     
-                    console.log('🔄 Migrando dados de localStorage para IndexedDB...');
-                    let migrated = 0;
+                    const chaves = [
+                        'redungeon_Mesa',
+                        'redungeon_npcs',
+                        'redungeon_itens',
+                        'redungeon_criatura',
+                        'redungeon_classes',
+                        'redungeon_racas',
+                        'redungeon_origens',
+                        'redungeon_aptidoes',
+                        'redungeon_cardflux',
+                        'redungeon_regioes',
+                        'redungeon_cenarios',
+                        'redungeon_condicoes',
+                        'redungeon_receitas',
+                        'redungeon_materiais'
+                    ];
                     
-                    for (let i = 0; i < localStorage.length; i++) {
-                        const key = localStorage.key(i);
-                        if (key && key.startsWith('redungeon_')) {
-                            const value = localStorage.getItem(key);
-                            await this.set(key, value);
-                            migrated++;
+                    let countSynced = 0;
+                    for (const chave of chaves) {
+                        const value = originalLocalStorage.getItem(chave);
+                        if (value) {
+                            // Validar integridade
+                            try {
+                                JSON.parse(value);
+                                countSynced++;
+                            } catch (e) {
+                                console.warn(`⚠️ [StorageSync] Dados corrompidos: ${chave}`);
+                                originalLocalStorage.removeItem(chave);
+                            }
                         }
                     }
                     
-                    console.log(`✅ ${migrated} entradas migradas para IndexedDB`);
-                    return migrated;
+                    console.log(`✅ [StorageSync] Sincronização completa: ${countSynced}/${chaves.length} OK`);
+                    return countSynced;
                 } catch (error) {
-                    console.error('❌ Erro ao migrar de localStorage:', error);
+                    console.error(`🔴 StorageSync erro:`, error);
+                    return 0;
                 }
-            }
+            },
+            
+            // 🆘 NOVO: Tentar recuperar dados de backup
+            async attemptRecovery(key) {
+                try {
+                    console.log(`🆘 [StorageRecovery] Tentando recuperar ${key}...`);
+                    
+                    // Procurar por qualquer backup dessa chave
+                    const backups = [];
+                    for (let i = 0; i < originalLocalStorage.length; i++) {
+                        const k = originalLocalStorage.key(i);
+                        if (k && k.includes(key) && (k.includes('backup') || k.includes('restore'))) {
+                            backups.push(k);
+                        }
+                    }
+                    
+                    if (backups.length > 0) {
+                        const mostRecentBackup = backups[backups.length - 1];
+                        const backupValue = originalLocalStorage.getItem(mostRecentBackup);
+                        console.log(`✅ [StorageRecovery] Backup encontrado: ${mostRecentBackup}`);
+                        return backupValue;
+                    }
+                    
+                    console.log(`❌ [StorageRecovery] Nenhum backup encontrado para ${key}`);
+                    return null;
+                } catch (error) {
+                    console.error(`🔴 StorageRecovery erro:`, error);
+                    return null;
+                }
+            },
+            
+            // 📊 NOVO: Diagnóstico do storage
+            getDiagnostics() {
+                try {
+                    const stats = {
+                        ready: this.ready,
+                        useIndexedDB: this.useIndexedDB,
+                        totalKeys: originalLocalStorage.length,
+                        redungeonKeys: 0,
+                        totalSize: 0,
+                        lastSaves: this._lastSaveTime,
+                        attemptCounts: this._saveAttempts
+                    };
+                    
+                    for (let i = 0; i < originalLocalStorage.length; i++) {
+                        const key = originalLocalStorage.key(i);
+                        if (key && key.startsWith('redungeon_')) {
+                            stats.redungeonKeys++;
+                            const value = originalLocalStorage.getItem(key);
+                            stats.totalSize += value ? value.length : 0;
+                        }
+                    }
+                    
+                    console.log(`📊 [StorageManager] Diagnóstico:`, stats);
+                    return stats;
+                } catch (error) {
+                    console.error(`🔴 getDiagnostics erro:`, error);
+                    return null;
+                }
+            },
         };
         
         // Capturar erros globais (NÃO suprimir)
@@ -1799,16 +1861,16 @@
             window._bloqueiaReaberturaArte = false;
             console.log('✅ Flags de bloqueio de reabertura inicializadas');
             
-            // 🗄️ Inicializar StorageManager (IndexedDB com fallback localStorage)
+            // 🗄️ Inicializar StorageManager (localStorage robusto)
             console.log('🚀 Inicializando StorageManager...');
             await window.StorageManager.init();
             
-            // Migrar dados existentes de localStorage para IndexedDB
-            const migrados = await window.StorageManager.migrateFromLocalStorage();
-            if (migrados > 0) {
-                console.log(`✅ Migração concluída: ${migrados} entradas`);
-                window.APP_LOGS.push(`🗄️ ${migrados} entradas migradas para IndexedDB`);
-            }
+            // 🔄 NOVO: Sincronizar dados da aba atual
+            console.log('🔄 Sincronizando dados...');
+            await window.StorageManager.syncCurrentTab();
+            
+            // 📊 NOVO: Mostrar diagnóstico
+            window.StorageManager.getDiagnostics();
             
             DataStore.init();
             // ✅ INICIAR MONITOR DE SCROLL
@@ -1951,26 +2013,50 @@
         }, delay);
     };
 
-    // ============ SISTEMA DE MEMÓRIA DE ABAS ============
+    // ============ SISTEMA DE MEMÓRIA DE ABAS COM SINCRONIZAÇÃO ============
     // Salvar e restaurar a aba ativa ao recarregar a página
     document.addEventListener('DOMContentLoaded', () => {
+        // 🔄 NOVO: Usar abreviação global para aba atual
+        window.abaAtual = null;
+        
         // Restaurar aba salva
         const abaAtiva = localStorage.getItem('abaAtiva');
         if (abaAtiva) {
             const botaoAba = document.querySelector(`[data-bs-target="#${abaAtiva}"]`);
             if (botaoAba) {
+                console.log(`🔄 [Tab Memory] Restaurando aba: ${abaAtiva}`);
                 const tab = new bootstrap.Tab(botaoAba);
                 tab.show();
+            } else {
+                console.warn(`⚠️ [Tab Memory] Aba não encontrada: ${abaAtiva}`);
+                // Remover aba corrompida
+                localStorage.removeItem('abaAtiva');
             }
         }
 
-        // Salvar aba quando clicada
+        // Salvar aba quando clicada e sincronizar dados
         document.querySelectorAll('.nav-link').forEach(botao => {
             botao.addEventListener('click', () => {
                 const target = botao.getAttribute('data-bs-target');
-                if (target) {
-                    const abaId = target.replace('#', '');
+                const abaId = target ? target.substring(1) : null; // Remove o #
+                
+                if (abaId) {
+                    window.abaAtual = abaId;
                     localStorage.setItem('abaAtiva', abaId);
+                    console.log(`💾 [Tab Memory] Aba salva: ${abaId}`);
+                    
+                    // 🔄 NOVO: Sincronizar dados quando muda aba
+                    setTimeout(async () => {
+                        console.log(`🔄 [Tab Memory] Sincronizando dados da aba: ${abaId}`);
+                        await window.StorageManager.syncCurrentTab();
+                        
+                        // Recarregar dados específicos da aba se necessário
+                        if (abaId === 'npcs' && window.recarregarDadosArmazenar) {
+                            recarregarDadosArmazenar('npcs');
+                        } else if (abaId === 'itens' && window.recarregarDadosArmazenar) {
+                            recarregarDadosArmazenar('itens');
+                        }
+                    }, 100);
                 }
             });
         });
@@ -7324,6 +7410,32 @@
         #modalNovoNPC .modal-content {
             z-index: 901 !important;
             position: relative !important;
+        }
+        
+        /* 🔧 SCROLLBAR CUSTOMIZADO PARA MODAL NPC */
+        #modalNovoNPC .modal-body {
+            scrollbar-width: thin;
+            scrollbar-color: #d4af37 #222;
+        }
+        
+        #modalNovoNPC .modal-body::-webkit-scrollbar {
+            width: 12px;
+            background: #222;
+        }
+        
+        #modalNovoNPC .modal-body::-webkit-scrollbar-track {
+            background: #222;
+            border-radius: 6px;
+        }
+        
+        #modalNovoNPC .modal-body::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 6px;
+            border: 2px solid #222;
+        }
+        
+        #modalNovoNPC .modal-body::-webkit-scrollbar-thumb:hover {
+            background: #f0c850;
         }
         
         /* MODAL: Detalhes de Classe (abre sobre modalNovoNPC) */
