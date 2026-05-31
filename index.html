@@ -7417,6 +7417,8 @@
             scrollbar-width: thin !important;
             scrollbar-color: #d4af37 #222 !important;
             overflow-y: auto !important;
+            display: block !important;
+            position: relative !important;
         }
         
         #modalNovoNPC .modal-body::-webkit-scrollbar {
@@ -7436,6 +7438,38 @@
         }
         
         #modalNovoNPC .modal-body::-webkit-scrollbar-thumb:hover {
+            background: #f0c850 !important;
+        }
+        
+        /* 🎨 Classe para forçar reativação da scrollbar */
+        #modalNovoNPC .modal-body.force-scrollbar-style {
+            scrollbar-width: thin !important;
+            scrollbar-color: #d4af37 #222 !important;
+            overflow: auto !important;
+            overflow-y: scroll !important;
+        }
+        
+        #modalNovoNPC .modal-body.force-scrollbar-style::-webkit-scrollbar {
+            width: 12px !important;
+            background: #222 !important;
+            display: block !important;
+        }
+        
+        #modalNovoNPC .modal-body.force-scrollbar-style::-webkit-scrollbar-track {
+            background: #222 !important;
+            border-radius: 6px !important;
+            display: block !important;
+        }
+        
+        #modalNovoNPC .modal-body.force-scrollbar-style::-webkit-scrollbar-thumb {
+            background: #d4af37 !important;
+            border-radius: 6px !important;
+            border: 2px solid #222 !important;
+            display: block !important;
+            min-height: 40px !important;
+        }
+        
+        #modalNovoNPC .modal-body.force-scrollbar-style::-webkit-scrollbar-thumb:hover {
             background: #f0c850 !important;
         }
         
@@ -19232,6 +19266,15 @@
                 this.style.borderBottom = '2px solid #d4af37';
                 document.getElementById('aba-' + aba).style.display = 'block';
                 
+                // 🎨 FORÇA A REATIVAÇÃO DA SCROLLBAR ao mudar de aba
+                const modalBody = document.querySelector('#modalNovoNPC .modal-body');
+                if (modalBody) {
+                    // Remover e re-adicionar a classe para forçar recalc
+                    modalBody.classList.remove('force-scrollbar-style');
+                    void modalBody.offsetHeight; // Trigger reflow
+                    modalBody.classList.add('force-scrollbar-style');
+                }
+                
                 // Atualizar radar quando clicar na aba de Características
                 if (aba === 'overview' && typeof updateRadar === 'function') {
                     setTimeout(() => updateRadar(), 100);
@@ -21288,6 +21331,17 @@
                 const modalBody = this.querySelector('.modal-body');
                 if (modalBody) {
                     modalBody.scrollTop = 0;
+                    
+                    // 🎨 FORÇA A REATIVAÇÃO DA SCROLLBAR - Solução para scrollbar intermitente
+                    // Apagar e re-adicionar a classe para forçar recalc do CSS
+                    modalBody.classList.remove('force-scrollbar-style');
+                    // Trigger reflow
+                    void modalBody.offsetHeight;
+                    modalBody.classList.add('force-scrollbar-style');
+                    
+                    // Também reforçar inline styles
+                    modalBody.style.overflow = 'auto';
+                    modalBody.style.overflowY = 'auto';
                 }
 
                 // 🎯 RESPEITAR O MODO DE VISUALIZAÇÃO se foi definido por verNPCCompleto()
@@ -42432,6 +42486,14 @@ ${cenario.perigos ? `PERIGOS/OBSTÁCULOS
             } else {
                 if (btnEditar) btnEditar.style.display = 'inline-block';
                 if (btnSalvar) btnSalvar.style.display = 'none';
+            }
+            
+            // 🎨 FORÇA A REATIVAÇÃO DA SCROLLBAR ao alternar modo
+            const modalBody = document.querySelector('#modalNovoNPC .modal-body');
+            if (modalBody) {
+                modalBody.classList.remove('force-scrollbar-style');
+                void modalBody.offsetHeight; // Trigger reflow
+                modalBody.classList.add('force-scrollbar-style');
             }
         }
 

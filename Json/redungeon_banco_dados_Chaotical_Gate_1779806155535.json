@@ -1523,6 +1523,210 @@
       "inventario": [],
       "imagem": "https://i.imgur.com/MQzMYZ3.png",
       "morto": false
+    },
+    {
+      "nome": "Caesar Gattuso - 2 Ano",
+      "tipo": "NPC",
+      "npcCategoria": "NPC",
+      "npcTipo": "Neutro",
+      "raca": "Nenhuma raça selecionada",
+      "racaID": "Nenhuma raça selecionada",
+      "classe": "Nenhuma classe selecionada",
+      "classeID": "Nenhuma classe selecionada",
+      "origem": "Nenhuma origem selecionada",
+      "origemID": "Nenhuma origem selecionada",
+      "descricao": "",
+      "idade": null,
+      "atributos": {
+        "forca": {
+          "base": 10,
+          "extra": 0,
+          "total": 0
+        },
+        "vitalidade": {
+          "base": 10,
+          "extra": 0,
+          "total": 0
+        },
+        "agilidade": {
+          "base": 10,
+          "extra": 0,
+          "total": 0
+        },
+        "inteligencia": {
+          "base": 10,
+          "extra": 0,
+          "total": 0
+        },
+        "percepcao": {
+          "base": 10,
+          "extra": 0,
+          "total": 0
+        },
+        "sorte": {
+          "base": 10,
+          "extra": 0,
+          "total": 0
+        }
+      },
+      "saude": {
+        "atual": 0,
+        "maxima": 100,
+        "extra": 0
+      },
+      "energia": {
+        "atual": 0,
+        "maxima": 100,
+        "extra": 0
+      },
+      "fadiga": {
+        "atual": 0,
+        "maxima": 100,
+        "extra": 0
+      },
+      "statusSecundarios": {
+        "prontidao": {
+          "extra": 0,
+          "total": 0,
+          "bonus": 0
+        },
+        "ataque": {
+          "extra": 0,
+          "total": 0,
+          "bonus": 0
+        },
+        "defesa": {
+          "extra": 0,
+          "total": 0,
+          "bonus": 0
+        },
+        "reacao": {
+          "extra": 0,
+          "total": 6,
+          "bonus": 0
+        },
+        "precisao": {
+          "extra": 0,
+          "total": 0,
+          "bonus": 0
+        },
+        "evasao": {
+          "extra": 0,
+          "total": 0,
+          "bonus": 0
+        }
+      },
+      "sorteBonus": 0,
+      "tricksterValue": 0,
+      "condicoes": [],
+      "aptidoes": [],
+      "ganhasAptidoes": 0,
+      "habilidades": [],
+      "inventario": [],
+      "imagem": "https://i.redd.it/1mkl8mtvc43c1.jpg",
+      "morto": false
+    },
+    {
+      "nome": "Lucas Luminous",
+      "tipo": "NPC",
+      "npcCategoria": "NPC",
+      "npcTipo": "Neutro",
+      "raca": "Nenhuma raça selecionada",
+      "racaID": "Nenhuma raça selecionada",
+      "classe": "Nenhuma classe selecionada",
+      "classeID": "Nenhuma classe selecionada",
+      "origem": "Nenhuma origem selecionada",
+      "origemID": "Nenhuma origem selecionada",
+      "descricao": "",
+      "idade": null,
+      "atributos": {
+        "forca": {
+          "base": 10,
+          "extra": 0,
+          "total": 0
+        },
+        "vitalidade": {
+          "base": 10,
+          "extra": 0,
+          "total": 0
+        },
+        "agilidade": {
+          "base": 10,
+          "extra": 0,
+          "total": 0
+        },
+        "inteligencia": {
+          "base": 10,
+          "extra": 0,
+          "total": 0
+        },
+        "percepcao": {
+          "base": 10,
+          "extra": 0,
+          "total": 0
+        },
+        "sorte": {
+          "base": 10,
+          "extra": 0,
+          "total": 0
+        }
+      },
+      "saude": {
+        "atual": 0,
+        "maxima": 100,
+        "extra": 0
+      },
+      "energia": {
+        "atual": 0,
+        "maxima": 100,
+        "extra": 0
+      },
+      "fadiga": {
+        "atual": 0,
+        "maxima": 100,
+        "extra": 0
+      },
+      "statusSecundarios": {
+        "prontidao": {
+          "extra": 0,
+          "total": 0,
+          "bonus": 0
+        },
+        "ataque": {
+          "extra": 0,
+          "total": 0,
+          "bonus": 0
+        },
+        "defesa": {
+          "extra": 0,
+          "total": 0,
+          "bonus": 0
+        },
+        "reacao": {
+          "extra": 0,
+          "total": 6,
+          "bonus": 0
+        },
+        "precisao": {
+          "extra": 0,
+          "total": 0,
+          "bonus": 0
+        },
+        "evasao": {
+          "extra": 0,
+          "total": 0,
+          "bonus": 0
+        }
+      },
+      "sorteBonus": 0,
+      "tricksterValue": 0,
+      "condicoes": [],
+      "aptidoes": [],
+      "ganhasAptidoes": 0,
+      "habilidades": [],
+      "inventario": [],
+      "imagem": "https://i.redd.it/official-lu-mingfei-luminous-character-design-from-the-v0-9x6rbazi3nh81.jpg?width=1920&format=pjpg&auto=webp&s=935092d2056f9d245e129b0237c189d545ac299b",
+      "morto": false
     }
   ],
   "criaturas": [],
@@ -5221,8 +5425,8 @@
     }
   ],
   "artes": [],
-  "dataSalvamento": "29/05/2026, 11:25:52",
+  "dataSalvamento": "31/05/2026, 14:54:57",
   "versao": "1.0",
   "tipo": "banco_completo",
-  "totalItens": 98
+  "totalItens": 100
 }
