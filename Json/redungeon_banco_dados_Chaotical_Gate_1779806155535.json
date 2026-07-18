@@ -697,9 +697,173 @@
         }
       ],
       "habilidadesAvancadas": []
+    },
+    {
+      "id": 1782670003166,
+      "nome": "Besta Caótica - Nv. Zwo",
+      "raridade": "comum",
+      "imagem": "",
+      "descricao": " È basicamente a forma inicial das criaturas caoticas é devido a recém exposição a energia eles basicamente são animais com pequenas características ou padrões anormais podendo ter alterações nos padrões de pelo, cor dos olhos ou presas e garras etc... Grau do intelecto deles pode variar dependendo da espécie afetada, mais seu nível de poder não se difere muito da própria espécie sendo somente comparado à o líder da espécie.",
+      "limiteAtributo": 100,
+      "atributos": {
+        "forca": "3d6+15",
+        "vitalidade": "4d8+15",
+        "agilidade": "4d8+15",
+        "inteligencia": "3d6+15",
+        "percepcao": "4d8+15",
+        "sorte": "5d10+20"
+      },
+      "habilidades": [],
+      "habilidadesAvancadas": []
+    },
+    {
+      "id": 1782670580170,
+      "nome": " Besta Caótica - Nv. Anima",
+      "raridade": "raro",
+      "imagem": "",
+      "descricao": "Sendo o primeiro estágio após a primeira hibernação as bestas caoticas passam por um grau metamórfico baixo podendo ter algumas características mais desenvolvidas e nos mais raros casos elas possuem padrões que não são destintos da própria espécie demonstrando que ela recebeu uma mutação. Essas tais criaturas mutadas são mais fortes que as demais do mesmo nível.",
+      "limiteAtributo": 100,
+      "atributos": {
+        "forca": "4d6+10",
+        "vitalidade": "6d8+10",
+        "agilidade": "6d8+10",
+        "inteligencia": "4d6+10",
+        "percepcao": "6d8+10",
+        "sorte": "5d10+20"
+      },
+      "habilidades": [],
+      "habilidadesAvancadas": []
+    },
+    {
+      "id": 1782670848941,
+      "nome": "Besta Caótica Nv. Koukozo",
+      "raridade": "raro",
+      "imagem": "",
+      "descricao": "A parte, mas importante da linha evolutiva de uma besta caótica e o estagio Koukozo, sendo ele a primeira mutação devido a grau de energia armazenado para superar seus limites. Tais criaturas que chegam aqui são consideradas os lendários soldados das matriarcas.",
+      "limiteAtributo": 150,
+      "atributos": {
+        "forca": "4d8+15",
+        "vitalidade": "6d10+15",
+        "agilidade": "4d8+15",
+        "inteligencia": "6d10+15",
+        "percepcao": "6d10+15",
+        "sorte": "5d10+20"
+      },
+      "habilidades": [],
+      "habilidadesAvancadas": []
+    },
+    {
+      "id": 1782671094753,
+      "nome": "Besta Caótica Nv. Quimera",
+      "raridade": "epico",
+      "imagem": "",
+      "descricao": "E o estagio mais temido pelos defensores é quando elas passam pela terceira hibernação, assim as tornando com intelecto próximo a do humano. Graças a nível de acumulo de energia essas tais criaturas desenvolvem habilidades parecida com a dos seres humanos, mas por serem bestas elas possuem criatividade limitada, assim somente usando a essência destes poderes.",
+      "limiteAtributo": 200,
+      "atributos": {
+        "forca": "4d8+25",
+        "vitalidade": "6d10+25 ",
+        "agilidade": "4d8+25 ",
+        "inteligencia": "6d10+25 ",
+        "percepcao": "6d10+25",
+        "sorte": "8d10+20"
+      },
+      "habilidades": [],
+      "habilidadesAvancadas": []
+    },
+    {
+      "id": 1782671252630,
+      "nome": "Besta Caoticas - Nv. Alpha Quimera",
+      "raridade": "lendario",
+      "imagem": "",
+      "descricao": "Após tanto tempo absorvendo energia as tais bestas acabam sofrendo a ultima mutação que acabam aumentando ainda mais seus atributos e destacando suas outras mutações, mas algo em essencial e destacado que transforma em um inimigo mortal para humanidade, sendo o intelecto avançado sendo comparado de um humano com +1 um Ph.D.",
+      "limiteAtributo": 250,
+      "atributos": {
+        "forca": "8d8+15",
+        "vitalidade": "12d10+15",
+        "agilidade": "8d8+15",
+        "inteligencia": "12d10+15",
+        "percepcao": "12d10+15",
+        "sorte": "10d10+20"
+      },
+      "habilidades": [],
+      "habilidadesAvancadas": []
     }
   ],
-  "classes": [],
+  "classes": [
+    {
+      "id": 1782671767885,
+      "nome": "Bestas Pequenas",
+      "funcoes": [
+        "Damage Dealer"
+      ],
+      "raridade": "comum",
+      "imagem": "",
+      "descricao": "Bestas de pequeno porte",
+      "atributos": {
+        "forca": "2d6+4",
+        "vitalidade": "2d8+8",
+        "agilidade": "2d10+8",
+        "inteligencia": "2d4+2",
+        "percepcao": "2d10+8"
+      },
+      "habilidades": []
+    },
+    {
+      "id": 1782672140385,
+      "nome": "Bestas de medio porte",
+      "funcoes": [
+        "Hibrid DPS",
+        "Control"
+      ],
+      "raridade": "incomum",
+      "imagem": "",
+      "descricao": "bestas de medio porte",
+      "atributos": {
+        "forca": "2d8+4",
+        "vitalidade": "2d10+8",
+        "agilidade": "2d6+2",
+        "inteligencia": "2d6+2",
+        "percepcao": "2d8+4"
+      },
+      "habilidades": []
+    },
+    {
+      "id": 1782672302355,
+      "nome": "Bestas Grandes",
+      "funcoes": [
+        "Tank"
+      ],
+      "raridade": "incomum",
+      "imagem": "",
+      "descricao": "bestas grandes",
+      "atributos": {
+        "forca": "2d10+8",
+        "vitalidade": "2d10+8",
+        "agilidade": "2d6+2",
+        "inteligencia": "2d6+2",
+        "percepcao": "2d8+8"
+      },
+      "habilidades": []
+    },
+    {
+      "id": 1782672477408,
+      "nome": "Bestas Enormes",
+      "funcoes": [
+        "Control"
+      ],
+      "raridade": "raro",
+      "imagem": "",
+      "descricao": "grandes",
+      "atributos": {
+        "forca": "2d12+8",
+        "vitalidade": "2d12+8",
+        "agilidade": "2d4+2",
+        "inteligencia": "2d8+8",
+        "percepcao": "2d8+8"
+      },
+      "habilidades": []
+    }
+  ],
   "aptidoes": [],
   "npcs": [
     {
@@ -1727,12 +1891,1373 @@
       "inventario": [],
       "imagem": "https://i.redd.it/official-lu-mingfei-luminous-character-design-from-the-v0-9x6rbazi3nh81.jpg?width=1920&format=pjpg&auto=webp&s=935092d2056f9d245e129b0237c189d545ac299b",
       "morto": false
+    },
+    {
+      "id": "npc_1782673092832_6fbbyxo5c",
+      "nome": "Ratos da Fissura",
+      "tipo": "MOB",
+      "npcCategoria": "MOB",
+      "npcTipo": "Comuns",
+      "raca": "Besta Caótica - Nv. Zwo",
+      "racaID": "1782670003166",
+      "classe": "Bestas Pequenas",
+      "classeID": "1782671767885",
+      "origem": "Nenhuma origem selecionada",
+      "origemID": "Nenhuma origem selecionada",
+      "descricao": "",
+      "idade": null,
+      "atributos": {
+        "forca": {
+          "base": 47,
+          "extra": 0,
+          "total": 47
+        },
+        "vitalidade": {
+          "base": 69,
+          "extra": 0,
+          "total": 79
+        },
+        "agilidade": {
+          "base": 67,
+          "extra": 0,
+          "total": 72
+        },
+        "inteligencia": {
+          "base": 40,
+          "extra": 0,
+          "total": 45
+        },
+        "percepcao": {
+          "base": 57,
+          "extra": 0,
+          "total": 62
+        },
+        "sorte": {
+          "base": 51,
+          "extra": 0,
+          "total": 51
+        }
+      },
+      "saude": {
+        "atual": 184,
+        "maxima": 184,
+        "extra": 0
+      },
+      "energia": {
+        "atual": 68,
+        "maxima": 68,
+        "extra": 0
+      },
+      "fadiga": {
+        "atual": 64,
+        "maxima": 64,
+        "extra": 0
+      },
+      "statusSecundarios": {
+        "prontidao": {
+          "extra": 0,
+          "total": 141,
+          "bonus": 0
+        },
+        "ataque": {
+          "extra": 0,
+          "total": 7,
+          "bonus": 0
+        },
+        "defesa": {
+          "extra": 0,
+          "total": 8,
+          "bonus": 0
+        },
+        "reacao": {
+          "extra": 0,
+          "total": 10,
+          "bonus": 1
+        },
+        "precisao": {
+          "extra": 0,
+          "total": 6,
+          "bonus": 0
+        },
+        "evasao": {
+          "extra": 0,
+          "total": 7,
+          "bonus": 1
+        }
+      },
+      "sorteBonus": 2,
+      "tricksterValue": 0,
+      "condicoes": [],
+      "aptidoes": [
+        {
+          "nome": "Atletismo",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Vontade",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Sobrevivência",
+          "nivel": 1,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Intimidação",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Dança",
+          "nivel": 5,
+          "bonusAplicados": false
+        }
+      ],
+      "ganhasAptidoes": 0,
+      "habilidades": [],
+      "inventario": [
+        {
+          "id": 1782673579390.8892,
+          "nome": "Mordida",
+          "qualidade": "Raro",
+          "level": 10,
+          "levelMax": 15,
+          "ataque": "3d6+6",
+          "extra": "+1 PreC",
+          "tipo": "arma",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        },
+        {
+          "id": 1782673580829.7559,
+          "nome": "Caudas e Patadas",
+          "qualidade": "Raro",
+          "level": 8,
+          "levelMax": 15,
+          "ataque": "3d6+5",
+          "extra": "+1 PreC",
+          "tipo": "arma",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        }
+      ],
+      "imagem": "https://i.imgur.com/79gfVgT.jpeg",
+      "morto": false
+    },
+    {
+      "id": "npc_1782673092832_6fbbyxo5c",
+      "nome": "Corvos Carniceiros",
+      "tipo": "MOB",
+      "npcCategoria": "MOB",
+      "npcTipo": "Comuns",
+      "raca": "Besta Caótica - Nv. Zwo",
+      "racaID": "1782670003166",
+      "classe": "Bestas Pequenas",
+      "classeID": "1782671767885",
+      "origem": "Nenhuma origem selecionada",
+      "origemID": "Nenhuma origem selecionada",
+      "descricao": "",
+      "idade": null,
+      "atributos": {
+        "forca": {
+          "base": 47,
+          "extra": 0,
+          "total": 47
+        },
+        "vitalidade": {
+          "base": 69,
+          "extra": 0,
+          "total": 79
+        },
+        "agilidade": {
+          "base": 67,
+          "extra": 0,
+          "total": 72
+        },
+        "inteligencia": {
+          "base": 40,
+          "extra": 0,
+          "total": 45
+        },
+        "percepcao": {
+          "base": 57,
+          "extra": 0,
+          "total": 62
+        },
+        "sorte": {
+          "base": 51,
+          "extra": 0,
+          "total": 51
+        }
+      },
+      "saude": {
+        "atual": 184,
+        "maxima": 184,
+        "extra": 0
+      },
+      "energia": {
+        "atual": 68,
+        "maxima": 68,
+        "extra": 0
+      },
+      "fadiga": {
+        "atual": 64,
+        "maxima": 64,
+        "extra": 0
+      },
+      "statusSecundarios": {
+        "prontidao": {
+          "extra": 0,
+          "total": 141,
+          "bonus": 0
+        },
+        "ataque": {
+          "extra": 0,
+          "total": 7,
+          "bonus": 0
+        },
+        "defesa": {
+          "extra": 0,
+          "total": 8,
+          "bonus": 0
+        },
+        "reacao": {
+          "extra": 0,
+          "total": 10,
+          "bonus": 1
+        },
+        "precisao": {
+          "extra": 0,
+          "total": 6,
+          "bonus": 0
+        },
+        "evasao": {
+          "extra": 0,
+          "total": 7,
+          "bonus": 1
+        }
+      },
+      "sorteBonus": 2,
+      "tricksterValue": 0,
+      "condicoes": [],
+      "aptidoes": [
+        {
+          "nome": "Atletismo",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Vontade",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Sobrevivência",
+          "nivel": 1,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Intimidação",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Dança",
+          "nivel": 5,
+          "bonusAplicados": false
+        }
+      ],
+      "ganhasAptidoes": 0,
+      "habilidades": [],
+      "inventario": [
+        {
+          "id": 1782673579390.8892,
+          "nome": "Mordida",
+          "qualidade": "Raro",
+          "level": 10,
+          "levelMax": 15,
+          "ataque": "3d6+6",
+          "extra": "+1 PreC",
+          "tipo": "arma",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        },
+        {
+          "id": 1782673580829.7559,
+          "nome": "Caudas e Patadas",
+          "qualidade": "Raro",
+          "level": 8,
+          "levelMax": 15,
+          "ataque": "3d6+5",
+          "extra": "+1 PreC",
+          "tipo": "arma",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        }
+      ],
+      "imagem": "https://i.imgur.com/LfKDV5s.jpeg",
+      "morto": false
+    },
+    {
+      "id": "npc_1782673092832_6fbbyxo5c",
+      "nome": "Javalis Rochosos",
+      "tipo": "MOB",
+      "npcCategoria": "MOB",
+      "npcTipo": "Comuns",
+      "raca": "Besta Caótica - Nv. Anima",
+      "racaID": "1782670580170",
+      "classe": "Bestas Pequenas",
+      "classeID": "1782671767885",
+      "origem": "Nenhuma origem selecionada",
+      "origemID": "Nenhuma origem selecionada",
+      "descricao": "",
+      "idade": null,
+      "atributos": {
+        "forca": {
+          "base": 44,
+          "extra": 0,
+          "total": 44
+        },
+        "vitalidade": {
+          "base": 61,
+          "extra": 0,
+          "total": 66
+        },
+        "agilidade": {
+          "base": 65,
+          "extra": 0,
+          "total": 75
+        },
+        "inteligencia": {
+          "base": 34,
+          "extra": 0,
+          "total": 34
+        },
+        "percepcao": {
+          "base": 58,
+          "extra": 0,
+          "total": 63
+        },
+        "sorte": {
+          "base": 52,
+          "extra": 0,
+          "total": 52
+        }
+      },
+      "saude": {
+        "atual": 166,
+        "maxima": 166,
+        "extra": 0
+      },
+      "energia": {
+        "atual": 60,
+        "maxima": 60,
+        "extra": 0
+      },
+      "fadiga": {
+        "atual": 57,
+        "maxima": 57,
+        "extra": 0
+      },
+      "statusSecundarios": {
+        "prontidao": {
+          "extra": 0,
+          "total": 146,
+          "bonus": 0
+        },
+        "ataque": {
+          "extra": 0,
+          "total": 6,
+          "bonus": 0
+        },
+        "defesa": {
+          "extra": 0,
+          "total": 8,
+          "bonus": 0
+        },
+        "reacao": {
+          "extra": 0,
+          "total": 10,
+          "bonus": 1
+        },
+        "precisao": {
+          "extra": 0,
+          "total": 6,
+          "bonus": 0
+        },
+        "evasao": {
+          "extra": 0,
+          "total": 8,
+          "bonus": 2
+        }
+      },
+      "sorteBonus": 2,
+      "tricksterValue": 0,
+      "condicoes": [],
+      "aptidoes": [
+        {
+          "nome": "Atletismo",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Acrobacia",
+          "nivel": 5,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Dança",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Intuição",
+          "nivel": 1,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Sobrevivência",
+          "nivel": 1,
+          "bonusAplicados": false
+        }
+      ],
+      "ganhasAptidoes": 0,
+      "habilidades": [],
+      "inventario": [
+        {
+          "id": 1782673579390.8892,
+          "nome": "Mordida",
+          "qualidade": "Raro",
+          "level": 10,
+          "levelMax": 15,
+          "ataque": "3d6+6",
+          "extra": "+1 PreC",
+          "tipo": "arma",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        },
+        {
+          "id": 1782673580829.7559,
+          "nome": "Caudas e Patadas",
+          "qualidade": "Raro",
+          "level": 8,
+          "levelMax": 15,
+          "ataque": "3d6+5",
+          "extra": "+1 PreC",
+          "tipo": "arma",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        }
+      ],
+      "imagem": "https://i.imgur.com/n68DkoF.jpeg",
+      "morto": false
+    },
+    {
+      "nome": "Javalis Rochosos",
+      "tipo": "MOB",
+      "npcCategoria": "MOB",
+      "npcTipo": "Elites",
+      "raca": "Besta Caótica - Nv. Anima",
+      "racaID": "1782670580170",
+      "classe": "Bestas de medio porte",
+      "classeID": "1782672140385",
+      "origem": "Nenhuma origem selecionada",
+      "origemID": "Nenhuma origem selecionada",
+      "descricao": "",
+      "idade": null,
+      "atributos": {
+        "forca": {
+          "base": 54,
+          "extra": 0,
+          "total": 54
+        },
+        "vitalidade": {
+          "base": 68,
+          "extra": 0,
+          "total": 83
+        },
+        "agilidade": {
+          "base": 55,
+          "extra": 0,
+          "total": 55
+        },
+        "inteligencia": {
+          "base": 40,
+          "extra": 0,
+          "total": 40
+        },
+        "percepcao": {
+          "base": 63,
+          "extra": 0,
+          "total": 68
+        },
+        "sorte": {
+          "base": 61,
+          "extra": 0,
+          "total": 61
+        }
+      },
+      "saude": {
+        "atual": 195,
+        "maxima": 195,
+        "extra": 0
+      },
+      "energia": {
+        "atual": 68,
+        "maxima": 68,
+        "extra": 0
+      },
+      "fadiga": {
+        "atual": 70,
+        "maxima": 70,
+        "extra": 0
+      },
+      "statusSecundarios": {
+        "prontidao": {
+          "extra": 0,
+          "total": 125,
+          "bonus": 0
+        },
+        "ataque": {
+          "extra": 0,
+          "total": 7,
+          "bonus": 0
+        },
+        "defesa": {
+          "extra": 0,
+          "total": 8,
+          "bonus": 0
+        },
+        "reacao": {
+          "extra": 0,
+          "total": 9,
+          "bonus": 0
+        },
+        "precisao": {
+          "extra": 0,
+          "total": 6,
+          "bonus": 0
+        },
+        "evasao": {
+          "extra": 0,
+          "total": 5,
+          "bonus": 0
+        }
+      },
+      "sorteBonus": 2,
+      "tricksterValue": 0,
+      "condicoes": [],
+      "aptidoes": [
+        {
+          "nome": "Atletismo",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 4,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Tolerância",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Vontade",
+          "nivel": 1,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Sobrevivência",
+          "nivel": 1,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Fôlego",
+          "nivel": 5,
+          "bonusAplicados": false
+        }
+      ],
+      "ganhasAptidoes": 0,
+      "habilidades": [],
+      "inventario": [
+        {
+          "id": 1782674349095.9126,
+          "nome": "Corrida",
+          "qualidade": "Épico",
+          "level": 10,
+          "levelMax": 15,
+          "ataque": "4d8+6",
+          "extra": "+1 PreC",
+          "tipo": "arma",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        },
+        {
+          "id": 1782674350455.721,
+          "nome": "Caudas e Patadas",
+          "qualidade": "Épico",
+          "level": 8,
+          "levelMax": 15,
+          "ataque": "3d8+5",
+          "extra": "+1 PreC",
+          "Mesa": "",
+          "tipo": "arma",
+          "imagem": "",
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        }
+      ],
+      "imagem": "https://i.imgur.com/95jndAv.jpeg",
+      "morto": false
+    },
+    {
+      "nome": "Lobos Espinhosos",
+      "tipo": "MOB",
+      "npcCategoria": "MOB",
+      "npcTipo": "Elites",
+      "raca": "Besta Caótica - Nv. Anima",
+      "racaID": "1782670580170",
+      "classe": "Bestas de medio porte",
+      "classeID": "1782672140385",
+      "origem": "Nenhuma origem selecionada",
+      "origemID": "Nenhuma origem selecionada",
+      "descricao": "",
+      "idade": null,
+      "atributos": {
+        "forca": {
+          "base": 54,
+          "extra": 0,
+          "total": 54
+        },
+        "vitalidade": {
+          "base": 55,
+          "extra": 0,
+          "total": 60
+        },
+        "agilidade": {
+          "base": 65,
+          "extra": 0,
+          "total": 65
+        },
+        "inteligencia": {
+          "base": 40,
+          "extra": 0,
+          "total": 45
+        },
+        "percepcao": {
+          "base": 63,
+          "extra": 0,
+          "total": 68
+        },
+        "sorte": {
+          "base": 61,
+          "extra": 0,
+          "total": 61
+        }
+      },
+      "saude": {
+        "atual": 167,
+        "maxima": 167,
+        "extra": 0
+      },
+      "energia": {
+        "atual": 72,
+        "maxima": 72,
+        "extra": 0
+      },
+      "fadiga": {
+        "atual": 59,
+        "maxima": 59,
+        "extra": 0
+      },
+      "statusSecundarios": {
+        "prontidao": {
+          "extra": 0,
+          "total": 138,
+          "bonus": 0
+        },
+        "ataque": {
+          "extra": 0,
+          "total": 8,
+          "bonus": 0
+        },
+        "defesa": {
+          "extra": 0,
+          "total": 7,
+          "bonus": 0
+        },
+        "reacao": {
+          "extra": 0,
+          "total": 10,
+          "bonus": 1
+        },
+        "precisao": {
+          "extra": 0,
+          "total": 6,
+          "bonus": 0
+        },
+        "evasao": {
+          "extra": 0,
+          "total": 6,
+          "bonus": 0
+        }
+      },
+      "sorteBonus": 2,
+      "tricksterValue": 0,
+      "condicoes": [],
+      "aptidoes": [
+        {
+          "nome": "Atletismo",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 5,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Tolerância",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Sobrevivência",
+          "nivel": 1,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Intimidação",
+          "nivel": 4,
+          "bonusAplicados": false
+        }
+      ],
+      "ganhasAptidoes": 0,
+      "habilidades": [],
+      "inventario": [
+        {
+          "id": 1782674349095.9126,
+          "nome": "Corrida",
+          "qualidade": "Épico",
+          "level": 10,
+          "levelMax": 15,
+          "ataque": "4d8+6",
+          "extra": "+1 PreC",
+          "tipo": "arma",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        },
+        {
+          "id": 1782674350455.721,
+          "nome": "Caudas e Patadas",
+          "qualidade": "Épico",
+          "level": 8,
+          "levelMax": 15,
+          "ataque": "3d8+5",
+          "extra": "+1 PreC",
+          "Mesa": "",
+          "tipo": "arma",
+          "imagem": "",
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        }
+      ],
+      "imagem": "https://i.imgur.com/s6UTR7U.jpeg",
+      "morto": false
+    },
+    {
+      "nome": "Urso Cristalino",
+      "tipo": "MOB",
+      "npcCategoria": "MOB",
+      "npcTipo": "Elites",
+      "raca": "Besta Caótica - Nv. Anima",
+      "racaID": "1782670580170",
+      "classe": "Bestas Grandes",
+      "classeID": "1782672302355",
+      "origem": "Nenhuma origem selecionada",
+      "origemID": "Nenhuma origem selecionada",
+      "descricao": "",
+      "idade": null,
+      "atributos": {
+        "forca": {
+          "base": 72,
+          "extra": 0,
+          "total": 72
+        },
+        "vitalidade": {
+          "base": 100,
+          "extra": 0,
+          "total": 105
+        },
+        "agilidade": {
+          "base": 73,
+          "extra": 0,
+          "total": 73
+        },
+        "inteligencia": {
+          "base": 50,
+          "extra": 0,
+          "total": 55
+        },
+        "percepcao": {
+          "base": 78,
+          "extra": 0,
+          "total": 83
+        },
+        "sorte": {
+          "base": 61,
+          "extra": 0,
+          "total": 61
+        }
+      },
+      "saude": {
+        "atual": 382,
+        "maxima": 382,
+        "extra": 150
+      },
+      "energia": {
+        "atual": 86,
+        "maxima": 86,
+        "extra": 0
+      },
+      "fadiga": {
+        "atual": 87,
+        "maxima": 87,
+        "extra": 0
+      },
+      "statusSecundarios": {
+        "prontidao": {
+          "extra": 0,
+          "total": 158,
+          "bonus": 0
+        },
+        "ataque": {
+          "extra": 8,
+          "total": 18,
+          "bonus": 0
+        },
+        "defesa": {
+          "extra": 8,
+          "total": 18,
+          "bonus": 0
+        },
+        "reacao": {
+          "extra": 0,
+          "total": 10,
+          "bonus": 1
+        },
+        "precisao": {
+          "extra": 0,
+          "total": 7,
+          "bonus": 0
+        },
+        "evasao": {
+          "extra": 0,
+          "total": 7,
+          "bonus": 0
+        }
+      },
+      "sorteBonus": 2,
+      "tricksterValue": 0,
+      "condicoes": [],
+      "aptidoes": [
+        {
+          "nome": "Atletismo",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 5,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Tolerância",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Sobrevivência",
+          "nivel": 1,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Intimidação",
+          "nivel": 4,
+          "bonusAplicados": false
+        }
+      ],
+      "ganhasAptidoes": 0,
+      "habilidades": [],
+      "inventario": [
+        {
+          "id": 1782674349095.9126,
+          "nome": "Corrida",
+          "qualidade": "Épico",
+          "level": 10,
+          "levelMax": 15,
+          "ataque": "4d8+6",
+          "extra": "+1 PreC",
+          "tipo": "arma",
+          "imagem": null,
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        },
+        {
+          "id": 1782674350455.721,
+          "nome": "Caudas e Patadas",
+          "qualidade": "Épico",
+          "level": 8,
+          "levelMax": 15,
+          "ataque": "3d8+5",
+          "extra": "+1 PreC",
+          "Mesa": "",
+          "tipo": "arma",
+          "imagem": "",
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        }
+      ],
+      "imagem": "https://i.imgur.com/CVvtLeZ.jpeg",
+      "morto": false
+    },
+    {
+      "nome": "Serpentes Abissais",
+      "tipo": "MOB",
+      "npcCategoria": "MOB",
+      "npcTipo": "Chefes",
+      "raca": "Besta Caótica Nv. Koukozo",
+      "racaID": "1782670848941",
+      "classe": "Bestas de medio porte",
+      "classeID": "1782672140385",
+      "origem": "Nenhuma origem selecionada",
+      "origemID": "Nenhuma origem selecionada",
+      "descricao": "",
+      "idade": null,
+      "atributos": {
+        "forca": {
+          "base": 89,
+          "extra": 0,
+          "total": 89
+        },
+        "vitalidade": {
+          "base": 99,
+          "extra": 0,
+          "total": 104
+        },
+        "agilidade": {
+          "base": 80,
+          "extra": 0,
+          "total": 85
+        },
+        "inteligencia": {
+          "base": 91,
+          "extra": 0,
+          "total": 96
+        },
+        "percepcao": {
+          "base": 101,
+          "extra": 0,
+          "total": 116
+        },
+        "sorte": {
+          "base": 62,
+          "extra": 0,
+          "total": 62
+        }
+      },
+      "saude": {
+        "atual": 391,
+        "maxima": 391,
+        "extra": 150
+      },
+      "energia": {
+        "atual": 132,
+        "maxima": 132,
+        "extra": 0
+      },
+      "fadiga": {
+        "atual": 92,
+        "maxima": 92,
+        "extra": 0
+      },
+      "statusSecundarios": {
+        "prontidao": {
+          "extra": 0,
+          "total": 194,
+          "bonus": 0
+        },
+        "ataque": {
+          "extra": 0,
+          "total": 13,
+          "bonus": 0
+        },
+        "defesa": {
+          "extra": 0,
+          "total": 11,
+          "bonus": 0
+        },
+        "reacao": {
+          "extra": 0,
+          "total": 11,
+          "bonus": 1
+        },
+        "precisao": {
+          "extra": 0,
+          "total": 11,
+          "bonus": 2
+        },
+        "evasao": {
+          "extra": 0,
+          "total": 9,
+          "bonus": 1
+        }
+      },
+      "sorteBonus": 2,
+      "tricksterValue": 0,
+      "condicoes": [],
+      "aptidoes": [
+        {
+          "nome": "Atletismo",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Dança",
+          "nivel": 5,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Intuição",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Intimidação",
+          "nivel": 4,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Olho Crítico",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Ambidestro",
+          "nivel": 5,
+          "bonusAplicados": false
+        }
+      ],
+      "ganhasAptidoes": 0,
+      "habilidades": [],
+      "inventario": [
+        {
+          "id": 1782675542232.0464,
+          "nome": "Mordida",
+          "qualidade": "Épico",
+          "level": 10,
+          "levelMax": 15,
+          "ataque": "4d8+6",
+          "extra": "+1 PreC",
+          "Mesa": "",
+          "tipo": "arma",
+          "imagem": "",
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        },
+        {
+          "id": 1782675543342.791,
+          "nome": "Caudas e Patadas",
+          "qualidade": "Épico",
+          "level": 8,
+          "levelMax": 15,
+          "ataque": "3d8+5",
+          "extra": "+1 PreC",
+          "Mesa": "",
+          "tipo": "arma",
+          "imagem": "",
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        }
+      ],
+      "imagem": "https://i.imgur.com/c1nVTiH.jpeg",
+      "morto": false
+    },
+    {
+      "nome": "Tigre seis patas",
+      "tipo": "MOB",
+      "npcCategoria": "MOB",
+      "npcTipo": "Chefes",
+      "raca": "Besta Caótica Nv. Koukozo",
+      "racaID": "1782670848941",
+      "classe": "Bestas Grandes",
+      "classeID": "1782672302355",
+      "origem": "Nenhuma origem selecionada",
+      "origemID": "Nenhuma origem selecionada",
+      "descricao": "",
+      "idade": null,
+      "atributos": {
+        "forca": {
+          "base": 93,
+          "extra": 0,
+          "total": 93
+        },
+        "vitalidade": {
+          "base": 123,
+          "extra": 0,
+          "total": 133
+        },
+        "agilidade": {
+          "base": 69,
+          "extra": 0,
+          "total": 79
+        },
+        "inteligencia": {
+          "base": 87,
+          "extra": 0,
+          "total": 92
+        },
+        "percepcao": {
+          "base": 112,
+          "extra": 0,
+          "total": 122
+        },
+        "sorte": {
+          "base": 59,
+          "extra": 0,
+          "total": 59
+        }
+      },
+      "saude": {
+        "atual": 428,
+        "maxima": 428,
+        "extra": 150
+      },
+      "energia": {
+        "atual": 131,
+        "maxima": 131,
+        "extra": 0
+      },
+      "fadiga": {
+        "atual": 107,
+        "maxima": 107,
+        "extra": 0
+      },
+      "statusSecundarios": {
+        "prontidao": {
+          "extra": 0,
+          "total": 191,
+          "bonus": 2
+        },
+        "ataque": {
+          "extra": 0,
+          "total": 13,
+          "bonus": 0
+        },
+        "defesa": {
+          "extra": 0,
+          "total": 12,
+          "bonus": 0
+        },
+        "reacao": {
+          "extra": 0,
+          "total": 11,
+          "bonus": 1
+        },
+        "precisao": {
+          "extra": 0,
+          "total": 10,
+          "bonus": 1
+        },
+        "evasao": {
+          "extra": 0,
+          "total": 9,
+          "bonus": 1
+        }
+      },
+      "sorteBonus": 2,
+      "tricksterValue": 0,
+      "condicoes": [],
+      "aptidoes": [
+        {
+          "nome": "Atletismo",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Acrobacia",
+          "nivel": 5,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Intimidação",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Percepção",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Olho Crítico",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Tolerância",
+          "nivel": 2,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Vontade",
+          "nivel": 3,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Furtividade",
+          "nivel": 4,
+          "bonusAplicados": false
+        },
+        {
+          "nome": "Camuflagem",
+          "nivel": 1,
+          "bonusAplicados": false
+        }
+      ],
+      "ganhasAptidoes": 0,
+      "habilidades": [],
+      "inventario": [
+        {
+          "id": 1782675591562.846,
+          "nome": "Caudas e Patadas",
+          "qualidade": "Épico",
+          "level": 8,
+          "levelMax": 15,
+          "ataque": "3d8+5",
+          "extra": "+1 PreC",
+          "Mesa": "",
+          "tipo": "arma",
+          "imagem": "",
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        },
+        {
+          "id": 1782675592632.795,
+          "nome": "Mordida",
+          "qualidade": "Épico",
+          "level": 10,
+          "levelMax": 15,
+          "ataque": "4d8+6",
+          "extra": "+1 PreC",
+          "Mesa": "",
+          "tipo": "arma",
+          "imagem": "",
+          "imagemIndexedDBId": null,
+          "habilidades": [],
+          "maxSlotsHabilidades": 1,
+          "origemDatabase": true
+        }
+      ],
+      "imagem": "https://i.imgur.com/5xmqHIP.jpeg",
+      "morto": false
     }
   ],
   "criaturas": [],
   "materiais": [],
   "receitas": [],
-  "itens": [],
+  "itens": [
+    {
+      "nome": "Caudas e Patadas",
+      "qualidade": "Épico",
+      "level": 8,
+      "levelMax": 15,
+      "ataque": "3d8+5",
+      "extra": "+1 PreC",
+      "Mesa": "",
+      "tipo": "arma",
+      "imagem": "",
+      "imagemIndexedDBId": null,
+      "habilidades": [],
+      "maxSlotsHabilidades": 1
+    },
+    {
+      "nome": "Mordida",
+      "qualidade": "Épico",
+      "level": 10,
+      "levelMax": 15,
+      "ataque": "4d8+6",
+      "extra": "+1 PreC",
+      "Mesa": "",
+      "tipo": "arma",
+      "imagem": "",
+      "imagemIndexedDBId": null,
+      "habilidades": [],
+      "maxSlotsHabilidades": 1
+    }
+  ],
   "condicoes": [
     {
       "id": 1768270076566,
@@ -5425,8 +6950,8 @@
     }
   ],
   "artes": [],
-  "dataSalvamento": "31/05/2026, 14:54:57",
+  "dataSalvamento": "28/06/2026, 16:41:19",
   "versao": "1.0",
   "tipo": "banco_completo",
-  "totalItens": 100
+  "totalItens": 119
 }
