@@ -16315,8 +16315,8 @@
 
     <!-- MODAL NOVO/EDITAR NPC - DESIGN COMPACTO -->
     <div class="modal fade" id="modalNovoNPC" tabindex="-1" role="dialog" aria-modal="true">
-        <div class="modal-dialog" style="max-width: 1404px; max-height: 90vh;">
-            <div class="modal-content bg-dark border-0" style="background: #1a1a1a; overflow: hidden;">
+        <div class="modal-dialog" style="max-width: 1404px; max-height: 90vh; display: flex; align-items: stretch;">
+            <div class="modal-content bg-dark border-0" style="background: #1a1a1a; overflow: visible; display: flex; flex-direction: column; max-height: 90vh;">
                 <!-- ABAS -->
                 <div style="display: flex; border-bottom: 1px solid #d4af37; background: #0f0f0f; padding: 0;">
                     <button type="button" class="abaNPC active" data-aba="overview" style="flex: 1; padding: 8px; background: transparent; border: none; color: #d4af37; font-weight: bold; cursor: pointer; font-size: 0.9rem; border-bottom: 2px solid #d4af37;">Características</button>
@@ -16327,7 +16327,7 @@
                     <button type="button" class="btn-close btn-close-white" onclick="fecharModalNPC()" style="padding: 8px 12px;"></button>
                 </div>
 
-                <div class="modal-body" style="max-height: calc(90vh - 100px); overflow-y: auto; padding: 15px;">
+                <div class="modal-body" style="max-height: calc(90vh - 100px); overflow-y: auto; padding: 15px; flex: 1 1 auto;">
                     <form id="formNovoNPC">
                         <!-- TAB: OVERVIEW -->
                         <div id="aba-overview" class="aba-content" style="display: block;">
@@ -16879,7 +16879,55 @@
         </div>
     </div>
 
-    <!-- MODAL EDITAR ATRIBUTOS BASE DO NPC -->
+            <script>
+                // Normaliza overflow/scroll do modalNovoNPC para evitar desaparecimento da scrollbar
+                (function(){
+                    const modalEl = document.getElementById('modalNovoNPC');
+                    if (!modalEl) return;
+
+                    function applyFix() {
+                        try {
+                            const modalContent = modalEl.querySelector('.modal-content');
+                            const modalBody = modalEl.querySelector('.modal-body');
+                            if (modalContent) {
+                                modalContent.style.overflow = 'visible';
+                                modalContent.style.display = 'flex';
+                                modalContent.style.flexDirection = 'column';
+                                modalContent.style.maxHeight = '90vh';
+                            }
+                            if (modalBody) {
+                                modalBody.classList.add('force-scrollbar-style');
+                                modalBody.style.overflowY = 'auto';
+                                modalBody.style.flex = '1 1 auto';
+                                modalBody.style.position = 'relative';
+                            }
+                        } catch (e) { console.warn('Erro ao aplicar fix modalNovoNPC', e); }
+                    }
+
+                    modalEl.addEventListener('show.bs.modal', function(){ setTimeout(applyFix, 8); });
+
+                    modalEl.addEventListener('hidden.bs.modal', function(){
+                        try {
+                            const modalBody = modalEl.querySelector('.modal-body');
+                            if (modalBody) {
+                                modalBody.classList.remove('force-scrollbar-style');
+                                modalBody.style.overflowY = '';
+                                modalBody.style.flex = '';
+                                modalBody.style.position = '';
+                            }
+                            const modalContent = modalEl.querySelector('.modal-content');
+                            if (modalContent) {
+                                modalContent.style.overflow = '';
+                                modalContent.style.display = '';
+                                modalContent.style.flexDirection = '';
+                                modalContent.style.maxHeight = '';
+                            }
+                        } catch (e) { console.warn('Erro ao limpar fix modalNovoNPC', e); }
+                    });
+                })();
+            </script>
+
+            <!-- MODAL EDITAR ATRIBUTOS BASE DO NPC -->
     <div class="modal fade" id="modalEditarAtributosBase" tabindex="-1" role="dialog" aria-modal="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content bg-dark border-0" style="background: #1a1a1a; border: 2px solid #d4af37;">
@@ -34964,10 +35012,10 @@ Copiado de ReDungeon em ${new Date().toLocaleString('pt-BR')}`;
         // =============== FUNÇÕES DO INVENTÁRIO DO NPC ===============
 
         // Variável global para armazenar os itens do inventário do NPC atual
-        let npcInventarioItens = [];
+        var npcInventarioItens = [];
         
         // Variável para rastrear o filtro de raridade atual
-        let filtroRaridadeAtual = 'todos';
+        var filtroRaridadeAtual = 'todos';
 
         // Abrir modal para adicionar itens existentes
         function abrirModalAdicionarItemExistente() {
